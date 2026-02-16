@@ -224,5 +224,90 @@
   "navigateScanner": "Quét",
   "navigateScannerDesc": "Dịch tài liệu tiếng Nhật",
   "navigateMedical": "Y tế",
-  "navigateMedicalDesc": "Hướng dẫn cấp cứu và cụm từ"
+  "navigateMedicalDesc": "Hướng dẫn cấp cứu và cụm từ",
+
+  "upgradeToPremium": "Nâng cấp lên Premium",
+
+  "communityTitle": "Cộng đồng Hỏi đáp",
+  "communityEmpty": "Chưa có bài viết",
+  "communityNewPost": "Bài viết mới",
+  "communityDetailTitle": "Chi tiết bài viết",
+  "communityAnswered": "Đã trả lời",
+  "communityBestAnswer": "Câu trả lời tốt nhất",
+  "communityFilterAll": "Tất cả",
+  "communitySortNewest": "Mới nhất",
+  "communitySortPopular": "Phổ biến",
+  "communityCategoryVisa": "Visa",
+  "communityCategoryHousing": "Nhà ở",
+  "communityCategoryBanking": "Ngân hàng",
+  "communityCategoryWork": "Công việc",
+  "communityCategoryDailyLife": "Cuộc sống hàng ngày",
+  "communityCategoryMedical": "Y tế",
+  "communityCategoryEducation": "Giáo dục",
+  "communityCategoryTax": "Thuế",
+  "communityCategoryOther": "Khác",
+  "communityReplies": "{count} Trả lời",
+  "@communityReplies": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityNoReplies": "Chưa có câu trả lời. Hãy là người đầu tiên!",
+  "communityReplyHint": "Viết câu trả lời...",
+  "communityReplyPremiumOnly": "Đăng bài và trả lời cần đăng ký Premium.",
+  "communityVoteCount": "{count} phiếu",
+  "@communityVoteCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityModerationPending": "Đang xem xét",
+  "communityModerationFlagged": "Đã gắn cờ để xem xét",
+  "communityModerationNotice": "Bài viết của bạn sẽ được hệ thống AI kiểm duyệt trước khi hiển thị cho người khác.",
+  "communityChannelLabel": "Kênh ngôn ngữ",
+  "communityCategoryLabel": "Danh mục",
+  "communityTitleLabel": "Tiêu đề",
+  "communityTitleHint": "Câu hỏi của bạn là gì?",
+  "communityTitleMinLength": "Tiêu đề phải có ít nhất 5 ký tự",
+  "communityContentLabel": "Chi tiết",
+  "communityContentHint": "Mô tả chi tiết câu hỏi hoặc tình huống của bạn...",
+  "communityContentMinLength": "Nội dung phải có ít nhất 10 ký tự",
+  "communitySubmit": "Đăng",
+  "communityTimeAgoDays": "{days} ngày trước",
+  "@communityTimeAgoDays": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "communityTimeAgoHours": "{hours} giờ trước",
+  "@communityTimeAgoHours": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "communityTimeAgoMinutes": "{minutes} phút trước",
+  "@communityTimeAgoMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "navigateCommunity": "Cộng đồng",
+  "navigateCommunityDesc": "Hỏi đáp với người nước ngoài khác",
+
+  "subscriptionTitle": "Đăng ký",
+  "subscriptionPlansTitle": "Chọn gói của bạn",
+  "subscriptionPlansSubtitle": "Mở khóa toàn bộ tiềm năng của Gaijin Life Navi",
+  "subscriptionCurrentPlan": "Gói hiện tại",
+  "subscriptionCurrentPlanBadge": "Gói hiện tại",
+  "subscriptionTierFree": "Miễn phí",
+  "subscriptionTierPremium": "Premium",
+  "subscriptionTierPremiumPlus": "Premium+",
+  "subscriptionFreePrice": "¥0",
+  "subscriptionPricePerMonth": "¥{price}/tháng",
+  "@subscriptionPricePerMonth": {
+    "placeholders": { "price": { "type": "int" } }
+  },
+  "subscriptionCheckout": "Đăng ký ngay",
+  "subscriptionRecommended": "KHUYẾN NGHỊ",
+  "subscriptionCancelling": "Đang hủy...",
+  "subscriptionCancellingAt": "Gói của bạn sẽ kết thúc vào {date}",
+  "@subscriptionCancellingAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "subscriptionFeatureFreeChat": "5 cuộc trò chuyện AI mỗi ngày",
+  "subscriptionFeatureFreeScans": "3 lần quét tài liệu mỗi tháng",
+  "subscriptionFeatureFreeTracker": "Theo dõi tối đa 3 thủ tục",
+  "subscriptionFeatureFreeCommunityRead": "Đọc bài viết cộng đồng",
+  "subscriptionFeatureCommunityPost": "Đăng bài và trả lời trong cộng đồng",
+  "subscriptionFeatureUnlimitedChat": "Trò chuyện AI không giới hạn"
 }

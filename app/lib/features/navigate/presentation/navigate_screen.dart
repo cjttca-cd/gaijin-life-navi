@@ -42,6 +42,13 @@ class NavigateScreen extends StatelessWidget {
         route: AppRoutes.medical,
         color: theme.colorScheme.error,
       ),
+      _NavigateItem(
+        icon: Icons.forum,
+        title: l10n.navigateCommunity,
+        subtitle: l10n.navigateCommunityDesc,
+        route: AppRoutes.community,
+        color: theme.colorScheme.inversePrimary,
+      ),
     ];
 
     return Scaffold(

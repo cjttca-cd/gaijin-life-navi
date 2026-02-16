@@ -687,4 +687,207 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get navigateMedicalDesc => 'Hướng dẫn cấp cứu và cụm từ';
+
+  @override
+  String get upgradeToPremium => 'Nâng cấp lên Premium';
+
+  @override
+  String get communityTitle => 'Cộng đồng Hỏi đáp';
+
+  @override
+  String get communityEmpty => 'Chưa có bài viết';
+
+  @override
+  String get communityNewPost => 'Bài viết mới';
+
+  @override
+  String get communityDetailTitle => 'Chi tiết bài viết';
+
+  @override
+  String get communityAnswered => 'Đã trả lời';
+
+  @override
+  String get communityBestAnswer => 'Câu trả lời tốt nhất';
+
+  @override
+  String get communityFilterAll => 'Tất cả';
+
+  @override
+  String get communitySortNewest => 'Mới nhất';
+
+  @override
+  String get communitySortPopular => 'Phổ biến';
+
+  @override
+  String get communityCategoryVisa => 'Visa';
+
+  @override
+  String get communityCategoryHousing => 'Nhà ở';
+
+  @override
+  String get communityCategoryBanking => 'Ngân hàng';
+
+  @override
+  String get communityCategoryWork => 'Công việc';
+
+  @override
+  String get communityCategoryDailyLife => 'Cuộc sống hàng ngày';
+
+  @override
+  String get communityCategoryMedical => 'Y tế';
+
+  @override
+  String get communityCategoryEducation => 'Giáo dục';
+
+  @override
+  String get communityCategoryTax => 'Thuế';
+
+  @override
+  String get communityCategoryOther => 'Khác';
+
+  @override
+  String communityReplies(int count) {
+    return '$count Trả lời';
+  }
+
+  @override
+  String get communityNoReplies =>
+      'Chưa có câu trả lời. Hãy là người đầu tiên!';
+
+  @override
+  String get communityReplyHint => 'Viết câu trả lời...';
+
+  @override
+  String get communityReplyPremiumOnly =>
+      'Đăng bài và trả lời cần đăng ký Premium.';
+
+  @override
+  String communityVoteCount(int count) {
+    return '$count phiếu';
+  }
+
+  @override
+  String get communityModerationPending => 'Đang xem xét';
+
+  @override
+  String get communityModerationFlagged => 'Đã gắn cờ để xem xét';
+
+  @override
+  String get communityModerationNotice =>
+      'Bài viết của bạn sẽ được hệ thống AI kiểm duyệt trước khi hiển thị cho người khác.';
+
+  @override
+  String get communityChannelLabel => 'Kênh ngôn ngữ';
+
+  @override
+  String get communityCategoryLabel => 'Danh mục';
+
+  @override
+  String get communityTitleLabel => 'Tiêu đề';
+
+  @override
+  String get communityTitleHint => 'Câu hỏi của bạn là gì?';
+
+  @override
+  String get communityTitleMinLength => 'Tiêu đề phải có ít nhất 5 ký tự';
+
+  @override
+  String get communityContentLabel => 'Chi tiết';
+
+  @override
+  String get communityContentHint =>
+      'Mô tả chi tiết câu hỏi hoặc tình huống của bạn...';
+
+  @override
+  String get communityContentMinLength => 'Nội dung phải có ít nhất 10 ký tự';
+
+  @override
+  String get communitySubmit => 'Đăng';
+
+  @override
+  String communityTimeAgoDays(int days) {
+    return '$days ngày trước';
+  }
+
+  @override
+  String communityTimeAgoHours(int hours) {
+    return '$hours giờ trước';
+  }
+
+  @override
+  String communityTimeAgoMinutes(int minutes) {
+    return '$minutes phút trước';
+  }
+
+  @override
+  String get navigateCommunity => 'Cộng đồng';
+
+  @override
+  String get navigateCommunityDesc => 'Hỏi đáp với người nước ngoài khác';
+
+  @override
+  String get subscriptionTitle => 'Đăng ký';
+
+  @override
+  String get subscriptionPlansTitle => 'Chọn gói của bạn';
+
+  @override
+  String get subscriptionPlansSubtitle =>
+      'Mở khóa toàn bộ tiềm năng của Gaijin Life Navi';
+
+  @override
+  String get subscriptionCurrentPlan => 'Gói hiện tại';
+
+  @override
+  String get subscriptionCurrentPlanBadge => 'Gói hiện tại';
+
+  @override
+  String get subscriptionTierFree => 'Miễn phí';
+
+  @override
+  String get subscriptionTierPremium => 'Premium';
+
+  @override
+  String get subscriptionTierPremiumPlus => 'Premium+';
+
+  @override
+  String get subscriptionFreePrice => '¥0';
+
+  @override
+  String subscriptionPricePerMonth(int price) {
+    return '¥$price/tháng';
+  }
+
+  @override
+  String get subscriptionCheckout => 'Đăng ký ngay';
+
+  @override
+  String get subscriptionRecommended => 'KHUYẾN NGHỊ';
+
+  @override
+  String get subscriptionCancelling => 'Đang hủy...';
+
+  @override
+  String subscriptionCancellingAt(String date) {
+    return 'Gói của bạn sẽ kết thúc vào $date';
+  }
+
+  @override
+  String get subscriptionFeatureFreeChat => '5 cuộc trò chuyện AI mỗi ngày';
+
+  @override
+  String get subscriptionFeatureFreeScans => '3 lần quét tài liệu mỗi tháng';
+
+  @override
+  String get subscriptionFeatureFreeTracker => 'Theo dõi tối đa 3 thủ tục';
+
+  @override
+  String get subscriptionFeatureFreeCommunityRead => 'Đọc bài viết cộng đồng';
+
+  @override
+  String get subscriptionFeatureCommunityPost =>
+      'Đăng bài và trả lời trong cộng đồng';
+
+  @override
+  String get subscriptionFeatureUnlimitedChat => 'Trò chuyện AI không giới hạn';
 }

@@ -224,5 +224,90 @@
   "navigateScanner": "Scanner",
   "navigateScannerDesc": "Traduza documentos em japonês",
   "navigateMedical": "Médico",
-  "navigateMedicalDesc": "Guia de emergência e frases"
+  "navigateMedicalDesc": "Guia de emergência e frases",
+
+  "upgradeToPremium": "Atualizar para Premium",
+
+  "communityTitle": "Comunidade Q&A",
+  "communityEmpty": "Nenhuma postagem ainda",
+  "communityNewPost": "Nova Postagem",
+  "communityDetailTitle": "Detalhe da Postagem",
+  "communityAnswered": "Respondido",
+  "communityBestAnswer": "Melhor Resposta",
+  "communityFilterAll": "Todos",
+  "communitySortNewest": "Mais recentes",
+  "communitySortPopular": "Popular",
+  "communityCategoryVisa": "Visto",
+  "communityCategoryHousing": "Moradia",
+  "communityCategoryBanking": "Banco",
+  "communityCategoryWork": "Trabalho",
+  "communityCategoryDailyLife": "Vida Diária",
+  "communityCategoryMedical": "Médico",
+  "communityCategoryEducation": "Educação",
+  "communityCategoryTax": "Impostos",
+  "communityCategoryOther": "Outros",
+  "communityReplies": "{count} Respostas",
+  "@communityReplies": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityNoReplies": "Sem respostas ainda. Seja o primeiro a responder!",
+  "communityReplyHint": "Escreva uma resposta...",
+  "communityReplyPremiumOnly": "Postar e responder requer uma assinatura Premium.",
+  "communityVoteCount": "{count} votos",
+  "@communityVoteCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityModerationPending": "Em análise",
+  "communityModerationFlagged": "Sinalizado para revisão",
+  "communityModerationNotice": "Sua postagem será revisada pelo nosso sistema de moderação AI antes de ficar visível para outros.",
+  "communityChannelLabel": "Canal de idioma",
+  "communityCategoryLabel": "Categoria",
+  "communityTitleLabel": "Título",
+  "communityTitleHint": "Qual é a sua pergunta?",
+  "communityTitleMinLength": "O título deve ter pelo menos 5 caracteres",
+  "communityContentLabel": "Detalhes",
+  "communityContentHint": "Descreva sua pergunta ou situação em detalhes...",
+  "communityContentMinLength": "O conteúdo deve ter pelo menos 10 caracteres",
+  "communitySubmit": "Publicar",
+  "communityTimeAgoDays": "{days}d atrás",
+  "@communityTimeAgoDays": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "communityTimeAgoHours": "{hours}h atrás",
+  "@communityTimeAgoHours": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "communityTimeAgoMinutes": "{minutes}m atrás",
+  "@communityTimeAgoMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "navigateCommunity": "Comunidade",
+  "navigateCommunityDesc": "Perguntas e respostas com outros estrangeiros",
+
+  "subscriptionTitle": "Assinatura",
+  "subscriptionPlansTitle": "Escolha seu Plano",
+  "subscriptionPlansSubtitle": "Desbloqueie todo o potencial do Gaijin Life Navi",
+  "subscriptionCurrentPlan": "Plano Atual",
+  "subscriptionCurrentPlanBadge": "Plano Atual",
+  "subscriptionTierFree": "Gratuito",
+  "subscriptionTierPremium": "Premium",
+  "subscriptionTierPremiumPlus": "Premium+",
+  "subscriptionFreePrice": "¥0",
+  "subscriptionPricePerMonth": "¥{price}/mês",
+  "@subscriptionPricePerMonth": {
+    "placeholders": { "price": { "type": "int" } }
+  },
+  "subscriptionCheckout": "Assinar Agora",
+  "subscriptionRecommended": "RECOMENDADO",
+  "subscriptionCancelling": "Cancelando...",
+  "subscriptionCancellingAt": "Seu plano termina em {date}",
+  "@subscriptionCancellingAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "subscriptionFeatureFreeChat": "5 conversas com IA por dia",
+  "subscriptionFeatureFreeScans": "3 escaneamentos de documentos por mês",
+  "subscriptionFeatureFreeTracker": "Rastrear até 3 procedimentos",
+  "subscriptionFeatureFreeCommunityRead": "Ler postagens da comunidade",
+  "subscriptionFeatureCommunityPost": "Postar e responder na comunidade",
+  "subscriptionFeatureUnlimitedChat": "Conversas com IA ilimitadas"
 }

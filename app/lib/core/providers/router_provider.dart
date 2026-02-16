@@ -11,6 +11,9 @@ import '../../features/banking/presentation/banking_list_screen.dart';
 import '../../features/banking/presentation/banking_recommend_screen.dart';
 import '../../features/chat/presentation/chat_conversation_screen.dart';
 import '../../features/chat/presentation/chat_list_screen.dart';
+import '../../features/community/presentation/community_create_screen.dart';
+import '../../features/community/presentation/community_detail_screen.dart';
+import '../../features/community/presentation/community_list_screen.dart';
 import '../../features/home/presentation/main_shell.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/medical/presentation/medical_guide_screen.dart';
@@ -20,6 +23,7 @@ import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/scanner/presentation/scanner_history_screen.dart';
 import '../../features/scanner/presentation/scanner_home_screen.dart';
 import '../../features/scanner/presentation/scanner_result_screen.dart';
+import '../../features/subscription/presentation/subscription_screen.dart';
 import '../../features/tracker/presentation/tracker_add_screen.dart';
 import '../../features/tracker/presentation/tracker_detail_screen.dart';
 import '../../features/tracker/presentation/tracker_screen.dart';
@@ -63,6 +67,14 @@ class AppRoutes {
 
   // Medical Guide
   static const String medical = '/medical';
+
+  // Community Q&A
+  static const String community = '/community';
+  static const String communityNew = '/community/new';
+  static const String communityDetail = '/community/:id';
+
+  // Subscription
+  static const String subscription = '/subscription';
 }
 
 /// Navigation key for refreshing the router when auth state changes.
@@ -226,6 +238,29 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.medical,
         builder: (context, state) => const MedicalGuideScreen(),
+      ),
+
+      // Community Q&A (full-screen routes)
+      GoRoute(
+        path: AppRoutes.community,
+        builder: (context, state) => const CommunityListScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.communityNew,
+        builder: (context, state) => const CommunityCreateScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.communityDetail,
+        builder: (context, state) {
+          final postId = state.pathParameters['id']!;
+          return CommunityDetailScreen(postId: postId);
+        },
+      ),
+
+      // Subscription (full-screen)
+      GoRoute(
+        path: AppRoutes.subscription,
+        builder: (context, state) => const SubscriptionScreen(),
       ),
 
       // Main shell with bottom navigation

@@ -669,4 +669,201 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get navigateMedicalDesc => '紧急指南和短语';
+
+  @override
+  String get upgradeToPremium => '升级到高级版';
+
+  @override
+  String get communityTitle => '社区问答';
+
+  @override
+  String get communityEmpty => '暂无帖子';
+
+  @override
+  String get communityNewPost => '发新帖';
+
+  @override
+  String get communityDetailTitle => '帖子详情';
+
+  @override
+  String get communityAnswered => '已回答';
+
+  @override
+  String get communityBestAnswer => '最佳答案';
+
+  @override
+  String get communityFilterAll => '全部';
+
+  @override
+  String get communitySortNewest => '最新';
+
+  @override
+  String get communitySortPopular => '热门';
+
+  @override
+  String get communityCategoryVisa => '签证';
+
+  @override
+  String get communityCategoryHousing => '住房';
+
+  @override
+  String get communityCategoryBanking => '银行';
+
+  @override
+  String get communityCategoryWork => '工作';
+
+  @override
+  String get communityCategoryDailyLife => '日常生活';
+
+  @override
+  String get communityCategoryMedical => '医疗';
+
+  @override
+  String get communityCategoryEducation => '教育';
+
+  @override
+  String get communityCategoryTax => '税务';
+
+  @override
+  String get communityCategoryOther => '其他';
+
+  @override
+  String communityReplies(int count) {
+    return '$count 条回复';
+  }
+
+  @override
+  String get communityNoReplies => '暂无回复。成为第一个回答者！';
+
+  @override
+  String get communityReplyHint => '写回复...';
+
+  @override
+  String get communityReplyPremiumOnly => '发帖和回复需要高级版订阅。';
+
+  @override
+  String communityVoteCount(int count) {
+    return '$count 票';
+  }
+
+  @override
+  String get communityModerationPending => '审核中';
+
+  @override
+  String get communityModerationFlagged => '已标记待审';
+
+  @override
+  String get communityModerationNotice => '您的帖子将由AI审核系统审核后才会对其他人可见。';
+
+  @override
+  String get communityChannelLabel => '语言频道';
+
+  @override
+  String get communityCategoryLabel => '分类';
+
+  @override
+  String get communityTitleLabel => '标题';
+
+  @override
+  String get communityTitleHint => '您的问题是什么？';
+
+  @override
+  String get communityTitleMinLength => '标题至少5个字符';
+
+  @override
+  String get communityContentLabel => '详情';
+
+  @override
+  String get communityContentHint => '详细描述您的问题或情况...';
+
+  @override
+  String get communityContentMinLength => '内容至少10个字符';
+
+  @override
+  String get communitySubmit => '发布';
+
+  @override
+  String communityTimeAgoDays(int days) {
+    return '$days天前';
+  }
+
+  @override
+  String communityTimeAgoHours(int hours) {
+    return '$hours小时前';
+  }
+
+  @override
+  String communityTimeAgoMinutes(int minutes) {
+    return '$minutes分钟前';
+  }
+
+  @override
+  String get navigateCommunity => '社区';
+
+  @override
+  String get navigateCommunityDesc => '与其他外国人问答';
+
+  @override
+  String get subscriptionTitle => '订阅';
+
+  @override
+  String get subscriptionPlansTitle => '选择您的方案';
+
+  @override
+  String get subscriptionPlansSubtitle => '解锁 Gaijin Life Navi 的全部功能';
+
+  @override
+  String get subscriptionCurrentPlan => '当前方案';
+
+  @override
+  String get subscriptionCurrentPlanBadge => '当前方案';
+
+  @override
+  String get subscriptionTierFree => '免费';
+
+  @override
+  String get subscriptionTierPremium => '高级版';
+
+  @override
+  String get subscriptionTierPremiumPlus => '高级版+';
+
+  @override
+  String get subscriptionFreePrice => '¥0';
+
+  @override
+  String subscriptionPricePerMonth(int price) {
+    return '¥$price/月';
+  }
+
+  @override
+  String get subscriptionCheckout => '立即订阅';
+
+  @override
+  String get subscriptionRecommended => '推荐';
+
+  @override
+  String get subscriptionCancelling => '取消中...';
+
+  @override
+  String subscriptionCancellingAt(String date) {
+    return '您的方案将于 $date 结束';
+  }
+
+  @override
+  String get subscriptionFeatureFreeChat => '每天5次AI对话';
+
+  @override
+  String get subscriptionFeatureFreeScans => '每月3次文档扫描';
+
+  @override
+  String get subscriptionFeatureFreeTracker => '追踪最多3个手续';
+
+  @override
+  String get subscriptionFeatureFreeCommunityRead => '阅读社区帖子';
+
+  @override
+  String get subscriptionFeatureCommunityPost => '在社区发帖和回复';
+
+  @override
+  String get subscriptionFeatureUnlimitedChat => '无限AI对话';
 }

@@ -672,4 +672,202 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get navigateMedicalDesc => '응급 가이드 및 표현';
+
+  @override
+  String get upgradeToPremium => '프리미엄으로 업그레이드';
+
+  @override
+  String get communityTitle => '커뮤니티 Q&A';
+
+  @override
+  String get communityEmpty => '아직 게시글이 없습니다';
+
+  @override
+  String get communityNewPost => '새 게시글';
+
+  @override
+  String get communityDetailTitle => '게시글 상세';
+
+  @override
+  String get communityAnswered => '답변됨';
+
+  @override
+  String get communityBestAnswer => '최고 답변';
+
+  @override
+  String get communityFilterAll => '전체';
+
+  @override
+  String get communitySortNewest => '최신';
+
+  @override
+  String get communitySortPopular => '인기';
+
+  @override
+  String get communityCategoryVisa => '비자';
+
+  @override
+  String get communityCategoryHousing => '주거';
+
+  @override
+  String get communityCategoryBanking => '은행';
+
+  @override
+  String get communityCategoryWork => '직장';
+
+  @override
+  String get communityCategoryDailyLife => '일상생활';
+
+  @override
+  String get communityCategoryMedical => '의료';
+
+  @override
+  String get communityCategoryEducation => '교육';
+
+  @override
+  String get communityCategoryTax => '세금';
+
+  @override
+  String get communityCategoryOther => '기타';
+
+  @override
+  String communityReplies(int count) {
+    return '$count개 답변';
+  }
+
+  @override
+  String get communityNoReplies => '아직 답변이 없습니다. 첫 번째로 답변해보세요!';
+
+  @override
+  String get communityReplyHint => '답변 작성...';
+
+  @override
+  String get communityReplyPremiumOnly => '게시글 작성 및 답변에는 프리미엄 구독이 필요합니다.';
+
+  @override
+  String communityVoteCount(int count) {
+    return '$count표';
+  }
+
+  @override
+  String get communityModerationPending => '검토 중';
+
+  @override
+  String get communityModerationFlagged => '검토를 위해 표시됨';
+
+  @override
+  String get communityModerationNotice =>
+      '게시글은 AI 검토 시스템에 의해 검토된 후 다른 사용자에게 표시됩니다.';
+
+  @override
+  String get communityChannelLabel => '언어 채널';
+
+  @override
+  String get communityCategoryLabel => '카테고리';
+
+  @override
+  String get communityTitleLabel => '제목';
+
+  @override
+  String get communityTitleHint => '질문이 무엇인가요?';
+
+  @override
+  String get communityTitleMinLength => '제목은 5자 이상이어야 합니다';
+
+  @override
+  String get communityContentLabel => '상세 내용';
+
+  @override
+  String get communityContentHint => '질문이나 상황을 자세히 설명해주세요...';
+
+  @override
+  String get communityContentMinLength => '내용은 10자 이상이어야 합니다';
+
+  @override
+  String get communitySubmit => '게시';
+
+  @override
+  String communityTimeAgoDays(int days) {
+    return '$days일 전';
+  }
+
+  @override
+  String communityTimeAgoHours(int hours) {
+    return '$hours시간 전';
+  }
+
+  @override
+  String communityTimeAgoMinutes(int minutes) {
+    return '$minutes분 전';
+  }
+
+  @override
+  String get navigateCommunity => '커뮤니티';
+
+  @override
+  String get navigateCommunityDesc => '다른 외국인과의 Q&A';
+
+  @override
+  String get subscriptionTitle => '구독';
+
+  @override
+  String get subscriptionPlansTitle => '플랜 선택';
+
+  @override
+  String get subscriptionPlansSubtitle => 'Gaijin Life Navi의 모든 기능을 잠금 해제하세요';
+
+  @override
+  String get subscriptionCurrentPlan => '현재 플랜';
+
+  @override
+  String get subscriptionCurrentPlanBadge => '현재 플랜';
+
+  @override
+  String get subscriptionTierFree => '무료';
+
+  @override
+  String get subscriptionTierPremium => '프리미엄';
+
+  @override
+  String get subscriptionTierPremiumPlus => '프리미엄+';
+
+  @override
+  String get subscriptionFreePrice => '¥0';
+
+  @override
+  String subscriptionPricePerMonth(int price) {
+    return '¥$price/월';
+  }
+
+  @override
+  String get subscriptionCheckout => '지금 구독하기';
+
+  @override
+  String get subscriptionRecommended => '추천';
+
+  @override
+  String get subscriptionCancelling => '취소 중...';
+
+  @override
+  String subscriptionCancellingAt(String date) {
+    return '플랜이 $date에 종료됩니다';
+  }
+
+  @override
+  String get subscriptionFeatureFreeChat => '매일 AI 채팅 5회';
+
+  @override
+  String get subscriptionFeatureFreeScans => '매월 문서 스캔 3회';
+
+  @override
+  String get subscriptionFeatureFreeTracker => '최대 3개 절차 추적';
+
+  @override
+  String get subscriptionFeatureFreeCommunityRead => '커뮤니티 게시글 읽기';
+
+  @override
+  String get subscriptionFeatureCommunityPost => '커뮤니티에 게시 및 답변';
+
+  @override
+  String get subscriptionFeatureUnlimitedChat => '무제한 AI 채팅';
 }

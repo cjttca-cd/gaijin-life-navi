@@ -1417,6 +1417,372 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Emergency guide & phrases'**
   String get navigateMedicalDesc;
+
+  /// Upgrade to premium button
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium'**
+  String get upgradeToPremium;
+
+  /// Community screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Community Q&A'**
+  String get communityTitle;
+
+  /// Empty community list message
+  ///
+  /// In en, this message translates to:
+  /// **'No posts yet'**
+  String get communityEmpty;
+
+  /// New post button
+  ///
+  /// In en, this message translates to:
+  /// **'New Post'**
+  String get communityNewPost;
+
+  /// Post detail screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Post Detail'**
+  String get communityDetailTitle;
+
+  /// Answered badge
+  ///
+  /// In en, this message translates to:
+  /// **'Answered'**
+  String get communityAnswered;
+
+  /// Best answer badge
+  ///
+  /// In en, this message translates to:
+  /// **'Best Answer'**
+  String get communityBestAnswer;
+
+  /// All category filter
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get communityFilterAll;
+
+  /// Sort by newest
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get communitySortNewest;
+
+  /// Sort by popular
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get communitySortPopular;
+
+  /// Visa category
+  ///
+  /// In en, this message translates to:
+  /// **'Visa'**
+  String get communityCategoryVisa;
+
+  /// Housing category
+  ///
+  /// In en, this message translates to:
+  /// **'Housing'**
+  String get communityCategoryHousing;
+
+  /// Banking category
+  ///
+  /// In en, this message translates to:
+  /// **'Banking'**
+  String get communityCategoryBanking;
+
+  /// Work category
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get communityCategoryWork;
+
+  /// Daily life category
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Life'**
+  String get communityCategoryDailyLife;
+
+  /// Medical category
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get communityCategoryMedical;
+
+  /// Education category
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get communityCategoryEducation;
+
+  /// Tax category
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get communityCategoryTax;
+
+  /// Other category
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get communityCategoryOther;
+
+  /// Reply count header
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Replies'**
+  String communityReplies(int count);
+
+  /// No replies message
+  ///
+  /// In en, this message translates to:
+  /// **'No replies yet. Be the first to answer!'**
+  String get communityNoReplies;
+
+  /// Reply input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reply...'**
+  String get communityReplyHint;
+
+  /// Free user reply restriction
+  ///
+  /// In en, this message translates to:
+  /// **'Posting and replying requires a Premium subscription.'**
+  String get communityReplyPremiumOnly;
+
+  /// Vote count label
+  ///
+  /// In en, this message translates to:
+  /// **'{count} votes'**
+  String communityVoteCount(int count);
+
+  /// Pending moderation badge
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get communityModerationPending;
+
+  /// Flagged moderation badge
+  ///
+  /// In en, this message translates to:
+  /// **'Flagged for review'**
+  String get communityModerationFlagged;
+
+  /// Moderation notice on create
+  ///
+  /// In en, this message translates to:
+  /// **'Your post will be reviewed by our AI moderation system before it becomes visible to others.'**
+  String get communityModerationNotice;
+
+  /// Channel selector label
+  ///
+  /// In en, this message translates to:
+  /// **'Language Channel'**
+  String get communityChannelLabel;
+
+  /// Category selector label
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get communityCategoryLabel;
+
+  /// Post title field label
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get communityTitleLabel;
+
+  /// Post title hint
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your question?'**
+  String get communityTitleHint;
+
+  /// Title min length validation
+  ///
+  /// In en, this message translates to:
+  /// **'Title must be at least 5 characters'**
+  String get communityTitleMinLength;
+
+  /// Post content field label
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get communityContentLabel;
+
+  /// Post content hint
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your question or situation in detail...'**
+  String get communityContentHint;
+
+  /// Content min length validation
+  ///
+  /// In en, this message translates to:
+  /// **'Content must be at least 10 characters'**
+  String get communityContentMinLength;
+
+  /// Submit post button
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get communitySubmit;
+
+  /// Time ago in days
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d ago'**
+  String communityTimeAgoDays(int days);
+
+  /// Time ago in hours
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h ago'**
+  String communityTimeAgoHours(int hours);
+
+  /// Time ago in minutes
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m ago'**
+  String communityTimeAgoMinutes(int minutes);
+
+  /// Navigate hub community title
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get navigateCommunity;
+
+  /// Navigate hub community description
+  ///
+  /// In en, this message translates to:
+  /// **'Q&A with other foreigners'**
+  String get navigateCommunityDesc;
+
+  /// Subscription screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get subscriptionTitle;
+
+  /// Plans section title
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Your Plan'**
+  String get subscriptionPlansTitle;
+
+  /// Plans section subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock the full potential of Gaijin Life Navi'**
+  String get subscriptionPlansSubtitle;
+
+  /// Current plan label
+  ///
+  /// In en, this message translates to:
+  /// **'Current Plan'**
+  String get subscriptionCurrentPlan;
+
+  /// Current plan badge on card
+  ///
+  /// In en, this message translates to:
+  /// **'Current Plan'**
+  String get subscriptionCurrentPlanBadge;
+
+  /// Free tier name
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get subscriptionTierFree;
+
+  /// Premium tier name
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get subscriptionTierPremium;
+
+  /// Premium+ tier name
+  ///
+  /// In en, this message translates to:
+  /// **'Premium+'**
+  String get subscriptionTierPremiumPlus;
+
+  /// Free plan price
+  ///
+  /// In en, this message translates to:
+  /// **'¥0'**
+  String get subscriptionFreePrice;
+
+  /// Price per month
+  ///
+  /// In en, this message translates to:
+  /// **'¥{price}/month'**
+  String subscriptionPricePerMonth(int price);
+
+  /// Checkout button
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe Now'**
+  String get subscriptionCheckout;
+
+  /// Recommended badge
+  ///
+  /// In en, this message translates to:
+  /// **'RECOMMENDED'**
+  String get subscriptionRecommended;
+
+  /// Cancelling status
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelling...'**
+  String get subscriptionCancelling;
+
+  /// Cancellation date message
+  ///
+  /// In en, this message translates to:
+  /// **'Your plan will end on {date}'**
+  String subscriptionCancellingAt(String date);
+
+  /// Free plan chat feature
+  ///
+  /// In en, this message translates to:
+  /// **'5 AI chats per day'**
+  String get subscriptionFeatureFreeChat;
+
+  /// Free plan scan feature
+  ///
+  /// In en, this message translates to:
+  /// **'3 document scans per month'**
+  String get subscriptionFeatureFreeScans;
+
+  /// Free plan tracker feature
+  ///
+  /// In en, this message translates to:
+  /// **'Track up to 3 procedures'**
+  String get subscriptionFeatureFreeTracker;
+
+  /// Free plan community feature
+  ///
+  /// In en, this message translates to:
+  /// **'Read community posts'**
+  String get subscriptionFeatureFreeCommunityRead;
+
+  /// Premium community feature
+  ///
+  /// In en, this message translates to:
+  /// **'Post & reply in community'**
+  String get subscriptionFeatureCommunityPost;
+
+  /// Premium chat feature
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited AI chats'**
+  String get subscriptionFeatureUnlimitedChat;
 }
 
 class _AppLocalizationsDelegate

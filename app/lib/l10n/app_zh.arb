@@ -224,5 +224,90 @@
   "navigateScanner": "扫描",
   "navigateScannerDesc": "翻译日语文档",
   "navigateMedical": "医疗",
-  "navigateMedicalDesc": "紧急指南和短语"
+  "navigateMedicalDesc": "紧急指南和短语",
+
+  "upgradeToPremium": "升级到高级版",
+
+  "communityTitle": "社区问答",
+  "communityEmpty": "暂无帖子",
+  "communityNewPost": "发新帖",
+  "communityDetailTitle": "帖子详情",
+  "communityAnswered": "已回答",
+  "communityBestAnswer": "最佳答案",
+  "communityFilterAll": "全部",
+  "communitySortNewest": "最新",
+  "communitySortPopular": "热门",
+  "communityCategoryVisa": "签证",
+  "communityCategoryHousing": "住房",
+  "communityCategoryBanking": "银行",
+  "communityCategoryWork": "工作",
+  "communityCategoryDailyLife": "日常生活",
+  "communityCategoryMedical": "医疗",
+  "communityCategoryEducation": "教育",
+  "communityCategoryTax": "税务",
+  "communityCategoryOther": "其他",
+  "communityReplies": "{count} 条回复",
+  "@communityReplies": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityNoReplies": "暂无回复。成为第一个回答者！",
+  "communityReplyHint": "写回复...",
+  "communityReplyPremiumOnly": "发帖和回复需要高级版订阅。",
+  "communityVoteCount": "{count} 票",
+  "@communityVoteCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityModerationPending": "审核中",
+  "communityModerationFlagged": "已标记待审",
+  "communityModerationNotice": "您的帖子将由AI审核系统审核后才会对其他人可见。",
+  "communityChannelLabel": "语言频道",
+  "communityCategoryLabel": "分类",
+  "communityTitleLabel": "标题",
+  "communityTitleHint": "您的问题是什么？",
+  "communityTitleMinLength": "标题至少5个字符",
+  "communityContentLabel": "详情",
+  "communityContentHint": "详细描述您的问题或情况...",
+  "communityContentMinLength": "内容至少10个字符",
+  "communitySubmit": "发布",
+  "communityTimeAgoDays": "{days}天前",
+  "@communityTimeAgoDays": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "communityTimeAgoHours": "{hours}小时前",
+  "@communityTimeAgoHours": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "communityTimeAgoMinutes": "{minutes}分钟前",
+  "@communityTimeAgoMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "navigateCommunity": "社区",
+  "navigateCommunityDesc": "与其他外国人问答",
+
+  "subscriptionTitle": "订阅",
+  "subscriptionPlansTitle": "选择您的方案",
+  "subscriptionPlansSubtitle": "解锁 Gaijin Life Navi 的全部功能",
+  "subscriptionCurrentPlan": "当前方案",
+  "subscriptionCurrentPlanBadge": "当前方案",
+  "subscriptionTierFree": "免费",
+  "subscriptionTierPremium": "高级版",
+  "subscriptionTierPremiumPlus": "高级版+",
+  "subscriptionFreePrice": "¥0",
+  "subscriptionPricePerMonth": "¥{price}/月",
+  "@subscriptionPricePerMonth": {
+    "placeholders": { "price": { "type": "int" } }
+  },
+  "subscriptionCheckout": "立即订阅",
+  "subscriptionRecommended": "推荐",
+  "subscriptionCancelling": "取消中...",
+  "subscriptionCancellingAt": "您的方案将于 {date} 结束",
+  "@subscriptionCancellingAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "subscriptionFeatureFreeChat": "每天5次AI对话",
+  "subscriptionFeatureFreeScans": "每月3次文档扫描",
+  "subscriptionFeatureFreeTracker": "追踪最多3个手续",
+  "subscriptionFeatureFreeCommunityRead": "阅读社区帖子",
+  "subscriptionFeatureCommunityPost": "在社区发帖和回复",
+  "subscriptionFeatureUnlimitedChat": "无限AI对话"
 }

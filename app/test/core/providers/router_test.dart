@@ -92,5 +92,20 @@ void main() {
     test('scanner result route has :id parameter', () {
       expect(AppRoutes.scannerResult, contains(':id'));
     });
+
+    // M3 routes
+    test('Community Q&A routes are defined', () {
+      expect(AppRoutes.community, '/community');
+      expect(AppRoutes.communityNew, '/community/new');
+      expect(AppRoutes.communityDetail, '/community/:id');
+    });
+
+    test('community detail route has :id parameter', () {
+      expect(AppRoutes.communityDetail, contains(':id'));
+    });
+
+    test('Subscription route is defined', () {
+      expect(AppRoutes.subscription, '/subscription');
+    });
   });
 }

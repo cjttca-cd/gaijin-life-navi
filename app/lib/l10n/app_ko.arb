@@ -224,5 +224,90 @@
   "navigateScanner": "스캐너",
   "navigateScannerDesc": "일본어 문서 번역",
   "navigateMedical": "의료",
-  "navigateMedicalDesc": "응급 가이드 및 표현"
+  "navigateMedicalDesc": "응급 가이드 및 표현",
+
+  "upgradeToPremium": "프리미엄으로 업그레이드",
+
+  "communityTitle": "커뮤니티 Q&A",
+  "communityEmpty": "아직 게시글이 없습니다",
+  "communityNewPost": "새 게시글",
+  "communityDetailTitle": "게시글 상세",
+  "communityAnswered": "답변됨",
+  "communityBestAnswer": "최고 답변",
+  "communityFilterAll": "전체",
+  "communitySortNewest": "최신",
+  "communitySortPopular": "인기",
+  "communityCategoryVisa": "비자",
+  "communityCategoryHousing": "주거",
+  "communityCategoryBanking": "은행",
+  "communityCategoryWork": "직장",
+  "communityCategoryDailyLife": "일상생활",
+  "communityCategoryMedical": "의료",
+  "communityCategoryEducation": "교육",
+  "communityCategoryTax": "세금",
+  "communityCategoryOther": "기타",
+  "communityReplies": "{count}개 답변",
+  "@communityReplies": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityNoReplies": "아직 답변이 없습니다. 첫 번째로 답변해보세요!",
+  "communityReplyHint": "답변 작성...",
+  "communityReplyPremiumOnly": "게시글 작성 및 답변에는 프리미엄 구독이 필요합니다.",
+  "communityVoteCount": "{count}표",
+  "@communityVoteCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "communityModerationPending": "검토 중",
+  "communityModerationFlagged": "검토를 위해 표시됨",
+  "communityModerationNotice": "게시글은 AI 검토 시스템에 의해 검토된 후 다른 사용자에게 표시됩니다.",
+  "communityChannelLabel": "언어 채널",
+  "communityCategoryLabel": "카테고리",
+  "communityTitleLabel": "제목",
+  "communityTitleHint": "질문이 무엇인가요?",
+  "communityTitleMinLength": "제목은 5자 이상이어야 합니다",
+  "communityContentLabel": "상세 내용",
+  "communityContentHint": "질문이나 상황을 자세히 설명해주세요...",
+  "communityContentMinLength": "내용은 10자 이상이어야 합니다",
+  "communitySubmit": "게시",
+  "communityTimeAgoDays": "{days}일 전",
+  "@communityTimeAgoDays": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "communityTimeAgoHours": "{hours}시간 전",
+  "@communityTimeAgoHours": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "communityTimeAgoMinutes": "{minutes}분 전",
+  "@communityTimeAgoMinutes": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "navigateCommunity": "커뮤니티",
+  "navigateCommunityDesc": "다른 외국인과의 Q&A",
+
+  "subscriptionTitle": "구독",
+  "subscriptionPlansTitle": "플랜 선택",
+  "subscriptionPlansSubtitle": "Gaijin Life Navi의 모든 기능을 잠금 해제하세요",
+  "subscriptionCurrentPlan": "현재 플랜",
+  "subscriptionCurrentPlanBadge": "현재 플랜",
+  "subscriptionTierFree": "무료",
+  "subscriptionTierPremium": "프리미엄",
+  "subscriptionTierPremiumPlus": "프리미엄+",
+  "subscriptionFreePrice": "¥0",
+  "subscriptionPricePerMonth": "¥{price}/월",
+  "@subscriptionPricePerMonth": {
+    "placeholders": { "price": { "type": "int" } }
+  },
+  "subscriptionCheckout": "지금 구독하기",
+  "subscriptionRecommended": "추천",
+  "subscriptionCancelling": "취소 중...",
+  "subscriptionCancellingAt": "플랜이 {date}에 종료됩니다",
+  "@subscriptionCancellingAt": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "subscriptionFeatureFreeChat": "매일 AI 채팅 5회",
+  "subscriptionFeatureFreeScans": "매월 문서 스캔 3회",
+  "subscriptionFeatureFreeTracker": "최대 3개 절차 추적",
+  "subscriptionFeatureFreeCommunityRead": "커뮤니티 게시글 읽기",
+  "subscriptionFeatureCommunityPost": "커뮤니티에 게시 및 답변",
+  "subscriptionFeatureUnlimitedChat": "무제한 AI 채팅"
 }

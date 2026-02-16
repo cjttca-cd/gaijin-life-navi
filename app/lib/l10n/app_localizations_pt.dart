@@ -692,4 +692,212 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get navigateMedicalDesc => 'Guia de emergência e frases';
+
+  @override
+  String get upgradeToPremium => 'Atualizar para Premium';
+
+  @override
+  String get communityTitle => 'Comunidade Q&A';
+
+  @override
+  String get communityEmpty => 'Nenhuma postagem ainda';
+
+  @override
+  String get communityNewPost => 'Nova Postagem';
+
+  @override
+  String get communityDetailTitle => 'Detalhe da Postagem';
+
+  @override
+  String get communityAnswered => 'Respondido';
+
+  @override
+  String get communityBestAnswer => 'Melhor Resposta';
+
+  @override
+  String get communityFilterAll => 'Todos';
+
+  @override
+  String get communitySortNewest => 'Mais recentes';
+
+  @override
+  String get communitySortPopular => 'Popular';
+
+  @override
+  String get communityCategoryVisa => 'Visto';
+
+  @override
+  String get communityCategoryHousing => 'Moradia';
+
+  @override
+  String get communityCategoryBanking => 'Banco';
+
+  @override
+  String get communityCategoryWork => 'Trabalho';
+
+  @override
+  String get communityCategoryDailyLife => 'Vida Diária';
+
+  @override
+  String get communityCategoryMedical => 'Médico';
+
+  @override
+  String get communityCategoryEducation => 'Educação';
+
+  @override
+  String get communityCategoryTax => 'Impostos';
+
+  @override
+  String get communityCategoryOther => 'Outros';
+
+  @override
+  String communityReplies(int count) {
+    return '$count Respostas';
+  }
+
+  @override
+  String get communityNoReplies =>
+      'Sem respostas ainda. Seja o primeiro a responder!';
+
+  @override
+  String get communityReplyHint => 'Escreva uma resposta...';
+
+  @override
+  String get communityReplyPremiumOnly =>
+      'Postar e responder requer uma assinatura Premium.';
+
+  @override
+  String communityVoteCount(int count) {
+    return '$count votos';
+  }
+
+  @override
+  String get communityModerationPending => 'Em análise';
+
+  @override
+  String get communityModerationFlagged => 'Sinalizado para revisão';
+
+  @override
+  String get communityModerationNotice =>
+      'Sua postagem será revisada pelo nosso sistema de moderação AI antes de ficar visível para outros.';
+
+  @override
+  String get communityChannelLabel => 'Canal de idioma';
+
+  @override
+  String get communityCategoryLabel => 'Categoria';
+
+  @override
+  String get communityTitleLabel => 'Título';
+
+  @override
+  String get communityTitleHint => 'Qual é a sua pergunta?';
+
+  @override
+  String get communityTitleMinLength =>
+      'O título deve ter pelo menos 5 caracteres';
+
+  @override
+  String get communityContentLabel => 'Detalhes';
+
+  @override
+  String get communityContentHint =>
+      'Descreva sua pergunta ou situação em detalhes...';
+
+  @override
+  String get communityContentMinLength =>
+      'O conteúdo deve ter pelo menos 10 caracteres';
+
+  @override
+  String get communitySubmit => 'Publicar';
+
+  @override
+  String communityTimeAgoDays(int days) {
+    return '${days}d atrás';
+  }
+
+  @override
+  String communityTimeAgoHours(int hours) {
+    return '${hours}h atrás';
+  }
+
+  @override
+  String communityTimeAgoMinutes(int minutes) {
+    return '${minutes}m atrás';
+  }
+
+  @override
+  String get navigateCommunity => 'Comunidade';
+
+  @override
+  String get navigateCommunityDesc =>
+      'Perguntas e respostas com outros estrangeiros';
+
+  @override
+  String get subscriptionTitle => 'Assinatura';
+
+  @override
+  String get subscriptionPlansTitle => 'Escolha seu Plano';
+
+  @override
+  String get subscriptionPlansSubtitle =>
+      'Desbloqueie todo o potencial do Gaijin Life Navi';
+
+  @override
+  String get subscriptionCurrentPlan => 'Plano Atual';
+
+  @override
+  String get subscriptionCurrentPlanBadge => 'Plano Atual';
+
+  @override
+  String get subscriptionTierFree => 'Gratuito';
+
+  @override
+  String get subscriptionTierPremium => 'Premium';
+
+  @override
+  String get subscriptionTierPremiumPlus => 'Premium+';
+
+  @override
+  String get subscriptionFreePrice => '¥0';
+
+  @override
+  String subscriptionPricePerMonth(int price) {
+    return '¥$price/mês';
+  }
+
+  @override
+  String get subscriptionCheckout => 'Assinar Agora';
+
+  @override
+  String get subscriptionRecommended => 'RECOMENDADO';
+
+  @override
+  String get subscriptionCancelling => 'Cancelando...';
+
+  @override
+  String subscriptionCancellingAt(String date) {
+    return 'Seu plano termina em $date';
+  }
+
+  @override
+  String get subscriptionFeatureFreeChat => '5 conversas com IA por dia';
+
+  @override
+  String get subscriptionFeatureFreeScans =>
+      '3 escaneamentos de documentos por mês';
+
+  @override
+  String get subscriptionFeatureFreeTracker => 'Rastrear até 3 procedimentos';
+
+  @override
+  String get subscriptionFeatureFreeCommunityRead =>
+      'Ler postagens da comunidade';
+
+  @override
+  String get subscriptionFeatureCommunityPost =>
+      'Postar e responder na comunidade';
+
+  @override
+  String get subscriptionFeatureUnlimitedChat => 'Conversas com IA ilimitadas';
 }
