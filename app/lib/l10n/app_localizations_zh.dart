@@ -114,7 +114,266 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeSubtitle => '您的日本生活指南';
 
   @override
+  String get homeQuickActions => '快捷操作';
+
+  @override
+  String get homeActionAskAI => 'AI 问答';
+
+  @override
+  String get homeActionTracker => '追踪器';
+
+  @override
+  String get homeActionBanking => '银行';
+
+  @override
+  String get homeActionChatHistory => '聊天记录';
+
+  @override
+  String get homeRecentChats => '最近的聊天';
+
+  @override
+  String get homeNoRecentChats => '暂无聊天记录';
+
+  @override
+  String get homeMessagesLabel => '条消息';
+
+  @override
   String get chatPlaceholder => 'AI 聊天 — 即将推出';
+
+  @override
+  String get chatTitle => 'AI 聊天';
+
+  @override
+  String get chatNewSession => '新对话';
+
+  @override
+  String get chatEmptyTitle => '开始对话';
+
+  @override
+  String get chatEmptySubtitle => '向 AI 询问有关在日本生活的任何问题';
+
+  @override
+  String get chatUntitledSession => '新对话';
+
+  @override
+  String get chatConversationTitle => '对话';
+
+  @override
+  String get chatInputHint => '询问有关日本生活的问题...';
+
+  @override
+  String get chatTyping => '思考中...';
+
+  @override
+  String get chatSources => '来源';
+
+  @override
+  String get chatRetry => '重试';
+
+  @override
+  String get chatDeleteTitle => '删除聊天';
+
+  @override
+  String get chatDeleteConfirm => '确定要删除这个聊天吗？';
+
+  @override
+  String get chatDeleteCancel => '取消';
+
+  @override
+  String get chatDeleteAction => '删除';
+
+  @override
+  String get chatLimitReached => '已达每日上限';
+
+  @override
+  String chatRemainingCount(int remaining, int limit) {
+    return '剩余 $remaining/$limit';
+  }
+
+  @override
+  String get chatLimitReachedTitle => '已达每日上限';
+
+  @override
+  String get chatLimitReachedMessage => '您今天的免费聊天次数已用完。升级到高级版可无限使用。';
+
+  @override
+  String get chatUpgradeToPremium => '升级到高级版';
+
+  @override
+  String get chatWelcomePrompt => '今天我能帮您什么？';
+
+  @override
+  String get chatWelcomeHint => '询问有关签证手续、银行、住房或在日本生活的任何问题。';
+
+  @override
+  String get onboardingTitle => '设置您的个人资料';
+
+  @override
+  String get onboardingSkip => '跳过';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingComplete => '完成';
+
+  @override
+  String onboardingStepOf(int current, int total) {
+    return '第 $current 步，共 $total 步';
+  }
+
+  @override
+  String get onboardingNationalityTitle => '您的国籍是什么？';
+
+  @override
+  String get onboardingNationalitySubtitle => '这有助于我们为您提供相关信息。';
+
+  @override
+  String get onboardingResidenceStatusTitle => '您的在留资格是什么？';
+
+  @override
+  String get onboardingResidenceStatusSubtitle => '选择您在日本的当前签证类型。';
+
+  @override
+  String get onboardingRegionTitle => '您住在哪里？';
+
+  @override
+  String get onboardingRegionSubtitle => '选择您目前居住或计划搬迁的地区。';
+
+  @override
+  String get onboardingArrivalDateTitle => '您什么时候到日本的？';
+
+  @override
+  String get onboardingArrivalDateSubtitle => '这有助于我们建议相关手续和截止日期。';
+
+  @override
+  String get onboardingSelectDate => '选择日期';
+
+  @override
+  String get onboardingChangeDate => '更改日期';
+
+  @override
+  String get countryCN => '中国';
+
+  @override
+  String get countryVN => '越南';
+
+  @override
+  String get countryKR => '韩国';
+
+  @override
+  String get countryPH => '菲律宾';
+
+  @override
+  String get countryBR => '巴西';
+
+  @override
+  String get countryNP => '尼泊尔';
+
+  @override
+  String get countryID => '印度尼西亚';
+
+  @override
+  String get countryUS => '美国';
+
+  @override
+  String get countryTH => '泰国';
+
+  @override
+  String get countryIN => '印度';
+
+  @override
+  String get countryMM => '缅甸';
+
+  @override
+  String get countryTW => '台湾';
+
+  @override
+  String get countryPE => '秘鲁';
+
+  @override
+  String get countryGB => '英国';
+
+  @override
+  String get countryPK => '巴基斯坦';
+
+  @override
+  String get countryBD => '孟加拉国';
+
+  @override
+  String get countryLK => '斯里兰卡';
+
+  @override
+  String get countryFR => '法国';
+
+  @override
+  String get countryDE => '德国';
+
+  @override
+  String get countryOther => '其他';
+
+  @override
+  String get visaEngineer => '技术·人文知识·国际业务';
+
+  @override
+  String get visaStudent => '留学';
+
+  @override
+  String get visaDependent => '家族滞在';
+
+  @override
+  String get visaPermanent => '永住者';
+
+  @override
+  String get visaSpouse => '日本人配偶者';
+
+  @override
+  String get visaWorkingHoliday => '工作假期';
+
+  @override
+  String get visaSpecifiedSkilled => '特定技能';
+
+  @override
+  String get visaTechnicalIntern => '技能实习';
+
+  @override
+  String get visaHighlySkilled => '高度专业人才';
+
+  @override
+  String get visaOther => '其他';
+
+  @override
+  String get regionTokyo => '东京';
+
+  @override
+  String get regionOsaka => '大阪';
+
+  @override
+  String get regionNagoya => '名古屋';
+
+  @override
+  String get regionYokohama => '横滨';
+
+  @override
+  String get regionFukuoka => '福冈';
+
+  @override
+  String get regionSapporo => '札幌';
+
+  @override
+  String get regionKobe => '神户';
+
+  @override
+  String get regionKyoto => '京都';
+
+  @override
+  String get regionSendai => '仙台';
+
+  @override
+  String get regionHiroshima => '广岛';
+
+  @override
+  String get regionOther => '其他';
 
   @override
   String get trackerPlaceholder => '行政追踪 — 即将推出';

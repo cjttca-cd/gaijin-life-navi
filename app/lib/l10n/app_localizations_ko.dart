@@ -114,7 +114,267 @@ class AppLocalizationsKo extends AppLocalizations {
   String get homeSubtitle => '일본 생활 가이드';
 
   @override
+  String get homeQuickActions => '빠른 실행';
+
+  @override
+  String get homeActionAskAI => 'AI에게 질문';
+
+  @override
+  String get homeActionTracker => '추적기';
+
+  @override
+  String get homeActionBanking => '은행';
+
+  @override
+  String get homeActionChatHistory => '채팅 기록';
+
+  @override
+  String get homeRecentChats => '최근 채팅';
+
+  @override
+  String get homeNoRecentChats => '아직 채팅 기록이 없습니다';
+
+  @override
+  String get homeMessagesLabel => '개 메시지';
+
+  @override
   String get chatPlaceholder => 'AI 채팅 — 곧 출시';
+
+  @override
+  String get chatTitle => 'AI 채팅';
+
+  @override
+  String get chatNewSession => '새 채팅';
+
+  @override
+  String get chatEmptyTitle => '대화를 시작하세요';
+
+  @override
+  String get chatEmptySubtitle => '일본 생활에 대해 AI에게 무엇이든 물어보세요';
+
+  @override
+  String get chatUntitledSession => '새 대화';
+
+  @override
+  String get chatConversationTitle => '대화';
+
+  @override
+  String get chatInputHint => '일본 생활에 대해 질문하세요...';
+
+  @override
+  String get chatTyping => '생각 중...';
+
+  @override
+  String get chatSources => '출처';
+
+  @override
+  String get chatRetry => '다시 시도';
+
+  @override
+  String get chatDeleteTitle => '채팅 삭제';
+
+  @override
+  String get chatDeleteConfirm => '이 채팅을 삭제하시겠습니까?';
+
+  @override
+  String get chatDeleteCancel => '취소';
+
+  @override
+  String get chatDeleteAction => '삭제';
+
+  @override
+  String get chatLimitReached => '일일 한도 도달';
+
+  @override
+  String chatRemainingCount(int remaining, int limit) {
+    return '남은 횟수 $remaining/$limit';
+  }
+
+  @override
+  String get chatLimitReachedTitle => '일일 한도에 도달했습니다';
+
+  @override
+  String get chatLimitReachedMessage =>
+      '오늘의 무료 채팅을 모두 사용했습니다. 프리미엄으로 업그레이드하면 무제한으로 이용할 수 있습니다.';
+
+  @override
+  String get chatUpgradeToPremium => '프리미엄으로 업그레이드';
+
+  @override
+  String get chatWelcomePrompt => '오늘 무엇을 도와드릴까요?';
+
+  @override
+  String get chatWelcomeHint => '비자 절차, 은행, 주거 또는 일본 생활에 관한 모든 것을 물어보세요.';
+
+  @override
+  String get onboardingTitle => '프로필 설정';
+
+  @override
+  String get onboardingSkip => '건너뛰기';
+
+  @override
+  String get onboardingNext => '다음';
+
+  @override
+  String get onboardingComplete => '완료';
+
+  @override
+  String onboardingStepOf(int current, int total) {
+    return '$total단계 중 $current단계';
+  }
+
+  @override
+  String get onboardingNationalityTitle => '국적이 어떻게 되시나요?';
+
+  @override
+  String get onboardingNationalitySubtitle => '귀하의 상황에 맞는 정보를 제공하는 데 도움이 됩니다.';
+
+  @override
+  String get onboardingResidenceStatusTitle => '재류 자격은 무엇인가요?';
+
+  @override
+  String get onboardingResidenceStatusSubtitle => '현재 일본에서의 비자 유형을 선택하세요.';
+
+  @override
+  String get onboardingRegionTitle => '어디에 살고 계신가요?';
+
+  @override
+  String get onboardingRegionSubtitle => '현재 거주하거나 이사할 예정인 지역을 선택하세요.';
+
+  @override
+  String get onboardingArrivalDateTitle => '일본에 언제 도착하셨나요?';
+
+  @override
+  String get onboardingArrivalDateSubtitle => '관련 절차와 기한을 제안하는 데 도움이 됩니다.';
+
+  @override
+  String get onboardingSelectDate => '날짜 선택';
+
+  @override
+  String get onboardingChangeDate => '날짜 변경';
+
+  @override
+  String get countryCN => '중국';
+
+  @override
+  String get countryVN => '베트남';
+
+  @override
+  String get countryKR => '한국';
+
+  @override
+  String get countryPH => '필리핀';
+
+  @override
+  String get countryBR => '브라질';
+
+  @override
+  String get countryNP => '네팔';
+
+  @override
+  String get countryID => '인도네시아';
+
+  @override
+  String get countryUS => '미국';
+
+  @override
+  String get countryTH => '태국';
+
+  @override
+  String get countryIN => '인도';
+
+  @override
+  String get countryMM => '미얀마';
+
+  @override
+  String get countryTW => '대만';
+
+  @override
+  String get countryPE => '페루';
+
+  @override
+  String get countryGB => '영국';
+
+  @override
+  String get countryPK => '파키스탄';
+
+  @override
+  String get countryBD => '방글라데시';
+
+  @override
+  String get countryLK => '스리랑카';
+
+  @override
+  String get countryFR => '프랑스';
+
+  @override
+  String get countryDE => '독일';
+
+  @override
+  String get countryOther => '기타';
+
+  @override
+  String get visaEngineer => '기술·인문지식·국제업무';
+
+  @override
+  String get visaStudent => '유학';
+
+  @override
+  String get visaDependent => '가족체재';
+
+  @override
+  String get visaPermanent => '영주자';
+
+  @override
+  String get visaSpouse => '일본인 배우자';
+
+  @override
+  String get visaWorkingHoliday => '워킹홀리데이';
+
+  @override
+  String get visaSpecifiedSkilled => '특정기능';
+
+  @override
+  String get visaTechnicalIntern => '기능실습';
+
+  @override
+  String get visaHighlySkilled => '고도전문직';
+
+  @override
+  String get visaOther => '기타';
+
+  @override
+  String get regionTokyo => '도쿄';
+
+  @override
+  String get regionOsaka => '오사카';
+
+  @override
+  String get regionNagoya => '나고야';
+
+  @override
+  String get regionYokohama => '요코하마';
+
+  @override
+  String get regionFukuoka => '후쿠오카';
+
+  @override
+  String get regionSapporo => '삿포로';
+
+  @override
+  String get regionKobe => '고베';
+
+  @override
+  String get regionKyoto => '교토';
+
+  @override
+  String get regionSendai => '센다이';
+
+  @override
+  String get regionHiroshima => '히로시마';
+
+  @override
+  String get regionOther => '기타';
 
   @override
   String get trackerPlaceholder => '행정 추적 — 곧 출시';

@@ -9,8 +9,10 @@ void main() {
       expect(AppRoutes.login, '/login');
       expect(AppRoutes.register, '/register');
       expect(AppRoutes.resetPassword, '/reset-password');
+      expect(AppRoutes.onboarding, '/onboarding');
       expect(AppRoutes.home, '/home');
       expect(AppRoutes.chat, '/chat');
+      expect(AppRoutes.chatConversation, '/chat/:id');
       expect(AppRoutes.tracker, '/tracker');
       expect(AppRoutes.navigate, '/navigate');
       expect(AppRoutes.profile, '/profile');
@@ -37,6 +39,14 @@ void main() {
       ];
       expect(publicRoutes.length, 5);
       expect(publicRoutes.contains(AppRoutes.home), isFalse);
+    });
+
+    test('onboarding route is defined', () {
+      expect(AppRoutes.onboarding, '/onboarding');
+    });
+
+    test('chat conversation route has :id parameter', () {
+      expect(AppRoutes.chatConversation, contains(':id'));
     });
   });
 }

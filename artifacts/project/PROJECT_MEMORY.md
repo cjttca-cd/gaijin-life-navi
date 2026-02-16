@@ -38,7 +38,7 @@ E0（骨格 + 認証）Pipeline 完了。Backend scaffold + Flutter scaffold 両
 | Epic | Milestone | Status | Features |
 |------|-----------|--------|----------|
 | E0: 骨格 + 認証 | M0 | ✅ 完了 | ✅ Backend scaffold (task-018) → ✅ Flutter scaffold (task-019) |
-| E1: AI Chat Engine | M1 | 🔲 未着手 | AI Service, RAG, チャット CRUD, SSE ストリーミング, 日次制限, オンボーディング |
+| E1: AI Chat Engine | M1 | 🔵 進行中 | AI Service, RAG, チャット CRUD, SSE ストリーミング, 日次制限, オンボーディング |
 | E2: Banking Navigator | M2 | 🔲 未着手 | 銀行一覧, レコメンド, 口座開設ガイド |
 | E3: Visa Navigator | M2 | 🔲 未着手 | 手続き一覧, 詳細ガイド |
 | E4: Admin Tracker | M2 | 🔲 未着手 | チェックリスト, 進捗管理, 手続き追加 |

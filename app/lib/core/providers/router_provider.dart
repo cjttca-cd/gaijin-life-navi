@@ -6,12 +6,14 @@ import '../../features/auth/presentation/language_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/reset_password_screen.dart';
+import '../../features/chat/presentation/chat_conversation_screen.dart';
+import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/home/presentation/main_shell.dart';
 import '../../features/home/presentation/home_screen.dart';
-import '../../features/chat/presentation/chat_screen.dart';
-import '../../features/tracker/presentation/tracker_screen.dart';
 import '../../features/navigate/presentation/navigate_screen.dart';
+import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/tracker/presentation/tracker_screen.dart';
 import 'auth_provider.dart';
 import 'locale_provider.dart';
 
@@ -24,8 +26,10 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String resetPassword = '/reset-password';
+  static const String onboarding = '/onboarding';
   static const String home = '/home';
   static const String chat = '/chat';
+  static const String chatConversation = '/chat/:id';
   static const String tracker = '/tracker';
   static const String navigate = '/navigate';
   static const String profile = '/profile';
@@ -113,6 +117,21 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ResetPasswordScreen(),
       ),
 
+      // Onboarding (full-screen, not in shell)
+      GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+
+      // Chat conversation (full-screen, not in shell)
+      GoRoute(
+        path: AppRoutes.chatConversation,
+        builder: (context, state) {
+          final sessionId = state.pathParameters['id']!;
+          return ChatConversationScreen(sessionId: sessionId);
+        },
+      ),
+
       // Main shell with bottom navigation
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
@@ -127,7 +146,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.chat,
             pageBuilder: (context, state) => const NoTransitionPage(
-              child: ChatScreen(),
+              child: ChatListScreen(),
             ),
           ),
           GoRoute(

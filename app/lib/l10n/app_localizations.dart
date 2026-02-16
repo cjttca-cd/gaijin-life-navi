@@ -314,11 +314,521 @@ abstract class AppLocalizations {
   /// **'Your guide to life in Japan'**
   String get homeSubtitle;
 
+  /// Quick actions section title
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get homeQuickActions;
+
+  /// Ask AI quick action
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI'**
+  String get homeActionAskAI;
+
+  /// Tracker quick action
+  ///
+  /// In en, this message translates to:
+  /// **'Tracker'**
+  String get homeActionTracker;
+
+  /// Banking quick action
+  ///
+  /// In en, this message translates to:
+  /// **'Banking'**
+  String get homeActionBanking;
+
+  /// Chat history quick action
+  ///
+  /// In en, this message translates to:
+  /// **'Chat History'**
+  String get homeActionChatHistory;
+
+  /// Recent chats section title
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Chats'**
+  String get homeRecentChats;
+
+  /// No recent chats message
+  ///
+  /// In en, this message translates to:
+  /// **'No recent chats yet'**
+  String get homeNoRecentChats;
+
+  /// Messages count label
+  ///
+  /// In en, this message translates to:
+  /// **'messages'**
+  String get homeMessagesLabel;
+
   /// Chat placeholder text
   ///
   /// In en, this message translates to:
   /// **'AI Chat — Coming Soon'**
   String get chatPlaceholder;
+
+  /// Chat screen title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get chatTitle;
+
+  /// New chat session button
+  ///
+  /// In en, this message translates to:
+  /// **'New Chat'**
+  String get chatNewSession;
+
+  /// Empty chat list title
+  ///
+  /// In en, this message translates to:
+  /// **'Start a Conversation'**
+  String get chatEmptyTitle;
+
+  /// Empty chat list subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the AI anything about living in Japan'**
+  String get chatEmptySubtitle;
+
+  /// Untitled session label
+  ///
+  /// In en, this message translates to:
+  /// **'New Conversation'**
+  String get chatUntitledSession;
+
+  /// Chat conversation screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chatConversationTitle;
+
+  /// Chat input hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about life in Japan...'**
+  String get chatInputHint;
+
+  /// Typing indicator text
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking...'**
+  String get chatTyping;
+
+  /// Sources section label
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get chatSources;
+
+  /// Retry button label
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get chatRetry;
+
+  /// Delete chat dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Chat'**
+  String get chatDeleteTitle;
+
+  /// Delete chat confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this chat?'**
+  String get chatDeleteConfirm;
+
+  /// Cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get chatDeleteCancel;
+
+  /// Delete button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get chatDeleteAction;
+
+  /// Daily limit reached label
+  ///
+  /// In en, this message translates to:
+  /// **'Daily limit reached'**
+  String get chatLimitReached;
+
+  /// Remaining chat count
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining}/{limit} remaining'**
+  String chatRemainingCount(int remaining, int limit);
+
+  /// Limit reached dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Limit Reached'**
+  String get chatLimitReachedTitle;
+
+  /// Limit reached dialog message
+  ///
+  /// In en, this message translates to:
+  /// **'You have used all your free chats for today. Upgrade to Premium for unlimited access.'**
+  String get chatLimitReachedMessage;
+
+  /// Upgrade to premium button
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium'**
+  String get chatUpgradeToPremium;
+
+  /// Chat welcome prompt
+  ///
+  /// In en, this message translates to:
+  /// **'How can I help you today?'**
+  String get chatWelcomePrompt;
+
+  /// Chat welcome hint
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about visa procedures, banking, housing, or anything about life in Japan.'**
+  String get chatWelcomeHint;
+
+  /// Onboarding screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Your Profile'**
+  String get onboardingTitle;
+
+  /// Skip onboarding button
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// Next step button
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// Complete onboarding button
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get onboardingComplete;
+
+  /// Step indicator
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String onboardingStepOf(int current, int total);
+
+  /// Nationality step title
+  ///
+  /// In en, this message translates to:
+  /// **'What is your nationality?'**
+  String get onboardingNationalityTitle;
+
+  /// Nationality step subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'This helps us provide relevant information for your situation.'**
+  String get onboardingNationalitySubtitle;
+
+  /// Residence status step title
+  ///
+  /// In en, this message translates to:
+  /// **'What is your residence status?'**
+  String get onboardingResidenceStatusTitle;
+
+  /// Residence status step subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Select your current visa type in Japan.'**
+  String get onboardingResidenceStatusSubtitle;
+
+  /// Region step title
+  ///
+  /// In en, this message translates to:
+  /// **'Where do you live?'**
+  String get onboardingRegionTitle;
+
+  /// Region step subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Select the area you currently live in or plan to move to.'**
+  String get onboardingRegionSubtitle;
+
+  /// Arrival date step title
+  ///
+  /// In en, this message translates to:
+  /// **'When did you arrive in Japan?'**
+  String get onboardingArrivalDateTitle;
+
+  /// Arrival date step subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'This helps us suggest relevant procedures and deadlines.'**
+  String get onboardingArrivalDateSubtitle;
+
+  /// Select date button
+  ///
+  /// In en, this message translates to:
+  /// **'Select Date'**
+  String get onboardingSelectDate;
+
+  /// Change date button
+  ///
+  /// In en, this message translates to:
+  /// **'Change Date'**
+  String get onboardingChangeDate;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'China'**
+  String get countryCN;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnam'**
+  String get countryVN;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'South Korea'**
+  String get countryKR;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Philippines'**
+  String get countryPH;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Brazil'**
+  String get countryBR;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Nepal'**
+  String get countryNP;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesia'**
+  String get countryID;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'United States'**
+  String get countryUS;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Thailand'**
+  String get countryTH;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'India'**
+  String get countryIN;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Myanmar'**
+  String get countryMM;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Taiwan'**
+  String get countryTW;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Peru'**
+  String get countryPE;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'United Kingdom'**
+  String get countryGB;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Pakistan'**
+  String get countryPK;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Bangladesh'**
+  String get countryBD;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Sri Lanka'**
+  String get countryLK;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'France'**
+  String get countryFR;
+
+  /// Country name
+  ///
+  /// In en, this message translates to:
+  /// **'Germany'**
+  String get countryDE;
+
+  /// Other country
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get countryOther;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Engineer / Specialist'**
+  String get visaEngineer;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Student'**
+  String get visaStudent;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Dependent'**
+  String get visaDependent;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent Resident'**
+  String get visaPermanent;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Spouse of Japanese National'**
+  String get visaSpouse;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Working Holiday'**
+  String get visaWorkingHoliday;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Specified Skilled Worker'**
+  String get visaSpecifiedSkilled;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Technical Intern'**
+  String get visaTechnicalIntern;
+
+  /// Visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Highly Skilled Professional'**
+  String get visaHighlySkilled;
+
+  /// Other visa type
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get visaOther;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Tokyo'**
+  String get regionTokyo;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Osaka'**
+  String get regionOsaka;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Nagoya'**
+  String get regionNagoya;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Yokohama'**
+  String get regionYokohama;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Fukuoka'**
+  String get regionFukuoka;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Sapporo'**
+  String get regionSapporo;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Kobe'**
+  String get regionKobe;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Kyoto'**
+  String get regionKyoto;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Sendai'**
+  String get regionSendai;
+
+  /// Region name
+  ///
+  /// In en, this message translates to:
+  /// **'Hiroshima'**
+  String get regionHiroshima;
+
+  /// Other region
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get regionOther;
 
   /// Tracker placeholder text
   ///
