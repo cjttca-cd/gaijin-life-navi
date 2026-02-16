@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-プロジェクト初期化完了。Architect の設計文書（9 ファイル）と Strategist の事業文書（3 ファイル）を基に PM artifacts を作成済み。開発はまだ開始していない。
+E0（骨格 + 認証）Pipeline 進行中。Step 1（Backend scaffold）完了、Step 2（Flutter scaffold）実行中。
 
 ## Status
 
@@ -37,7 +37,7 @@
 ### Epics（Architect DEV_PHASES.md ベース）
 | Epic | Milestone | Status | Features |
 |------|-----------|--------|----------|
-| E0: 骨格 + 認証 | M0 | 🔵 進行中 | Flutter scaffold, Firebase Auth, FastAPI scaffold, API Gateway, 認証フロー, BottomNav, l10n 基盤 |
+| E0: 骨格 + 認証 | M0 | 🔵 進行中 | ✅ Backend scaffold (task-018) → 🔵 Flutter scaffold (task-019) |
 | E1: AI Chat Engine | M1 | 🔲 未着手 | AI Service, RAG, チャット CRUD, SSE ストリーミング, 日次制限, オンボーディング |
 | E2: Banking Navigator | M2 | 🔲 未着手 | 銀行一覧, レコメンド, 口座開設ガイド |
 | E3: Visa Navigator | M2 | 🔲 未着手 | 手続き一覧, 詳細ガイド |
@@ -56,7 +56,7 @@ M0 (骨格+認証) → M1 (AI Chat) → M2 (ナビゲーター群) → M3 (Commu
 ```
 
 ## Next
-E0（プロジェクト骨格 + 認証）の Pipeline を計画・開始する。
+Step 2（Flutter scaffold）完了後、E0 全体の受入 → M1 計画へ。
 
 ## Decisions
 | Date | Decision | Rationale |
@@ -65,6 +65,8 @@ E0（プロジェクト骨格 + 認証）の Pipeline を計画・開始する�
 | 2026-02-16 | 技術スタック: Flutter + FastAPI + Firebase Auth | Architect 確定（DECISIONS.md）。strategy の React Native → Flutter に変更済み |
 | 2026-02-16 | Monorepo 構成（app/backend/infra/lp） | Architect SYSTEM_DESIGN.md §6 確定 |
 | 2026-02-16 | Epic 順序: E0→E1→E2〜E5(M2)→E6〜E7(M3)→E8〜E11(M4) | Architect DEV_PHASES.md ベース |
+| 2026-02-16 | E0 Pipeline 開始: Step1=Backend scaffold, Step2=Flutter scaffold | pipeline-004 |
+| 2026-02-16 | Step 1 完了（task-018）: FastAPI + Alembic + CF Workers scaffold | 検証済み（import OK, migration OK, 6 endpoints） |
 
 ## Glossary
 | Term | Definition |
