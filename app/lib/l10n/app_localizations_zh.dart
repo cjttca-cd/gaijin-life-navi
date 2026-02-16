@@ -392,4 +392,281 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get logout => '退出登录';
+
+  @override
+  String get bankingTitle => '银行导航';
+
+  @override
+  String get bankingFriendlyScore => '外国人友好评分';
+
+  @override
+  String get bankingEmpty => '未找到银行';
+
+  @override
+  String get bankingRecommendButton => '推荐';
+
+  @override
+  String get bankingRecommendTitle => '银行推荐';
+
+  @override
+  String get bankingSelectPriorities => '选择您的优先条件';
+
+  @override
+  String get bankingPriorityMultilingual => '多语言支持';
+
+  @override
+  String get bankingPriorityLowFee => '低手续费';
+
+  @override
+  String get bankingPriorityAtm => 'ATM 网络';
+
+  @override
+  String get bankingPriorityOnline => '网上银行';
+
+  @override
+  String get bankingGetRecommendations => '获取推荐';
+
+  @override
+  String get bankingRecommendHint => '选择您的优先条件并点击获取推荐';
+
+  @override
+  String get bankingNoRecommendations => '未找到推荐';
+
+  @override
+  String get bankingViewGuide => '查看指南';
+
+  @override
+  String get bankingGuideTitle => '开户指南';
+
+  @override
+  String get bankingRequiredDocs => '所需文件';
+
+  @override
+  String get bankingConversationTemplates => '银行常用短语';
+
+  @override
+  String get bankingTroubleshooting => '故障排除提示';
+
+  @override
+  String get bankingSource => '来源';
+
+  @override
+  String get visaTitle => '签证导航';
+
+  @override
+  String get visaEmpty => '未找到手续';
+
+  @override
+  String get visaFilterAll => '全部';
+
+  @override
+  String get visaDetailTitle => '手续详情';
+
+  @override
+  String get visaSteps => '步骤';
+
+  @override
+  String get visaRequiredDocuments => '所需文件';
+
+  @override
+  String get visaFees => '费用';
+
+  @override
+  String get visaProcessingTime => '处理时间';
+
+  @override
+  String get visaDisclaimer =>
+      '重要提示：这是关于签证手续的一般信息，不构成移民建议。移民法律和程序可能会变更。请务必咨询出入国管理局或合格的行政书士以了解您的具体情况。';
+
+  @override
+  String get trackerTitle => '行政追踪';
+
+  @override
+  String get trackerEmpty => '未追踪任何手续';
+
+  @override
+  String get trackerEmptyHint => '点击 + 添加要追踪的手续';
+
+  @override
+  String get trackerAddProcedure => '添加手续';
+
+  @override
+  String get trackerStatusNotStarted => '未开始';
+
+  @override
+  String get trackerStatusInProgress => '进行中';
+
+  @override
+  String get trackerStatusCompleted => '已完成';
+
+  @override
+  String get trackerDueDate => '截止日期';
+
+  @override
+  String get trackerFreeLimitInfo => '免费版：最多3个手续。升级可无限使用。';
+
+  @override
+  String get trackerDetailTitle => '手续详情';
+
+  @override
+  String get trackerCurrentStatus => '当前状态';
+
+  @override
+  String get trackerNotes => '备注';
+
+  @override
+  String get trackerChangeStatus => '更改状态';
+
+  @override
+  String get trackerMarkInProgress => '标记为进行中';
+
+  @override
+  String get trackerMarkCompleted => '标记为已完成';
+
+  @override
+  String get trackerMarkIncomplete => '标记为未完成';
+
+  @override
+  String get trackerStatusUpdated => '状态已更新';
+
+  @override
+  String get trackerDeleteTitle => '删除手续';
+
+  @override
+  String get trackerDeleteConfirm => '确定要从追踪中移除此手续吗？';
+
+  @override
+  String get trackerProcedureAdded => '手续已添加到追踪';
+
+  @override
+  String get trackerLimitReached => '免费版限制已达到（3个手续）。升级到高级版可无限使用。';
+
+  @override
+  String get trackerAlreadyTracking => '您已在追踪此手续';
+
+  @override
+  String get trackerEssentialProcedures => '必要手续（到达后）';
+
+  @override
+  String get trackerOtherProcedures => '其他手续';
+
+  @override
+  String get trackerNoTemplates => '没有可用的手续模板';
+
+  @override
+  String get scannerTitle => '文档扫描';
+
+  @override
+  String get scannerDescription => '扫描日语文档，获取即时翻译和解释';
+
+  @override
+  String get scannerFromCamera => '从相机扫描';
+
+  @override
+  String get scannerFromGallery => '从相册选择';
+
+  @override
+  String get scannerHistory => '历史';
+
+  @override
+  String get scannerHistoryTitle => '扫描历史';
+
+  @override
+  String get scannerHistoryEmpty => '暂无扫描记录';
+
+  @override
+  String get scannerUnknownType => '未知文档';
+
+  @override
+  String get scannerResultTitle => '扫描结果';
+
+  @override
+  String get scannerOriginalText => '原文（日语）';
+
+  @override
+  String get scannerTranslation => '翻译';
+
+  @override
+  String get scannerExplanation => '这意味着什么';
+
+  @override
+  String get scannerProcessing => '正在处理您的文档...';
+
+  @override
+  String get scannerRefresh => '刷新';
+
+  @override
+  String get scannerFailed => '扫描失败，请重试。';
+
+  @override
+  String get scannerFreeLimitInfo => '免费版：每月3次扫描。升级可获取更多。';
+
+  @override
+  String get scannerLimitReached => '已达每月扫描上限。升级到高级版可获取更多扫描次数。';
+
+  @override
+  String get medicalTitle => '医疗指南';
+
+  @override
+  String get medicalTabEmergency => '紧急';
+
+  @override
+  String get medicalTabPhrases => '短语';
+
+  @override
+  String get medicalEmergencyNumber => '急救电话';
+
+  @override
+  String get medicalHowToCall => '如何拨打';
+
+  @override
+  String get medicalWhatToPrepare => '准备事项';
+
+  @override
+  String get medicalUsefulPhrases => '常用短语';
+
+  @override
+  String get medicalCategoryAll => '全部';
+
+  @override
+  String get medicalCategoryEmergency => '紧急';
+
+  @override
+  String get medicalCategorySymptom => '症状';
+
+  @override
+  String get medicalCategoryInsurance => '保险';
+
+  @override
+  String get medicalCategoryGeneral => '一般';
+
+  @override
+  String get medicalNoPhrases => '未找到短语';
+
+  @override
+  String get medicalDisclaimer => '本指南提供一般健康信息，不能替代专业医疗建议。紧急情况下请立即拨打119。';
+
+  @override
+  String get navigateBanking => '银行';
+
+  @override
+  String get navigateBankingDesc => '查找外国人友好的银行';
+
+  @override
+  String get navigateVisa => '签证';
+
+  @override
+  String get navigateVisaDesc => '签证手续和文件';
+
+  @override
+  String get navigateScanner => '扫描';
+
+  @override
+  String get navigateScannerDesc => '翻译日语文档';
+
+  @override
+  String get navigateMedical => '医疗';
+
+  @override
+  String get navigateMedicalDesc => '紧急指南和短语';
 }

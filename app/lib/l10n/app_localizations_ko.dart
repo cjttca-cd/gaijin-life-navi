@@ -393,4 +393,283 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get logout => '로그아웃';
+
+  @override
+  String get bankingTitle => '은행 가이드';
+
+  @override
+  String get bankingFriendlyScore => '외국인 친화 점수';
+
+  @override
+  String get bankingEmpty => '은행을 찾을 수 없습니다';
+
+  @override
+  String get bankingRecommendButton => '추천';
+
+  @override
+  String get bankingRecommendTitle => '은행 추천';
+
+  @override
+  String get bankingSelectPriorities => '우선순위를 선택하세요';
+
+  @override
+  String get bankingPriorityMultilingual => '다국어 지원';
+
+  @override
+  String get bankingPriorityLowFee => '낮은 수수료';
+
+  @override
+  String get bankingPriorityAtm => 'ATM 네트워크';
+
+  @override
+  String get bankingPriorityOnline => '온라인 뱅킹';
+
+  @override
+  String get bankingGetRecommendations => '추천 받기';
+
+  @override
+  String get bankingRecommendHint => '우선순위를 선택하고 추천 받기를 눌러주세요';
+
+  @override
+  String get bankingNoRecommendations => '추천을 찾을 수 없습니다';
+
+  @override
+  String get bankingViewGuide => '가이드 보기';
+
+  @override
+  String get bankingGuideTitle => '계좌 개설 가이드';
+
+  @override
+  String get bankingRequiredDocs => '필요 서류';
+
+  @override
+  String get bankingConversationTemplates => '은행에서 유용한 표현';
+
+  @override
+  String get bankingTroubleshooting => '문제 해결 팁';
+
+  @override
+  String get bankingSource => '출처';
+
+  @override
+  String get visaTitle => '비자 가이드';
+
+  @override
+  String get visaEmpty => '절차를 찾을 수 없습니다';
+
+  @override
+  String get visaFilterAll => '전체';
+
+  @override
+  String get visaDetailTitle => '절차 상세';
+
+  @override
+  String get visaSteps => '단계';
+
+  @override
+  String get visaRequiredDocuments => '필요 서류';
+
+  @override
+  String get visaFees => '수수료';
+
+  @override
+  String get visaProcessingTime => '처리 시간';
+
+  @override
+  String get visaDisclaimer =>
+      '중요: 이것은 비자 절차에 대한 일반적인 정보이며 이민 조언을 구성하지 않습니다. 이민법과 절차는 변경될 수 있습니다. 구체적인 상황은 출입국관리국 또는 자격을 갖춘 행정서사(行政書士)에게 문의하세요.';
+
+  @override
+  String get trackerTitle => '행정 추적';
+
+  @override
+  String get trackerEmpty => '추적 중인 절차 없음';
+
+  @override
+  String get trackerEmptyHint => '+ 를 눌러 추적할 절차를 추가하세요';
+
+  @override
+  String get trackerAddProcedure => '절차 추가';
+
+  @override
+  String get trackerStatusNotStarted => '시작 전';
+
+  @override
+  String get trackerStatusInProgress => '진행 중';
+
+  @override
+  String get trackerStatusCompleted => '완료';
+
+  @override
+  String get trackerDueDate => '마감일';
+
+  @override
+  String get trackerFreeLimitInfo => '무료 플랜: 최대 3개 절차. 업그레이드하면 무제한.';
+
+  @override
+  String get trackerDetailTitle => '절차 상세';
+
+  @override
+  String get trackerCurrentStatus => '현재 상태';
+
+  @override
+  String get trackerNotes => '메모';
+
+  @override
+  String get trackerChangeStatus => '상태 변경';
+
+  @override
+  String get trackerMarkInProgress => '진행 중으로 변경';
+
+  @override
+  String get trackerMarkCompleted => '완료로 변경';
+
+  @override
+  String get trackerMarkIncomplete => '미완료로 변경';
+
+  @override
+  String get trackerStatusUpdated => '상태 업데이트됨';
+
+  @override
+  String get trackerDeleteTitle => '절차 삭제';
+
+  @override
+  String get trackerDeleteConfirm => '이 절차를 추적에서 삭제하시겠습니까?';
+
+  @override
+  String get trackerProcedureAdded => '절차가 추적에 추가되었습니다';
+
+  @override
+  String get trackerLimitReached => '무료 플랜 한도 도달 (3개 절차). 프리미엄으로 업그레이드하면 무제한.';
+
+  @override
+  String get trackerAlreadyTracking => '이미 이 절차를 추적 중입니다';
+
+  @override
+  String get trackerEssentialProcedures => '필수 (도착 후)';
+
+  @override
+  String get trackerOtherProcedures => '기타 절차';
+
+  @override
+  String get trackerNoTemplates => '사용 가능한 절차 템플릿 없음';
+
+  @override
+  String get scannerTitle => '문서 스캐너';
+
+  @override
+  String get scannerDescription => '일본어 문서를 스캔하여 즉시 번역과 설명을 받으세요';
+
+  @override
+  String get scannerFromCamera => '카메라로 스캔';
+
+  @override
+  String get scannerFromGallery => '갤러리에서 선택';
+
+  @override
+  String get scannerHistory => '기록';
+
+  @override
+  String get scannerHistoryTitle => '스캔 기록';
+
+  @override
+  String get scannerHistoryEmpty => '아직 스캔 기록이 없습니다';
+
+  @override
+  String get scannerUnknownType => '알 수 없는 문서';
+
+  @override
+  String get scannerResultTitle => '스캔 결과';
+
+  @override
+  String get scannerOriginalText => '원본 텍스트 (일본어)';
+
+  @override
+  String get scannerTranslation => '번역';
+
+  @override
+  String get scannerExplanation => '이것이 의미하는 바';
+
+  @override
+  String get scannerProcessing => '문서를 처리 중...';
+
+  @override
+  String get scannerRefresh => '새로고침';
+
+  @override
+  String get scannerFailed => '스캔 실패. 다시 시도해주세요.';
+
+  @override
+  String get scannerFreeLimitInfo => '무료 플랜: 월 3회 스캔. 업그레이드하면 더 많이.';
+
+  @override
+  String get scannerLimitReached =>
+      '월간 스캔 한도에 도달했습니다. 프리미엄으로 업그레이드하면 더 많은 스캔이 가능합니다.';
+
+  @override
+  String get medicalTitle => '의료 가이드';
+
+  @override
+  String get medicalTabEmergency => '응급';
+
+  @override
+  String get medicalTabPhrases => '표현';
+
+  @override
+  String get medicalEmergencyNumber => '응급 전화번호';
+
+  @override
+  String get medicalHowToCall => '전화 방법';
+
+  @override
+  String get medicalWhatToPrepare => '준비 사항';
+
+  @override
+  String get medicalUsefulPhrases => '유용한 표현';
+
+  @override
+  String get medicalCategoryAll => '전체';
+
+  @override
+  String get medicalCategoryEmergency => '응급';
+
+  @override
+  String get medicalCategorySymptom => '증상';
+
+  @override
+  String get medicalCategoryInsurance => '보험';
+
+  @override
+  String get medicalCategoryGeneral => '일반';
+
+  @override
+  String get medicalNoPhrases => '표현을 찾을 수 없습니다';
+
+  @override
+  String get medicalDisclaimer =>
+      '이 가이드는 일반적인 건강 정보를 제공하며 전문적인 의료 조언을 대체하지 않습니다. 응급 상황에서는 즉시 119에 전화하세요.';
+
+  @override
+  String get navigateBanking => '은행';
+
+  @override
+  String get navigateBankingDesc => '외국인 친화적인 은행 찾기';
+
+  @override
+  String get navigateVisa => '비자';
+
+  @override
+  String get navigateVisaDesc => '비자 절차 및 서류';
+
+  @override
+  String get navigateScanner => '스캐너';
+
+  @override
+  String get navigateScannerDesc => '일본어 문서 번역';
+
+  @override
+  String get navigateMedical => '의료';
+
+  @override
+  String get navigateMedicalDesc => '응급 가이드 및 표현';
 }

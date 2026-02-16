@@ -401,4 +401,290 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logout => 'Logout';
+
+  @override
+  String get bankingTitle => 'Banking Navigator';
+
+  @override
+  String get bankingFriendlyScore => 'Foreigner-Friendly Score';
+
+  @override
+  String get bankingEmpty => 'No banks found';
+
+  @override
+  String get bankingRecommendButton => 'Recommend';
+
+  @override
+  String get bankingRecommendTitle => 'Bank Recommendations';
+
+  @override
+  String get bankingSelectPriorities => 'Select your priorities';
+
+  @override
+  String get bankingPriorityMultilingual => 'Multilingual Support';
+
+  @override
+  String get bankingPriorityLowFee => 'Low Fees';
+
+  @override
+  String get bankingPriorityAtm => 'ATM Network';
+
+  @override
+  String get bankingPriorityOnline => 'Online Banking';
+
+  @override
+  String get bankingGetRecommendations => 'Get Recommendations';
+
+  @override
+  String get bankingRecommendHint =>
+      'Select your priorities and tap Get Recommendations';
+
+  @override
+  String get bankingNoRecommendations => 'No recommendations found';
+
+  @override
+  String get bankingViewGuide => 'View Guide';
+
+  @override
+  String get bankingGuideTitle => 'Account Opening Guide';
+
+  @override
+  String get bankingRequiredDocs => 'Required Documents';
+
+  @override
+  String get bankingConversationTemplates => 'Useful Phrases at the Bank';
+
+  @override
+  String get bankingTroubleshooting => 'Troubleshooting Tips';
+
+  @override
+  String get bankingSource => 'Source';
+
+  @override
+  String get visaTitle => 'Visa Navigator';
+
+  @override
+  String get visaEmpty => 'No procedures found';
+
+  @override
+  String get visaFilterAll => 'All';
+
+  @override
+  String get visaDetailTitle => 'Procedure Details';
+
+  @override
+  String get visaSteps => 'Steps';
+
+  @override
+  String get visaRequiredDocuments => 'Required Documents';
+
+  @override
+  String get visaFees => 'Fees';
+
+  @override
+  String get visaProcessingTime => 'Processing Time';
+
+  @override
+  String get visaDisclaimer =>
+      'IMPORTANT: This is general information about visa procedures and does not constitute immigration advice. Immigration laws and procedures may change. Always consult the Immigration Services Agency or a qualified immigration lawyer (行政書士) for your specific situation.';
+
+  @override
+  String get trackerTitle => 'Admin Tracker';
+
+  @override
+  String get trackerEmpty => 'No procedures tracked';
+
+  @override
+  String get trackerEmptyHint => 'Tap + to add procedures to track';
+
+  @override
+  String get trackerAddProcedure => 'Add Procedure';
+
+  @override
+  String get trackerStatusNotStarted => 'Not Started';
+
+  @override
+  String get trackerStatusInProgress => 'In Progress';
+
+  @override
+  String get trackerStatusCompleted => 'Completed';
+
+  @override
+  String get trackerDueDate => 'Due Date';
+
+  @override
+  String get trackerFreeLimitInfo =>
+      'Free plan: up to 3 procedures. Upgrade for unlimited.';
+
+  @override
+  String get trackerDetailTitle => 'Procedure Details';
+
+  @override
+  String get trackerCurrentStatus => 'Current Status';
+
+  @override
+  String get trackerNotes => 'Notes';
+
+  @override
+  String get trackerChangeStatus => 'Change Status';
+
+  @override
+  String get trackerMarkInProgress => 'Mark as In Progress';
+
+  @override
+  String get trackerMarkCompleted => 'Mark as Completed';
+
+  @override
+  String get trackerMarkIncomplete => 'Mark as Incomplete';
+
+  @override
+  String get trackerStatusUpdated => 'Status updated';
+
+  @override
+  String get trackerDeleteTitle => 'Delete Procedure';
+
+  @override
+  String get trackerDeleteConfirm =>
+      'Are you sure you want to remove this procedure from your tracker?';
+
+  @override
+  String get trackerProcedureAdded => 'Procedure added to tracker';
+
+  @override
+  String get trackerLimitReached =>
+      'Free plan limit reached (3 procedures). Upgrade to Premium for unlimited.';
+
+  @override
+  String get trackerAlreadyTracking =>
+      'You are already tracking this procedure';
+
+  @override
+  String get trackerEssentialProcedures => 'Essential (After Arrival)';
+
+  @override
+  String get trackerOtherProcedures => 'Other Procedures';
+
+  @override
+  String get trackerNoTemplates => 'No procedure templates available';
+
+  @override
+  String get scannerTitle => 'Document Scanner';
+
+  @override
+  String get scannerDescription =>
+      'Scan Japanese documents to get instant translations and explanations';
+
+  @override
+  String get scannerFromCamera => 'Scan from Camera';
+
+  @override
+  String get scannerFromGallery => 'Choose from Gallery';
+
+  @override
+  String get scannerHistory => 'History';
+
+  @override
+  String get scannerHistoryTitle => 'Scan History';
+
+  @override
+  String get scannerHistoryEmpty => 'No scans yet';
+
+  @override
+  String get scannerUnknownType => 'Unknown Document';
+
+  @override
+  String get scannerResultTitle => 'Scan Result';
+
+  @override
+  String get scannerOriginalText => 'Original Text (Japanese)';
+
+  @override
+  String get scannerTranslation => 'Translation';
+
+  @override
+  String get scannerExplanation => 'What This Means';
+
+  @override
+  String get scannerProcessing => 'Processing your document...';
+
+  @override
+  String get scannerRefresh => 'Refresh';
+
+  @override
+  String get scannerFailed => 'Scan failed. Please try again.';
+
+  @override
+  String get scannerFreeLimitInfo =>
+      'Free plan: 3 scans/month. Upgrade for more.';
+
+  @override
+  String get scannerLimitReached =>
+      'Monthly scan limit reached. Upgrade to Premium for more scans.';
+
+  @override
+  String get medicalTitle => 'Medical Guide';
+
+  @override
+  String get medicalTabEmergency => 'Emergency';
+
+  @override
+  String get medicalTabPhrases => 'Phrases';
+
+  @override
+  String get medicalEmergencyNumber => 'Emergency Number';
+
+  @override
+  String get medicalHowToCall => 'How to Call';
+
+  @override
+  String get medicalWhatToPrepare => 'What to Prepare';
+
+  @override
+  String get medicalUsefulPhrases => 'Useful Phrases';
+
+  @override
+  String get medicalCategoryAll => 'All';
+
+  @override
+  String get medicalCategoryEmergency => 'Emergency';
+
+  @override
+  String get medicalCategorySymptom => 'Symptoms';
+
+  @override
+  String get medicalCategoryInsurance => 'Insurance';
+
+  @override
+  String get medicalCategoryGeneral => 'General';
+
+  @override
+  String get medicalNoPhrases => 'No phrases found';
+
+  @override
+  String get medicalDisclaimer =>
+      'This guide provides general health information and is not a substitute for professional medical advice. In an emergency, call 119 immediately.';
+
+  @override
+  String get navigateBanking => 'Banking';
+
+  @override
+  String get navigateBankingDesc => 'Find foreigner-friendly banks';
+
+  @override
+  String get navigateVisa => 'Visa';
+
+  @override
+  String get navigateVisaDesc => 'Visa procedures & documents';
+
+  @override
+  String get navigateScanner => 'Scanner';
+
+  @override
+  String get navigateScannerDesc => 'Translate Japanese documents';
+
+  @override
+  String get navigateMedical => 'Medical';
+
+  @override
+  String get navigateMedicalDesc => 'Emergency guide & phrases';
 }

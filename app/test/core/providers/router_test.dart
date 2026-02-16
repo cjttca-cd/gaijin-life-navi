@@ -48,5 +48,49 @@ void main() {
     test('chat conversation route has :id parameter', () {
       expect(AppRoutes.chatConversation, contains(':id'));
     });
+
+    // M2 routes
+    test('Banking Navigator routes are defined', () {
+      expect(AppRoutes.banking, '/banking');
+      expect(AppRoutes.bankingRecommend, '/banking/recommend');
+      expect(AppRoutes.bankingGuide, '/banking/:bankId');
+    });
+
+    test('Visa Navigator routes are defined', () {
+      expect(AppRoutes.visa, '/visa');
+      expect(AppRoutes.visaDetail, '/visa/:procedureId');
+    });
+
+    test('Admin Tracker routes are defined', () {
+      expect(AppRoutes.tracker, '/tracker');
+      expect(AppRoutes.trackerDetail, '/tracker/:id');
+      expect(AppRoutes.trackerAdd, '/tracker/add');
+    });
+
+    test('Document Scanner routes are defined', () {
+      expect(AppRoutes.scanner, '/scanner');
+      expect(AppRoutes.scannerHistory, '/scanner/history');
+      expect(AppRoutes.scannerResult, '/scanner/:id');
+    });
+
+    test('Medical Guide route is defined', () {
+      expect(AppRoutes.medical, '/medical');
+    });
+
+    test('banking guide route has :bankId parameter', () {
+      expect(AppRoutes.bankingGuide, contains(':bankId'));
+    });
+
+    test('visa detail route has :procedureId parameter', () {
+      expect(AppRoutes.visaDetail, contains(':procedureId'));
+    });
+
+    test('tracker detail route has :id parameter', () {
+      expect(AppRoutes.trackerDetail, contains(':id'));
+    });
+
+    test('scanner result route has :id parameter', () {
+      expect(AppRoutes.scannerResult, contains(':id'));
+    });
   });
 }

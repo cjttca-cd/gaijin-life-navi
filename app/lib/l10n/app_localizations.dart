@@ -865,6 +865,558 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get logout;
+
+  /// Banking list screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Banking Navigator'**
+  String get bankingTitle;
+
+  /// Bank friendly score label
+  ///
+  /// In en, this message translates to:
+  /// **'Foreigner-Friendly Score'**
+  String get bankingFriendlyScore;
+
+  /// Empty bank list message
+  ///
+  /// In en, this message translates to:
+  /// **'No banks found'**
+  String get bankingEmpty;
+
+  /// Recommend button
+  ///
+  /// In en, this message translates to:
+  /// **'Recommend'**
+  String get bankingRecommendButton;
+
+  /// Recommend screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Recommendations'**
+  String get bankingRecommendTitle;
+
+  /// Priority selection label
+  ///
+  /// In en, this message translates to:
+  /// **'Select your priorities'**
+  String get bankingSelectPriorities;
+
+  /// Priority chip
+  ///
+  /// In en, this message translates to:
+  /// **'Multilingual Support'**
+  String get bankingPriorityMultilingual;
+
+  /// Priority chip
+  ///
+  /// In en, this message translates to:
+  /// **'Low Fees'**
+  String get bankingPriorityLowFee;
+
+  /// Priority chip
+  ///
+  /// In en, this message translates to:
+  /// **'ATM Network'**
+  String get bankingPriorityAtm;
+
+  /// Priority chip
+  ///
+  /// In en, this message translates to:
+  /// **'Online Banking'**
+  String get bankingPriorityOnline;
+
+  /// Get recommendations button
+  ///
+  /// In en, this message translates to:
+  /// **'Get Recommendations'**
+  String get bankingGetRecommendations;
+
+  /// Recommend screen hint
+  ///
+  /// In en, this message translates to:
+  /// **'Select your priorities and tap Get Recommendations'**
+  String get bankingRecommendHint;
+
+  /// No recommendations message
+  ///
+  /// In en, this message translates to:
+  /// **'No recommendations found'**
+  String get bankingNoRecommendations;
+
+  /// View guide button
+  ///
+  /// In en, this message translates to:
+  /// **'View Guide'**
+  String get bankingViewGuide;
+
+  /// Guide screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Account Opening Guide'**
+  String get bankingGuideTitle;
+
+  /// Required documents section
+  ///
+  /// In en, this message translates to:
+  /// **'Required Documents'**
+  String get bankingRequiredDocs;
+
+  /// Conversation templates section
+  ///
+  /// In en, this message translates to:
+  /// **'Useful Phrases at the Bank'**
+  String get bankingConversationTemplates;
+
+  /// Troubleshooting section
+  ///
+  /// In en, this message translates to:
+  /// **'Troubleshooting Tips'**
+  String get bankingTroubleshooting;
+
+  /// Source citation label
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get bankingSource;
+
+  /// Visa list screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Visa Navigator'**
+  String get visaTitle;
+
+  /// Empty visa list message
+  ///
+  /// In en, this message translates to:
+  /// **'No procedures found'**
+  String get visaEmpty;
+
+  /// All filter chip
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get visaFilterAll;
+
+  /// Visa detail screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Procedure Details'**
+  String get visaDetailTitle;
+
+  /// Steps section title
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get visaSteps;
+
+  /// Required documents section
+  ///
+  /// In en, this message translates to:
+  /// **'Required Documents'**
+  String get visaRequiredDocuments;
+
+  /// Fees section title
+  ///
+  /// In en, this message translates to:
+  /// **'Fees'**
+  String get visaFees;
+
+  /// Processing time section
+  ///
+  /// In en, this message translates to:
+  /// **'Processing Time'**
+  String get visaProcessingTime;
+
+  /// Visa disclaimer text
+  ///
+  /// In en, this message translates to:
+  /// **'IMPORTANT: This is general information about visa procedures and does not constitute immigration advice. Immigration laws and procedures may change. Always consult the Immigration Services Agency or a qualified immigration lawyer (行政書士) for your specific situation.'**
+  String get visaDisclaimer;
+
+  /// Tracker screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Tracker'**
+  String get trackerTitle;
+
+  /// Empty tracker message
+  ///
+  /// In en, this message translates to:
+  /// **'No procedures tracked'**
+  String get trackerEmpty;
+
+  /// Empty tracker hint
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add procedures to track'**
+  String get trackerEmptyHint;
+
+  /// Add procedure button
+  ///
+  /// In en, this message translates to:
+  /// **'Add Procedure'**
+  String get trackerAddProcedure;
+
+  /// Not started status
+  ///
+  /// In en, this message translates to:
+  /// **'Not Started'**
+  String get trackerStatusNotStarted;
+
+  /// In progress status
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get trackerStatusInProgress;
+
+  /// Completed status
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get trackerStatusCompleted;
+
+  /// Due date label
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date'**
+  String get trackerDueDate;
+
+  /// Free tier limit info
+  ///
+  /// In en, this message translates to:
+  /// **'Free plan: up to 3 procedures. Upgrade for unlimited.'**
+  String get trackerFreeLimitInfo;
+
+  /// Tracker detail screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Procedure Details'**
+  String get trackerDetailTitle;
+
+  /// Current status label
+  ///
+  /// In en, this message translates to:
+  /// **'Current Status'**
+  String get trackerCurrentStatus;
+
+  /// Notes label
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get trackerNotes;
+
+  /// Change status section title
+  ///
+  /// In en, this message translates to:
+  /// **'Change Status'**
+  String get trackerChangeStatus;
+
+  /// Mark in progress button
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as In Progress'**
+  String get trackerMarkInProgress;
+
+  /// Mark completed button
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Completed'**
+  String get trackerMarkCompleted;
+
+  /// Mark incomplete button
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Incomplete'**
+  String get trackerMarkIncomplete;
+
+  /// Status updated snackbar
+  ///
+  /// In en, this message translates to:
+  /// **'Status updated'**
+  String get trackerStatusUpdated;
+
+  /// Delete procedure dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Procedure'**
+  String get trackerDeleteTitle;
+
+  /// Delete procedure confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this procedure from your tracker?'**
+  String get trackerDeleteConfirm;
+
+  /// Procedure added snackbar
+  ///
+  /// In en, this message translates to:
+  /// **'Procedure added to tracker'**
+  String get trackerProcedureAdded;
+
+  /// Tracker limit reached message
+  ///
+  /// In en, this message translates to:
+  /// **'Free plan limit reached (3 procedures). Upgrade to Premium for unlimited.'**
+  String get trackerLimitReached;
+
+  /// Already tracking message
+  ///
+  /// In en, this message translates to:
+  /// **'You are already tracking this procedure'**
+  String get trackerAlreadyTracking;
+
+  /// Essential procedures section
+  ///
+  /// In en, this message translates to:
+  /// **'Essential (After Arrival)'**
+  String get trackerEssentialProcedures;
+
+  /// Other procedures section
+  ///
+  /// In en, this message translates to:
+  /// **'Other Procedures'**
+  String get trackerOtherProcedures;
+
+  /// No templates message
+  ///
+  /// In en, this message translates to:
+  /// **'No procedure templates available'**
+  String get trackerNoTemplates;
+
+  /// Scanner screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Document Scanner'**
+  String get scannerTitle;
+
+  /// Scanner description
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Japanese documents to get instant translations and explanations'**
+  String get scannerDescription;
+
+  /// Camera scan button
+  ///
+  /// In en, this message translates to:
+  /// **'Scan from Camera'**
+  String get scannerFromCamera;
+
+  /// Gallery scan button
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get scannerFromGallery;
+
+  /// History button
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get scannerHistory;
+
+  /// History screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Scan History'**
+  String get scannerHistoryTitle;
+
+  /// Empty history message
+  ///
+  /// In en, this message translates to:
+  /// **'No scans yet'**
+  String get scannerHistoryEmpty;
+
+  /// Unknown document type
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Document'**
+  String get scannerUnknownType;
+
+  /// Result screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Result'**
+  String get scannerResultTitle;
+
+  /// Original OCR text section
+  ///
+  /// In en, this message translates to:
+  /// **'Original Text (Japanese)'**
+  String get scannerOriginalText;
+
+  /// Translation section
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get scannerTranslation;
+
+  /// Explanation section
+  ///
+  /// In en, this message translates to:
+  /// **'What This Means'**
+  String get scannerExplanation;
+
+  /// Processing status
+  ///
+  /// In en, this message translates to:
+  /// **'Processing your document...'**
+  String get scannerProcessing;
+
+  /// Refresh button
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get scannerRefresh;
+
+  /// Scan failed message
+  ///
+  /// In en, this message translates to:
+  /// **'Scan failed. Please try again.'**
+  String get scannerFailed;
+
+  /// Free tier limit info
+  ///
+  /// In en, this message translates to:
+  /// **'Free plan: 3 scans/month. Upgrade for more.'**
+  String get scannerFreeLimitInfo;
+
+  /// Scanner limit reached message
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly scan limit reached. Upgrade to Premium for more scans.'**
+  String get scannerLimitReached;
+
+  /// Medical screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Guide'**
+  String get medicalTitle;
+
+  /// Emergency tab
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get medicalTabEmergency;
+
+  /// Phrases tab
+  ///
+  /// In en, this message translates to:
+  /// **'Phrases'**
+  String get medicalTabPhrases;
+
+  /// Emergency number label
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Number'**
+  String get medicalEmergencyNumber;
+
+  /// How to call section
+  ///
+  /// In en, this message translates to:
+  /// **'How to Call'**
+  String get medicalHowToCall;
+
+  /// What to prepare section
+  ///
+  /// In en, this message translates to:
+  /// **'What to Prepare'**
+  String get medicalWhatToPrepare;
+
+  /// Useful phrases section
+  ///
+  /// In en, this message translates to:
+  /// **'Useful Phrases'**
+  String get medicalUsefulPhrases;
+
+  /// All categories filter
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get medicalCategoryAll;
+
+  /// Emergency category
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get medicalCategoryEmergency;
+
+  /// Symptoms category
+  ///
+  /// In en, this message translates to:
+  /// **'Symptoms'**
+  String get medicalCategorySymptom;
+
+  /// Insurance category
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance'**
+  String get medicalCategoryInsurance;
+
+  /// General category
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get medicalCategoryGeneral;
+
+  /// No phrases message
+  ///
+  /// In en, this message translates to:
+  /// **'No phrases found'**
+  String get medicalNoPhrases;
+
+  /// Medical disclaimer text
+  ///
+  /// In en, this message translates to:
+  /// **'This guide provides general health information and is not a substitute for professional medical advice. In an emergency, call 119 immediately.'**
+  String get medicalDisclaimer;
+
+  /// Navigate hub banking title
+  ///
+  /// In en, this message translates to:
+  /// **'Banking'**
+  String get navigateBanking;
+
+  /// Navigate hub banking description
+  ///
+  /// In en, this message translates to:
+  /// **'Find foreigner-friendly banks'**
+  String get navigateBankingDesc;
+
+  /// Navigate hub visa title
+  ///
+  /// In en, this message translates to:
+  /// **'Visa'**
+  String get navigateVisa;
+
+  /// Navigate hub visa description
+  ///
+  /// In en, this message translates to:
+  /// **'Visa procedures & documents'**
+  String get navigateVisaDesc;
+
+  /// Navigate hub scanner title
+  ///
+  /// In en, this message translates to:
+  /// **'Scanner'**
+  String get navigateScanner;
+
+  /// Navigate hub scanner description
+  ///
+  /// In en, this message translates to:
+  /// **'Translate Japanese documents'**
+  String get navigateScannerDesc;
+
+  /// Navigate hub medical title
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get navigateMedical;
+
+  /// Navigate hub medical description
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency guide & phrases'**
+  String get navigateMedicalDesc;
 }
 
 class _AppLocalizationsDelegate

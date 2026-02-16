@@ -402,4 +402,289 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get logout => 'Đăng xuất';
+
+  @override
+  String get bankingTitle => 'Hướng dẫn Ngân hàng';
+
+  @override
+  String get bankingFriendlyScore => 'Điểm thân thiện với người nước ngoài';
+
+  @override
+  String get bankingEmpty => 'Không tìm thấy ngân hàng';
+
+  @override
+  String get bankingRecommendButton => 'Gợi ý';
+
+  @override
+  String get bankingRecommendTitle => 'Gợi ý Ngân hàng';
+
+  @override
+  String get bankingSelectPriorities => 'Chọn ưu tiên của bạn';
+
+  @override
+  String get bankingPriorityMultilingual => 'Hỗ trợ đa ngôn ngữ';
+
+  @override
+  String get bankingPriorityLowFee => 'Phí thấp';
+
+  @override
+  String get bankingPriorityAtm => 'Mạng lưới ATM';
+
+  @override
+  String get bankingPriorityOnline => 'Ngân hàng trực tuyến';
+
+  @override
+  String get bankingGetRecommendations => 'Nhận gợi ý';
+
+  @override
+  String get bankingRecommendHint => 'Chọn ưu tiên và nhấn Nhận gợi ý';
+
+  @override
+  String get bankingNoRecommendations => 'Không tìm thấy gợi ý';
+
+  @override
+  String get bankingViewGuide => 'Xem hướng dẫn';
+
+  @override
+  String get bankingGuideTitle => 'Hướng dẫn mở tài khoản';
+
+  @override
+  String get bankingRequiredDocs => 'Tài liệu cần thiết';
+
+  @override
+  String get bankingConversationTemplates => 'Cụm từ hữu ích tại ngân hàng';
+
+  @override
+  String get bankingTroubleshooting => 'Mẹo xử lý sự cố';
+
+  @override
+  String get bankingSource => 'Nguồn';
+
+  @override
+  String get visaTitle => 'Hướng dẫn Visa';
+
+  @override
+  String get visaEmpty => 'Không tìm thấy thủ tục';
+
+  @override
+  String get visaFilterAll => 'Tất cả';
+
+  @override
+  String get visaDetailTitle => 'Chi tiết thủ tục';
+
+  @override
+  String get visaSteps => 'Các bước';
+
+  @override
+  String get visaRequiredDocuments => 'Tài liệu cần thiết';
+
+  @override
+  String get visaFees => 'Lệ phí';
+
+  @override
+  String get visaProcessingTime => 'Thời gian xử lý';
+
+  @override
+  String get visaDisclaimer =>
+      'QUAN TRỌNG: Đây là thông tin chung về thủ tục visa và không cấu thành tư vấn nhập cư. Luật và thủ tục nhập cư có thể thay đổi. Luôn tham khảo ý kiến của Cục Quản lý Xuất nhập cảnh hoặc luật sư nhập cư có chuyên môn (行政書士) cho tình huống cụ thể của bạn.';
+
+  @override
+  String get trackerTitle => 'Theo dõi Thủ tục';
+
+  @override
+  String get trackerEmpty => 'Chưa theo dõi thủ tục nào';
+
+  @override
+  String get trackerEmptyHint => 'Nhấn + để thêm thủ tục cần theo dõi';
+
+  @override
+  String get trackerAddProcedure => 'Thêm thủ tục';
+
+  @override
+  String get trackerStatusNotStarted => 'Chưa bắt đầu';
+
+  @override
+  String get trackerStatusInProgress => 'Đang tiến hành';
+
+  @override
+  String get trackerStatusCompleted => 'Đã hoàn thành';
+
+  @override
+  String get trackerDueDate => 'Hạn chót';
+
+  @override
+  String get trackerFreeLimitInfo =>
+      'Gói miễn phí: tối đa 3 thủ tục. Nâng cấp để không giới hạn.';
+
+  @override
+  String get trackerDetailTitle => 'Chi tiết thủ tục';
+
+  @override
+  String get trackerCurrentStatus => 'Trạng thái hiện tại';
+
+  @override
+  String get trackerNotes => 'Ghi chú';
+
+  @override
+  String get trackerChangeStatus => 'Thay đổi trạng thái';
+
+  @override
+  String get trackerMarkInProgress => 'Đánh dấu đang tiến hành';
+
+  @override
+  String get trackerMarkCompleted => 'Đánh dấu hoàn thành';
+
+  @override
+  String get trackerMarkIncomplete => 'Đánh dấu chưa hoàn thành';
+
+  @override
+  String get trackerStatusUpdated => 'Đã cập nhật trạng thái';
+
+  @override
+  String get trackerDeleteTitle => 'Xóa thủ tục';
+
+  @override
+  String get trackerDeleteConfirm =>
+      'Bạn có chắc chắn muốn xóa thủ tục này khỏi theo dõi?';
+
+  @override
+  String get trackerProcedureAdded => 'Đã thêm thủ tục vào theo dõi';
+
+  @override
+  String get trackerLimitReached =>
+      'Đã đạt giới hạn gói miễn phí (3 thủ tục). Nâng cấp lên Premium để không giới hạn.';
+
+  @override
+  String get trackerAlreadyTracking => 'Bạn đã theo dõi thủ tục này';
+
+  @override
+  String get trackerEssentialProcedures => 'Thiết yếu (Sau khi đến)';
+
+  @override
+  String get trackerOtherProcedures => 'Thủ tục khác';
+
+  @override
+  String get trackerNoTemplates => 'Không có mẫu thủ tục';
+
+  @override
+  String get scannerTitle => 'Quét tài liệu';
+
+  @override
+  String get scannerDescription =>
+      'Quét tài liệu tiếng Nhật để nhận bản dịch và giải thích ngay lập tức';
+
+  @override
+  String get scannerFromCamera => 'Quét từ Camera';
+
+  @override
+  String get scannerFromGallery => 'Chọn từ Thư viện';
+
+  @override
+  String get scannerHistory => 'Lịch sử';
+
+  @override
+  String get scannerHistoryTitle => 'Lịch sử quét';
+
+  @override
+  String get scannerHistoryEmpty => 'Chưa có bản quét nào';
+
+  @override
+  String get scannerUnknownType => 'Tài liệu không xác định';
+
+  @override
+  String get scannerResultTitle => 'Kết quả quét';
+
+  @override
+  String get scannerOriginalText => 'Văn bản gốc (Tiếng Nhật)';
+
+  @override
+  String get scannerTranslation => 'Bản dịch';
+
+  @override
+  String get scannerExplanation => 'Điều này có nghĩa gì';
+
+  @override
+  String get scannerProcessing => 'Đang xử lý tài liệu...';
+
+  @override
+  String get scannerRefresh => 'Làm mới';
+
+  @override
+  String get scannerFailed => 'Quét thất bại. Vui lòng thử lại.';
+
+  @override
+  String get scannerFreeLimitInfo =>
+      'Gói miễn phí: 3 lần quét/tháng. Nâng cấp để có thêm.';
+
+  @override
+  String get scannerLimitReached =>
+      'Đã đạt giới hạn quét hàng tháng. Nâng cấp lên Premium để quét thêm.';
+
+  @override
+  String get medicalTitle => 'Hướng dẫn Y tế';
+
+  @override
+  String get medicalTabEmergency => 'Cấp cứu';
+
+  @override
+  String get medicalTabPhrases => 'Cụm từ';
+
+  @override
+  String get medicalEmergencyNumber => 'Số cấp cứu';
+
+  @override
+  String get medicalHowToCall => 'Cách gọi';
+
+  @override
+  String get medicalWhatToPrepare => 'Chuẩn bị gì';
+
+  @override
+  String get medicalUsefulPhrases => 'Cụm từ hữu ích';
+
+  @override
+  String get medicalCategoryAll => 'Tất cả';
+
+  @override
+  String get medicalCategoryEmergency => 'Cấp cứu';
+
+  @override
+  String get medicalCategorySymptom => 'Triệu chứng';
+
+  @override
+  String get medicalCategoryInsurance => 'Bảo hiểm';
+
+  @override
+  String get medicalCategoryGeneral => 'Chung';
+
+  @override
+  String get medicalNoPhrases => 'Không tìm thấy cụm từ';
+
+  @override
+  String get medicalDisclaimer =>
+      'Hướng dẫn này cung cấp thông tin sức khỏe chung và không thay thế lời khuyên y tế chuyên nghiệp. Trong trường hợp khẩn cấp, hãy gọi 119 ngay lập tức.';
+
+  @override
+  String get navigateBanking => 'Ngân hàng';
+
+  @override
+  String get navigateBankingDesc =>
+      'Tìm ngân hàng thân thiện với người nước ngoài';
+
+  @override
+  String get navigateVisa => 'Visa';
+
+  @override
+  String get navigateVisaDesc => 'Thủ tục visa và tài liệu';
+
+  @override
+  String get navigateScanner => 'Quét';
+
+  @override
+  String get navigateScannerDesc => 'Dịch tài liệu tiếng Nhật';
+
+  @override
+  String get navigateMedical => 'Y tế';
+
+  @override
+  String get navigateMedicalDesc => 'Hướng dẫn cấp cứu và cụm từ';
 }
