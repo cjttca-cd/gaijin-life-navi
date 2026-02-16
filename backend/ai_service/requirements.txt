@@ -1,0 +1,28 @@
+# Gaijin Life Navi — AI Service dependencies
+
+# Web framework
+fastapi>=0.115.0
+uvicorn>=0.27.0
+sse-starlette>=2.0.0
+
+# Database
+sqlalchemy>=2.0.0
+aiosqlite>=0.19.0
+alembic>=1.13.0
+
+# Validation & settings
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# AI / LLM
+anthropic>=0.34.0
+
+# RAG pipeline
+openai>=1.0.0
+pinecone-client>=3.0.0
+
+# HTTP client
+httpx>=0.25.0
+
+# Auth (Firebase Admin SDK — optional, mock mode without it)
+# firebase-admin>=6.0.0

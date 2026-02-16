@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     APP_VERSION: str = "0.1.0"
     DEBUG: bool = False
 
-    # Database
-    DATABASE_URL: str = "sqlite+aiosqlite:///./app.db"
+    # Database (absolute path — shared with AI Service)
+    DATABASE_URL: str = "sqlite+aiosqlite:////root/.openclaw/projects/gaijin-life-navi/data/app.db"
 
     # Firebase
     FIREBASE_PROJECT_ID: str = "gaijin-life-navi"

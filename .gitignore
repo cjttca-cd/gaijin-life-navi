@@ -30,6 +30,10 @@ env/
 *.db
 *.sqlite3
 
+# Runtime data directory (DB files etc.)
+data/*
+!data/.gitkeep
+
 # Alembic
 alembic/versions/__pycache__/
 
