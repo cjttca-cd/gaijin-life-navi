@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-E0（骨格 + 認証）Pipeline 完了。Backend scaffold + Flutter scaffold 両方構築済み。次は M1（AI Chat Engine）の計画へ。
+E0 + E1 完了。Backend/Flutter scaffold + AI Chat Engine（バックエンド + フロント）構築済み。次は M2（コンテンツナビゲーター群）の計画へ。
 
 ## Status
 
@@ -38,7 +38,7 @@ E0（骨格 + 認証）Pipeline 完了。Backend scaffold + Flutter scaffold 両
 | Epic | Milestone | Status | Features |
 |------|-----------|--------|----------|
 | E0: 骨格 + 認証 | M0 | ✅ 完了 | ✅ Backend scaffold (task-018) → ✅ Flutter scaffold (task-019) |
-| E1: AI Chat Engine | M1 | 🔵 進行中 | AI Service, RAG, チャット CRUD, SSE ストリーミング, 日次制限, オンボーディング |
+| E1: AI Chat Engine | M1 | ✅ 完了 | ✅ AI Service backend (task-020b) → ✅ Flutter Chat UI + Onboarding (task-021) |
 | E2: Banking Navigator | M2 | 🔲 未着手 | 銀行一覧, レコメンド, 口座開設ガイド |
 | E3: Visa Navigator | M2 | 🔲 未着手 | 手続き一覧, 詳細ガイド |
 | E4: Admin Tracker | M2 | 🔲 未着手 | チェックリスト, 進捗管理, 手続き追加 |
@@ -56,7 +56,7 @@ M0 (骨格+認証) → M1 (AI Chat) → M2 (ナビゲーター群) → M3 (Commu
 ```
 
 ## Next
-M1（AI Chat Engine）の Epic 計画 → Pipeline 設計 → 実行開始。
+M2（コンテンツナビゲーター群: Banking/Visa/Tracker/Scanner/Medical）の Epic 計画。
 
 ## Decisions
 | Date | Decision | Rationale |
@@ -69,6 +69,9 @@ M1（AI Chat Engine）の Epic 計画 → Pipeline 設計 → 実行開始。
 | 2026-02-16 | Step 1 完了（task-018）: FastAPI + Alembic + CF Workers scaffold | 検証済み（import OK, migration OK, 6 endpoints） |
 | 2026-02-16 | Step 2 完了（task-019）: Flutter App scaffold + Auth + l10n | 検証済み（analyze OK, 17 tests passed, web build OK） |
 | 2026-02-16 | E0 Pipeline 完了（pipeline-004） | Backend + Flutter 基盤構築完了 |
+| 2026-02-16 | E1 Pipeline 開始+完了（pipeline-005） | AI Service + Flutter Chat UI |
+| 2026-02-16 | Step 1 完了（task-020b）: AI Service Chat Backend | 7 endpoints, SSE streaming, RAG mock, daily limit |
+| 2026-02-16 | Step 2 完了（task-021）: Flutter Chat UI + Onboarding | 125 l10n keys × 5 langs, 40 tests, SSE parser |
 
 ## Glossary
 | Term | Definition |
