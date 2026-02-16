@@ -889,4 +889,102 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get subscriptionFeatureUnlimitedChat => 'Unlimited AI chats';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profileEditTitle => 'Edit Profile';
+
+  @override
+  String get profileEdit => 'Edit Profile';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileNationality => 'Nationality';
+
+  @override
+  String get profileResidenceStatus => 'Residence Status';
+
+  @override
+  String get profileRegion => 'Region';
+
+  @override
+  String get profileLanguage => 'Language';
+
+  @override
+  String get profileArrivalDate => 'Arrival Date';
+
+  @override
+  String get profileDisplayName => 'Display Name';
+
+  @override
+  String get profileNoName => 'No Name';
+
+  @override
+  String get profileNameTooLong => 'Name must be 100 characters or less';
+
+  @override
+  String get profileSaved => 'Profile saved';
+
+  @override
+  String get profileSaveButton => 'Save';
+
+  @override
+  String get profileSaveError => 'Failed to save profile';
+
+  @override
+  String get profileLoadError => 'Failed to load profile';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsLanguageSection => 'Language';
+
+  @override
+  String get settingsAccountSection => 'Account';
+
+  @override
+  String get settingsAboutSection => 'About';
+
+  @override
+  String get settingsLogout => 'Log Out';
+
+  @override
+  String get settingsDeleteAccount => 'Delete Account';
+
+  @override
+  String get settingsDeleteAccountSubtitle => 'This action cannot be undone';
+
+  @override
+  String get settingsVersion => 'Version';
+
+  @override
+  String get settingsLogoutConfirmTitle => 'Log Out';
+
+  @override
+  String get settingsLogoutConfirmMessage =>
+      'Are you sure you want to log out?';
+
+  @override
+  String get settingsDeleteConfirmTitle => 'Delete Account';
+
+  @override
+  String get settingsDeleteConfirmMessage =>
+      'Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently removed.';
+
+  @override
+  String get settingsDeleteError => 'Failed to delete account';
+
+  @override
+  String get settingsCancel => 'Cancel';
+
+  @override
+  String get settingsDelete => 'Delete';
+
+  @override
+  String get settingsConfirm => 'Confirm';
 }

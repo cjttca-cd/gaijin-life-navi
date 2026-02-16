@@ -890,4 +890,102 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get subscriptionFeatureUnlimitedChat => 'Trò chuyện AI không giới hạn';
+
+  @override
+  String get profileTitle => 'Hồ sơ';
+
+  @override
+  String get profileEditTitle => 'Chỉnh sửa hồ sơ';
+
+  @override
+  String get profileEdit => 'Chỉnh sửa hồ sơ';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileNationality => 'Quốc tịch';
+
+  @override
+  String get profileResidenceStatus => 'Tư cách cư trú';
+
+  @override
+  String get profileRegion => 'Khu vực';
+
+  @override
+  String get profileLanguage => 'Ngôn ngữ';
+
+  @override
+  String get profileArrivalDate => 'Ngày đến';
+
+  @override
+  String get profileDisplayName => 'Tên hiển thị';
+
+  @override
+  String get profileNoName => 'Chưa đặt tên';
+
+  @override
+  String get profileNameTooLong => 'Tên không được quá 100 ký tự';
+
+  @override
+  String get profileSaved => 'Đã lưu hồ sơ';
+
+  @override
+  String get profileSaveButton => 'Lưu';
+
+  @override
+  String get profileSaveError => 'Lưu hồ sơ thất bại';
+
+  @override
+  String get profileLoadError => 'Tải hồ sơ thất bại';
+
+  @override
+  String get settingsTitle => 'Cài đặt';
+
+  @override
+  String get settingsLanguageSection => 'Ngôn ngữ';
+
+  @override
+  String get settingsAccountSection => 'Tài khoản';
+
+  @override
+  String get settingsAboutSection => 'Giới thiệu';
+
+  @override
+  String get settingsLogout => 'Đăng xuất';
+
+  @override
+  String get settingsDeleteAccount => 'Xóa tài khoản';
+
+  @override
+  String get settingsDeleteAccountSubtitle =>
+      'Hành động này không thể hoàn tác';
+
+  @override
+  String get settingsVersion => 'Phiên bản';
+
+  @override
+  String get settingsLogoutConfirmTitle => 'Đăng xuất';
+
+  @override
+  String get settingsLogoutConfirmMessage => 'Bạn có chắc muốn đăng xuất?';
+
+  @override
+  String get settingsDeleteConfirmTitle => 'Xóa tài khoản';
+
+  @override
+  String get settingsDeleteConfirmMessage =>
+      'Bạn có chắc muốn xóa tài khoản? Hành động này không thể hoàn tác. Tất cả dữ liệu sẽ bị xóa vĩnh viễn.';
+
+  @override
+  String get settingsDeleteError => 'Xóa tài khoản thất bại';
+
+  @override
+  String get settingsCancel => 'Hủy';
+
+  @override
+  String get settingsDelete => 'Xóa';
+
+  @override
+  String get settingsConfirm => 'Xác nhận';
 }

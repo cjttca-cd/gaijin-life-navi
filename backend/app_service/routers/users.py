@@ -1,8 +1,9 @@
 """User profile endpoints (API_DESIGN.md — User Profile section).
 
-GET   /api/v1/users/me            — Get current user profile
-PATCH /api/v1/users/me            — Update profile
-POST  /api/v1/users/me/onboarding — Complete onboarding
+GET    /api/v1/users/me            — Get current user profile
+PATCH  /api/v1/users/me            — Update profile
+DELETE /api/v1/users/me            — Soft-delete account + cancel subscription
+POST   /api/v1/users/me/onboarding — Complete onboarding
 """
 
 import json
@@ -17,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from models.admin_procedure import AdminProcedure
 from models.profile import Profile
+from models.subscription import Subscription
 from models.user_procedure import UserProcedure
 from schemas.common import ErrorResponse, SuccessResponse
 from schemas.users import OnboardingRequest, ProfileResponse, UpdateProfileRequest
@@ -85,6 +87,78 @@ async def update_me(
     return SuccessResponse(
         data=ProfileResponse.model_validate(profile).model_dump()
     ).model_dump()
+
+
+@router.delete(
+    "/me",
+    response_model=SuccessResponse,
+    responses={404: {"model": ErrorResponse}},
+)
+async def delete_me(
+    current_user: FirebaseUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Soft-delete the user profile and cancel subscription.
+
+    Processing:
+    1. Set profiles.deleted_at
+    2. If active subscription → set cancel_at_period_end=true
+    3. Delete Firebase Auth account (skip in mock mode)
+    """
+    profile = await db.get(Profile, current_user.uid)
+    if profile is None or profile.deleted_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error": {
+                    "code": "NOT_FOUND",
+                    "message": "Profile not found.",
+                    "details": {},
+                }
+            },
+        )
+
+    now = datetime.now(timezone.utc)
+    profile.deleted_at = now
+    await db.flush()
+
+    # Cancel active subscription
+    sub_stmt = select(Subscription).where(Subscription.user_id == current_user.uid)
+    sub_result = await db.execute(sub_stmt)
+    sub = sub_result.scalars().first()
+
+    if sub and sub.status in ("active", "past_due"):
+        sub.cancel_at_period_end = True
+        sub.cancelled_at = now
+        sub.updated_at = now
+        await db.flush()
+
+        try:
+            from config import settings as _s
+
+            if _s.STRIPE_SECRET_KEY and sub.stripe_subscription_id:
+                import stripe
+
+                stripe.api_key = _s.STRIPE_SECRET_KEY
+                stripe.Subscription.modify(
+                    sub.stripe_subscription_id,
+                    cancel_at_period_end=True,
+                )
+        except Exception:
+            logger.exception("Failed to cancel Stripe subscription (non-fatal).")
+
+    # Delete Firebase Auth account (best-effort)
+    try:
+        from config import settings as _s
+
+        if _s.FIREBASE_CREDENTIALS:
+            from firebase_admin import auth as fb_auth  # type: ignore[import-untyped]
+
+            fb_auth.delete_user(current_user.uid)
+    except Exception:
+        logger.exception("Failed to delete Firebase Auth account (non-fatal).")
+
+    return SuccessResponse(data={"message": "Account deleted"}).model_dump()
 
 
 @router.post(

@@ -1783,6 +1783,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unlimited AI chats'**
   String get subscriptionFeatureUnlimitedChat;
+
+  /// Profile screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// Profile edit screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profileEditTitle;
+
+  /// Edit profile button
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profileEdit;
+
+  /// Profile email label
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileEmail;
+
+  /// Profile nationality label
+  ///
+  /// In en, this message translates to:
+  /// **'Nationality'**
+  String get profileNationality;
+
+  /// Profile residence status label
+  ///
+  /// In en, this message translates to:
+  /// **'Residence Status'**
+  String get profileResidenceStatus;
+
+  /// Profile region label
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get profileRegion;
+
+  /// Profile language label
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profileLanguage;
+
+  /// Profile arrival date label
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival Date'**
+  String get profileArrivalDate;
+
+  /// Profile display name field
+  ///
+  /// In en, this message translates to:
+  /// **'Display Name'**
+  String get profileDisplayName;
+
+  /// Placeholder when name is empty
+  ///
+  /// In en, this message translates to:
+  /// **'No Name'**
+  String get profileNoName;
+
+  /// Validation for name length
+  ///
+  /// In en, this message translates to:
+  /// **'Name must be 100 characters or less'**
+  String get profileNameTooLong;
+
+  /// Snackbar after profile save
+  ///
+  /// In en, this message translates to:
+  /// **'Profile saved'**
+  String get profileSaved;
+
+  /// Save button label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get profileSaveButton;
+
+  /// Error saving profile
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save profile'**
+  String get profileSaveError;
+
+  /// Error loading profile
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load profile'**
+  String get profileLoadError;
+
+  /// Settings screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// Language section header
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguageSection;
+
+  /// Account section header
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAccountSection;
+
+  /// About section header
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAboutSection;
+
+  /// Logout button
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get settingsLogout;
+
+  /// Delete account button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get settingsDeleteAccount;
+
+  /// Delete account subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone'**
+  String get settingsDeleteAccountSubtitle;
+
+  /// App version label
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get settingsVersion;
+
+  /// Logout confirmation title
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get settingsLogoutConfirmTitle;
+
+  /// Logout confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get settingsLogoutConfirmMessage;
+
+  /// Delete confirmation title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get settingsDeleteConfirmTitle;
+
+  /// Delete confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently removed.'**
+  String get settingsDeleteConfirmMessage;
+
+  /// Error deleting account
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete account'**
+  String get settingsDeleteError;
+
+  /// Cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settingsCancel;
+
+  /// Delete button in dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get settingsDelete;
+
+  /// Confirm button in dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get settingsConfirm;
 }
 
 class _AppLocalizationsDelegate

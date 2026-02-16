@@ -900,4 +900,101 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get subscriptionFeatureUnlimitedChat => 'Conversas com IA ilimitadas';
+
+  @override
+  String get profileTitle => 'Perfil';
+
+  @override
+  String get profileEditTitle => 'Editar Perfil';
+
+  @override
+  String get profileEdit => 'Editar Perfil';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileNationality => 'Nacionalidade';
+
+  @override
+  String get profileResidenceStatus => 'Status de Residência';
+
+  @override
+  String get profileRegion => 'Região';
+
+  @override
+  String get profileLanguage => 'Idioma';
+
+  @override
+  String get profileArrivalDate => 'Data de Chegada';
+
+  @override
+  String get profileDisplayName => 'Nome de Exibição';
+
+  @override
+  String get profileNoName => 'Sem Nome';
+
+  @override
+  String get profileNameTooLong => 'O nome deve ter no máximo 100 caracteres';
+
+  @override
+  String get profileSaved => 'Perfil salvo';
+
+  @override
+  String get profileSaveButton => 'Salvar';
+
+  @override
+  String get profileSaveError => 'Falha ao salvar perfil';
+
+  @override
+  String get profileLoadError => 'Falha ao carregar perfil';
+
+  @override
+  String get settingsTitle => 'Configurações';
+
+  @override
+  String get settingsLanguageSection => 'Idioma';
+
+  @override
+  String get settingsAccountSection => 'Conta';
+
+  @override
+  String get settingsAboutSection => 'Sobre';
+
+  @override
+  String get settingsLogout => 'Sair';
+
+  @override
+  String get settingsDeleteAccount => 'Excluir Conta';
+
+  @override
+  String get settingsDeleteAccountSubtitle => 'Esta ação não pode ser desfeita';
+
+  @override
+  String get settingsVersion => 'Versão';
+
+  @override
+  String get settingsLogoutConfirmTitle => 'Sair';
+
+  @override
+  String get settingsLogoutConfirmMessage => 'Tem certeza que deseja sair?';
+
+  @override
+  String get settingsDeleteConfirmTitle => 'Excluir Conta';
+
+  @override
+  String get settingsDeleteConfirmMessage =>
+      'Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita. Todos os seus dados serão permanentemente removidos.';
+
+  @override
+  String get settingsDeleteError => 'Falha ao excluir conta';
+
+  @override
+  String get settingsCancel => 'Cancelar';
+
+  @override
+  String get settingsDelete => 'Excluir';
+
+  @override
+  String get settingsConfirm => 'Confirmar';
 }

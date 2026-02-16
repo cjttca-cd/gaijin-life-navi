@@ -19,7 +19,9 @@ import '../../features/home/presentation/home_screen.dart';
 import '../../features/medical/presentation/medical_guide_screen.dart';
 import '../../features/navigate/presentation/navigate_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/profile/presentation/profile_edit_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/profile/presentation/settings_screen.dart';
 import '../../features/scanner/presentation/scanner_history_screen.dart';
 import '../../features/scanner/presentation/scanner_home_screen.dart';
 import '../../features/scanner/presentation/scanner_result_screen.dart';
@@ -50,6 +52,8 @@ class AppRoutes {
   static const String trackerAdd = '/tracker/add';
   static const String navigate = '/navigate';
   static const String profile = '/profile';
+  static const String profileEdit = '/profile/edit';
+  static const String settings = '/settings';
 
   // Banking Navigator
   static const String banking = '/banking';
@@ -261,6 +265,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.subscription,
         builder: (context, state) => const SubscriptionScreen(),
+      ),
+
+      // Profile Edit (full-screen)
+      GoRoute(
+        path: AppRoutes.profileEdit,
+        builder: (context, state) => const ProfileEditScreen(),
+      ),
+
+      // Settings (full-screen)
+      GoRoute(
+        path: AppRoutes.settings,
+        builder: (context, state) => const SettingsScreen(),
       ),
 
       // Main shell with bottom navigation

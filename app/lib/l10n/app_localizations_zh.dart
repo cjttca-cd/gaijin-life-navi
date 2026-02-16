@@ -866,4 +866,100 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get subscriptionFeatureUnlimitedChat => '无限AI对话';
+
+  @override
+  String get profileTitle => '个人资料';
+
+  @override
+  String get profileEditTitle => '编辑资料';
+
+  @override
+  String get profileEdit => '编辑资料';
+
+  @override
+  String get profileEmail => '邮箱';
+
+  @override
+  String get profileNationality => '国籍';
+
+  @override
+  String get profileResidenceStatus => '在留资格';
+
+  @override
+  String get profileRegion => '地区';
+
+  @override
+  String get profileLanguage => '语言';
+
+  @override
+  String get profileArrivalDate => '来日日期';
+
+  @override
+  String get profileDisplayName => '显示名称';
+
+  @override
+  String get profileNoName => '未设置';
+
+  @override
+  String get profileNameTooLong => '名称不能超过100个字符';
+
+  @override
+  String get profileSaved => '资料已保存';
+
+  @override
+  String get profileSaveButton => '保存';
+
+  @override
+  String get profileSaveError => '保存失败';
+
+  @override
+  String get profileLoadError => '加载资料失败';
+
+  @override
+  String get settingsTitle => '设置';
+
+  @override
+  String get settingsLanguageSection => '语言';
+
+  @override
+  String get settingsAccountSection => '账户';
+
+  @override
+  String get settingsAboutSection => '关于';
+
+  @override
+  String get settingsLogout => '退出登录';
+
+  @override
+  String get settingsDeleteAccount => '删除账户';
+
+  @override
+  String get settingsDeleteAccountSubtitle => '此操作无法撤销';
+
+  @override
+  String get settingsVersion => '版本';
+
+  @override
+  String get settingsLogoutConfirmTitle => '退出登录';
+
+  @override
+  String get settingsLogoutConfirmMessage => '确定要退出登录吗？';
+
+  @override
+  String get settingsDeleteConfirmTitle => '删除账户';
+
+  @override
+  String get settingsDeleteConfirmMessage => '确定要删除账户吗？此操作无法撤销，所有数据将被永久删除。';
+
+  @override
+  String get settingsDeleteError => '删除账户失败';
+
+  @override
+  String get settingsCancel => '取消';
+
+  @override
+  String get settingsDelete => '删除';
+
+  @override
+  String get settingsConfirm => '确认';
 }

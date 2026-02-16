@@ -870,4 +870,101 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get subscriptionFeatureUnlimitedChat => '무제한 AI 채팅';
+
+  @override
+  String get profileTitle => '프로필';
+
+  @override
+  String get profileEditTitle => '프로필 편집';
+
+  @override
+  String get profileEdit => '프로필 편집';
+
+  @override
+  String get profileEmail => '이메일';
+
+  @override
+  String get profileNationality => '국적';
+
+  @override
+  String get profileResidenceStatus => '체류 자격';
+
+  @override
+  String get profileRegion => '지역';
+
+  @override
+  String get profileLanguage => '언어';
+
+  @override
+  String get profileArrivalDate => '입국일';
+
+  @override
+  String get profileDisplayName => '표시 이름';
+
+  @override
+  String get profileNoName => '이름 없음';
+
+  @override
+  String get profileNameTooLong => '이름은 100자 이하여야 합니다';
+
+  @override
+  String get profileSaved => '프로필 저장됨';
+
+  @override
+  String get profileSaveButton => '저장';
+
+  @override
+  String get profileSaveError => '프로필 저장 실패';
+
+  @override
+  String get profileLoadError => '프로필 로드 실패';
+
+  @override
+  String get settingsTitle => '설정';
+
+  @override
+  String get settingsLanguageSection => '언어';
+
+  @override
+  String get settingsAccountSection => '계정';
+
+  @override
+  String get settingsAboutSection => '정보';
+
+  @override
+  String get settingsLogout => '로그아웃';
+
+  @override
+  String get settingsDeleteAccount => '계정 삭제';
+
+  @override
+  String get settingsDeleteAccountSubtitle => '이 작업은 취소할 수 없습니다';
+
+  @override
+  String get settingsVersion => '버전';
+
+  @override
+  String get settingsLogoutConfirmTitle => '로그아웃';
+
+  @override
+  String get settingsLogoutConfirmMessage => '로그아웃 하시겠습니까?';
+
+  @override
+  String get settingsDeleteConfirmTitle => '계정 삭제';
+
+  @override
+  String get settingsDeleteConfirmMessage =>
+      '계정을 삭제하시겠습니까? 이 작업은 취소할 수 없으며 모든 데이터가 영구적으로 삭제됩니다.';
+
+  @override
+  String get settingsDeleteError => '계정 삭제 실패';
+
+  @override
+  String get settingsCancel => '취소';
+
+  @override
+  String get settingsDelete => '삭제';
+
+  @override
+  String get settingsConfirm => '확인';
 }

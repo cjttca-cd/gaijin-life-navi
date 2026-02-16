@@ -1,7 +1,7 @@
 """Auth endpoints (API_DESIGN.md — Auth section).
 
 POST /api/v1/auth/register   — Create profile after Firebase Auth sign-up
-POST /api/v1/auth/delete-account — Soft-delete profile + delete Firebase account
+POST /api/v1/auth/delete-account — Soft-delete profile + cancel subscription + delete Firebase account
 """
 
 import logging
@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
 from models.profile import Profile
+from models.subscription import Subscription
 from schemas.auth import RegisterRequest, RegisterResponse, UserInRegisterResponse
 from schemas.common import ErrorResponse, SuccessResponse
 from services.auth import FirebaseUser, get_current_user
@@ -81,12 +82,12 @@ async def delete_account(
     current_user: FirebaseUser = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Soft-delete the user profile and delete the Firebase Auth account.
+    """Soft-delete the user profile, cancel Stripe subscription, and delete Firebase Auth account.
 
-    Processing:
+    Processing (per API_DESIGN.md):
     1. Set profiles.deleted_at
-    2. (Future) Cancel Stripe subscription if active
-    3. Delete Firebase Auth account via Admin SDK
+    2. If active subscription exists → set cancel_at_period_end=true
+    3. Delete Firebase Auth account via Admin SDK (skip in mock mode)
     """
     profile = await db.get(Profile, current_user.uid)
     if profile is None or profile.deleted_at is not None:
@@ -101,9 +102,39 @@ async def delete_account(
             },
         )
 
-    # Soft-delete
-    profile.deleted_at = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc)
+
+    # Soft-delete profile
+    profile.deleted_at = now
     await db.flush()
+
+    # Cancel subscription if active (BUSINESS_RULES.md §9)
+    sub_stmt = select(Subscription).where(
+        Subscription.user_id == current_user.uid,
+    )
+    sub_result = await db.execute(sub_stmt)
+    sub = sub_result.scalars().first()
+
+    if sub and sub.status in ("active", "past_due"):
+        sub.cancel_at_period_end = True
+        sub.cancelled_at = now
+        sub.updated_at = now
+        await db.flush()
+
+        # Attempt Stripe API cancel (best-effort)
+        try:
+            from config import settings as _s
+
+            if _s.STRIPE_SECRET_KEY and sub.stripe_subscription_id:
+                import stripe
+
+                stripe.api_key = _s.STRIPE_SECRET_KEY
+                stripe.Subscription.modify(
+                    sub.stripe_subscription_id,
+                    cancel_at_period_end=True,
+                )
+        except Exception:
+            logger.exception("Failed to cancel Stripe subscription (non-fatal).")
 
     # Attempt to delete Firebase Auth account (best-effort)
     try:
