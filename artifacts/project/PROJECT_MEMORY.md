@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-🎉 全 11 Epic 完了。M0〜M4 全マイルストーン達成。MVP 開発完了。
+🎉 全 11 Epic 完了。M0〜M4 全マイルストーン受入検証済み ✅。MVP 開発完了。
 
 ## Status
 
@@ -62,6 +62,7 @@ M0 (骨格+認証) → M1 (AI Chat) → M2 (ナビゲーター群) → M3 (Commu
 | M1 | ✅ PASS (7/8) | 2026-02-16 13:30 |
 | M2 | ✅ PASS (6/6 + MVP§4-§7,§9) | 2026-02-16 16:00 |
 | M3 | ✅ PASS (6/6 + MVP§8,§10) | 2026-02-16 16:35 |
+| M4 | ✅ PASS (6/6 + E2E 6/6 + MVP全項目) | 2026-02-16 17:25 |
 
 ## Next
 本番デプロイ準備（Firebase 実設定、API キー設定、Fly.io デプロイ、Cloudflare Pages、App Store/Play Store 提出）。

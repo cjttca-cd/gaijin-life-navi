@@ -1,6 +1,13 @@
 """Application configuration via environment variables."""
 
+import os
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
+
+# Resolve project root: backend/app_service/config.py → ../../data/app.db
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+_DEFAULT_DB = f"sqlite+aiosqlite:///{_PROJECT_ROOT / 'data' / 'app.db'}"
 
 
 class Settings(BaseSettings):
@@ -11,8 +18,8 @@ class Settings(BaseSettings):
     APP_VERSION: str = "0.1.0"
     DEBUG: bool = False
 
-    # Database (absolute path — shared with AI Service)
-    DATABASE_URL: str = "sqlite+aiosqlite:////root/.openclaw/projects/gaijin-life-navi/data/app.db"
+    # Database (auto-resolved from project root; override via DATABASE_URL env var)
+    DATABASE_URL: str = _DEFAULT_DB
 
     # Firebase
     FIREBASE_PROJECT_ID: str = "gaijin-life-navi"
