@@ -22,6 +22,10 @@ from models.visa_procedure import VisaProcedure  # noqa: F401
 from models.admin_procedure import AdminProcedure  # noqa: F401
 from models.user_procedure import UserProcedure  # noqa: F401
 from models.medical_phrase import MedicalPhrase  # noqa: F401
+from models.community_post import CommunityPost  # noqa: F401
+from models.community_reply import CommunityReply  # noqa: F401
+from models.community_vote import CommunityVote  # noqa: F401
+from models.subscription import Subscription  # noqa: F401
 
 # ── Alembic Config ────────────────────────────────────────────────────
 config = context.config
