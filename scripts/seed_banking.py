@@ -13,9 +13,10 @@ from datetime import datetime, timezone
 
 # ── DB setup ───────────────────────────────────────────────────────────
 
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    "sqlite:////root/.openclaw/projects/gaijin-life-navi/data/app.db",
+    f"sqlite:///{os.path.join(_PROJECT_ROOT, 'data', 'app.db')}",
 )
 # Convert async URL to sync
 DATABASE_URL = DATABASE_URL.replace("sqlite+aiosqlite", "sqlite")

@@ -10,9 +10,10 @@ import os
 import uuid
 from datetime import datetime, timezone
 
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
-    "sqlite:////root/.openclaw/projects/gaijin-life-navi/data/app.db",
+    f"sqlite:///{os.path.join(_PROJECT_ROOT, 'data', 'app.db')}",
 )
 DATABASE_URL = DATABASE_URL.replace("sqlite+aiosqlite", "sqlite")
 DATABASE_URL = DATABASE_URL.replace("postgresql+asyncpg", "postgresql")
