@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-E0〜E8 完了。M0〜M3 マイルストーン受入検証済み ✅。残り M4（統合テスト + ローンチ準備）のみ。
+🎉 全 11 Epic 完了。M0〜M4 全マイルストーン達成。MVP 開発完了。
 
 ## Status
 
@@ -46,9 +46,9 @@ E0〜E8 完了。M0〜M3 マイルストーン受入検証済み ✅。残り M4
 | E6: Community Q&A | M3 | ✅ 完了 | 投稿 CRUD, 返信, 投票, AI モデレーション |
 | E7: サブスクリプション | M3 | ✅ 完了 | Stripe Checkout, Webhook, プラン管理 |
 | E8: Medical Guide | M2 | ✅ 完了 | 緊急時ガイド, フレーズ集 |
-| E9: プロフィール・設定 | M4 | 🔲 未着手 | プロフィール編集, 言語変更, アカウント削除 |
-| E10: LP | M4 | 🔲 未着手 | Astro LP, 5 言語, SEO |
-| E11: 統合テスト + ローンチ | M4 | 🔲 未着手 | E2E テスト, ビルド, 本番デプロイ |
+| E9: プロフィール・設定 | M4 | ✅ 完了 | プロフィール編集, 言語変更, アカウント削除 |
+| E10: LP | M4 | ✅ 完了 | Astro LP, 5 言語, SEO |
+| E11: 統合テスト + ローンチ | M4 | ✅ 完了 | E2E テスト, ビルド, 本番デプロイ |
 
 ### Milestone Dependencies
 ```
@@ -64,7 +64,7 @@ M0 (骨格+認証) → M1 (AI Chat) → M2 (ナビゲーター群) → M3 (Commu
 | M3 | ✅ PASS (6/6 + MVP§8,§10) | 2026-02-16 16:35 |
 
 ## Next
-M4（プロフィール・設定 + LP + 統合テスト + ローンチ準備）。
+本番デプロイ準備（Firebase 実設定、API キー設定、Fly.io デプロイ、Cloudflare Pages、App Store/Play Store 提出）。
 
 ## Decisions
 | Date | Decision | Rationale |
@@ -86,6 +86,10 @@ M4（プロフィール・設定 + LP + 統合テスト + ローンチ準備）�
 | 2026-02-16 | M3 Pipeline 完了（pipeline-007） | Community Q&A + Subscription |
 | 2026-02-16 | Step 1 完了（task-024）: M3 Backend | 14 tables, 39 App endpoints, AI Moderation |
 | 2026-02-16 | Step 2 完了（task-025）: M3 Flutter UI | Community + Subscription + Upgrade banner, 93 tests |
+| 2026-02-16 | M4 Pipeline 完了（pipeline-008） | Profile/Settings + E2E + Astro LP |
+| 2026-02-16 | Step 1 完了（task-026）: Profile/Settings + E2E | 97 tests, 6 閉ループ全 PASS |
+| 2026-02-16 | Step 2 完了（task-027）: Astro LP | 5 言語, SEO, hreflang |
+| 2026-02-16 | 🎉 MVP 開発完了 | M0〜M4 全マイルストーン達成 |
 
 ## Glossary
 | Term | Definition |
