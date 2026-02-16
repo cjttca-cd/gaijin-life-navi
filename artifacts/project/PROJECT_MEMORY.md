@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-E0（骨格 + 認証）Pipeline 進行中。Step 1（Backend scaffold）完了、Step 2（Flutter scaffold）実行中。
+E0（骨格 + 認証）Pipeline 完了。Backend scaffold + Flutter scaffold 両方構築済み。次は M1（AI Chat Engine）の計画へ。
 
 ## Status
 
@@ -37,7 +37,7 @@ E0（骨格 + 認証）Pipeline 進行中。Step 1（Backend scaffold）完了�
 ### Epics（Architect DEV_PHASES.md ベース）
 | Epic | Milestone | Status | Features |
 |------|-----------|--------|----------|
-| E0: 骨格 + 認証 | M0 | 🔵 進行中 | ✅ Backend scaffold (task-018) → 🔵 Flutter scaffold (task-019) |
+| E0: 骨格 + 認証 | M0 | ✅ 完了 | ✅ Backend scaffold (task-018) → ✅ Flutter scaffold (task-019) |
 | E1: AI Chat Engine | M1 | 🔲 未着手 | AI Service, RAG, チャット CRUD, SSE ストリーミング, 日次制限, オンボーディング |
 | E2: Banking Navigator | M2 | 🔲 未着手 | 銀行一覧, レコメンド, 口座開設ガイド |
 | E3: Visa Navigator | M2 | 🔲 未着手 | 手続き一覧, 詳細ガイド |
@@ -56,7 +56,7 @@ M0 (骨格+認証) → M1 (AI Chat) → M2 (ナビゲーター群) → M3 (Commu
 ```
 
 ## Next
-Step 2（Flutter scaffold）完了後、E0 全体の受入 → M1 計画へ。
+M1（AI Chat Engine）の Epic 計画 → Pipeline 設計 → 実行開始。
 
 ## Decisions
 | Date | Decision | Rationale |
@@ -67,6 +67,8 @@ Step 2（Flutter scaffold）完了後、E0 全体の受入 → M1 計画へ。
 | 2026-02-16 | Epic 順序: E0→E1→E2〜E5(M2)→E6〜E7(M3)→E8〜E11(M4) | Architect DEV_PHASES.md ベース |
 | 2026-02-16 | E0 Pipeline 開始: Step1=Backend scaffold, Step2=Flutter scaffold | pipeline-004 |
 | 2026-02-16 | Step 1 完了（task-018）: FastAPI + Alembic + CF Workers scaffold | 検証済み（import OK, migration OK, 6 endpoints） |
+| 2026-02-16 | Step 2 完了（task-019）: Flutter App scaffold + Auth + l10n | 検証済み（analyze OK, 17 tests passed, web build OK） |
+| 2026-02-16 | E0 Pipeline 完了（pipeline-004） | Backend + Flutter 基盤構築完了 |
 
 ## Glossary
 | Term | Definition |
