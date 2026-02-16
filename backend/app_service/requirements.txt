@@ -1,0 +1,18 @@
+# FastAPI + ASGI
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+
+# Database (async)
+sqlalchemy[asyncio]>=2.0.0
+aiosqlite>=0.20.0
+# asyncpg>=0.29.0  # Uncomment for PostgreSQL in production
+
+# Pydantic
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# Firebase Admin SDK
+firebase-admin>=6.0.0
+
+# Alembic (migrations — referenced from infra/migrations/)
+alembic>=1.13.0

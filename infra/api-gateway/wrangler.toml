@@ -1,0 +1,16 @@
+name = "gaijin-life-navi-gateway"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Environment variables (set via wrangler secret or dashboard)
+# APP_SERVICE_URL = "https://app-service.fly.dev"
+# AI_SERVICE_URL = "https://ai-service.fly.dev"
+# FIREBASE_PROJECT_ID = "gaijin-life-navi"
+
+[vars]
+ENVIRONMENT = "development"
+
+# Production environment overrides
+# [env.production]
+# vars = { ENVIRONMENT = "production" }
+# routes = [{ pattern = "api.gaijin-life-navi.com/*", zone_name = "gaijin-life-navi.com" }]

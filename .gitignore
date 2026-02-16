@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite3
+
+# Alembic
+alembic/versions/__pycache__/
+
+# Node.js (Cloudflare Workers)
+node_modules/
+.wrangler/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Firebase
+firebase-service-account.json
+firebase-credentials.json
+
+# Logs
+*.log
+
+# Docker
+docker-compose.override.yml
