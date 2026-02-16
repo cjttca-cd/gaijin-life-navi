@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-E0 + E1 完了。Backend/Flutter scaffold + AI Chat Engine（バックエンド + フロント）構築済み。次は M2（コンテンツナビゲーター群）の計画へ。
+E0 + E1 + E2〜E5/E8 完了。M0〜M2 マイルストーン達成。次は M3（Community Q&A + 課金）へ。
 
 ## Status
 
@@ -39,13 +39,13 @@ E0 + E1 完了。Backend/Flutter scaffold + AI Chat Engine（バックエンド 
 |------|-----------|--------|----------|
 | E0: 骨格 + 認証 | M0 | ✅ 完了 | ✅ Backend scaffold (task-018) → ✅ Flutter scaffold (task-019) |
 | E1: AI Chat Engine | M1 | ✅ 完了 | ✅ AI Service backend (task-020b) → ✅ Flutter Chat UI + Onboarding (task-021) |
-| E2: Banking Navigator | M2 | 🔵 進行中 | 銀行一覧, レコメンド, 口座開設ガイド |
-| E3: Visa Navigator | M2 | 🔵 進行中 | 手続き一覧, 詳細ガイド |
-| E4: Admin Tracker | M2 | 🔵 進行中 | チェックリスト, 進捗管理, 手続き追加 |
-| E5: Document Scanner | M2 | 🔵 進行中 | OCR + 翻訳 + 説明, 履歴 |
+| E2: Banking Navigator | M2 | ✅ 完了 | 銀行一覧, レコメンド, 口座開設ガイド |
+| E3: Visa Navigator | M2 | ✅ 完了 | 手続き一覧, 詳細ガイド |
+| E4: Admin Tracker | M2 | ✅ 完了 | チェックリスト, 進捗管理, 手続き追加 |
+| E5: Document Scanner | M2 | ✅ 完了 | OCR + 翻訳 + 説明, 履歴 |
 | E6: Community Q&A | M3 | 🔲 未着手 | 投稿 CRUD, 返信, 投票, AI モデレーション |
 | E7: サブスクリプション | M3 | 🔲 未着手 | Stripe Checkout, Webhook, プラン管理 |
-| E8: Medical Guide | M2 | 🔵 進行中 | 緊急時ガイド, フレーズ集 |
+| E8: Medical Guide | M2 | ✅ 完了 | 緊急時ガイド, フレーズ集 |
 | E9: プロフィール・設定 | M4 | 🔲 未着手 | プロフィール編集, 言語変更, アカウント削除 |
 | E10: LP | M4 | 🔲 未着手 | Astro LP, 5 言語, SEO |
 | E11: 統合テスト + ローンチ | M4 | 🔲 未着手 | E2E テスト, ビルド, 本番デプロイ |
@@ -56,7 +56,7 @@ M0 (骨格+認証) → M1 (AI Chat) → M2 (ナビゲーター群) → M3 (Commu
 ```
 
 ## Next
-M2（コンテンツナビゲーター群: Banking/Visa/Tracker/Scanner/Medical）の Epic 計画。
+M3（Community Q&A + Stripe 課金）の Epic 計画 → Pipeline 設計 → 実行。
 
 ## Decisions
 | Date | Decision | Rationale |
@@ -72,6 +72,9 @@ M2（コンテンツナビゲーター群: Banking/Visa/Tracker/Scanner/Medical�
 | 2026-02-16 | E1 Pipeline 開始+完了（pipeline-005） | AI Service + Flutter Chat UI |
 | 2026-02-16 | Step 1 完了（task-020b）: AI Service Chat Backend | 7 endpoints, SSE streaming, RAG mock, daily limit |
 | 2026-02-16 | Step 2 完了（task-021）: Flutter Chat UI + Onboarding | 125 l10n keys × 5 langs, 40 tests, SSE parser |
+| 2026-02-16 | M2 Pipeline 完了（pipeline-006） | Backend + Flutter UI 全 5 機能 |
+| 2026-02-16 | Step 1 完了（task-022）: M2 Backend 全 API | 10 tables, 29 endpoints, seed data |
+| 2026-02-16 | Step 2 完了（task-023）: M2 Flutter UI 全画面 | 12 画面, 73 tests, 51 files |
 
 ## Glossary
 | Term | Definition |
