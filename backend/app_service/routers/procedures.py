@@ -86,11 +86,12 @@ def _template_to_dict(proc: AdminProcedure, lang: str) -> dict:
     }
 
 
-def _user_procedure_to_dict(up: UserProcedure) -> dict:
+def _user_procedure_to_dict(up: UserProcedure, title: str = "") -> dict:
     return {
         "id": up.id,
         "procedure_ref_type": up.procedure_ref_type,
         "procedure_ref_id": up.procedure_ref_id,
+        "title": title,
         "status": up.status,
         "due_date": str(up.due_date) if up.due_date else None,
         "notes": up.notes,
@@ -98,6 +99,24 @@ def _user_procedure_to_dict(up: UserProcedure) -> dict:
         "created_at": up.created_at.isoformat() if up.created_at else None,
         "updated_at": up.updated_at.isoformat() if up.updated_at else None,
     }
+
+
+async def _resolve_procedure_title(
+    db: AsyncSession,
+    ref_type: str,
+    ref_id: str,
+    lang: str = "en",
+) -> str:
+    """Resolve the display title from the referenced procedure."""
+    if ref_type == "admin":
+        ref = await db.get(AdminProcedure, ref_id)
+        if ref:
+            return _localize(ref.procedure_name, lang)
+    elif ref_type == "visa":
+        ref = await db.get(VisaProcedure, ref_id)
+        if ref:
+            return _localize(ref.title, lang)
+    return ""
 
 
 def _calculate_due_date(deadline_rule: dict | None, arrival_date=None):
@@ -144,6 +163,7 @@ async def list_templates(
 @router.get("/my")
 async def list_my_procedures(
     status_filter: str | None = Query(default=None, alias="status"),
+    lang: str = Query(default="en", max_length=5),
     current_user: FirebaseUser = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
@@ -167,9 +187,15 @@ async def list_my_procedures(
     tier = profile.subscription_tier if profile else "free"
     limit = FREE_PROCEDURE_LIMIT if tier == "free" else None
 
-    return SuccessResponse(
-        data=[_user_procedure_to_dict(p) for p in procedures],
-    ).model_dump()
+    # Resolve titles from referenced procedures
+    data = []
+    for p in procedures:
+        title = await _resolve_procedure_title(
+            db, p.procedure_ref_type, p.procedure_ref_id, lang
+        )
+        data.append(_user_procedure_to_dict(p, title=title))
+
+    return SuccessResponse(data=data).model_dump()
 
 
 @router.post("/my", status_code=status.HTTP_201_CREATED)
@@ -225,6 +251,9 @@ async def add_procedure(
                 },
             )
 
+    # Resolve preferred language for title
+    ref_title = ""
+
     # Verify referenced procedure exists
     if body.procedure_ref_type == "admin":
         ref = await db.get(AdminProcedure, body.procedure_ref_id)
@@ -239,6 +268,7 @@ async def add_procedure(
                     }
                 },
             )
+        ref_title = _localize(ref.procedure_name, profile.preferred_language or "en")
     elif body.procedure_ref_type == "visa":
         ref = await db.get(VisaProcedure, body.procedure_ref_id)
         if ref is None:
@@ -252,6 +282,7 @@ async def add_procedure(
                     }
                 },
             )
+        ref_title = _localize(ref.title, profile.preferred_language or "en")
 
     # Check for duplicate
     dup_stmt = select(UserProcedure).where(
@@ -305,7 +336,7 @@ async def add_procedure(
     await db.flush()
 
     return SuccessResponse(
-        data=_user_procedure_to_dict(up)
+        data=_user_procedure_to_dict(up, title=ref_title)
     ).model_dump()
 
 
@@ -363,8 +394,11 @@ async def update_procedure(
     up.updated_at = now
     await db.flush()
 
+    title = await _resolve_procedure_title(
+        db, up.procedure_ref_type, up.procedure_ref_id
+    )
     return SuccessResponse(
-        data=_user_procedure_to_dict(up)
+        data=_user_procedure_to_dict(up, title=title)
     ).model_dump()
 
 

@@ -65,14 +65,30 @@ void main() {
       expect(proc.status, ProcedureStatus.completed);
       expect(proc.completedAt, isNotNull);
     });
+
+    test('fromJson handles missing title gracefully', () {
+      // Backend may not always return title (legacy data).
+      final json = {
+        'id': 'up-3',
+        'procedure_ref_type': 'visa',
+        'procedure_ref_id': 'visa-1',
+        'status': 'not_started',
+      };
+
+      final proc = UserProcedure.fromJson(json);
+
+      expect(proc.title, '');
+    });
   });
 
   group('ProcedureTemplate', () {
-    test('fromJson creates valid instance', () {
+    test('fromJson creates valid instance from backend response', () {
+      // Backend returns procedure_code and procedure_name, not
+      // procedure_type and title.
       final json = {
         'id': 'tmpl-1',
-        'procedure_type': 'resident_registration',
-        'title': 'Resident Registration',
+        'procedure_code': 'resident_registration',
+        'procedure_name': 'Resident Registration',
         'description': 'Register at city hall',
         'category': 'essential',
         'is_arrival_essential': true,
@@ -81,16 +97,31 @@ void main() {
       final tmpl = ProcedureTemplate.fromJson(json);
 
       expect(tmpl.id, 'tmpl-1');
+      expect(tmpl.procedureType, 'resident_registration');
       expect(tmpl.title, 'Resident Registration');
       expect(tmpl.isArrivalEssential, isTrue);
       expect(tmpl.category, 'essential');
     });
 
-    test('fromJson defaults isArrivalEssential to false', () {
+    test('fromJson falls back to procedure_type and title keys', () {
       final json = {
         'id': 'tmpl-2',
         'procedure_type': 'tax_filing',
         'title': 'Tax Filing',
+      };
+
+      final tmpl = ProcedureTemplate.fromJson(json);
+
+      expect(tmpl.procedureType, 'tax_filing');
+      expect(tmpl.title, 'Tax Filing');
+      expect(tmpl.isArrivalEssential, isFalse);
+    });
+
+    test('fromJson defaults isArrivalEssential to false', () {
+      final json = {
+        'id': 'tmpl-3',
+        'procedure_code': 'test',
+        'procedure_name': 'Test',
       };
 
       final tmpl = ProcedureTemplate.fromJson(json);

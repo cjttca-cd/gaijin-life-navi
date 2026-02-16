@@ -137,7 +137,16 @@ class _EmergencyGuideTab extends ConsumerWidget {
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(12),
-                  child: Text(guide.howToCall),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: guide.howToCall
+                        .map((step) => Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 4),
+                              child: Text('• $step'),
+                            ))
+                        .toList(),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -149,7 +158,16 @@ class _EmergencyGuideTab extends ConsumerWidget {
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(12),
-                  child: Text(guide.whatToPrepare),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: guide.whatToPrepare
+                        .map((item) => Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 4),
+                              child: Text('• $item'),
+                            ))
+                        .toList(),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -164,7 +182,17 @@ class _EmergencyGuideTab extends ConsumerWidget {
                     margin: const EdgeInsets.only(bottom: 8),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Text(phrase),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(phrase.ja,
+                              style: theme.textTheme.titleSmall),
+                          if (phrase.reading.isNotEmpty)
+                            Text(phrase.reading,
+                                style: theme.textTheme.bodySmall),
+                          Text(phrase.translation),
+                        ],
+                      ),
                     ),
                   ),
                 ),

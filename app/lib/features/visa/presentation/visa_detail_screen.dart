@@ -99,17 +99,40 @@ class VisaDetailScreen extends ConsumerWidget {
                       style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
                   ...proc.requiredDocuments.map(
-                    (doc) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(Icons.check_circle_outline,
-                              size: 20,
-                              color: theme.colorScheme.primary),
-                          const SizedBox(width: 8),
-                          Expanded(child: Text(doc)),
-                        ],
+                    (doc) => Card(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Icon(Icons.check_circle_outline,
+                                size: 20,
+                                color: theme.colorScheme.primary),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Text(doc.name,
+                                      style: theme
+                                          .textTheme.bodyMedium),
+                                  if (doc.howToGet != null &&
+                                      doc.howToGet!.isNotEmpty)
+                                    Text(doc.howToGet!,
+                                        style: theme
+                                            .textTheme.bodySmall
+                                            ?.copyWith(
+                                          color: theme.colorScheme
+                                              .onSurfaceVariant,
+                                        )),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -129,7 +152,9 @@ class VisaDetailScreen extends ConsumerWidget {
                           Icon(Icons.payments_outlined,
                               color: theme.colorScheme.primary),
                           const SizedBox(width: 12),
-                          Expanded(child: Text(proc.fees!)),
+                          Expanded(
+                            child: Text(_formatFees(proc.fees!)),
+                          ),
                         ],
                       ),
                     ),
@@ -183,5 +208,21 @@ class VisaDetailScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  /// Format the fees Map into a human-readable string.
+  String _formatFees(Map<String, dynamic> fees) {
+    final parts = <String>[];
+    final currency = fees['currency'] as String? ?? '';
+    for (final entry in fees.entries) {
+      if (entry.key == 'currency') continue;
+      if (entry.key == 'notes') {
+        parts.add(entry.value.toString());
+      } else if (entry.value is num) {
+        final label = entry.key.replaceAll('_', ' ');
+        parts.add('$label: ${entry.value} $currency');
+      }
+    }
+    return parts.isEmpty ? fees.toString() : parts.join(' / ');
   }
 }

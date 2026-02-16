@@ -97,21 +97,7 @@ class BankingGuideScreen extends ConsumerWidget {
                   style: theme.textTheme.titleMedium,
                 ),
                 const SizedBox(height: 8),
-                ...guide.requirements.map(
-                  (req) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(Icons.description_outlined,
-                            size: 20,
-                            color: theme.colorScheme.primary),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text(req)),
-                      ],
-                    ),
-                  ),
-                ),
+                ..._buildRequirementsList(guide.requirements, theme),
                 const SizedBox(height: 24),
 
                 // Conversation templates
@@ -175,19 +161,46 @@ class BankingGuideScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   ...guide.troubleshooting!.map(
-                    (tip) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Icon(Icons.lightbulb_outline,
-                              size: 20,
-                              color: theme
-                                  .colorScheme.tertiary),
-                          const SizedBox(width: 8),
-                          Expanded(child: Text(tip)),
-                        ],
+                    (item) => Card(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.help_outline,
+                                    size: 20,
+                                    color: theme
+                                        .colorScheme.tertiary),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(item.problem,
+                                      style: theme
+                                          .textTheme.titleSmall),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.lightbulb_outline,
+                                    size: 20,
+                                    color: theme
+                                        .colorScheme.primary),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                    child: Text(item.solution)),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -225,5 +238,56 @@ class BankingGuideScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  /// Build requirements display from the requirements map structure.
+  /// Extracts the 'documents' list if present, otherwise shows key-value pairs.
+  List<Widget> _buildRequirementsList(
+      Map<String, dynamic> requirements, ThemeData theme) {
+    final widgets = <Widget>[];
+    final documents = requirements['documents'];
+    if (documents is List) {
+      for (final doc in documents) {
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.description_outlined,
+                    size: 20, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Expanded(child: Text(doc.toString())),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+    // Show other notable requirements
+    for (final entry in requirements.entries) {
+      if (entry.key == 'documents') continue;
+      final label = entry.key.replaceAll('_', ' ');
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Row(
+            children: [
+              Icon(Icons.info_outline,
+                  size: 16,
+                  color: theme.colorScheme.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '$label: ${entry.value}',
+                  style: theme.textTheme.bodySmall,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return widgets;
   }
 }

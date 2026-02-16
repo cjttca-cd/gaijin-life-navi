@@ -68,43 +68,57 @@ void main() {
   });
 
   group('BankGuide', () {
-    test('fromJson creates valid instance', () {
+    test('fromJson creates valid instance from flat backend response', () {
+      // Backend returns bank fields at root level (flat), not nested.
       final json = {
-        'bank': {
-          'id': 'bank-1',
-          'bank_code': 'mufg',
-          'bank_name': 'MUFG Bank',
-          'foreigner_friendly_score': 4,
+        'id': 'bank-1',
+        'bank_code': 'mufg',
+        'bank_name': 'MUFG Bank',
+        'foreigner_friendly_score': 4,
+        'requirements': {
+          'residence_card': true,
+          'min_stay_months': 0,
+          'documents': ['residence_card', 'passport'],
         },
-        'requirements': ['Passport', 'Residence card'],
         'conversation_templates': [
           {
             'situation': 'Opening account',
-            'japanese': '口座を開設したいです',
+            'ja': '口座を開設したいです',
             'reading': 'こうざをかいせつしたいです',
             'translation': 'I would like to open an account',
           },
         ],
-        'troubleshooting': ['Bring hanko if required'],
+        'troubleshooting': [
+          {
+            'problem': "Can't open account without a seal",
+            'solution': 'MUFG accepts signature instead of seal.',
+          },
+        ],
         'source_url': 'https://www.mufg.jp/',
       };
 
       final guide = BankGuide.fromJson(json);
 
       expect(guide.bank.bankName, 'MUFG Bank');
-      expect(guide.requirements.length, 2);
+      expect(guide.requirements['residence_card'], true);
+      expect(guide.requirements['documents'], ['residence_card', 'passport']);
       expect(guide.conversationTemplates.length, 1);
       expect(guide.conversationTemplates.first.japanese, '口座を開設したいです');
+      expect(guide.troubleshooting, isNotNull);
       expect(guide.troubleshooting!.length, 1);
+      expect(guide.troubleshooting!.first.problem,
+          "Can't open account without a seal");
+      expect(guide.troubleshooting!.first.solution,
+          contains('signature'));
       expect(guide.sourceUrl, 'https://www.mufg.jp/');
     });
   });
 
   group('ConversationTemplate', () {
-    test('fromJson creates valid instance', () {
+    test('fromJson creates valid instance with ja key', () {
       final json = {
         'situation': 'Checking balance',
-        'japanese': '残高を確認したいです',
+        'ja': '残高を確認したいです',
         'reading': 'ざんだかをかくにんしたいです',
         'translation': 'I want to check my balance',
       };
@@ -115,6 +129,20 @@ void main() {
       expect(template.japanese, '残高を確認したいです');
       expect(template.reading, 'ざんだかをかくにんしたいです');
       expect(template.translation, 'I want to check my balance');
+    });
+  });
+
+  group('TroubleshootingItem', () {
+    test('fromJson creates valid instance', () {
+      final json = {
+        'problem': 'Need a Japanese phone number',
+        'solution': 'Get a SIM card first.',
+      };
+
+      final item = TroubleshootingItem.fromJson(json);
+
+      expect(item.problem, 'Need a Japanese phone number');
+      expect(item.solution, 'Get a SIM card first.');
     });
   });
 }

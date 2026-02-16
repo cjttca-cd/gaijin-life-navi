@@ -10,7 +10,11 @@ class ProcedureTemplate {
   });
 
   final String id;
+
+  /// Backend returns `procedure_code`, not `procedure_type`.
   final String procedureType;
+
+  /// Backend returns `procedure_name`, not `title`.
   final String title;
   final String? description;
   final String? category;
@@ -19,8 +23,14 @@ class ProcedureTemplate {
   factory ProcedureTemplate.fromJson(Map<String, dynamic> json) {
     return ProcedureTemplate(
       id: json['id'] as String,
-      procedureType: json['procedure_type'] as String? ?? '',
-      title: json['title'] as String? ?? '',
+      // Backend uses 'procedure_code', not 'procedure_type'.
+      procedureType: json['procedure_code'] as String? ??
+          json['procedure_type'] as String? ??
+          '',
+      // Backend uses 'procedure_name', not 'title'.
+      title: json['procedure_name'] as String? ??
+          json['title'] as String? ??
+          '',
       description: json['description'] as String?,
       category: json['category'] as String?,
       isArrivalEssential:
