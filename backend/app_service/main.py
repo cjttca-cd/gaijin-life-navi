@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
-from routers import auth, health, users
+from routers import auth, banking, health, medical, procedures, users, visa
 
 # ── Logging setup ──────────────────────────────────────────────────────
 
@@ -43,6 +43,10 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(users.router)
+app.include_router(banking.router)
+app.include_router(visa.router)
+app.include_router(procedures.router)
+app.include_router(medical.router)
 
 logger.info(
     "App Service started — version=%s, debug=%s",

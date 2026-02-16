@@ -17,6 +17,11 @@ from sqlalchemy import create_engine, pool
 # prepend_sys_path in alembic.ini adds backend/app_service to sys.path.
 from database import Base  # noqa: F401
 from models import Profile, DailyUsage  # noqa: F401
+from models.banking_guide import BankingGuide  # noqa: F401
+from models.visa_procedure import VisaProcedure  # noqa: F401
+from models.admin_procedure import AdminProcedure  # noqa: F401
+from models.user_procedure import UserProcedure  # noqa: F401
+from models.medical_phrase import MedicalPhrase  # noqa: F401
 
 # ── Alembic Config ────────────────────────────────────────────────────
 config = context.config

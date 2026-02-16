@@ -24,5 +24,8 @@ pinecone-client>=3.0.0
 # HTTP client
 httpx>=0.25.0
 
+# Form/file upload support
+python-multipart>=0.0.6
+
 # Auth (Firebase Admin SDK — optional, mock mode without it)
 # firebase-admin>=6.0.0
