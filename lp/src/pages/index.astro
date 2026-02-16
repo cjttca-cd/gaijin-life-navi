@@ -1,0 +1,8 @@
+---
+import LandingPage from '../components/LandingPage.astro';
+import { getTranslations } from '../i18n/index';
+
+const t = getTranslations('en');
+---
+
+<LandingPage t={t} locale="en" />

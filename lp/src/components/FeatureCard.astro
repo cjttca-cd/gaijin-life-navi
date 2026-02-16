@@ -1,0 +1,59 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+const { icon, title, description } = Astro.props;
+
+const iconPaths: Record<string, string> = {
+  chat: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+  banking:
+    'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z',
+  visa: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+  tracker:
+    'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+  scanner:
+    'M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z',
+  medical:
+    'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+};
+
+const iconColors: Record<string, string> = {
+  chat: 'from-primary-500 to-primary-600',
+  banking: 'from-emerald-500 to-emerald-600',
+  visa: 'from-violet-500 to-violet-600',
+  tracker: 'from-amber-500 to-amber-600',
+  scanner: 'from-rose-500 to-rose-600',
+  medical: 'from-sky-500 to-sky-600',
+};
+
+const iconBgColors: Record<string, string> = {
+  chat: 'bg-primary-50',
+  banking: 'bg-emerald-50',
+  visa: 'bg-violet-50',
+  tracker: 'bg-amber-50',
+  scanner: 'bg-rose-50',
+  medical: 'bg-sky-50',
+};
+---
+
+<div class="group relative p-6 sm:p-8 rounded-2xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300">
+  <!-- Icon -->
+  <div class:list={['w-12 h-12 rounded-xl flex items-center justify-center mb-5', iconBgColors[icon] || 'bg-gray-50']}>
+    <div class:list={['w-6 h-6 bg-gradient-to-br bg-clip-text', iconColors[icon] || 'from-gray-500 to-gray-600']}>
+      <svg class:list={['w-6 h-6']} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d={iconPaths[icon] || ''} />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+    {title}
+  </h3>
+  <p class="text-sm text-gray-600 leading-relaxed">
+    {description}
+  </p>
+</div>
