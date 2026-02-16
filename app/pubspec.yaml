@@ -1,0 +1,49 @@
+name: gaijin_life_navi
+description: Life navigation app for foreigners living in Japan.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Routing
+  go_router: ^14.8.1
+
+  # Networking
+  dio: ^5.7.0
+
+  # Local DB (cache only)
+  drift: ^2.23.1
+  sqlite3_flutter_libs: ^0.5.28
+
+  # Authentication
+  firebase_core: ^3.12.1
+  firebase_auth: ^5.5.1
+
+  # UI
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  riverpod_generator: ^2.6.3
+  build_runner: ^2.4.14
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.3
+  drift_dev: ^2.23.1
+
+flutter:
+  uses-material-design: true
+  generate: true
