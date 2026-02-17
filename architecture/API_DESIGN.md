@@ -2,25 +2,25 @@
 
 ## API スタイル
 
-**REST API** — 選定理由: Flutter (dio) との親和性が高く、ストリーミング (SSE) との相性が良い。GraphQL は MVP のクエリ複雑性に対して過剰。
+**REST API** — FastAPI (Python) で実装。API Gateway (port 8000) が全エンドポイントを提供。
+Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 
 ## 共通仕様
 
 ### ベース URL
 
-| サービス | ベース URL | ルーティング |
-|---------|-----------|-------------|
-| App Service (FastAPI) | `/api/v1/` | CF Workers → Fly.io (App Service) |
-| AI Service (FastAPI) | `/api/v1/ai/` | CF Workers → Fly.io (AI Service) |
+| サービス | ベース URL | 説明 |
+|---------|-----------|------|
+| API Gateway (FastAPI) | `/api/v1/` | 全 API を一元提供 |
+
+> **旧アーキテクチャとの違い**: ~~AI Service (port 8001) への /api/v1/ai/* ルーティング~~ は廃止。OpenClaw Runtime に統合されたため、全 API を単一の FastAPI (port 8000) で提供。
 
 ### 認証
 
 - **方式**: Bearer Token (Firebase Auth ID Token)
 - **ヘッダー**: `Authorization: Bearer {firebase_id_token}`
-- **JWT 検証**: CF Workers の Edge で Firebase 公開鍵を使用して RS256 検証。バックエンドでも Firebase Admin SDK で二重検証
-- **未認証エンドポイント**: `/api/v1/auth/register`, `/api/v1/health`, `/api/v1/banking/banks` (公開情報), `/api/v1/subscriptions/plans`, `/api/v1/subscriptions/webhook`
-
-> クライアント (Flutter) は `firebase_auth` パッケージでサインイン後、`getIdToken()` で ID Token を取得し、dio の interceptor で全リクエストに付与する。
+- **JWT 検証**: API Gateway (FastAPI) で Firebase Admin SDK を使用して検証
+- **未認証エンドポイント**: `/api/v1/health`, `/api/v1/auth/register`, `/api/v1/emergency`, `/api/v1/navigator/domains`, `/api/v1/navigator/{domain}/guides`, `/api/v1/subscription/plans`
 
 ### エラーフォーマット
 
@@ -28,7 +28,7 @@
 {
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "Email is required",
+    "message": "Human-readable message in request language",
     "details": {
       "field": "email",
       "constraint": "required"
@@ -45,546 +45,621 @@
 | 401 | `UNAUTHORIZED` | 認証なし / トークン期限切れ |
 | 403 | `FORBIDDEN` | 権限なし（Tier 不足含む） |
 | 404 | `NOT_FOUND` | リソースが存在しない |
-| 409 | `CONFLICT` | 重複（メール等） |
-| 422 | `UNPROCESSABLE_ENTITY` | ビジネスルール違反 |
+| 429 | `USAGE_LIMIT_EXCEEDED` | 利用制限超過 |
 | 429 | `RATE_LIMITED` | レート制限超過 |
 | 500 | `INTERNAL_ERROR` | サーバーエラー |
-
-### ページネーション
-
-**Cursor-based** — コミュニティ投稿等のリスト API に適用。
-
-```
-GET /api/v1/community/posts?limit=20&cursor={last_id}
-```
-
-**レスポンス**:
-```json
-{
-  "data": [...],
-  "pagination": {
-    "next_cursor": "uuid-of-last-item",
-    "has_more": true
-  }
-}
-```
-
-- `limit`: デフォルト 20、最大 50
-- `cursor`: 前回取得の最後の ID
+| 502 | `AGENT_ERROR` | Agent 呼び出しエラー |
 
 ### 共通レスポンスラッパー
 
 ```json
 {
-  "data": { ... },
-  "meta": {
-    "request_id": "uuid"
-  }
+  "data": { ... }
 }
 ```
 
-リスト系:
+---
+
+## エンドポイント一覧
+
+| Method | Path | 説明 | 認証 |
+|--------|------|------|------|
+| POST | /api/v1/chat | AI Chat（テキスト + 画像） | Required |
+| GET | /api/v1/navigator/domains | ドメイン一覧 | Public |
+| GET | /api/v1/navigator/{domain}/guides | ドメイン別ガイド一覧 | Public |
+| GET | /api/v1/navigator/{domain}/guides/{slug} | ガイド詳細 | Public |
+| GET | /api/v1/emergency | 緊急連絡先・救急ガイド | Public |
+| POST | /api/v1/auth/register | ユーザー登録 | Required (JWT) |
+| POST | /api/v1/auth/delete-account | アカウント削除 | Required |
+| GET | /api/v1/users/me | プロフィール取得 | Required |
+| PATCH | /api/v1/users/me | プロフィール更新 | Required |
+| POST | /api/v1/users/me/onboarding | オンボーディング完了 | Required |
+| GET | /api/v1/subscription/plans | 料金プラン一覧 | Public |
+| POST | /api/v1/subscription/purchase | 購入処理（IAP レシート検証） | Required |
+| GET | /api/v1/usage | 利用状況（残回数等） | Required |
+| GET | /api/v1/profile | プロフィール取得 | Required |
+| PUT | /api/v1/profile | プロフィール更新 | Required |
+| GET | /api/v1/health | ヘルスチェック | Public |
+
+### ~~廃止されたエンドポイント（Phase 0 ピボット）~~
+
+以下のエンドポイントは Phase 0 ピボットで廃止:
+- ~~POST /api/v1/ai/chat/sessions~~ → POST /api/v1/chat に統合
+- ~~POST /api/v1/ai/chat/sessions/:id/messages~~ → POST /api/v1/chat に統合
+- ~~GET/DELETE /api/v1/ai/chat/sessions/*~~ → OpenClaw session 管理に委譲
+- ~~POST /api/v1/ai/documents/scan~~ → AI Chat 画像入力に統合
+- ~~GET/DELETE /api/v1/ai/documents/*~~ → 削除
+- ~~GET/POST /api/v1/community/*~~ → Phase 0 ピボットで Community 削除
+- ~~GET /api/v1/banking/banks~~ → Navigator API に統合
+- ~~POST /api/v1/banking/recommend~~ → AI Chat に統合
+- ~~GET /api/v1/visa/procedures~~ → Navigator API に統合
+- ~~GET /api/v1/medical/phrases~~ → svc-medical の knowledge に統合
+- ~~POST /api/v1/subscriptions/checkout~~ → Apple IAP / Google Play Billing に変更
+
+---
+
+## エンドポイント詳細
+
+---
+
+### 1. AI Chat（コアエンドポイント）
+
+#### `POST /api/v1/chat`
+
+- **説明**: AI Chat — テキスト（+ 画像: Phase 1）をドメイン agent にルーティングし、構造化レスポンスを返す
+- **認証**: 必要
+- **Rate Limit**: ティアによる制限（BUSINESS_RULES.md §2 参照）
+
+**Request Body**:
 ```json
 {
-  "data": [...],
-  "pagination": { ... },
-  "meta": {
-    "request_id": "uuid",
-    "total_count": 42
+  "message": "銀行口座を開設したいのですが",
+  "image": null,
+  "domain": null,
+  "locale": "zh"
+}
+```
+
+| フィールド | 型 | 必須 | 説明 |
+|-----------|------|------|------|
+| message | string | ✅ | ユーザーメッセージ (1-4000文字) |
+| image | string\|null | — | Base64 画像 (Phase 1 で実装) |
+| domain | string\|null | — | ドメインヒント: banking, visa, medical, concierge。指定時は LLM routing をスキップ |
+| locale | string | — | ユーザー言語 (default: "en") |
+
+**Response 200**:
+```json
+{
+  "data": {
+    "reply": "銀行口座の開設についてご案内します。\n\n日本で外国人が銀行口座を開設するには、以下の書類が必要です：\n\n1. **在留カード**（有効期限が3ヶ月以上残っていること）\n2. **パスポート**\n3. **住民票**（発行から3ヶ月以内）\n\n## おすすめの銀行\n\n多言語対応の銀行をいくつかご紹介します：\n- **ゆうちょ銀行**: 全国に支店があり、英語対応ATMが多い\n- **三井住友銀行**: 英語・中国語対応のオンラインバンキング\n- **セブン銀行**: コンビニATMで24時間利用可能",
+    "domain": "banking",
+    "sources": [
+      {
+        "title": "金融庁 外国人向けガイド",
+        "url": "https://www.fsa.go.jp/..."
+      },
+      {
+        "title": "全銀協 口座開設マニュアル",
+        "url": "https://www.zenginkyo.or.jp/..."
+      }
+    ],
+    "actions": [
+      {
+        "type": "checklist",
+        "items": "在留カード, パスポート, 住民票"
+      },
+      {
+        "type": "next_step",
+        "text": "最寄りのゆうちょ銀行支店を検索しますか？"
+      }
+    ],
+    "tracker_items": [
+      {
+        "type": "deadline",
+        "title": "銀行口座開設",
+        "date": ""
+      }
+    ],
+    "usage": {
+      "used": 3,
+      "limit": 5,
+      "tier": "free"
+    }
+  }
+}
+```
+
+| レスポンスフィールド | 型 | 説明 |
+|---|---|---|
+| reply | string | AI の回答テキスト（markdown 形式） |
+| domain | string | ルーティング先ドメイン (banking/visa/medical/concierge) |
+| sources | array | 参考ソース `[{title, url}]` |
+| actions | array | 提案アクション `[{type, ...}]` |
+| tracker_items | array | Tracker 自動追加候補 `[{type, title, date}]` |
+| usage | object | 利用状況 `{used, limit, tier}` |
+
+**Error 429 (利用制限超過)**:
+```json
+{
+  "error": {
+    "code": "USAGE_LIMIT_EXCEEDED",
+    "message": "Chat limit reached for your free plan. Used 5/5 chats.",
+    "details": {
+      "usage": {
+        "used": 5,
+        "limit": 5,
+        "tier": "free"
+      }
+    }
+  }
+}
+```
+
+**Error 502 (Agent エラー)**:
+```json
+{
+  "error": {
+    "code": "AGENT_ERROR",
+    "message": "The AI agent encountered an error. Please try again.",
+    "details": {
+      "agent_error": "Agent timed out after 75s"
+    }
+  }
+}
+```
+
+**処理フロー**:
+1. Firebase JWT 検証 → user_id 取得
+2. profiles.subscription_tier 取得
+3. daily_usage チェック + インクリメント（制限超過なら 429）
+4. Emergency keyword 検出 → svc-medical / LLM classification → domain 判定
+5. `openclaw agent --agent svc-{domain} --session-id app_{uid}_{domain}` 呼び出し
+6. Response text から `[SOURCES]` `[ACTIONS]` `[TRACKER]` ブロック解析
+7. 構造化 ChatResponse を返却
+
+---
+
+### 2. Navigator
+
+#### `GET /api/v1/navigator/domains`
+
+- **説明**: 全ナビゲーションドメインの一覧取得
+- **認証**: 不要（公開情報）
+
+**Response 200**:
+```json
+{
+  "data": {
+    "domains": [
+      {
+        "id": "banking",
+        "label": "Banking & Finance",
+        "icon": "🏦",
+        "status": "active",
+        "guide_count": 6
+      },
+      {
+        "id": "visa",
+        "label": "Visa & Immigration",
+        "icon": "🛂",
+        "status": "active",
+        "guide_count": 6
+      },
+      {
+        "id": "medical",
+        "label": "Medical & Health",
+        "icon": "🏥",
+        "status": "active",
+        "guide_count": 7
+      },
+      {
+        "id": "concierge",
+        "label": "Life & General",
+        "icon": "🗾",
+        "status": "active",
+        "guide_count": 5
+      },
+      {
+        "id": "housing",
+        "label": "Housing & Utilities",
+        "icon": "🏠",
+        "status": "coming_soon",
+        "guide_count": 0
+      },
+      {
+        "id": "employment",
+        "label": "Employment & Tax",
+        "icon": "💼",
+        "status": "coming_soon",
+        "guide_count": 0
+      },
+      {
+        "id": "education",
+        "label": "Education & Childcare",
+        "icon": "🎓",
+        "status": "coming_soon",
+        "guide_count": 0
+      },
+      {
+        "id": "legal",
+        "label": "Legal & Insurance",
+        "icon": "⚖️",
+        "status": "coming_soon",
+        "guide_count": 0
+      }
+    ]
+  }
+}
+```
+
+#### `GET /api/v1/navigator/{domain}/guides`
+
+- **説明**: ドメイン別ガイド一覧（knowledge/ ディレクトリの .md ファイルを一覧）
+- **認証**: 不要（公開情報）
+
+**Response 200**:
+```json
+{
+  "data": {
+    "domain": "banking",
+    "guides": [
+      {
+        "slug": "account-opening",
+        "title": "Bank Account Opening Guide for Foreign Residents",
+        "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident."
+      },
+      {
+        "slug": "banks-overview",
+        "title": "Major Banks Comparison",
+        "summary": "Comparison of major banks in Japan for foreign residents."
+      },
+      {
+        "slug": "remittance",
+        "title": "International Money Transfer Guide",
+        "summary": "Compare remittance options: bank transfer, Wise, Western Union."
+      }
+    ]
+  }
+}
+```
+
+**Response 200 (coming_soon ドメイン)**:
+```json
+{
+  "data": {
+    "domain": "housing",
+    "status": "coming_soon",
+    "guides": []
+  }
+}
+```
+
+#### `GET /api/v1/navigator/{domain}/guides/{slug}`
+
+- **説明**: 特定ガイドの全文取得（markdown コンテンツ）
+- **認証**: 不要（公開情報。将来 Tier-based 制限を検討）
+
+**Response 200**:
+```json
+{
+  "data": {
+    "domain": "banking",
+    "slug": "account-opening",
+    "title": "Bank Account Opening Guide for Foreign Residents",
+    "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident.",
+    "content": "# Bank Account Opening Guide for Foreign Residents\n\n## Required Documents\n\n1. **Residence Card** (在留カード)\n2. **Passport**\n3. **Proof of Address** (住民票)..."
+  }
+}
+```
+
+**Error 404**:
+```json
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Guide 'nonexistent' not found in domain 'banking'.",
+    "details": {}
   }
 }
 ```
 
 ---
 
-## エンドポイント
+### 3. Emergency
+
+#### `GET /api/v1/emergency`
+
+- **説明**: 緊急連絡先・救急ガイド（常時公開、認証不要）
+- **認証**: 不要
+
+**Response 200**:
+```json
+{
+  "data": {
+    "title": "Emergency Contacts — Japan",
+    "contacts": [
+      {"name": "Police", "number": "110", "note": ""},
+      {"name": "Fire / Ambulance", "number": "119", "note": ""},
+      {"name": "Emergency (English)", "number": "#7119", "note": "Medical consultation"},
+      {"name": "TELL Japan", "number": "03-5774-0992", "note": "Mental health"},
+      {"name": "Japan Helpline", "number": "0570-064-211", "note": "24h, multilingual"}
+    ],
+    "content": "# Emergency Guide\n\n## How to call 119 (Ambulance)..."
+  }
+}
+```
 
 ---
 
-### Auth
-
-> Firebase Auth SDK をクライアント (Flutter) から直接利用してサインイン/サインアップを行う。
-> 以下の API はサーバー側でプロフィール作成等の追加処理を行うラッパー。
+### 4. Auth
 
 #### `POST /api/v1/auth/register`
 
 - **説明**: プロフィール作成（Firebase Auth でアカウント作成後にクライアントが呼び出す）
 - **認証**: 必要（Firebase ID Token — 直前に作成したアカウントの Token）
-- **Request Body**:
-  ```json
-  {
-    "display_name": "string (optional, max 100)",
-    "preferred_language": "string (optional, enum: en|zh|vi|ko|pt, default: en)"
-  }
-  ```
-- **Response 201**:
-  ```json
-  {
-    "data": {
-      "user": {
-        "id": "firebase_uid",
-        "email": "user@example.com",
-        "display_name": "John",
-        "preferred_language": "en",
-        "subscription_tier": "free",
-        "onboarding_completed": false
-      }
+
+**Request Body**:
+```json
+{
+  "display_name": "Chen Wei",
+  "preferred_language": "zh"
+}
+```
+
+**Response 201**:
+```json
+{
+  "data": {
+    "user": {
+      "id": "firebase_uid_abc123",
+      "email": "user@example.com",
+      "display_name": "Chen Wei",
+      "preferred_language": "zh",
+      "subscription_tier": "free",
+      "onboarding_completed": false
     }
   }
-  ```
-- **Errors**: 409 (profile already exists)
-- **処理**: Firebase ID Token から UID と email を取得 → profiles テーブルにレコード作成
+}
+```
+
+**Error 409**: profile already exists
 
 #### `POST /api/v1/auth/delete-account`
 
 - **説明**: アカウント削除（プロフィールのソフトデリート + Firebase Auth アカウント削除）
 - **認証**: 必要
-- **Response 200**: `{"data": {"message": "Account deleted"}}`
-- **処理**: profiles.deleted_at 設定 → サブスクあれば Stripe キャンセル → Firebase Admin SDK でアカウント削除
+
+**Response 200**:
+```json
+{
+  "data": {
+    "message": "Account deleted"
+  }
+}
+```
 
 ---
 
-### User Profile
+### 5. User Profile
 
 #### `GET /api/v1/users/me`
 
 - **説明**: 現在のユーザープロフィール取得
 - **認証**: 必要
-- **Response 200**:
-  ```json
-  {
-    "data": {
-      "id": "firebase_uid",
-      "email": "user@example.com",
-      "display_name": "Chen Wei",
-      "avatar_url": "https://r2.example.com/avatars/uid.jpg",
-      "nationality": "CN",
-      "residence_status": "engineer_specialist",
-      "residence_region": "13",
-      "arrival_date": "2024-04-01",
-      "preferred_language": "zh",
-      "subscription_tier": "free",
-      "onboarding_completed": true,
-      "created_at": "2026-02-16T02:25:00Z"
-    }
+
+**Response 200**:
+```json
+{
+  "data": {
+    "id": "firebase_uid_abc123",
+    "email": "user@example.com",
+    "display_name": "Chen Wei",
+    "avatar_url": null,
+    "nationality": "CN",
+    "residence_status": "engineer_specialist",
+    "residence_region": "13",
+    "arrival_date": "2024-04-01",
+    "preferred_language": "zh",
+    "subscription_tier": "free",
+    "onboarding_completed": true,
+    "created_at": "2026-02-16T02:25:00Z"
   }
-  ```
+}
+```
 
 #### `PATCH /api/v1/users/me`
 
-- **説明**: プロフィール更新
+- **説明**: プロフィール更新（全フィールド optional）
 - **認証**: 必要
-- **Request Body** (全フィールド optional):
-  ```json
-  {
-    "display_name": "string (max 100)",
-    "avatar_url": "string (valid URL)",
-    "nationality": "string (ISO 3166-1 alpha-2)",
-    "residence_status": "string (enum, see DATA_MODEL §1)",
-    "residence_region": "string (prefecture code)",
-    "arrival_date": "string (YYYY-MM-DD)",
-    "preferred_language": "string (en|zh|vi|ko|pt)"
-  }
-  ```
-- **Response 200**: 更新後の profile オブジェクト
-- **Errors**: 422 (validation)
+
+**Request Body**:
+```json
+{
+  "nationality": "CN",
+  "residence_status": "engineer_specialist",
+  "residence_region": "13",
+  "preferred_language": "zh"
+}
+```
+
+**Response 200**: 更新後の profile オブジェクト
 
 #### `POST /api/v1/users/me/onboarding`
 
-- **説明**: オンボーディング完了（プロフィール設定 + フラグ更新 + 初期手続き追加）
+- **説明**: オンボーディング完了
 - **認証**: 必要
-- **Request Body**:
-  ```json
-  {
-    "nationality": "string (optional)",
-    "residence_status": "string (optional)",
-    "residence_region": "string (optional)",
-    "arrival_date": "string (optional, YYYY-MM-DD)",
-    "preferred_language": "string (required, en|zh|vi|ko|pt)"
-  }
-  ```
-- **Response 200**: 更新後の profile（`onboarding_completed: true`）
-- **処理**: プロフィール更新 + 来日直後の 5 大手続きを user_procedures に自動追加（see BUSINESS_RULES.md §8）
+
+**Request Body**:
+```json
+{
+  "nationality": "CN",
+  "residence_status": "engineer_specialist",
+  "residence_region": "13",
+  "arrival_date": "2024-04-01",
+  "preferred_language": "zh"
+}
+```
+
+**Response 200**: 更新後の profile（`onboarding_completed: true`）
 
 ---
 
-### AI Chat (AI Service)
+### 6. Subscription
 
-#### `POST /api/v1/ai/chat/sessions`
-
-- **説明**: 新しいチャットセッション作成
-- **認証**: 必要
-- **Request Body**:
-  ```json
-  {
-    "initial_message": "string (optional, max 2000)"
-  }
-  ```
-- **Response 201**:
-  ```json
-  {
-    "data": {
-      "session": {
-        "id": "uuid",
-        "title": null,
-        "category": "general",
-        "language": "en",
-        "message_count": 0,
-        "created_at": "2026-02-16T02:25:00Z"
-      }
-    }
-  }
-  ```
-  > `initial_message` が指定された場合、セッション作成後に自動的にメッセージを送信し、AI 応答を SSE ストリーミング返却する。
-
-#### `GET /api/v1/ai/chat/sessions`
-
-- **説明**: チャットセッション一覧取得
-- **認証**: 必要
-- **Query Parameters**: `limit` (int, default 20, max 50), `cursor` (UUID, optional), `category` (string, optional)
-- **Response 200**: セッション配列 + pagination
-
-#### `GET /api/v1/ai/chat/sessions/:session_id`
-
-- **説明**: セッション詳細 + 最新メッセージ 20 件
-- **認証**: 必要
-- **Errors**: 404, 403
-
-#### `DELETE /api/v1/ai/chat/sessions/:session_id`
-
-- **説明**: セッション削除（ソフトデリート）
-- **認証**: 必要（所有者のみ）
-- **Errors**: 404, 403
-
-#### `POST /api/v1/ai/chat/sessions/:session_id/messages`
-
-- **説明**: メッセージ送信 + AI 応答（ストリーミング）
-- **認証**: 必要
-- **Rate Limit**: Free ティア: 5 回/日（BUSINESS_RULES.md §2 参照）
-- **Request Body**:
-  ```json
-  {
-    "content": "string (required, max 2000)"
-  }
-  ```
-- **Response 200** (SSE — `text/event-stream`):
-  ```
-  event: message_start
-  data: {"message_id": "uuid", "role": "assistant"}
-
-  event: content_delta
-  data: {"delta": "日本で"}
-
-  event: content_delta
-  data: {"delta": "銀行口座を"}
-
-  event: message_end
-  data: {"sources": [{"title": "ISA Portal", "url": "https://..."}], "tokens_used": 450}
-  ```
-- **Errors**: 403 (`TIER_LIMIT_EXCEEDED`), 404
-
-#### `GET /api/v1/ai/chat/sessions/:session_id/messages`
-
-- **説明**: メッセージ履歴取得
-- **認証**: 必要
-- **Query Parameters**: `limit` (int, default 50, max 100), `cursor` (UUID), `order` (asc|desc, default asc)
-- **Response 200**: メッセージ配列 + pagination
-
----
-
-### Banking Navigator
-
-#### `GET /api/v1/banking/banks`
-
-- **説明**: 銀行一覧取得
-- **認証**: 不要（公開情報）
-- **Query Parameters**: `lang` (string, default en)
-- **Response 200**: 銀行配列（bank_code, bank_name, features, foreigner_friendly_score 等）
-
-#### `POST /api/v1/banking/recommend`
-
-- **説明**: ユーザー条件に基づく銀行レコメンド
-- **認証**: 必要
-- **Request Body**:
-  ```json
-  {
-    "nationality": "string (optional, defaults to profile)",
-    "residence_status": "string (optional)",
-    "residence_region": "string (optional)",
-    "priorities": "string[] (optional, enum: multilingual|low_fee|atm|online)"
-  }
-  ```
-- **Response 200**: recommendations 配列（bank オブジェクト + match_score + match_reasons + warnings）
-- **計算ロジック**: see BUSINESS_RULES.md §7
-
-#### `GET /api/v1/banking/banks/:bank_id/guide`
-
-- **説明**: 特定銀行の詳細口座開設ガイド
-- **認証**: 必要
-- **Query Parameters**: `lang` (string)
-- **Response 200**: bank オブジェクト + requirements + conversation_templates + troubleshooting
-
----
-
-### Visa Navigator
-
-#### `GET /api/v1/visa/procedures`
-
-- **説明**: ビザ手続き一覧
-- **認証**: 必要
-- **Query Parameters**: `lang`, `status` (filter by applicable residence status)
-- **Response 200**: 手続き配列
-
-#### `GET /api/v1/visa/procedures/:procedure_id`
-
-- **説明**: ビザ手続き詳細（ステップ、必要書類、費用）
-- **認証**: 必要
-- **Tier 制限**: Free = 基本情報のみ、Premium = 全情報（パーソナライズ含む）
-- **Response 200**: 詳細オブジェクト + disclaimer
-
-#### `POST /api/v1/visa/check`
-
-- **説明**: 在留資格に基づく手続き適格性チェック
-- **認証**: 必要
-- **Tier 制限**: Premium のみ
-- **Request Body**: `{ "procedure_type", "residence_status", "residence_expiry" }`
-- **Response 200**: eligible + applicable_procedures + urgency + disclaimer
-
----
-
-### Admin Procedure Tracker
-
-#### `GET /api/v1/procedures/templates`
-
-- **説明**: 行政手続きテンプレート一覧
-- **認証**: 必要
-- **Query Parameters**: `lang`, `category`, `arrival_essential` (boolean)
-- **Response 200**: テンプレート配列
-
-#### `GET /api/v1/procedures/my`
-
-- **説明**: ユーザーの追跡中手続き一覧
-- **認証**: 必要
-- **Tier 制限**: Free = 最大 3 件、Premium = 無制限
-- **Query Parameters**: `status` (not_started/in_progress/completed)
-- **Response 200**: user_procedure 配列 + meta (total_count, limit, tier)
-
-#### `POST /api/v1/procedures/my`
-
-- **説明**: 手続きを追跡リストに追加
-- **認証**: 必要
-- **Tier 制限**: Free = 最大 3 件
-- **Request Body**: `{ "procedure_ref_type", "procedure_ref_id", "due_date?", "notes?" }`
-- **Response 201**: 作成された user_procedure
-- **Errors**: 403 (`TIER_LIMIT_EXCEEDED`), 409 (already tracking), 404
-
-#### `PATCH /api/v1/procedures/my/:id`
-
-- **説明**: 追跡手続きの更新
-- **認証**: 必要
-- **Request Body**: `{ "status?", "due_date?", "notes?" }`
-- **Response 200**: 更新後のオブジェクト
-
-#### `DELETE /api/v1/procedures/my/:id`
-
-- **説明**: 追跡手続き削除（ソフトデリート）
-- **認証**: 必要
-
----
-
-### Document Scanner (AI Service)
-
-#### `POST /api/v1/ai/documents/scan`
-
-- **説明**: 書類スキャン（アップロード → OCR → 翻訳 → 説明）
-- **認証**: 必要
-- **Tier 制限**: Free = 3 枚/月、Premium = 30 枚/月、Premium+ = 無制限
-- **Content-Type**: `multipart/form-data`
-- **Request Body**: `file` (image, required, max 10MB, jpg/png/heic), `target_language` (optional)
-- **Response 202**: `{ "id", "status": "processing" }`
-- **Errors**: 403 (`TIER_LIMIT_EXCEEDED`), 422 (invalid file)
-
-#### `GET /api/v1/ai/documents`
-
-- **説明**: スキャン済み書類一覧
-- **認証**: 必要
-- **Query Parameters**: `limit`, `cursor`
-- **Response 200**: スキャン配列 + pagination
-
-#### `GET /api/v1/ai/documents/:id`
-
-- **説明**: スキャン結果詳細
-- **認証**: 必要
-- **Response 200**: file_url, ocr_text, translation, explanation, document_type, status 等
-
-#### `DELETE /api/v1/ai/documents/:id`
-
-- **説明**: スキャン結果削除（ソフトデリート）
-- **認証**: 必要
-
----
-
-### Community Q&A
-
-#### `GET /api/v1/community/posts`
-
-- **説明**: 投稿一覧取得
-- **認証**: 必要
-- **Query Parameters**: `channel` (required), `category`, `sort` (newest|popular), `limit`, `cursor`, `q` (search)
-- **Response 200**: 投稿配列 + pagination
-
-#### `POST /api/v1/community/posts`
-
-- **説明**: 投稿作成
-- **認証**: 必要
-- **Tier 制限**: Premium 以上のみ
-- **Request Body**: `{ "channel", "category", "title" (min 5, max 200), "content" (min 10, max 5000) }`
-- **Response 201**: 作成された post（`ai_moderation_status: pending`）
-- **Errors**: 403 (Tier 不足), 422
-
-#### `GET /api/v1/community/posts/:id`
-
-- **説明**: 投稿詳細
-- **認証**: 必要
-- **Response 200**: 投稿オブジェクト + user_voted フラグ
-
-#### `PATCH /api/v1/community/posts/:id`
-
-- **説明**: 投稿編集（投稿者のみ）
-- **Request Body**: `{ "title?", "content?" }`
-
-#### `DELETE /api/v1/community/posts/:id`
-
-- **説明**: 投稿削除（投稿者のみ、ソフトデリート）
-
-#### `POST /api/v1/community/posts/:id/replies`
-
-- **説明**: 返信作成
-- **Tier 制限**: Premium 以上
-- **Request Body**: `{ "content" (min 5, max 3000) }`
-
-#### `GET /api/v1/community/posts/:id/replies`
-
-- **説明**: 返信一覧
-- **Query Parameters**: `limit`, `cursor`
-
-#### `PATCH /api/v1/community/replies/:id`
-
-- **説明**: 返信編集（返信者のみ）
-
-#### `DELETE /api/v1/community/replies/:id`
-
-- **説明**: 返信削除（返信者のみ）
-
-#### `POST /api/v1/community/posts/:id/vote`
-
-- **説明**: 投稿に投票（トグル）
-- **Tier 制限**: Premium 以上
-- **Response 200**: `{ "voted": true, "upvote_count": 6 }`
-
-#### `POST /api/v1/community/replies/:id/vote`
-
-- **説明**: 返信に投票（トグル）
-- **Tier 制限**: Premium 以上
-
-#### `POST /api/v1/community/replies/:id/best-answer`
-
-- **説明**: ベストアンサーに設定（投稿者のみ）
-- **Errors**: 403 (投稿者以外)
-
----
-
-### Subscription
-
-#### `GET /api/v1/subscriptions/plans`
+#### `GET /api/v1/subscription/plans`
 
 - **説明**: 利用可能なプラン一覧
 - **認証**: 不要
-- **Response 200**: プラン配列（id, name, price, currency, interval, features）
 
-#### `POST /api/v1/subscriptions/checkout`
+**Response 200**:
+```json
+{
+  "data": {
+    "plans": [
+      {
+        "id": "free",
+        "name": "Free",
+        "price": 0,
+        "currency": "JPY",
+        "interval": null,
+        "features": {
+          "chat_limit": "5/day",
+          "tracker_limit": 3,
+          "ads": true
+        }
+      },
+      {
+        "id": "standard",
+        "name": "Standard",
+        "price": 720,
+        "currency": "JPY",
+        "interval": "month",
+        "features": {
+          "chat_limit": "300/month",
+          "tracker_limit": null,
+          "ads": false
+        }
+      },
+      {
+        "id": "premium",
+        "name": "Premium",
+        "price": 1360,
+        "currency": "JPY",
+        "interval": "month",
+        "features": {
+          "chat_limit": "unlimited",
+          "tracker_limit": null,
+          "ads": false
+        }
+      }
+    ],
+    "charge_packs": [
+      {"chats": 100, "price": 360, "unit_price": 3.6},
+      {"chats": 50, "price": 180, "unit_price": 3.6}
+    ]
+  }
+}
+```
 
-- **説明**: Stripe Checkout セッション作成
+#### `POST /api/v1/subscription/purchase`
+
+- **説明**: IAP 購入処理（Apple レシート or Google purchase token を検証）
 - **認証**: 必要
-- **Request Body**: `{ "plan_id", "success_url", "cancel_url" }`
-- **Response 200**: `{ "checkout_url": "https://checkout.stripe.com/..." }`
 
-#### `GET /api/v1/subscriptions/me`
+**Request Body**:
+```json
+{
+  "platform": "ios",
+  "receipt": "MIIbzg...",
+  "product_id": "com.gaijinlifenavi.standard_monthly"
+}
+```
 
-- **説明**: 現在のサブスクリプション状態
-- **認証**: 必要
-- **Response 200**: tier, status, current_period_end, cancel_at_period_end, manage_url
-
-#### `POST /api/v1/subscriptions/cancel`
-
-- **説明**: サブスクリプションキャンセル（期間終了時に解約）
-- **認証**: 必要
-- **Response 200**: status, cancel_at_period_end, current_period_end
-
-#### `POST /api/v1/subscriptions/webhook`
-
-- **説明**: Stripe Webhook ハンドラー
-- **認証**: Stripe Webhook Signature で検証
-- **処理するイベント**: see BUSINESS_RULES.md §9
-
----
-
-### Usage
-
-#### `GET /api/v1/usage/today`
-
-- **説明**: 当日の利用状況
-- **認証**: 必要
-- **Response 200**:
-  ```json
-  {
-    "data": {
-      "chat_count": 3,
-      "chat_limit": 5,
-      "chat_remaining": 2,
-      "scan_count_monthly": 1,
-      "scan_limit_monthly": 3,
-      "scan_remaining_monthly": 2,
-      "tier": "free"
+**Response 200**:
+```json
+{
+  "data": {
+    "subscription": {
+      "tier": "standard",
+      "status": "active",
+      "current_period_end": "2026-03-17T00:00:00Z"
     }
   }
-  ```
+}
+```
 
 ---
 
-### Medical Guide
+### 7. Usage
 
-#### `GET /api/v1/medical/phrases`
+#### `GET /api/v1/usage`
 
-- **説明**: 症状翻訳フレーズ集
+- **説明**: 当日/当月の利用状況
 - **認証**: 必要
-- **Query Parameters**: `lang`, `category` (symptom/emergency/insurance/general)
-- **Response 200**: フレーズ配列（phrase_ja, phrase_reading, translation, context）
 
-#### `GET /api/v1/medical/emergency-guide`
+**Response 200 (Free ティア)**:
+```json
+{
+  "data": {
+    "chat_count": 3,
+    "chat_limit": 5,
+    "chat_remaining": 2,
+    "period": "day",
+    "tier": "free"
+  }
+}
+```
 
-- **説明**: 緊急時ガイド（静的コンテンツ）
-- **認証**: 必要
-- **Query Parameters**: `lang`
-- **Response 200**: emergency_number, how_to_call, what_to_prepare, useful_phrases + disclaimer
+**Response 200 (Standard ティア)**:
+```json
+{
+  "data": {
+    "chat_count": 45,
+    "chat_limit": 300,
+    "chat_remaining": 255,
+    "period": "month",
+    "tier": "standard"
+  }
+}
+```
+
+**Response 200 (Premium ティア)**:
+```json
+{
+  "data": {
+    "chat_count": 120,
+    "chat_limit": null,
+    "chat_remaining": null,
+    "period": "month",
+    "tier": "premium"
+  }
+}
+```
 
 ---
 
-### Health Check
+### 8. Health Check
 
 #### `GET /api/v1/health`
 
 - **説明**: ヘルスチェック
 - **認証**: 不要
-- **Response 200**:
-  ```json
-  {
-    "status": "ok",
-    "version": "0.1.0",
-    "services": {
-      "database": "ok",
-      "ai_service": "ok",
-      "vector_db": "ok"
-    }
+
+**Response 200**:
+```json
+{
+  "status": "ok",
+  "version": "0.1.0",
+  "services": {
+    "database": "ok",
+    "openclaw_gateway": "ok"
   }
-  ```
+}
+```
+
+---
+
+## 変更履歴
+
+- 2026-02-16: 初版作成
+- 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）

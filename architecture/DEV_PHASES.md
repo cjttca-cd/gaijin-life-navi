@@ -2,260 +2,238 @@
 
 > **必ず順番通りに実装。** スキップ・一括実装は禁止。
 > 各マイルストーンの受入基準を全てクリアしてから次へ進む。
+> Phase 0 = 3 週間。Phase 1 = 追加 Agent + デプロイ。
 
 ---
 
-## M0: プロジェクト骨格 + 認証（先に跑通）
+## Phase 0: MVP（3 週間）
 
-### 範囲
-- Flutter プロジェクト初期化（iOS/Android/Web）
-- Riverpod + go_router + drift の基盤セットアップ
-- Firebase Auth 統合（Email/Password + Apple Sign In）
-- バックエンド（FastAPI App Service）のスキャフォールド
-- PostgreSQL 初期マイグレーション（profiles, daily_usage テーブル）
-- API Gateway（Cloudflare Workers）の基本セットアップ
-- 認証フロー（登録 → ログイン → ログアウト）
-- メインレイアウト + BottomNavigation + go_router ルーティング
-- 多言語基盤（Flutter l10n + ARB ファイル、5 言語スケルトン）
+### Week 1: 基盤構築（E0 + E1）
 
-### 含まれるストーリー
-- US-001 (ユーザー登録), US-002 (ログイン), US-003 (言語選択), US-005 (ログアウト), US-006 (パスワードリセット)
+#### Day 1-2: Service Agent 作成 + OC Runtime 確認
 
-### 産出物
-- `app/` — Flutter プロジェクト（lib/core/, lib/features/auth/, lib/l10n/, pubspec.yaml）
-- `backend/app_service/` — FastAPI プロジェクト（main.py, routers/auth.py, models/, migrations/）
-- `infra/api-gateway/` — Cloudflare Workers スクリプト
-- `infra/migrations/` — Alembic 初期マイグレーション（profiles, daily_usage）
-- `infra/firebase/` — Firebase プロジェクト設定
+**範囲:**
+- svc-concierge + svc-banking の Agent 作成
+  - workspace/AGENTS.md + IDENTITY.md + SOUL.md + TOOLS.md
+  - workspace/knowledge/ に知識ファイル配置
+  - OpenClaw config に agent 追加（tool 制限: web_search, web_fetch, read, memory_search, memory_get）
+- 動作確認: `openclaw agent --agent svc-banking --json` テスト
+- Session 持続性テスト: 同一 session ID で連続会話
 
-### 検証方法
+**含まれるストーリー:** —（インフラ準備）
+
+**産出物:**
+- `~/.openclaw/agents/svc-concierge/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-banking/workspace/` — Agent workspace + knowledge/
+- OpenClaw config 更新（tool 制限設定）
+
+**検証方法:**
 ```bash
-# Flutter アプリ起動
-cd app && flutter run  # エラーなく起動すること
+# Agent 呼び出しテスト
+openclaw agent --agent svc-banking --session-id test_banking \
+  --message "日本で銀行口座を開設するには？" --json --thinking low
 
-# バックエンド起動
-cd backend/app_service && uvicorn main:app --reload  # エラーなく起動
+# 期待: JSON レスポンス、3-5 秒、knowledge ベースの回答
+```
+
+**受入基準:**
+- [ ] svc-concierge, svc-banking が `--json` で正常応答する
+- [ ] memory_search が knowledge/ ファイルから関連情報を取得する
+- [ ] tool 制限が機能する（exec, write 等が使用不可）
+- [ ] Session 持続性: 同一 session ID で文脈が保持される
+
+#### Day 3: API Gateway scaffold
+
+**範囲:**
+- FastAPI プロジェクト初期化
+- Firebase Auth middleware（JWT 検証）
+- Agent 呼び出し service (`services/agent.py`: subprocess → `openclaw agent --json`)
+- POST /api/v1/chat endpoint
+- SQLite DB 初期化（profiles, daily_usage テーブル）
+- Usage service（ティア別制限チェック + インクリメント）
+
+**含まれるストーリー:** US-001 (登録), US-002 (ログイン)
+
+**産出物:**
+- `backend/app_service/` — FastAPI プロジェクト
+  - main.py, config.py, database.py
+  - routers/chat.py, routers/auth.py, routers/health.py
+  - services/agent.py, services/auth.py, services/usage.py
+  - models/profile.py, models/daily_usage.py
+
+**検証方法:**
+```bash
+cd backend/app_service && uvicorn main:app --reload
 curl http://localhost:8000/api/v1/health  # {"status": "ok"}
 
-# 認証フロー検証（アプリ上で手動テスト）
-# 1. 言語選択画面が表示される
-# 2. 登録画面で Email/Password を入力 → Firebase Auth アカウント作成成功
-# 3. profiles テーブルにレコードが作成される
-# 4. ログアウト → 再ログイン → ホーム画面に遷移
-# 5. 未ログインで /home にアクセス → /login にリダイレクト
+# POST /api/v1/chat テスト（認証付き）
+curl -X POST http://localhost:8000/api/v1/chat \
+  -H "Authorization: Bearer {firebase_token}" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "口座開設したい", "locale": "ja"}'
 ```
 
-### 受入基準
-- [ ] Flutter アプリが iOS/Android/Web で起動する
-- [ ] Email/Password で登録・ログイン・ログアウトが動作する
-- [ ] 未ログインは認証必須画面にアクセスできない（go_router redirect）
-- [ ] profiles テーブルにユーザーデータが保存される
-- [ ] 5 言語の切り替えが動作する（UI テキストが切り替わる）
-- [ ] API Gateway 経由で App Service にリクエストが到達する
+**受入基準:**
+- [ ] FastAPI が起動し、health check が OK
+- [ ] Firebase JWT 検証が動作する
+- [ ] POST /api/v1/chat → Agent 呼び出し → 構造化レスポンス返却
+- [ ] Free ティア 5回/日の制限が enforce される
+- [ ] SQLite に profiles, daily_usage テーブルが作成される
+
+#### Day 4-5: 残り Agent + 知識ファイル作成
+
+**範囲:**
+- svc-visa + svc-medical Agent 追加
+- 全 4 agent の knowledge/ ディレクトリに知識 .md ファイル作成
+- memory_search 動作確認（検索精度テスト）
+- LLM ルーティング（svc-concierge による分類）の実装確認
+
+**産出物:**
+- `~/.openclaw/agents/svc-visa/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-medical/workspace/` — Agent workspace + knowledge/
+
+**受入基準:**
+- [ ] 全 4 agent が正常に応答する
+- [ ] Emergency keyword (119, 救急 等) で svc-medical に即座にルーティングされる
+- [ ] LLM 分類で banking/visa/medical/concierge が正しく判定される
+- [ ] memory_search が各 agent の knowledge/ から適切な情報を取得する
 
 ---
 
-## M1: AI Chat Engine（コアバリュー）
+### Week 2: Navigator + Flutter 改造（E2 + E3）
 
-### 範囲
-- AI Service（FastAPI）のスキャフォールド
-- RAG パイプライン（Pinecone + LangChain + Claude API）
-- チャットセッション CRUD
-- メッセージ送受信（SSE ストリーミング）
-- セッションタイトル自動生成
-- カテゴリ自動判定
-- 日次利用制限（Free ティア: 5 回/日）
-- オンボーディング画面
+#### Day 1-2: Navigator + Emergency + Subscription endpoints
 
-### 含まれるストーリー
-- US-004 (オンボーディング), US-101 (セッション作成), US-102 (メッセージ送受信), US-103 (Free 制限), US-104 (履歴一覧), US-105 (セッション削除)
+**範囲:**
+- Navigator API (GET /api/v1/navigator/*)
+- Emergency API (GET /api/v1/emergency)
+- Subscription plans API (GET /api/v1/subscription/plans)
+- Usage API (GET /api/v1/usage)
+- Profile API (GET/PATCH /api/v1/users/me, POST /api/v1/users/me/onboarding)
 
-### 産出物
-- `backend/ai_service/` — FastAPI プロジェクト（chat_engine/, rag/, routers/chat.py）
-- `app/lib/features/chat/` — チャット画面、SSE ストリーミング表示
-- `app/lib/features/onboarding/` — オンボーディング画面
+**含まれるストーリー:** US-201〜203 (Navigator), US-301 (Emergency), US-401 (Plans)
+
+**産出物:**
+- `backend/app_service/routers/navigator.py`
+- `backend/app_service/routers/usage_router.py`
+- `backend/app_service/routers/subscriptions.py`
+- `backend/app_service/routers/profile_router.py`
+
+**受入基準:**
+- [ ] GET /api/v1/navigator/domains → 8 ドメイン (4 active + 4 coming_soon) 返却
+- [ ] GET /api/v1/navigator/banking/guides → knowledge/*.md 一覧返却
+- [ ] GET /api/v1/navigator/banking/guides/account-opening → ガイド全文返却
+- [ ] GET /api/v1/emergency → 緊急連絡先 + ガイドコンテンツ返却
+- [ ] GET /api/v1/subscription/plans → 3 プラン + 従量チャージ返却
+- [ ] GET /api/v1/usage → ティア別利用状況返却
+
+#### Day 3-4: Flutter 改造
+
+**範囲:**
+- Chat UI（テキスト送信 + レスポンス表示。sources, actions, tracker_items の表示）
+- Navigator UI（ドメイン一覧 + ガイド一覧 + ガイド詳細の markdown レンダリング）
+- Emergency UI
+- API 接続層（dio + Firebase Auth interceptor）
+- 認証フロー（登録 → ログイン → オンボーディング）
+- 多言語基盤（Flutter l10n + ARB ファイル、5 言語スケルトン）
+
+**含まれるストーリー:** US-001〜006 (認証), US-101〜104 (Chat), US-201〜203 (Navigator)
+
+**産出物:**
+- `app/lib/features/chat/` — Chat 画面
+- `app/lib/features/navigator/` — Navigator 画面群
+- `app/lib/features/emergency/` — Emergency 画面
+- `app/lib/features/auth/` — 認証画面群
+- `app/lib/features/onboarding/` — オンボーディング
 - `app/lib/features/home/` — ホーム画面
-- Pinecone インデックス初期設定 + ナレッジベース初期投入スクリプト
+- `app/lib/core/` — DI, theme, API client
 
-### 検証方法
-```bash
-# AI Service 起動
-cd backend/ai_service && uvicorn main:app --reload
-curl http://localhost:8001/api/v1/health  # {"status": "ok"}
+**受入基準:**
+- [ ] Flutter アプリが iOS/Android で起動する
+- [ ] Email/Password で登録・ログイン・ログアウトが動作する
+- [ ] Chat 画面でメッセージ送信 → AI 回答表示 → sources 表示
+- [ ] Navigator 画面でドメイン一覧 → ガイド一覧 → ガイド詳細が表示される
+- [ ] Emergency 画面で緊急連絡先が表示される
+- [ ] 5 言語の切り替えが動作する
 
-# チャットフロー検証（アプリ上で手動テスト）
-# 1. オンボーディング完了 → ホーム画面に遷移
-# 2. 新規チャット作成 → チャット画面に遷移
-# 3. 「日本で銀行口座を開設するには？」と入力
-# 4. AI がストリーミングで回答（文字が流れるように表示）
-# 5. ソース引用 URL が表示される
-# 6. 免責事項が表示される
-# 7. Free ユーザーで 6 回目のメッセージ → 制限メッセージ表示
-```
+#### Day 5: 結合テスト
 
-### 受入基準
-- [ ] オンボーディング完了 → プロフィール更新 + 5 大手続きが自動追加される
-- [ ] チャットセッション作成・一覧・削除が動作する
-- [ ] AI チャットがストリーミングで表示される
-- [ ] 回答にソース引用 URL が含まれる
-- [ ] 免責事項が表示される
-- [ ] セッションタイトルが自動生成される
-- [ ] Free ティアで 6 回目のメッセージに制限メッセージが表示される
-- [ ] 残り回数がチャット画面に表示される
+**範囲:**
+- 閉ループ A〜D の手動テスト
+- Usage 制限テスト
+- ルーティング精度テスト
+
+**受入基準:**
+- [ ] 閉ループ A: 登録 → オンボーディング → Chat → 回答 が通る
+- [ ] 閉ループ B: Navigator → ガイド閲覧 → Chat 遷移 が通る
+- [ ] 閉ループ C: Emergency → 緊急連絡先 → Chat で svc-medical ルーティング が通る
 
 ---
 
-## M2: コンテンツナビゲーター群
+### Week 3: 品質 + デプロイ（E4）
 
-### 範囲
-- Banking Navigator（一覧 + レコメンド + 個別ガイド）
-- Visa Navigator（一覧 + 詳細）
-- Admin Tracker（チェックリスト + 進捗管理 + 手続き追加）
-- Document Scanner（撮影/アップロード → OCR → 翻訳 → 説明）
-- Medical Guide（緊急時ガイド + フレーズ集）
+#### Day 1-2: IAP 統合 + Access Boundary
 
-### 含まれるストーリー
-- US-201〜203 (Banking), US-301〜302 (Visa), US-401〜403 (Admin Tracker), US-501〜502 (Scanner), US-801〜802 (Medical)
+**範囲:**
+- Apple IAP / Google Play Billing の Flutter 側実装
+- POST /api/v1/subscription/purchase のレシート検証実装
+- subscriptions テーブル + tier 更新ロジック
+- Access Boundary 実装（ゲスト/Free/Standard/Premium のコンテンツ制限）
 
-### 産出物
-- `app/lib/features/banking/` — Banking Navigator 画面群
-- `app/lib/features/visa/` — Visa Navigator 画面群
-- `app/lib/features/tracker/` — Admin Tracker 画面群
-- `app/lib/features/scanner/` — Document Scanner 画面群
-- `app/lib/features/medical/` — Medical Guide 画面
-- `backend/app_service/routers/` — banking.py, visa.py, procedures.py, medical.py
-- `backend/ai_service/routers/` — documents.py
-- マスターデータ投入スクリプト（banking_guides, visa_procedures, admin_procedures, medical_phrases）
+**含まれるストーリー:** US-402 (購入), US-403 (管理)
 
-### 検証方法
-```bash
-# Banking Navigator
-# 1. 銀行一覧が表示される（foreigner_friendly_score 順）
-# 2. レコメンド → 条件入力 → スコア順に表示 + 理由表示
-# 3. 個別ガイド → 必要書類 + 会話テンプレート表示
+**受入基準:**
+- [ ] IAP 購入フローが動作する（テスト環境）
+- [ ] 購入後に subscription_tier が即座に更新される
+- [ ] 閉ループ D: Free 制限 → アップグレード → 制限解除 が通る
 
-# Visa Navigator
-# 1. ユーザーの在留資格に応じた手続き一覧が表示される
-# 2. 詳細画面で手順 + 書類 + 費用 + 免責事項が表示される
+#### Day 3: E2E テスト + パフォーマンス確認
 
-# Admin Tracker
-# 1. オンボーディング後に 5 大手続きが表示される
-# 2. ステータス変更（not_started → in_progress → completed）が動作
-# 3. Free ユーザーで 4 件目の追加 → 制限メッセージ
+**範囲:**
+- 全閉ループ A〜D の E2E テスト
+- AI Chat レスポンスタイム確認（目標: routing 含み < 8 秒）
+- 知識ファイル品質レビュー
 
-# Document Scanner
-# 1. カメラ/ギャラリーから画像アップロード
-# 2. 処理中表示 → OCR テキスト + 翻訳 + 説明が表示
-# 3. 書類種別が自動判定される
+**受入基準:**
+- [ ] 全閉ループが跑通する
+- [ ] Chat レスポンスタイム p95 < 8 秒
+- [ ] CRUD API レスポンスタイム p95 < 300ms
 
-# Medical Guide
-# 1. 緊急時ガイド（119 の呼び方）が表示される
-# 2. フレーズ集が日本語 + ふりがな + ユーザー言語で表示される
-```
+#### Day 4: Backend deploy
 
-### 受入基準
-- [ ] Banking: 銀行一覧・レコメンド（BUSINESS_RULES.md §7 のスコア計算）・個別ガイドが動作
-- [ ] Visa: 手続き一覧（在留資格フィルタ）・詳細（免責事項付き）が動作
-- [ ] Admin Tracker: CRUD + ステータス遷移 + Free 制限が動作
-- [ ] Scanner: 画像アップロード → OCR → 翻訳 → 説明が表示。Free/Premium 月次制限が動作
-- [ ] Medical: 緊急時ガイド + フレーズ集（免責事項付き）が表示される
-- [ ] 全画面がユーザーの preferred_language で表示される
+**範囲:**
+- VPS セットアップ（OpenClaw + API Gateway + Ollama）
+- 本番環境での動作確認
+- ドメイン / SSL 設定
 
----
-
-## M3: Community Q&A + 課金
-
-### 範囲
-- Community Q&A（投稿一覧 + 詳細 + 作成 + 返信 + 投票 + ベストアンサー）
-- AI モデレーション
-- Stripe 統合（Checkout + Webhook + サブスク管理）
-- サブスクリプション画面（プラン比較 + 購入 + キャンセル）
-- Free → Premium アップグレードフロー全体
-
-### 含まれるストーリー
-- US-601〜603 (Community), US-701〜703 (Subscription)
-
-### 産出物
-- `app/lib/features/community/` — Community Q&A 画面群
-- `app/lib/features/subscription/` — サブスクリプション画面
-- `backend/app_service/routers/` — community.py, subscriptions.py
-- `backend/ai_service/` — moderation.py
-- Stripe 設定（商品 + 価格 + Webhook エンドポイント）
-
-### 検証方法
-```bash
-# Community Q&A
-# 1. チャンネル（言語）+ カテゴリ選択 → 投稿一覧表示
-# 2. Premium ユーザーで投稿作成 → AI モデレーション通過後に公開
-# 3. Free ユーザーで投稿 → 制限メッセージ
-# 4. 返信 + 投票（トグル）+ ベストアンサー設定が動作
-
-# サブスクリプション
-# 1. プラン比較画面が表示される
-# 2. Stripe Checkout → テストカードで支払い → 即座に Premium に
-# 3. subscription_tier が 'premium' に更新される
-# 4. キャンセル → cancel_at_period_end = true
-# 5. Webhook: invoice.payment_failed → status = 'past_due'
-```
-
-### 受入基準
-- [ ] Community: 投稿 CRUD + 返信 + 投票 + ベストアンサーが動作
-- [ ] AI モデレーションが非同期で実行され、approved/flagged が正しく設定される
-- [ ] Premium 限定機能（投稿・返信・投票）の制限が動作
-- [ ] Stripe Checkout → 支払い → 即座に Premium 機能開放
-- [ ] Stripe Webhook が全イベント（BUSINESS_RULES.md §9）を正しく処理
-- [ ] キャンセルフローが動作（期間終了まで Premium 維持）
-
----
-
-## M4: 統合テスト + ローンチ準備
-
-### 範囲
-- 全閉ループの E2E テスト
-- LP（Astro 静的サイト）構築
-- プロフィール・設定画面の仕上げ
-- パフォーマンス最適化
-- App Store / Google Play 提出準備
-- 本番環境デプロイ
-
-### 含まれるストーリー
-- US-901〜903 (プロフィール・設定), US-1001 (LP)
-
-### 産出物
-- `lp/` — Astro LP サイト（5 言語対応）
-- `app/lib/features/profile/` — プロフィール・設定画面
-- E2E テストスクリプト（主要閉ループ 6 本）
-- App Store / Play Store メタデータ（スクリーンショット、説明文、5 言語）
-- 本番環境設定（Fly.io, Cloudflare, Firebase, PostgreSQL, Pinecone, Stripe）
-
-### 検証方法
-```bash
-# 閉ループ A〜F を手動で通しテスト（see USER_STORIES.md §重要閉ループ）
-# A: 初回利用 → AI チャットで問題解決
-# B: 銀行口座開設ガイド
-# C: 来日直後の手続き管理
-# D: 書類スキャン → 内容理解
-# E: Community で質問 → 回答取得
-# F: Free → Premium アップグレード
-
-# LP
-# 1. 5 言語で LP が表示される
-# 2. App Store / Play Store リンクが動作する
-# 3. Lighthouse スコア: Performance 90+, SEO 95+
-
-# Flutter build
-flutter build ios --release  # エラーなし
-flutter build appbundle --release  # エラーなし
-flutter build web --release  # エラーなし
-```
-
-### 受入基準
-- [ ] 閉ループ A〜F が全て跑通する（see MVP_ACCEPTANCE.md）
-- [ ] LP が 5 言語で表示される（Lighthouse SEO 95+）
-- [ ] Flutter アプリが iOS/Android でリリースビルドに成功する
+**受入基準:**
 - [ ] 本番環境で全 API が正常応答する
-- [ ] 非機能要件を満たす（SYSTEM_DESIGN.md §7）
-- [ ] App Store / Play Store 提出準備が完了
+- [ ] OpenClaw Gateway が安定稼働する
+- [ ] SSL (TLS 1.3) が有効
+
+#### Day 5: App Store 準備
+
+**範囲:**
+- Xcode signing + build
+- App Store Connect メタデータ（スクリーンショット、説明文、5 言語）
+- Google Play Console 準備
+
+**受入基準:**
+- [ ] Flutter アプリが iOS/Android でリリースビルドに成功する
+- [ ] App Store / Play Store への提出準備が完了
+
+---
+
+## Phase 1: 拡張（Phase 0 完了後）
+
+### 範囲
+- **追加 4 Agent**: svc-housing, svc-work, svc-admin, svc-transport（knowledge files + workspace 作成）
+- **AI Chat 画像入力**: image フィールドの実装（書類撮影 → AI 解読）
+- **SSE ストリーミング**: Chat レスポンスのストリーミング対応
+- **Navigator 拡張**: coming_soon → active（4 ドメイン追加）
+- **LP（ランディングページ）**: Astro or Next.js で構築
+- **Tracker 強化**: AI 提案の Tracker アイテムを DB に保存、CRUD
+- **PostgreSQL 移行**: 必要に応じて SQLite → PostgreSQL
 
 ---
 
@@ -263,27 +241,21 @@ flutter build web --release  # エラーなし
 
 ```mermaid
 graph LR
-    M0[M0: 骨格 + 認証] --> M1[M1: AI Chat]
-    M0 --> M2[M2: ナビゲーター群]
-    M1 --> M2
-    M2 --> M3[M3: Community + 課金]
-    M3 --> M4[M4: 統合 + ローンチ]
+    W1D12[W1 Day1-2:<br/>Agent 作成 + OC 確認] --> W1D3[W1 Day3:<br/>API Gateway]
+    W1D12 --> W1D45[W1 Day4-5:<br/>残り Agent + 知識]
+    W1D3 --> W2D12[W2 Day1-2:<br/>Navigator + API]
+    W1D45 --> W2D12
+    W2D12 --> W2D34[W2 Day3-4:<br/>Flutter 改造]
+    W2D34 --> W2D5[W2 Day5:<br/>結合テスト]
+    W2D5 --> W3D12[W3 Day1-2:<br/>IAP + Access]
+    W3D12 --> W3D3[W3 Day3:<br/>E2E テスト]
+    W3D3 --> W3D4[W3 Day4:<br/>Deploy]
+    W3D4 --> W3D5[W3 Day5:<br/>App Store]
 ```
 
-- M0 → M1: 認証基盤が必要
-- M0 → M2: 認証 + DB 基盤が必要
-- M1 → M2: AI Service 基盤が必要（Scanner が AI Service を使用）
-- M2 → M3: コンテンツ機能が揃った後に Community と課金を統合
-- M3 → M4: 全機能が揃った後に統合テスト
+---
 
-### 推定期間
+## 変更履歴
 
-| マイルストーン | 推定期間 | 累計 |
-|--------------|---------|------|
-| M0 | 3-4 日 | 3-4 日 |
-| M1 | 4-5 日 | 7-9 日 |
-| M2 | 5-7 日 | 12-16 日 |
-| M3 | 4-5 日 | 16-21 日 |
-| M4 | 3-4 日 | 19-25 日 |
-
-> AI Agent (PM-Worker pipeline) 開発のため、人間開発より大幅に短縮。上記は保守的な見積もり。
+- 2026-02-16: 初版作成
+- 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）

@@ -123,7 +123,8 @@ Flutter → CF Workers (JWT検証+RateLimit) → App Service → PostgreSQL
 - **API Gateway**: `cd infra/api-gateway && wrangler deploy`
 - **DB Migration**: `cd infra/migrations && alembic upgrade head`
 - **LP**: `cd lp && npm run build` → Cloudflare Pages
-- **CI/CD**: GitHub main push → 自動デプロイ（Fly.io + Wrangler + Pages）
+- **Git ブランチ**: `master`（⚠️ `main` ではない）
+- **CI/CD**: GitHub master push → 自動デプロイ（Fly.io + Wrangler + Pages）
 
 ## 環境
 
