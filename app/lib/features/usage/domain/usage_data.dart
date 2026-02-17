@@ -18,12 +18,32 @@ class UsageData {
 
   bool get isUnlimited => chatLimit == null;
 
+  /// Parse from backend JSON (SSOT field names):
+  ///   queries_used_today, daily_limit, monthly_limit, tier
   factory UsageData.fromJson(Map<String, dynamic> json) {
+    final queriesUsed = json['queries_used_today'] as int? ?? 0;
+    final dailyLimit = json['daily_limit'] as int?;
+    final monthlyLimit = json['monthly_limit'] as int?;
+
+    // Use daily_limit if set, otherwise monthly_limit.
+    final effectiveLimit = dailyLimit ?? monthlyLimit;
+
+    // Compute remaining from limit − used.
+    final int? remaining;
+    if (effectiveLimit != null) {
+      remaining = (effectiveLimit - queriesUsed).clamp(0, effectiveLimit);
+    } else {
+      remaining = null; // unlimited
+    }
+
+    // Derive period: daily if daily_limit is set, else monthly.
+    final period = dailyLimit != null ? 'day' : 'month';
+
     return UsageData(
-      chatCount: json['chat_count'] as int? ?? 0,
-      chatLimit: json['chat_limit'] as int?,
-      chatRemaining: json['chat_remaining'] as int?,
-      period: json['period'] as String? ?? 'day',
+      chatCount: queriesUsed,
+      chatLimit: effectiveLimit,
+      chatRemaining: remaining,
+      period: period,
       tier: json['tier'] as String? ?? 'free',
     );
   }

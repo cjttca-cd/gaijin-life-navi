@@ -30,19 +30,23 @@ class ProfileUpdate(BaseModel):
     display_name: str | None = None
     preferred_language: str | None = None  # en, zh, ja, ko, vi, etc.
     nationality: str | None = None
-    visa_type: str | None = None  # stored in residence_status
+    residence_status: str | None = None
     arrival_date: str | None = None  # YYYY-MM-DD
 
 
 class ProfileOut(BaseModel):
-    """Profile data returned to the client."""
+    """Profile data returned to the client.
 
-    uid: str
+    Field names unified with /users/me (ProfileResponse) for consistency:
+      uid → id, visa_type → residence_status.
+    """
+
+    id: str
     display_name: str
     email: str
     preferred_language: str
     nationality: str | None
-    visa_type: str | None  # maps to residence_status
+    residence_status: str | None
     arrival_date: str | None
     subscription_tier: str
     onboarding_completed: bool
@@ -55,14 +59,18 @@ class ProfileOut(BaseModel):
 
 
 def _profile_to_out(profile: Profile) -> dict:
-    """Convert a Profile ORM instance to a response dict."""
+    """Convert a Profile ORM instance to a response dict.
+
+    Field names unified with /users/me (ProfileResponse):
+      uid → id, visa_type → residence_status.
+    """
     return {
-        "uid": profile.id,
+        "id": profile.id,
         "display_name": profile.display_name or "",
         "email": profile.email,
         "preferred_language": profile.preferred_language or "en",
         "nationality": profile.nationality,
-        "visa_type": profile.residence_status,
+        "residence_status": profile.residence_status,
         "arrival_date": profile.arrival_date.isoformat() if profile.arrival_date else None,
         "subscription_tier": profile.subscription_tier or "free",
         "onboarding_completed": profile.onboarding_completed,
@@ -124,8 +132,8 @@ async def update_profile(
         profile.preferred_language = body.preferred_language
     if body.nationality is not None:
         profile.nationality = body.nationality
-    if body.visa_type is not None:
-        profile.residence_status = body.visa_type
+    if body.residence_status is not None:
+        profile.residence_status = body.residence_status
     if body.arrival_date is not None:
         try:
             profile.arrival_date = date.fromisoformat(body.arrival_date)

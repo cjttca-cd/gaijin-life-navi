@@ -11,11 +11,19 @@ class SubscriptionRepository {
 
   final Dio _client;
 
-  /// GET /api/v1/subscription/plans — fetch available plans + charge packs.
+  /// GET /api/v1/subscriptions/plans — fetch available plans + charge packs.
   Future<PlansData> getPlans() async {
     final response = await _client.get<Map<String, dynamic>>(
-      '/subscription/plans',
+      '/subscriptions/plans',
     );
-    return PlansData.fromJson(response.data!['data'] as Map<String, dynamic>);
+    final data = response.data!['data'];
+
+    // Backend returns a flat list of plans (no charge_packs wrapper).
+    if (data is List) {
+      return PlansData.fromList(data);
+    }
+
+    // Fallback: if backend returns {"plans": [...], "charge_packs": [...]}.
+    return PlansData.fromJson(data as Map<String, dynamic>);
   }
 }

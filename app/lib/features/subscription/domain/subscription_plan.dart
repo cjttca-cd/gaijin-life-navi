@@ -1,4 +1,4 @@
-/// A subscription plan from GET /api/v1/subscription/plans.
+/// A subscription plan from GET /api/v1/subscriptions/plans.
 class SubscriptionPlan {
   const SubscriptionPlan({
     required this.id,
@@ -16,7 +16,9 @@ class SubscriptionPlan {
 
   /// null for free plan, "month" for paid.
   final String? interval;
-  final Map<String, dynamic> features;
+
+  /// Feature descriptions (backend returns a list of strings).
+  final List<String> features;
 
   bool get isFree => id == 'free';
 
@@ -27,7 +29,11 @@ class SubscriptionPlan {
       price: json['price'] as int? ?? 0,
       currency: json['currency'] as String? ?? 'JPY',
       interval: json['interval'] as String?,
-      features: json['features'] as Map<String, dynamic>? ?? {},
+      features:
+          (json['features'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          const [],
     );
   }
 }
@@ -60,6 +66,7 @@ class PlansData {
   final List<SubscriptionPlan> plans;
   final List<ChargePack> chargePacks;
 
+  /// Parse from a JSON map with "plans" and optional "charge_packs" keys.
   factory PlansData.fromJson(Map<String, dynamic> json) {
     return PlansData(
       plans:
@@ -72,6 +79,17 @@ class PlansData {
               ?.map((e) => ChargePack.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+    );
+  }
+
+  /// Create from a flat list of plans (backend returns data as List directly).
+  factory PlansData.fromList(List<dynamic> list) {
+    return PlansData(
+      plans:
+          list
+              .map((e) => SubscriptionPlan.fromJson(e as Map<String, dynamic>))
+              .toList(),
+      chargePacks: const [],
     );
   }
 }

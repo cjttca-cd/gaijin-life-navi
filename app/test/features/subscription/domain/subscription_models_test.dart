@@ -3,28 +3,26 @@ import 'package:gaijin_life_navi/features/subscription/domain/subscription_plan.
 
 void main() {
   group('SubscriptionPlan', () {
-    test('fromJson creates valid instance', () {
+    test('fromJson creates valid instance with List<String> features', () {
       final json = {
-        'id': 'standard',
-        'name': 'Standard',
-        'price': 720,
-        'currency': 'JPY',
+        'id': 'premium_monthly',
+        'name': 'Premium',
+        'price': 500,
+        'currency': 'jpy',
         'interval': 'month',
-        'features': {
-          'chat_limit': '300/month',
-          'tracker_limit': null,
-          'ads': false,
-        },
+        'features': ['Unlimited AI chat', '30 document scans/month', 'No ads'],
       };
 
       final plan = SubscriptionPlan.fromJson(json);
 
-      expect(plan.id, 'standard');
-      expect(plan.name, 'Standard');
-      expect(plan.price, 720);
-      expect(plan.currency, 'JPY');
+      expect(plan.id, 'premium_monthly');
+      expect(plan.name, 'Premium');
+      expect(plan.price, 500);
+      expect(plan.currency, 'jpy');
       expect(plan.interval, 'month');
-      expect(plan.features, isNotEmpty);
+      expect(plan.features, isA<List<String>>());
+      expect(plan.features.length, 3);
+      expect(plan.features.first, 'Unlimited AI chat');
       expect(plan.isFree, isFalse);
     });
 
@@ -35,7 +33,7 @@ void main() {
         'price': 0,
         'currency': 'JPY',
         'interval': null,
-        'features': {'chat_limit': '5/day', 'tracker_limit': 3, 'ads': true},
+        'features': ['5 AI chats/day', '3 tracker items'],
       };
 
       final plan = SubscriptionPlan.fromJson(json);
@@ -44,6 +42,7 @@ void main() {
       expect(plan.price, 0);
       expect(plan.interval, isNull);
       expect(plan.isFree, isTrue);
+      expect(plan.features, hasLength(2));
     });
 
     test('fromJson handles missing optional fields', () {
@@ -72,7 +71,7 @@ void main() {
   });
 
   group('PlansData', () {
-    test('fromJson creates valid instance', () {
+    test('fromJson creates valid instance with plans and charge_packs', () {
       final json = {
         'plans': [
           {
@@ -81,15 +80,15 @@ void main() {
             'price': 0,
             'currency': 'JPY',
             'interval': null,
-            'features': {'chat_limit': '5/day'},
+            'features': ['5 AI chats/day'],
           },
           {
-            'id': 'standard',
-            'name': 'Standard',
-            'price': 720,
-            'currency': 'JPY',
+            'id': 'premium_monthly',
+            'name': 'Premium',
+            'price': 500,
+            'currency': 'jpy',
             'interval': 'month',
-            'features': {'chat_limit': '300/month'},
+            'features': ['Unlimited AI chat', 'No ads'],
           },
         ],
         'charge_packs': [
@@ -113,6 +112,34 @@ void main() {
 
       expect(data.plans, isEmpty);
       expect(data.chargePacks, isEmpty);
+    });
+
+    test('fromList creates PlansData from flat list (backend format)', () {
+      final list = [
+        {
+          'id': 'premium_monthly',
+          'name': 'Premium',
+          'price': 500,
+          'currency': 'jpy',
+          'interval': 'month',
+          'features': ['Unlimited AI chat', 'No ads'],
+        },
+        {
+          'id': 'premium_plus_monthly',
+          'name': 'Premium+',
+          'price': 1500,
+          'currency': 'jpy',
+          'interval': 'month',
+          'features': ['Everything in Premium', 'Priority AI responses'],
+        },
+      ];
+
+      final data = PlansData.fromList(list);
+
+      expect(data.plans.length, 2);
+      expect(data.chargePacks, isEmpty);
+      expect(data.plans.first.id, 'premium_monthly');
+      expect(data.plans.last.features, contains('Priority AI responses'));
     });
   });
 }

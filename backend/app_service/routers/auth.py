@@ -23,6 +23,35 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
 
+@router.get(
+    "/me",
+    response_model=SuccessResponse,
+    responses={404: {"model": ErrorResponse}},
+)
+async def get_me(
+    current_user: FirebaseUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Return the authenticated user's profile (same as /users/me)."""
+    from schemas.users import ProfileResponse as PR
+
+    profile = await db.get(Profile, current_user.uid)
+    if profile is None or profile.deleted_at is not None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "error": {
+                    "code": "NOT_FOUND",
+                    "message": "Profile not found.",
+                    "details": {},
+                }
+            },
+        )
+    return SuccessResponse(
+        data=PR.model_validate(profile).model_dump()
+    ).model_dump()
+
+
 @router.post(
     "/register",
     response_model=SuccessResponse,
