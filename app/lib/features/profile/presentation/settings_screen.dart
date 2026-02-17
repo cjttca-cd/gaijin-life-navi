@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/config/app_config.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/locale_provider.dart';
+import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_spacing.dart';
 import 'providers/profile_providers.dart';
 
-/// Settings screen — language change, logout, account deletion.
-/// Route: /settings
+/// S15: Settings — per handoff-profile.md.
+///
+/// General (Language, Notifications), Account (Subscription, Log Out),
+/// Danger Zone (Delete Account), About (Version, Terms, Privacy, Contact).
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
@@ -19,93 +24,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _isDeleting = false;
-
-  Future<void> _changeLanguage(String langCode) async {
-    // Update locale immediately
-    ref.read(localeProvider.notifier).setLocale(langCode);
-
-    // Save to server
-    try {
-      final repo = ref.read(profileRepositoryProvider);
-      await repo.updateProfile({'preferred_language': langCode});
-      ref.invalidate(userProfileProvider);
-    } catch (_) {
-      // Language was already changed locally; server save is best-effort
-    }
-  }
-
-  Future<void> _logout() async {
-    final confirmed = await _showConfirmDialog(
-      title: AppLocalizations.of(context).settingsLogoutConfirmTitle,
-      message: AppLocalizations.of(context).settingsLogoutConfirmMessage,
-    );
-    if (confirmed != true) return;
-
-    await ref.read(firebaseAuthProvider).signOut();
-    if (mounted) context.go('/login');
-  }
-
-  Future<void> _deleteAccount() async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await _showConfirmDialog(
-      title: l10n.settingsDeleteConfirmTitle,
-      message: l10n.settingsDeleteConfirmMessage,
-      isDestructive: true,
-    );
-    if (confirmed != true) return;
-
-    setState(() => _isDeleting = true);
-
-    try {
-      final repo = ref.read(profileRepositoryProvider);
-      await repo.deleteAccount();
-      await ref.read(firebaseAuthProvider).signOut();
-      if (mounted) context.go('/login');
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.settingsDeleteError)));
-      }
-    } finally {
-      if (mounted) setState(() => _isDeleting = false);
-    }
-  }
-
-  Future<bool?> _showConfirmDialog({
-    required String title,
-    required String message,
-    bool isDestructive = false,
-  }) {
-    return showDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: Text(AppLocalizations.of(context).settingsCancel),
-              ),
-              TextButton(
-                style:
-                    isDestructive
-                        ? TextButton.styleFrom(
-                          foregroundColor: Theme.of(ctx).colorScheme.error,
-                        )
-                        : null,
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: Text(
-                  isDestructive
-                      ? AppLocalizations.of(context).settingsDelete
-                      : AppLocalizations.of(context).settingsConfirm,
-                ),
-              ),
-            ],
-          ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,82 +36,417 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: ListView(
         children: [
-          // Language section
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // ── GENERAL ──
+          _SectionHeader(title: l10n.settingsSectionGeneral),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
-              l10n.settingsLanguageSection,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: theme.colorScheme.primary,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.language,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsLanguage,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _languageLabel(currentLang),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.spaceXs),
+                        Icon(
+                          Icons.chevron_right,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    onTap: () => _showLanguageSheet(context, currentLang),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: theme.colorScheme.outlineVariant,
+                    indent: 56,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.notifications_outlined,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsNotifications,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.navComingSoonSnackbar)),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ),
-          ...AppConfig.supportedLanguages.map((lang) {
-            final isSelected = lang == currentLang;
-            return ListTile(
-              leading: const Icon(Icons.language),
-              title: Text(_languageLabel(lang)),
-              trailing:
-                  isSelected
-                      ? Icon(Icons.check, color: theme.colorScheme.primary)
-                      : null,
-              selected: isSelected,
-              onTap: () => _changeLanguage(lang),
-            );
-          }),
-          const Divider(),
 
-          // Account section
+          const SizedBox(height: AppSpacing.space2xl),
+
+          // ── ACCOUNT ──
+          _SectionHeader(title: l10n.settingsSectionAccount),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
-              l10n.settingsAccountSection,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: theme.colorScheme.primary,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Text('⭐', style: TextStyle(fontSize: 20)),
+                    title: Text(
+                      l10n.settingsSubscription,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Free',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.spaceXs),
+                        Icon(
+                          Icons.chevron_right,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    onTap: () => context.push(AppRoutes.subscription),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: theme.colorScheme.outlineVariant,
+                    indent: 56,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.logout,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsLogout,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
+                    ),
+                    onTap: _logout,
+                  ),
+                ],
               ),
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: Text(l10n.settingsLogout),
-            onTap: _logout,
-          ),
-          ListTile(
-            leading: Icon(Icons.delete_forever, color: theme.colorScheme.error),
-            title: Text(
-              l10n.settingsDeleteAccount,
-              style: TextStyle(color: theme.colorScheme.error),
-            ),
-            subtitle: Text(l10n.settingsDeleteAccountSubtitle),
-            enabled: !_isDeleting,
-            onTap: _deleteAccount,
-          ),
-          if (_isDeleting)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
-            ),
 
-          const Divider(),
+          const SizedBox(height: AppSpacing.space2xl),
 
-          // About section
+          // ── DANGER ZONE ──
+          _SectionHeader(title: l10n.settingsSectionDanger),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
-              l10n.settingsAboutSection,
-              style: theme.textTheme.titleSmall?.copyWith(
-                color: theme.colorScheme.primary,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Card(
+              child: ListTile(
+                leading: Icon(
+                  Icons.delete_outline,
+                  color: theme.colorScheme.error,
+                ),
+                title: Text(
+                  l10n.settingsDeleteAccount,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
+                ),
+                enabled: !_isDeleting,
+                onTap: _deleteAccount,
               ),
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: Text(l10n.settingsVersion),
-            subtitle: const Text('0.1.0'),
+
+          const SizedBox(height: AppSpacing.space2xl),
+
+          // ── ABOUT ──
+          _SectionHeader(title: l10n.settingsSectionAbout),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.info_outline,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsVersion,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Text(
+                      '1.0.0',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: theme.colorScheme.outlineVariant,
+                    indent: 56,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.description_outlined,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsTerms,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    onTap: () => _openUrl('https://gaijinlifenavi.com/terms'),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: theme.colorScheme.outlineVariant,
+                    indent: 56,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.lock_outline,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsPrivacy,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    onTap: () => _openUrl('https://gaijinlifenavi.com/privacy'),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: theme.colorScheme.outlineVariant,
+                    indent: 56,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.email_outlined,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsContact,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    onTap: () => _openUrl('mailto:support@gaijinlifenavi.com'),
+                  ),
+                ],
+              ),
+            ),
           ),
+
+          const SizedBox(height: AppSpacing.space2xl),
+
+          // Footer
+          Center(
+            child: Text(
+              l10n.settingsFooter,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.space3xl),
         ],
       ),
     );
+  }
+
+  void _showLanguageSheet(BuildContext context, String currentLang) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    showModalBottomSheet(
+      context: context,
+      builder:
+          (ctx) => SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Drag handle
+                Container(
+                  width: 32,
+                  height: 4,
+                  margin: const EdgeInsets.only(top: AppSpacing.spaceSm),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.outline,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                  child: Text(
+                    l10n.settingsLanguageTitle,
+                    style: theme.textTheme.headlineMedium,
+                  ),
+                ),
+                ...AppConfig.supportedLanguages.map((lang) {
+                  return ListTile(
+                    title: Text(_languageLabel(lang)),
+                    trailing:
+                        lang == currentLang
+                            ? Icon(
+                              Icons.check,
+                              color: theme.colorScheme.primary,
+                            )
+                            : null,
+                    onTap: () {
+                      _changeLanguage(lang);
+                      Navigator.pop(ctx);
+                    },
+                  );
+                }),
+                const SizedBox(height: AppSpacing.spaceLg),
+              ],
+            ),
+          ),
+    );
+  }
+
+  Future<void> _changeLanguage(String langCode) async {
+    ref.read(localeProvider.notifier).setLocale(langCode);
+    try {
+      final repo = ref.read(profileRepositoryProvider);
+      await repo.updateProfile({'preferred_language': langCode});
+      ref.invalidate(userProfileProvider);
+    } catch (_) {
+      // Language changed locally; server save is best-effort
+    }
+  }
+
+  Future<void> _logout() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            title: Text(l10n.settingsLogoutTitle),
+            content: Text(l10n.settingsLogoutMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(l10n.settingsLogoutCancel),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(ctx).colorScheme.error,
+                ),
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(l10n.settingsLogoutConfirm),
+              ),
+            ],
+          ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await ref.read(firebaseAuthProvider).signOut();
+      if (mounted) context.go(AppRoutes.login);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.settingsErrorLogout)));
+      }
+    }
+  }
+
+  Future<void> _deleteAccount() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            title: Text(l10n.settingsDeleteTitle),
+            content: Text(l10n.settingsDeleteMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(l10n.settingsDeleteCancel),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(ctx).colorScheme.error,
+                  foregroundColor: Theme.of(ctx).colorScheme.onError,
+                ),
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(l10n.settingsDeleteConfirmAction),
+              ),
+            ],
+          ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() => _isDeleting = true);
+    try {
+      final repo = ref.read(profileRepositoryProvider);
+      await repo.deleteAccount();
+      await ref.read(firebaseAuthProvider).signOut();
+      if (mounted) context.go(AppRoutes.language);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.settingsErrorDelete)));
+      }
+    } finally {
+      if (mounted) setState(() => _isDeleting = false);
+    }
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 
   String _languageLabel(String code) {
@@ -211,5 +464,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       default:
         return code;
     }
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenPadding,
+        0,
+        AppSpacing.screenPadding,
+        AppSpacing.spaceSm,
+      ),
+      child: Text(
+        title.toUpperCase(),
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      ),
+    );
   }
 }

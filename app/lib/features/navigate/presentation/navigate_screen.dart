@@ -1,143 +1,299 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/domain_colors.dart';
+import '../domain/navigator_domain.dart';
+import 'providers/navigator_providers.dart';
 
-/// Navigate hub screen — entry points to Banking, Visa, Scanner, Medical.
-class NavigateScreen extends StatelessWidget {
+/// S09: Navigator Top — Domain Grid.
+///
+/// Displays 2-column grid of navigator domains.
+/// Active domains navigate to Guide List (S10).
+/// Coming Soon domains show a snackbar.
+class NavigateScreen extends ConsumerWidget {
   const NavigateScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final domainsAsync = ref.watch(navigatorDomainsProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.navTitle)),
+      body: domainsAsync.when(
+        loading: () => _buildSkeleton(context),
+        error: (error, _) => _buildError(context, ref),
+        data: (domains) => _buildGrid(context, domains),
+      ),
+    );
+  }
+
+  Widget _buildGrid(BuildContext context, List<NavigatorDomain> domains) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
-    final items = [
-      _NavigateItem(
-        icon: Icons.account_balance,
-        title: l10n.navigateBanking,
-        subtitle: l10n.navigateBankingDesc,
-        route: AppRoutes.banking,
-        color: theme.colorScheme.primary,
-      ),
-      _NavigateItem(
-        icon: Icons.assignment,
-        title: l10n.navigateVisa,
-        subtitle: l10n.navigateVisaDesc,
-        route: AppRoutes.visa,
-        color: theme.colorScheme.secondary,
-      ),
-      _NavigateItem(
-        icon: Icons.document_scanner,
-        title: l10n.navigateScanner,
-        subtitle: l10n.navigateScannerDesc,
-        route: AppRoutes.scanner,
-        color: theme.colorScheme.tertiary,
-      ),
-      _NavigateItem(
-        icon: Icons.medical_services,
-        title: l10n.navigateMedical,
-        subtitle: l10n.navigateMedicalDesc,
-        route: AppRoutes.medical,
-        color: theme.colorScheme.error,
-      ),
-      _NavigateItem(
-        icon: Icons.forum,
-        title: l10n.navigateCommunity,
-        subtitle: l10n.navigateCommunityDesc,
-        route: AppRoutes.community,
-        color: theme.colorScheme.inversePrimary,
-      ),
-    ];
+    // Separate active and coming_soon domains
+    final activeDomains = domains.where((d) => d.isActive).toList();
+    final comingSoonDomains = domains.where((d) => d.isComingSoon).toList();
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.tabGuide)),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.95,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenPadding,
+        vertical: AppSpacing.spaceLg,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Subtitle
+          Text(
+            l10n.navSubtitle,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            final item = items[index];
-            return _NavigateCard(item: item);
-          },
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Active domains grid
+          _DomainGrid(domains: activeDomains, isComingSoon: false),
+
+          if (comingSoonDomains.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.space2xl),
+            // Coming Soon domains grid
+            _DomainGrid(domains: comingSoonDomains, isComingSoon: true),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSkeleton(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.screenPadding),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: AppSpacing.spaceMd,
+          mainAxisSpacing: AppSpacing.spaceMd,
+          childAspectRatio: 0.95,
         ),
+        itemCount: 4,
+        itemBuilder:
+            (context, index) => Card(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.spaceMd),
+                    Container(
+                      width: 80,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.spaceXs),
+                    Container(
+                      width: 50,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+      ),
+    );
+  }
+
+  Widget _buildError(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 48,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(height: AppSpacing.spaceLg),
+          Text(
+            l10n.navErrorLoad,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.spaceSm),
+          TextButton(
+            onPressed: () => ref.invalidate(navigatorDomainsProvider),
+            child: Text(l10n.navErrorRetry),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _NavigateItem {
-  const _NavigateItem({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.route,
-    required this.color,
-  });
+/// 2-column grid of domain cards.
+class _DomainGrid extends StatelessWidget {
+  const _DomainGrid({required this.domains, required this.isComingSoon});
 
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String route;
-  final Color color;
-}
-
-class _NavigateCard extends StatelessWidget {
-  const _NavigateCard({required this.item});
-
-  final _NavigateItem item;
+  final List<NavigatorDomain> domains;
+  final bool isComingSoon;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: AppSpacing.spaceMd,
+        mainAxisSpacing: AppSpacing.spaceMd,
+        childAspectRatio: 0.95,
+      ),
+      itemCount: domains.length,
+      itemBuilder:
+          (context, index) =>
+              _DomainCard(domain: domains[index], isComingSoon: isComingSoon),
+    );
+  }
+}
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
+/// Single domain card in the navigator grid.
+class _DomainCard extends StatelessWidget {
+  const _DomainCard({required this.domain, required this.isComingSoon});
+
+  final NavigatorDomain domain;
+  final bool isComingSoon;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final colors = DomainColors.forDomain(domain.id);
+    final icon = DomainColors.iconForDomain(domain.id);
+    final domainLabel = _getDomainLabel(domain.id, l10n);
+
+    Widget card = Card(
       child: InkWell(
-        onTap: () => context.push(item.route),
+        borderRadius: BorderRadius.circular(12),
+        onTap:
+            isComingSoon
+                ? () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.navComingSoonSnackbar)),
+                  );
+                }
+                : () {
+                  context.push('${AppRoutes.navigate}/${domain.id}');
+                },
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.spaceLg),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Icon container
               Container(
-                width: 56,
-                height: 56,
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
-                  color: item.color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(16),
+                  color: colors.container,
+                  shape: BoxShape.circle,
                 ),
-                child: Icon(item.icon, size: 32, color: item.color),
+                child: Icon(icon, size: 28, color: colors.icon),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.spaceMd),
+
+              // Domain name
               Text(
-                item.title,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                item.subtitle,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+                domainLabel,
+                style: theme.textTheme.titleMedium,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: AppSpacing.spaceXs),
+
+              // Guide count or Coming Soon badge
+              if (isComingSoon)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.spaceSm,
+                    vertical: AppSpacing.space2xs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    l10n.navComingSoon,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                )
+              else
+                Text(
+                  domain.guideCount == 1
+                      ? l10n.navGuideCountOne
+                      : l10n.navGuideCount(domain.guideCount),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
             ],
           ),
         ),
       ),
     );
+
+    if (isComingSoon) {
+      card = Opacity(opacity: 0.5, child: card);
+    }
+
+    return card;
+  }
+
+  String _getDomainLabel(String domainId, AppLocalizations l10n) {
+    switch (domainId) {
+      case 'banking':
+        return l10n.domainBanking;
+      case 'visa':
+        return l10n.domainVisa;
+      case 'medical':
+        return l10n.domainMedical;
+      case 'concierge':
+        return l10n.domainConcierge;
+      case 'housing':
+        return l10n.domainHousing;
+      case 'employment':
+        return l10n.domainEmployment;
+      case 'education':
+        return l10n.domainEducation;
+      case 'legal':
+        return l10n.domainLegal;
+      default:
+        return domainId;
+    }
   }
 }

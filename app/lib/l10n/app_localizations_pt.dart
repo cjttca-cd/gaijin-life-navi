@@ -1115,4 +1115,487 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get settingsConfirm => 'Confirmar';
+
+  @override
+  String get navTitle => 'Guia';
+
+  @override
+  String get navSubtitle =>
+      'Explore tópicos para ajudar você a viver no Japão.';
+
+  @override
+  String navGuideCount(int count) {
+    return '$count guias';
+  }
+
+  @override
+  String get navGuideCountOne => '1 guia';
+
+  @override
+  String get navComingSoon => 'Em breve';
+
+  @override
+  String get navComingSoonSnackbar => 'Em breve! Estamos trabalhando nisso.';
+
+  @override
+  String get navErrorLoad => 'Não foi possível carregar os guias.';
+
+  @override
+  String get navErrorRetry => 'Toque para tentar novamente';
+
+  @override
+  String get domainBanking => 'Banco e Finanças';
+
+  @override
+  String get domainVisa => 'Visto e Imigração';
+
+  @override
+  String get domainMedical => 'Saúde e Medicina';
+
+  @override
+  String get domainConcierge => 'Vida e Geral';
+
+  @override
+  String get domainHousing => 'Moradia e Utilidades';
+
+  @override
+  String get domainEmployment => 'Emprego e Impostos';
+
+  @override
+  String get domainEducation => 'Educação e Cuidado Infantil';
+
+  @override
+  String get domainLegal => 'Jurídico e Seguros';
+
+  @override
+  String get guideSearchPlaceholder => 'Buscar guias...';
+
+  @override
+  String get guideComingSoonTitle => 'Em breve';
+
+  @override
+  String guideComingSoonSubtitle(String domain) {
+    return 'Estamos trabalhando nos guias de $domain. Volte em breve!';
+  }
+
+  @override
+  String guideComingSoonAskAi(String domain) {
+    return 'Pergunte à IA sobre $domain';
+  }
+
+  @override
+  String guideSearchEmpty(String query) {
+    return 'Nenhum guia encontrado para \"$query\".';
+  }
+
+  @override
+  String get guideSearchTry => 'Tente um termo de busca diferente.';
+
+  @override
+  String get guideErrorLoad =>
+      'Não foi possível carregar os guias desta categoria.';
+
+  @override
+  String get guideAskAi => 'Perguntar à IA sobre este tópico';
+
+  @override
+  String get guideDisclaimer =>
+      'Esta é uma informação geral e não constitui aconselhamento jurídico. Verifique com as autoridades competentes.';
+
+  @override
+  String get guideShare => 'Compartilhar';
+
+  @override
+  String get guideErrorNotFound => 'Este guia não está mais disponível.';
+
+  @override
+  String get guideErrorLoadDetail =>
+      'Não foi possível carregar este guia. Tente novamente.';
+
+  @override
+  String get guideErrorRetryBack => 'Voltar';
+
+  @override
+  String get emergencyTitle => 'Emergência';
+
+  @override
+  String get emergencyWarning =>
+      'Se você está em perigo imediato, ligue 110 (Polícia) ou 119 (Bombeiros/Ambulância) imediatamente.';
+
+  @override
+  String get emergencySectionContacts => 'Contatos de emergência';
+
+  @override
+  String get emergencySectionAmbulance => 'Como chamar uma ambulância';
+
+  @override
+  String get emergencySectionMoreHelp => 'Precisa de mais ajuda?';
+
+  @override
+  String get emergencyPoliceName => 'Polícia';
+
+  @override
+  String get emergencyPoliceNumber => '110';
+
+  @override
+  String get emergencyFireName => 'Bombeiros / Ambulância';
+
+  @override
+  String get emergencyFireNumber => '119';
+
+  @override
+  String get emergencyMedicalName => 'Consulta médica';
+
+  @override
+  String get emergencyMedicalNumber => '#7119';
+
+  @override
+  String get emergencyMedicalNote => 'Aconselhamento médico não emergencial';
+
+  @override
+  String get emergencyTellName => 'TELL Japan (Saúde Mental)';
+
+  @override
+  String get emergencyTellNumber => '03-5774-0992';
+
+  @override
+  String get emergencyTellNote => 'Aconselhamento em inglês';
+
+  @override
+  String get emergencyHelplineName => 'Japan Helpline';
+
+  @override
+  String get emergencyHelplineNumber => '0570-064-211';
+
+  @override
+  String get emergencyHelplineNote => '24 horas, multilíngue';
+
+  @override
+  String get emergencyStep1 => 'Ligue 119';
+
+  @override
+  String get emergencyStep2 =>
+      'Diga \"Kyuukyuu desu\" (救急です — É uma emergência)';
+
+  @override
+  String get emergencyStep3 =>
+      'Explique sua localização (endereço, pontos de referência)';
+
+  @override
+  String get emergencyStep4 =>
+      'Descreva a situação (o que aconteceu, sintomas)';
+
+  @override
+  String get emergencyStep5 => 'Espere a ambulância na entrada do seu prédio';
+
+  @override
+  String get emergencyPhraseEmergencyHelp => 'É uma emergência';
+
+  @override
+  String get emergencyPhraseHelpHelp => 'Por favor, ajude';
+
+  @override
+  String get emergencyPhraseAmbulanceHelp => 'Por favor, envie uma ambulância';
+
+  @override
+  String get emergencyPhraseAddressHelp => 'O endereço é ○○';
+
+  @override
+  String get emergencyAskAi => 'Falar com IA sobre situações de emergência';
+
+  @override
+  String get emergencyDisclaimer =>
+      'Este guia fornece informações gerais de saúde e não substitui orientação médica profissional. Em caso de emergência, ligue 119 imediatamente.';
+
+  @override
+  String get emergencyCallButton => 'Ligar';
+
+  @override
+  String get emergencyOffline =>
+      'Não foi possível carregar informações adicionais. Ligue 110 ou 119 se precisar de ajuda.';
+
+  @override
+  String get subTitle => 'Assinatura';
+
+  @override
+  String get subSectionCurrent => 'Plano atual';
+
+  @override
+  String get subSectionChoose => 'Escolha um plano';
+
+  @override
+  String get subSectionCharge => 'Precisa de mais chats?';
+
+  @override
+  String get subSectionFaq => 'Perguntas frequentes';
+
+  @override
+  String get subCurrentFree => 'Plano grátis';
+
+  @override
+  String get subCurrentStandard => 'Plano padrão';
+
+  @override
+  String get subCurrentPremium => 'Plano premium';
+
+  @override
+  String get subUpgradeNow => 'Upgrade agora';
+
+  @override
+  String get subPlanFree => 'Grátis';
+
+  @override
+  String get subPlanStandard => 'Padrão';
+
+  @override
+  String get subPlanPremium => 'Premium';
+
+  @override
+  String get subPriceFree => '¥0';
+
+  @override
+  String get subPriceStandard => '¥720';
+
+  @override
+  String get subPricePremium => '¥1,360';
+
+  @override
+  String get subPriceInterval => '/mês';
+
+  @override
+  String get subRecommended => 'RECOMENDADO';
+
+  @override
+  String get subFeatureChatFree => '5 chats por dia';
+
+  @override
+  String get subFeatureChatStandard => '300 chats por mês';
+
+  @override
+  String get subFeatureChatPremium => 'Chats ilimitados';
+
+  @override
+  String get subFeatureTrackerFree => 'Até 3 itens no rastreador';
+
+  @override
+  String get subFeatureTrackerPaid => 'Itens ilimitados no rastreador';
+
+  @override
+  String get subFeatureAdsYes => 'Contém anúncios';
+
+  @override
+  String get subFeatureAdsNo => 'Sem anúncios';
+
+  @override
+  String get subFeatureImageNo => 'Análise de imagem (em breve)';
+
+  @override
+  String get subFeatureImageYes => 'Análise de imagem (em breve)';
+
+  @override
+  String get subButtonCurrent => 'Plano atual';
+
+  @override
+  String subButtonChoose(String plan) {
+    return 'Escolher $plan';
+  }
+
+  @override
+  String get subCharge100 => 'Pacote 100 chats';
+
+  @override
+  String get subCharge50 => 'Pacote 50 chats';
+
+  @override
+  String get subCharge100Price => '¥360 (¥3.6/chat)';
+
+  @override
+  String get subCharge50Price => '¥180 (¥3.6/chat)';
+
+  @override
+  String get subChargeDescription =>
+      'Chats extras que nunca expiram. Usados após o limite do plano.';
+
+  @override
+  String get subFaqBillingQ => 'Como funciona a cobrança?';
+
+  @override
+  String get subFaqBillingA =>
+      'As assinaturas são cobradas mensalmente pela App Store ou Google Play. Você pode gerenciar nas configurações do dispositivo.';
+
+  @override
+  String get subFaqCancelQ => 'Posso cancelar a qualquer momento?';
+
+  @override
+  String get subFaqCancelA =>
+      'Sim! Você pode cancelar a qualquer momento. Seu plano permanece ativo até o final do período.';
+
+  @override
+  String get subFaqDowngradeQ => 'O que acontece quando eu rebaixo?';
+
+  @override
+  String get subFaqDowngradeA =>
+      'Ao rebaixar, você mantém os benefícios do plano atual até o final do período. Depois, muda para o novo nível.';
+
+  @override
+  String get subFooter => 'Assinatura gerenciada pela App Store / Google Play';
+
+  @override
+  String subPurchaseSuccess(String plan) {
+    return 'Bem-vindo ao $plan! Seu upgrade está ativo.';
+  }
+
+  @override
+  String get subPurchaseError =>
+      'Não foi possível concluir a compra. Tente novamente.';
+
+  @override
+  String get subErrorLoad => 'Não foi possível carregar os planos.';
+
+  @override
+  String get subErrorRetry => 'Toque para tentar novamente';
+
+  @override
+  String get profileSectionInfo => 'Suas informações';
+
+  @override
+  String get profileSectionStats => 'Estatísticas de uso';
+
+  @override
+  String get profileChatsToday => 'Chats hoje';
+
+  @override
+  String get profileMemberSince => 'Membro desde';
+
+  @override
+  String get profileManageSubscription => 'Gerenciar assinatura';
+
+  @override
+  String get profileNotSet => 'Não definido';
+
+  @override
+  String get editTitle => 'Editar perfil';
+
+  @override
+  String get editSave => 'Salvar';
+
+  @override
+  String get editNameLabel => 'Nome de exibição';
+
+  @override
+  String get editNameHint => 'Digite seu nome';
+
+  @override
+  String get editNationalityLabel => 'Nacionalidade';
+
+  @override
+  String get editNationalityHint => 'Selecione sua nacionalidade';
+
+  @override
+  String get editStatusLabel => 'Status de residência';
+
+  @override
+  String get editStatusHint => 'Selecione seu status';
+
+  @override
+  String get editRegionLabel => 'Região';
+
+  @override
+  String get editRegionHint => 'Selecione sua região';
+
+  @override
+  String get editLanguageLabel => 'Idioma preferido';
+
+  @override
+  String get editChangePhoto => 'Alterar foto';
+
+  @override
+  String get editSuccess => 'Perfil atualizado com sucesso.';
+
+  @override
+  String get editError =>
+      'Não foi possível atualizar o perfil. Tente novamente.';
+
+  @override
+  String get editUnsavedTitle => 'Alterações não salvas';
+
+  @override
+  String get editUnsavedMessage => 'Você tem alterações não salvas. Descartar?';
+
+  @override
+  String get editUnsavedDiscard => 'Descartar';
+
+  @override
+  String get editUnsavedKeep => 'Continuar editando';
+
+  @override
+  String get settingsSectionGeneral => 'Geral';
+
+  @override
+  String get settingsSectionAccount => 'Conta';
+
+  @override
+  String get settingsSectionDanger => 'Zona de perigo';
+
+  @override
+  String get settingsSectionAbout => 'Sobre';
+
+  @override
+  String get settingsLanguage => 'Idioma';
+
+  @override
+  String get settingsNotifications => 'Notificações';
+
+  @override
+  String get settingsSubscription => 'Assinatura';
+
+  @override
+  String get settingsTerms => 'Termos de Serviço';
+
+  @override
+  String get settingsPrivacy => 'Política de Privacidade';
+
+  @override
+  String get settingsContact => 'Fale conosco';
+
+  @override
+  String get settingsFooter => 'Feito com ❤️ para todos que vivem no Japão';
+
+  @override
+  String get settingsLogoutTitle => 'Sair';
+
+  @override
+  String get settingsLogoutMessage => 'Tem certeza que deseja sair?';
+
+  @override
+  String get settingsLogoutConfirm => 'Sair';
+
+  @override
+  String get settingsLogoutCancel => 'Cancelar';
+
+  @override
+  String get settingsDeleteTitle => 'Excluir conta';
+
+  @override
+  String get settingsDeleteMessage =>
+      'Esta ação não pode ser desfeita. Todos os seus dados serão excluídos permanentemente. Tem certeza?';
+
+  @override
+  String get settingsDeleteConfirmAction => 'Excluir minha conta';
+
+  @override
+  String get settingsDeleteCancel => 'Cancelar';
+
+  @override
+  String get settingsDeleteSuccess => 'Sua conta foi excluída.';
+
+  @override
+  String get settingsLanguageTitle => 'Escolher idioma';
+
+  @override
+  String get settingsErrorLogout => 'Não foi possível sair. Tente novamente.';
+
+  @override
+  String get settingsErrorDelete =>
+      'Não foi possível excluir a conta. Tente novamente.';
 }

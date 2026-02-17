@@ -2173,6 +2173,912 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get settingsConfirm;
+
+  /// No description provided for @navTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Guide'**
+  String get navTitle;
+
+  /// No description provided for @navSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore topics to help you navigate life in Japan.'**
+  String get navSubtitle;
+
+  /// No description provided for @navGuideCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} guides'**
+  String navGuideCount(int count);
+
+  /// No description provided for @navGuideCountOne.
+  ///
+  /// In en, this message translates to:
+  /// **'1 guide'**
+  String get navGuideCountOne;
+
+  /// No description provided for @navComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get navComingSoon;
+
+  /// No description provided for @navComingSoonSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon! We\'re working on it.'**
+  String get navComingSoonSnackbar;
+
+  /// No description provided for @navErrorLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load guides.'**
+  String get navErrorLoad;
+
+  /// No description provided for @navErrorRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to retry'**
+  String get navErrorRetry;
+
+  /// No description provided for @domainBanking.
+  ///
+  /// In en, this message translates to:
+  /// **'Banking & Finance'**
+  String get domainBanking;
+
+  /// No description provided for @domainVisa.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa & Immigration'**
+  String get domainVisa;
+
+  /// No description provided for @domainMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical & Health'**
+  String get domainMedical;
+
+  /// No description provided for @domainConcierge.
+  ///
+  /// In en, this message translates to:
+  /// **'Life & General'**
+  String get domainConcierge;
+
+  /// No description provided for @domainHousing.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing & Utilities'**
+  String get domainHousing;
+
+  /// No description provided for @domainEmployment.
+  ///
+  /// In en, this message translates to:
+  /// **'Employment & Tax'**
+  String get domainEmployment;
+
+  /// No description provided for @domainEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education & Childcare'**
+  String get domainEducation;
+
+  /// No description provided for @domainLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal & Insurance'**
+  String get domainLegal;
+
+  /// No description provided for @guideSearchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search guides...'**
+  String get guideSearchPlaceholder;
+
+  /// No description provided for @guideComingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get guideComingSoonTitle;
+
+  /// No description provided for @guideComingSoonSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re working on {domain} guides. Check back soon!'**
+  String guideComingSoonSubtitle(String domain);
+
+  /// No description provided for @guideComingSoonAskAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI about {domain}'**
+  String guideComingSoonAskAi(String domain);
+
+  /// No description provided for @guideSearchEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No guides found for \"{query}\".'**
+  String guideSearchEmpty(String query);
+
+  /// No description provided for @guideSearchTry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different search term.'**
+  String get guideSearchTry;
+
+  /// No description provided for @guideErrorLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load guides for this category.'**
+  String get guideErrorLoad;
+
+  /// No description provided for @guideAskAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI about this topic'**
+  String get guideAskAi;
+
+  /// No description provided for @guideDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This is general information and does not constitute legal advice. Please verify with relevant authorities.'**
+  String get guideDisclaimer;
+
+  /// No description provided for @guideShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get guideShare;
+
+  /// No description provided for @guideErrorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This guide is no longer available.'**
+  String get guideErrorNotFound;
+
+  /// No description provided for @guideErrorLoadDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load this guide. Please try again.'**
+  String get guideErrorLoadDetail;
+
+  /// No description provided for @guideErrorRetryBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get guideErrorRetryBack;
+
+  /// No description provided for @emergencyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get emergencyTitle;
+
+  /// No description provided for @emergencyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'If you are in immediate danger, call 110 (Police) or 119 (Fire/Ambulance) immediately.'**
+  String get emergencyWarning;
+
+  /// No description provided for @emergencySectionContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Contacts'**
+  String get emergencySectionContacts;
+
+  /// No description provided for @emergencySectionAmbulance.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Call an Ambulance'**
+  String get emergencySectionAmbulance;
+
+  /// No description provided for @emergencySectionMoreHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Need more help?'**
+  String get emergencySectionMoreHelp;
+
+  /// No description provided for @emergencyPoliceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Police'**
+  String get emergencyPoliceName;
+
+  /// No description provided for @emergencyPoliceNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'110'**
+  String get emergencyPoliceNumber;
+
+  /// No description provided for @emergencyFireName.
+  ///
+  /// In en, this message translates to:
+  /// **'Fire / Ambulance'**
+  String get emergencyFireName;
+
+  /// No description provided for @emergencyFireNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'119'**
+  String get emergencyFireNumber;
+
+  /// No description provided for @emergencyMedicalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Consultation'**
+  String get emergencyMedicalName;
+
+  /// No description provided for @emergencyMedicalNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'#7119'**
+  String get emergencyMedicalNumber;
+
+  /// No description provided for @emergencyMedicalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-emergency medical advice'**
+  String get emergencyMedicalNote;
+
+  /// No description provided for @emergencyTellName.
+  ///
+  /// In en, this message translates to:
+  /// **'TELL Japan (Mental Health)'**
+  String get emergencyTellName;
+
+  /// No description provided for @emergencyTellNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'03-5774-0992'**
+  String get emergencyTellNumber;
+
+  /// No description provided for @emergencyTellNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Counseling in English'**
+  String get emergencyTellNote;
+
+  /// No description provided for @emergencyHelplineName.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan Helpline'**
+  String get emergencyHelplineName;
+
+  /// No description provided for @emergencyHelplineNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'0570-064-211'**
+  String get emergencyHelplineNumber;
+
+  /// No description provided for @emergencyHelplineNote.
+  ///
+  /// In en, this message translates to:
+  /// **'24 hours, multilingual'**
+  String get emergencyHelplineNote;
+
+  /// No description provided for @emergencyStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Call 119'**
+  String get emergencyStep1;
+
+  /// No description provided for @emergencyStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Say \"Kyuukyuu desu\" (救急です — It\'s an emergency)'**
+  String get emergencyStep2;
+
+  /// No description provided for @emergencyStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain your location (address, nearby landmarks)'**
+  String get emergencyStep3;
+
+  /// No description provided for @emergencyStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the situation (what happened, symptoms)'**
+  String get emergencyStep4;
+
+  /// No description provided for @emergencyStep5.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for the ambulance at the entrance of your building'**
+  String get emergencyStep5;
+
+  /// No description provided for @emergencyPhraseEmergencyHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s an emergency'**
+  String get emergencyPhraseEmergencyHelp;
+
+  /// No description provided for @emergencyPhraseHelpHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please help'**
+  String get emergencyPhraseHelpHelp;
+
+  /// No description provided for @emergencyPhraseAmbulanceHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Please send an ambulance'**
+  String get emergencyPhraseAmbulanceHelp;
+
+  /// No description provided for @emergencyPhraseAddressHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The address is ○○'**
+  String get emergencyPhraseAddressHelp;
+
+  /// No description provided for @emergencyAskAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with AI about emergency situations'**
+  String get emergencyAskAi;
+
+  /// No description provided for @emergencyDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This guide provides general health information and is not a substitute for professional medical advice. In an emergency, call 119 immediately.'**
+  String get emergencyDisclaimer;
+
+  /// No description provided for @emergencyCallButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get emergencyCallButton;
+
+  /// No description provided for @emergencyOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load additional information. Call 110 or 119 if you need help.'**
+  String get emergencyOffline;
+
+  /// No description provided for @subTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get subTitle;
+
+  /// No description provided for @subSectionCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Plan'**
+  String get subSectionCurrent;
+
+  /// No description provided for @subSectionChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a Plan'**
+  String get subSectionChoose;
+
+  /// No description provided for @subSectionCharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Need More Chats?'**
+  String get subSectionCharge;
+
+  /// No description provided for @subSectionFaq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get subSectionFaq;
+
+  /// No description provided for @subCurrentFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Plan'**
+  String get subCurrentFree;
+
+  /// No description provided for @subCurrentStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard Plan'**
+  String get subCurrentStandard;
+
+  /// No description provided for @subCurrentPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium Plan'**
+  String get subCurrentPremium;
+
+  /// No description provided for @subUpgradeNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade Now'**
+  String get subUpgradeNow;
+
+  /// No description provided for @subPlanFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get subPlanFree;
+
+  /// No description provided for @subPlanStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get subPlanStandard;
+
+  /// No description provided for @subPlanPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get subPlanPremium;
+
+  /// No description provided for @subPriceFree.
+  ///
+  /// In en, this message translates to:
+  /// **'¥0'**
+  String get subPriceFree;
+
+  /// No description provided for @subPriceStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'¥720'**
+  String get subPriceStandard;
+
+  /// No description provided for @subPricePremium.
+  ///
+  /// In en, this message translates to:
+  /// **'¥1,360'**
+  String get subPricePremium;
+
+  /// No description provided for @subPriceInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'/month'**
+  String get subPriceInterval;
+
+  /// No description provided for @subRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'RECOMMENDED'**
+  String get subRecommended;
+
+  /// No description provided for @subFeatureChatFree.
+  ///
+  /// In en, this message translates to:
+  /// **'5 chats per day'**
+  String get subFeatureChatFree;
+
+  /// No description provided for @subFeatureChatStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'300 chats per month'**
+  String get subFeatureChatStandard;
+
+  /// No description provided for @subFeatureChatPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited chats'**
+  String get subFeatureChatPremium;
+
+  /// No description provided for @subFeatureTrackerFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 3 tracker items'**
+  String get subFeatureTrackerFree;
+
+  /// No description provided for @subFeatureTrackerPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited tracker items'**
+  String get subFeatureTrackerPaid;
+
+  /// No description provided for @subFeatureAdsYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Contains ads'**
+  String get subFeatureAdsYes;
+
+  /// No description provided for @subFeatureAdsNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No ads'**
+  String get subFeatureAdsNo;
+
+  /// No description provided for @subFeatureImageNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Image analysis (coming soon)'**
+  String get subFeatureImageNo;
+
+  /// No description provided for @subFeatureImageYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Image analysis (coming soon)'**
+  String get subFeatureImageYes;
+
+  /// No description provided for @subButtonCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Plan'**
+  String get subButtonCurrent;
+
+  /// No description provided for @subButtonChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose {plan}'**
+  String subButtonChoose(String plan);
+
+  /// No description provided for @subCharge100.
+  ///
+  /// In en, this message translates to:
+  /// **'100 Chats Pack'**
+  String get subCharge100;
+
+  /// No description provided for @subCharge50.
+  ///
+  /// In en, this message translates to:
+  /// **'50 Chats Pack'**
+  String get subCharge50;
+
+  /// No description provided for @subCharge100Price.
+  ///
+  /// In en, this message translates to:
+  /// **'¥360 (¥3.6/chat)'**
+  String get subCharge100Price;
+
+  /// No description provided for @subCharge50Price.
+  ///
+  /// In en, this message translates to:
+  /// **'¥180 (¥3.6/chat)'**
+  String get subCharge50Price;
+
+  /// No description provided for @subChargeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra chats that never expire. Used after your plan\'s limit.'**
+  String get subChargeDescription;
+
+  /// No description provided for @subFaqBillingQ.
+  ///
+  /// In en, this message translates to:
+  /// **'How does billing work?'**
+  String get subFaqBillingQ;
+
+  /// No description provided for @subFaqBillingA.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions are billed monthly through the App Store or Google Play. You can manage your subscription in your device settings.'**
+  String get subFaqBillingA;
+
+  /// No description provided for @subFaqCancelQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I cancel anytime?'**
+  String get subFaqCancelQ;
+
+  /// No description provided for @subFaqCancelA.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes! You can cancel anytime. Your plan will remain active until the end of the billing period.'**
+  String get subFaqCancelA;
+
+  /// No description provided for @subFaqDowngradeQ.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens when I downgrade?'**
+  String get subFaqDowngradeQ;
+
+  /// No description provided for @subFaqDowngradeA.
+  ///
+  /// In en, this message translates to:
+  /// **'When you downgrade, you\'ll keep your current plan benefits until the end of the billing period. Then your plan will switch to the new tier.'**
+  String get subFaqDowngradeA;
+
+  /// No description provided for @subFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription managed via App Store / Google Play'**
+  String get subFooter;
+
+  /// No description provided for @subPurchaseSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to {plan}! Your upgrade is now active.'**
+  String subPurchaseSuccess(String plan);
+
+  /// No description provided for @subPurchaseError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to complete purchase. Please try again.'**
+  String get subPurchaseError;
+
+  /// No description provided for @subErrorLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load subscription plans.'**
+  String get subErrorLoad;
+
+  /// No description provided for @subErrorRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to retry'**
+  String get subErrorRetry;
+
+  /// No description provided for @profileSectionInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Information'**
+  String get profileSectionInfo;
+
+  /// No description provided for @profileSectionStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Statistics'**
+  String get profileSectionStats;
+
+  /// No description provided for @profileChatsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats today'**
+  String get profileChatsToday;
+
+  /// No description provided for @profileMemberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Member since'**
+  String get profileMemberSince;
+
+  /// No description provided for @profileManageSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Subscription'**
+  String get profileManageSubscription;
+
+  /// No description provided for @profileNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get profileNotSet;
+
+  /// No description provided for @editTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editTitle;
+
+  /// No description provided for @editSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get editSave;
+
+  /// No description provided for @editNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Name'**
+  String get editNameLabel;
+
+  /// No description provided for @editNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name'**
+  String get editNameHint;
+
+  /// No description provided for @editNationalityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nationality'**
+  String get editNationalityLabel;
+
+  /// No description provided for @editNationalityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your nationality'**
+  String get editNationalityHint;
+
+  /// No description provided for @editStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Residence Status'**
+  String get editStatusLabel;
+
+  /// No description provided for @editStatusHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your status'**
+  String get editStatusHint;
+
+  /// No description provided for @editRegionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get editRegionLabel;
+
+  /// No description provided for @editRegionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your region'**
+  String get editRegionHint;
+
+  /// No description provided for @editLanguageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Language'**
+  String get editLanguageLabel;
+
+  /// No description provided for @editChangePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get editChangePhoto;
+
+  /// No description provided for @editSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully.'**
+  String get editSuccess;
+
+  /// No description provided for @editError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to update profile. Please try again.'**
+  String get editError;
+
+  /// No description provided for @editUnsavedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved changes'**
+  String get editUnsavedTitle;
+
+  /// No description provided for @editUnsavedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have unsaved changes. Discard them?'**
+  String get editUnsavedMessage;
+
+  /// No description provided for @editUnsavedDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get editUnsavedDiscard;
+
+  /// No description provided for @editUnsavedKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get editUnsavedKeep;
+
+  /// No description provided for @settingsSectionGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get settingsSectionGeneral;
+
+  /// No description provided for @settingsSectionAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsSectionAccount;
+
+  /// No description provided for @settingsSectionDanger.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger Zone'**
+  String get settingsSectionDanger;
+
+  /// No description provided for @settingsSectionAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsSectionAbout;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsNotifications;
+
+  /// No description provided for @settingsSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get settingsSubscription;
+
+  /// No description provided for @settingsTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get settingsTerms;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get settingsPrivacy;
+
+  /// No description provided for @settingsContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get settingsContact;
+
+  /// No description provided for @settingsFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Made with ❤️ for everyone navigating life in Japan'**
+  String get settingsFooter;
+
+  /// No description provided for @settingsLogoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get settingsLogoutTitle;
+
+  /// No description provided for @settingsLogoutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get settingsLogoutMessage;
+
+  /// No description provided for @settingsLogoutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get settingsLogoutConfirm;
+
+  /// No description provided for @settingsLogoutCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settingsLogoutCancel;
+
+  /// No description provided for @settingsDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get settingsDeleteTitle;
+
+  /// No description provided for @settingsDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. All your data will be permanently deleted. Are you sure?'**
+  String get settingsDeleteMessage;
+
+  /// No description provided for @settingsDeleteConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete My Account'**
+  String get settingsDeleteConfirmAction;
+
+  /// No description provided for @settingsDeleteCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settingsDeleteCancel;
+
+  /// No description provided for @settingsDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted.'**
+  String get settingsDeleteSuccess;
+
+  /// No description provided for @settingsLanguageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Language'**
+  String get settingsLanguageTitle;
+
+  /// No description provided for @settingsErrorLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to log out. Please try again.'**
+  String get settingsErrorLogout;
+
+  /// No description provided for @settingsErrorDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to delete account. Please try again.'**
+  String get settingsErrorDelete;
 }
 
 class _AppLocalizationsDelegate

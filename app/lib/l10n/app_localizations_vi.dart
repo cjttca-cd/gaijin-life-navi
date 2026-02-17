@@ -1100,4 +1100,486 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsConfirm => 'Xác nhận';
+
+  @override
+  String get navTitle => 'Hướng dẫn';
+
+  @override
+  String get navSubtitle => 'Khám phá các chủ đề giúp bạn sống tại Nhật Bản.';
+
+  @override
+  String navGuideCount(int count) {
+    return '$count hướng dẫn';
+  }
+
+  @override
+  String get navGuideCountOne => '1 hướng dẫn';
+
+  @override
+  String get navComingSoon => 'Sắp ra mắt';
+
+  @override
+  String get navComingSoonSnackbar => 'Sắp ra mắt! Chúng tôi đang thực hiện.';
+
+  @override
+  String get navErrorLoad => 'Không thể tải hướng dẫn.';
+
+  @override
+  String get navErrorRetry => 'Nhấn để thử lại';
+
+  @override
+  String get domainBanking => 'Ngân hàng & Tài chính';
+
+  @override
+  String get domainVisa => 'Visa & Nhập cư';
+
+  @override
+  String get domainMedical => 'Y tế & Sức khỏe';
+
+  @override
+  String get domainConcierge => 'Cuộc sống & Tổng hợp';
+
+  @override
+  String get domainHousing => 'Nhà ở & Tiện ích';
+
+  @override
+  String get domainEmployment => 'Việc làm & Thuế';
+
+  @override
+  String get domainEducation => 'Giáo dục & Chăm sóc trẻ';
+
+  @override
+  String get domainLegal => 'Pháp lý & Bảo hiểm';
+
+  @override
+  String get guideSearchPlaceholder => 'Tìm kiếm hướng dẫn...';
+
+  @override
+  String get guideComingSoonTitle => 'Sắp ra mắt';
+
+  @override
+  String guideComingSoonSubtitle(String domain) {
+    return 'Chúng tôi đang chuẩn bị hướng dẫn về $domain. Hãy quay lại sau!';
+  }
+
+  @override
+  String guideComingSoonAskAi(String domain) {
+    return 'Hỏi AI về $domain';
+  }
+
+  @override
+  String guideSearchEmpty(String query) {
+    return 'Không tìm thấy hướng dẫn cho \"$query\".';
+  }
+
+  @override
+  String get guideSearchTry => 'Thử từ khóa khác.';
+
+  @override
+  String get guideErrorLoad => 'Không thể tải hướng dẫn cho danh mục này.';
+
+  @override
+  String get guideAskAi => 'Hỏi AI về chủ đề này';
+
+  @override
+  String get guideDisclaimer =>
+      'Đây là thông tin chung và không phải tư vấn pháp lý. Vui lòng xác nhận với cơ quan liên quan.';
+
+  @override
+  String get guideShare => 'Chia sẻ';
+
+  @override
+  String get guideErrorNotFound => 'Hướng dẫn này không còn khả dụng.';
+
+  @override
+  String get guideErrorLoadDetail =>
+      'Không thể tải hướng dẫn này. Vui lòng thử lại.';
+
+  @override
+  String get guideErrorRetryBack => 'Quay lại';
+
+  @override
+  String get emergencyTitle => 'Khẩn cấp';
+
+  @override
+  String get emergencyWarning =>
+      'Nếu bạn đang gặp nguy hiểm, hãy gọi 110 (Cảnh sát) hoặc 119 (Cứu hỏa/Cứu thương) ngay lập tức.';
+
+  @override
+  String get emergencySectionContacts => 'Liên hệ khẩn cấp';
+
+  @override
+  String get emergencySectionAmbulance => 'Cách gọi xe cứu thương';
+
+  @override
+  String get emergencySectionMoreHelp => 'Cần thêm trợ giúp?';
+
+  @override
+  String get emergencyPoliceName => 'Cảnh sát';
+
+  @override
+  String get emergencyPoliceNumber => '110';
+
+  @override
+  String get emergencyFireName => 'Cứu hỏa / Cứu thương';
+
+  @override
+  String get emergencyFireNumber => '119';
+
+  @override
+  String get emergencyMedicalName => 'Tư vấn y tế';
+
+  @override
+  String get emergencyMedicalNumber => '#7119';
+
+  @override
+  String get emergencyMedicalNote => 'Tư vấn y tế không khẩn cấp';
+
+  @override
+  String get emergencyTellName => 'TELL Japan (Sức khỏe tâm thần)';
+
+  @override
+  String get emergencyTellNumber => '03-5774-0992';
+
+  @override
+  String get emergencyTellNote => 'Tư vấn bằng tiếng Anh';
+
+  @override
+  String get emergencyHelplineName => 'Japan Helpline';
+
+  @override
+  String get emergencyHelplineNumber => '0570-064-211';
+
+  @override
+  String get emergencyHelplineNote => '24 giờ, đa ngôn ngữ';
+
+  @override
+  String get emergencyStep1 => 'Gọi 119';
+
+  @override
+  String get emergencyStep2 =>
+      'Nói \"Kyuukyuu desu\" (救急です — Đây là trường hợp khẩn cấp)';
+
+  @override
+  String get emergencyStep3 =>
+      'Giải thích vị trí của bạn (địa chỉ, mốc gần đó)';
+
+  @override
+  String get emergencyStep4 =>
+      'Mô tả tình huống (chuyện gì xảy ra, triệu chứng)';
+
+  @override
+  String get emergencyStep5 => 'Đợi xe cứu thương ở lối vào tòa nhà';
+
+  @override
+  String get emergencyPhraseEmergencyHelp => 'Đây là trường hợp khẩn cấp';
+
+  @override
+  String get emergencyPhraseHelpHelp => 'Xin giúp đỡ';
+
+  @override
+  String get emergencyPhraseAmbulanceHelp => 'Xin gọi xe cứu thương';
+
+  @override
+  String get emergencyPhraseAddressHelp => 'Địa chỉ là ○○';
+
+  @override
+  String get emergencyAskAi => 'Chat với AI về tình huống khẩn cấp';
+
+  @override
+  String get emergencyDisclaimer =>
+      'Hướng dẫn này cung cấp thông tin sức khỏe chung, không thay thế tư vấn y tế chuyên nghiệp. Trong trường hợp khẩn cấp, hãy gọi 119 ngay.';
+
+  @override
+  String get emergencyCallButton => 'Gọi';
+
+  @override
+  String get emergencyOffline =>
+      'Không thể tải thêm thông tin. Gọi 110 hoặc 119 nếu bạn cần giúp đỡ.';
+
+  @override
+  String get subTitle => 'Gói đăng ký';
+
+  @override
+  String get subSectionCurrent => 'Gói hiện tại';
+
+  @override
+  String get subSectionChoose => 'Chọn gói';
+
+  @override
+  String get subSectionCharge => 'Cần thêm lượt chat?';
+
+  @override
+  String get subSectionFaq => 'Câu hỏi thường gặp';
+
+  @override
+  String get subCurrentFree => 'Gói miễn phí';
+
+  @override
+  String get subCurrentStandard => 'Gói tiêu chuẩn';
+
+  @override
+  String get subCurrentPremium => 'Gói cao cấp';
+
+  @override
+  String get subUpgradeNow => 'Nâng cấp ngay';
+
+  @override
+  String get subPlanFree => 'Miễn phí';
+
+  @override
+  String get subPlanStandard => 'Tiêu chuẩn';
+
+  @override
+  String get subPlanPremium => 'Cao cấp';
+
+  @override
+  String get subPriceFree => '¥0';
+
+  @override
+  String get subPriceStandard => '¥720';
+
+  @override
+  String get subPricePremium => '¥1,360';
+
+  @override
+  String get subPriceInterval => '/tháng';
+
+  @override
+  String get subRecommended => 'ĐỀ XUẤT';
+
+  @override
+  String get subFeatureChatFree => '5 lượt chat mỗi ngày';
+
+  @override
+  String get subFeatureChatStandard => '300 lượt chat mỗi tháng';
+
+  @override
+  String get subFeatureChatPremium => 'Chat không giới hạn';
+
+  @override
+  String get subFeatureTrackerFree => 'Tối đa 3 mục theo dõi';
+
+  @override
+  String get subFeatureTrackerPaid => 'Mục theo dõi không giới hạn';
+
+  @override
+  String get subFeatureAdsYes => 'Có quảng cáo';
+
+  @override
+  String get subFeatureAdsNo => 'Không quảng cáo';
+
+  @override
+  String get subFeatureImageNo => 'Phân tích ảnh (sắp có)';
+
+  @override
+  String get subFeatureImageYes => 'Phân tích ảnh (sắp có)';
+
+  @override
+  String get subButtonCurrent => 'Gói hiện tại';
+
+  @override
+  String subButtonChoose(String plan) {
+    return 'Chọn $plan';
+  }
+
+  @override
+  String get subCharge100 => 'Gói 100 lượt chat';
+
+  @override
+  String get subCharge50 => 'Gói 50 lượt chat';
+
+  @override
+  String get subCharge100Price => '¥360 (¥3.6/lượt)';
+
+  @override
+  String get subCharge50Price => '¥180 (¥3.6/lượt)';
+
+  @override
+  String get subChargeDescription =>
+      'Lượt chat thêm không hết hạn. Sử dụng sau khi hết hạn mức gói.';
+
+  @override
+  String get subFaqBillingQ => 'Thanh toán hoạt động thế nào?';
+
+  @override
+  String get subFaqBillingA =>
+      'Gói đăng ký được thanh toán hàng tháng qua App Store hoặc Google Play. Bạn có thể quản lý trong cài đặt thiết bị.';
+
+  @override
+  String get subFaqCancelQ => 'Tôi có thể hủy bất kỳ lúc nào?';
+
+  @override
+  String get subFaqCancelA =>
+      'Có! Bạn có thể hủy bất kỳ lúc nào. Gói sẽ hoạt động đến cuối kỳ thanh toán.';
+
+  @override
+  String get subFaqDowngradeQ => 'Điều gì xảy ra khi hạ gói?';
+
+  @override
+  String get subFaqDowngradeA =>
+      'Khi hạ gói, bạn vẫn giữ quyền lợi gói hiện tại đến cuối kỳ thanh toán, sau đó chuyển sang gói mới.';
+
+  @override
+  String get subFooter =>
+      'Gói đăng ký được quản lý qua App Store / Google Play';
+
+  @override
+  String subPurchaseSuccess(String plan) {
+    return 'Chào mừng đến $plan! Nâng cấp đã được kích hoạt.';
+  }
+
+  @override
+  String get subPurchaseError =>
+      'Không thể hoàn tất mua hàng. Vui lòng thử lại.';
+
+  @override
+  String get subErrorLoad => 'Không thể tải gói đăng ký.';
+
+  @override
+  String get subErrorRetry => 'Nhấn để thử lại';
+
+  @override
+  String get profileSectionInfo => 'Thông tin của bạn';
+
+  @override
+  String get profileSectionStats => 'Thống kê sử dụng';
+
+  @override
+  String get profileChatsToday => 'Chat hôm nay';
+
+  @override
+  String get profileMemberSince => 'Thành viên từ';
+
+  @override
+  String get profileManageSubscription => 'Quản lý gói đăng ký';
+
+  @override
+  String get profileNotSet => 'Chưa đặt';
+
+  @override
+  String get editTitle => 'Chỉnh sửa hồ sơ';
+
+  @override
+  String get editSave => 'Lưu';
+
+  @override
+  String get editNameLabel => 'Tên hiển thị';
+
+  @override
+  String get editNameHint => 'Nhập tên của bạn';
+
+  @override
+  String get editNationalityLabel => 'Quốc tịch';
+
+  @override
+  String get editNationalityHint => 'Chọn quốc tịch';
+
+  @override
+  String get editStatusLabel => 'Tình trạng cư trú';
+
+  @override
+  String get editStatusHint => 'Chọn tình trạng';
+
+  @override
+  String get editRegionLabel => 'Khu vực';
+
+  @override
+  String get editRegionHint => 'Chọn khu vực';
+
+  @override
+  String get editLanguageLabel => 'Ngôn ngữ ưu tiên';
+
+  @override
+  String get editChangePhoto => 'Đổi ảnh';
+
+  @override
+  String get editSuccess => 'Hồ sơ đã được cập nhật.';
+
+  @override
+  String get editError => 'Không thể cập nhật hồ sơ. Vui lòng thử lại.';
+
+  @override
+  String get editUnsavedTitle => 'Thay đổi chưa lưu';
+
+  @override
+  String get editUnsavedMessage => 'Bạn có thay đổi chưa lưu. Bỏ đi?';
+
+  @override
+  String get editUnsavedDiscard => 'Bỏ';
+
+  @override
+  String get editUnsavedKeep => 'Tiếp tục chỉnh sửa';
+
+  @override
+  String get settingsSectionGeneral => 'Chung';
+
+  @override
+  String get settingsSectionAccount => 'Tài khoản';
+
+  @override
+  String get settingsSectionDanger => 'Vùng nguy hiểm';
+
+  @override
+  String get settingsSectionAbout => 'Giới thiệu';
+
+  @override
+  String get settingsLanguage => 'Ngôn ngữ';
+
+  @override
+  String get settingsNotifications => 'Thông báo';
+
+  @override
+  String get settingsSubscription => 'Gói đăng ký';
+
+  @override
+  String get settingsTerms => 'Điều khoản dịch vụ';
+
+  @override
+  String get settingsPrivacy => 'Chính sách bảo mật';
+
+  @override
+  String get settingsContact => 'Liên hệ';
+
+  @override
+  String get settingsFooter =>
+      'Tạo với ❤️ cho mọi người đang sống tại Nhật Bản';
+
+  @override
+  String get settingsLogoutTitle => 'Đăng xuất';
+
+  @override
+  String get settingsLogoutMessage => 'Bạn có chắc muốn đăng xuất?';
+
+  @override
+  String get settingsLogoutConfirm => 'Đăng xuất';
+
+  @override
+  String get settingsLogoutCancel => 'Hủy';
+
+  @override
+  String get settingsDeleteTitle => 'Xóa tài khoản';
+
+  @override
+  String get settingsDeleteMessage =>
+      'Hành động này không thể hoàn tác. Tất cả dữ liệu sẽ bị xóa vĩnh viễn. Bạn chắc chứ?';
+
+  @override
+  String get settingsDeleteConfirmAction => 'Xóa tài khoản của tôi';
+
+  @override
+  String get settingsDeleteCancel => 'Hủy';
+
+  @override
+  String get settingsDeleteSuccess => 'Tài khoản của bạn đã bị xóa.';
+
+  @override
+  String get settingsLanguageTitle => 'Chọn ngôn ngữ';
+
+  @override
+  String get settingsErrorLogout => 'Không thể đăng xuất. Vui lòng thử lại.';
+
+  @override
+  String get settingsErrorDelete =>
+      'Không thể xóa tài khoản. Vui lòng thử lại.';
 }

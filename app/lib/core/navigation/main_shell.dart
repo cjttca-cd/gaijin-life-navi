@@ -20,7 +20,7 @@ class MainShell extends StatelessWidget {
     AppRoutes.home,
     AppRoutes.chat,
     AppRoutes.navigate,
-    '/emergency', // placeholder path for SOS tab
+    AppRoutes.emergency,
     AppRoutes.profile,
   ];
 
@@ -49,11 +49,6 @@ class MainShell extends StatelessWidget {
           selectedIndex: currentIndex,
           onDestinationSelected: (index) {
             final target = _tabs[index];
-            if (target == '/emergency') {
-              // SOS tab — for now navigate to medical/emergency
-              context.push(AppRoutes.medical);
-              return;
-            }
             context.go(target);
           },
           destinations: [

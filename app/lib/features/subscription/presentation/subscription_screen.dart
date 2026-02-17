@@ -3,10 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_spacing.dart';
 import '../domain/subscription_plan.dart';
 import 'providers/subscription_providers.dart';
 
-/// Subscription management screen — plan comparison + checkout.
+/// S16: Subscription — plan comparison + charge packs + FAQ.
+///
+/// Per handoff-subscription.md: horizontal plan cards, charge packs,
+/// expandable FAQ, footer.
 class SubscriptionScreen extends ConsumerWidget {
   const SubscriptionScreen({super.key});
 
@@ -18,333 +23,218 @@ class SubscriptionScreen extends ConsumerWidget {
     final mySubAsync = ref.watch(mySubscriptionProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.subscriptionTitle)),
+      appBar: AppBar(title: Text(l10n.subTitle)),
       body: plansAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error:
-            (error, _) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 48,
-                    color: theme.colorScheme.error,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(l10n.genericError),
-                  const SizedBox(height: 8),
-                  FilledButton(
-                    onPressed: () => ref.invalidate(subscriptionPlansProvider),
-                    child: Text(l10n.chatRetry),
-                  ),
-                ],
-              ),
-            ),
+        error: (_, __) => _buildError(context, ref),
         data: (plans) {
           final mySub = mySubAsync.valueOrNull;
+          final currentTier = mySub?.tier ?? 'free';
 
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              // Current plan info
-              _CurrentPlanCard(subscription: mySub),
-              const SizedBox(height: 24),
-
-              // Plan comparison header
-              Text(
-                l10n.subscriptionPlansTitle,
-                style: theme.textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.subscriptionPlansSubtitle,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-
-              // Free plan card
-              _FreePlanCard(isCurrentPlan: mySub?.isFree ?? true),
-              const SizedBox(height: 12),
-
-              // Paid plan cards
-              ...plans.map((plan) {
-                final isCurrent =
-                    mySub != null &&
-                    !mySub.isFree &&
-                    ((plan.id == 'premium_monthly' &&
-                            mySub.tier == 'premium') ||
-                        (plan.id == 'premium_plus_monthly' &&
-                            mySub.tier == 'premium_plus'));
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: _PlanCard(
-                    plan: plan,
-                    isCurrentPlan: isCurrent,
-                    isCancelling: isCurrent && mySub.isCancelling,
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Current Plan section
+                _SectionHeader(title: l10n.subSectionCurrent),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenPadding,
                   ),
-                );
-              }),
-            ],
+                  child: _CurrentPlanCard(
+                    tier: currentTier,
+                    subscription: mySub,
+                  ),
+                ),
+
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // Choose a Plan section
+                _SectionHeader(title: l10n.subSectionChoose),
+                const SizedBox(height: AppSpacing.spaceSm),
+
+                // Horizontal plan cards
+                SizedBox(
+                  height: 420,
+                  child: PageView(
+                    controller: PageController(viewportFraction: 0.85),
+                    children: [
+                      _PlanCard(
+                        planId: 'free',
+                        planName: l10n.subPlanFree,
+                        price: l10n.subPriceFree,
+                        interval: l10n.subPriceInterval,
+                        features: [
+                          _FeatureItem(l10n.subFeatureChatFree, true),
+                          _FeatureItem(l10n.subFeatureTrackerFree, true),
+                          _FeatureItem(l10n.subFeatureAdsYes, false),
+                          _FeatureItem(l10n.subFeatureImageNo, false),
+                        ],
+                        isCurrentPlan: currentTier == 'free',
+                        isRecommended: false,
+                        onChoose: null,
+                        currentTier: currentTier,
+                      ),
+                      _PlanCard(
+                        planId: 'standard',
+                        planName: l10n.subPlanStandard,
+                        price: l10n.subPriceStandard,
+                        interval: l10n.subPriceInterval,
+                        features: [
+                          _FeatureItem(l10n.subFeatureChatStandard, true),
+                          _FeatureItem(l10n.subFeatureTrackerPaid, true),
+                          _FeatureItem(l10n.subFeatureAdsNo, true),
+                          _FeatureItem(l10n.subFeatureImageNo, false),
+                        ],
+                        isCurrentPlan: currentTier == 'standard',
+                        isRecommended: true,
+                        onChoose: () => _checkout(context, ref, 'standard'),
+                        currentTier: currentTier,
+                      ),
+                      _PlanCard(
+                        planId: 'premium',
+                        planName: l10n.subPlanPremium,
+                        price: l10n.subPricePremium,
+                        interval: l10n.subPriceInterval,
+                        features: [
+                          _FeatureItem(l10n.subFeatureChatPremium, true),
+                          _FeatureItem(l10n.subFeatureTrackerPaid, true),
+                          _FeatureItem(l10n.subFeatureAdsNo, true),
+                          _FeatureItem(l10n.subFeatureImageYes, true),
+                        ],
+                        isCurrentPlan: currentTier == 'premium',
+                        isRecommended: false,
+                        onChoose: () => _checkout(context, ref, 'premium'),
+                        currentTier: currentTier,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // Charge packs section
+                _SectionHeader(title: l10n.subSectionCharge),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenPadding,
+                  ),
+                  child: Column(
+                    children: [
+                      _ChargePackCard(
+                        title: l10n.subCharge100,
+                        price: l10n.subCharge100Price,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceSm),
+                      _ChargePackCard(
+                        title: l10n.subCharge50,
+                        price: l10n.subCharge50Price,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceSm),
+                      Text(
+                        l10n.subChargeDescription,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // FAQ section
+                _SectionHeader(title: l10n.subSectionFaq),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenPadding,
+                  ),
+                  child: Card(
+                    child: Column(
+                      children: [
+                        _FaqItem(
+                          question: l10n.subFaqBillingQ,
+                          answer: l10n.subFaqBillingA,
+                        ),
+                        Divider(
+                          height: 1,
+                          color: theme.colorScheme.outlineVariant,
+                        ),
+                        _FaqItem(
+                          question: l10n.subFaqCancelQ,
+                          answer: l10n.subFaqCancelA,
+                        ),
+                        Divider(
+                          height: 1,
+                          color: theme.colorScheme.outlineVariant,
+                        ),
+                        _FaqItem(
+                          question: l10n.subFaqDowngradeQ,
+                          answer: l10n.subFaqDowngradeA,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // Footer
+                Center(
+                  child: Text(
+                    l10n.subFooter,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: AppSpacing.space3xl),
+              ],
+            ),
           );
         },
       ),
     );
   }
-}
 
-// ─── Current Plan Card ───────────────────────────────────────
-
-class _CurrentPlanCard extends StatelessWidget {
-  const _CurrentPlanCard({this.subscription});
-
-  final UserSubscription? subscription;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildError(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final isFree = subscription?.isFree ?? true;
-    final tierName =
-        isFree
-            ? l10n.subscriptionTierFree
-            : subscription?.tier == 'premium_plus'
-            ? l10n.subscriptionTierPremiumPlus
-            : l10n.subscriptionTierPremium;
-
-    return Card(
-      color:
-          isFree
-              ? theme.colorScheme.surfaceContainerHighest
-              : theme.colorScheme.primaryContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Icon(
-              isFree ? Icons.person_outline : Icons.star,
-              size: 32,
-              color:
-                  isFree
-                      ? theme.colorScheme.onSurfaceVariant
-                      : theme.colorScheme.onPrimaryContainer,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 48,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          const SizedBox(height: AppSpacing.spaceLg),
+          Text(
+            l10n.subErrorLoad,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.subscriptionCurrentPlan,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color:
-                    isFree
-                        ? theme.colorScheme.onSurfaceVariant
-                        : theme.colorScheme.onPrimaryContainer,
-              ),
-            ),
-            Text(
-              tierName,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color:
-                    isFree
-                        ? theme.colorScheme.onSurface
-                        : theme.colorScheme.onPrimaryContainer,
-              ),
-            ),
-            if (subscription != null &&
-                subscription!.isCancelling &&
-                subscription!.currentPeriodEnd != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  l10n.subscriptionCancellingAt(
-                    _formatDate(subscription!.currentPeriodEnd!),
-                  ),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
-                ),
-              ),
-          ],
-        ),
+          ),
+          const SizedBox(height: AppSpacing.spaceSm),
+          TextButton(
+            onPressed: () => ref.invalidate(subscriptionPlansProvider),
+            child: Text(l10n.subErrorRetry),
+          ),
+        ],
       ),
     );
   }
 
-  String _formatDate(DateTime dateTime) {
-    return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
-  }
-}
-
-// ─── Free Plan Card ──────────────────────────────────────────
-
-class _FreePlanCard extends StatelessWidget {
-  const _FreePlanCard({required this.isCurrentPlan});
-
-  final bool isCurrentPlan;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-
-    final features = [
-      l10n.subscriptionFeatureFreeChat,
-      l10n.subscriptionFeatureFreeScans,
-      l10n.subscriptionFeatureFreeTracker,
-      l10n.subscriptionFeatureFreeCommunityRead,
-    ];
-
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side:
-            isCurrentPlan
-                ? BorderSide(color: theme.colorScheme.primary, width: 2)
-                : BorderSide.none,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text(
-              l10n.subscriptionTierFree,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.subscriptionFreePrice,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ...features.map((f) => _FeatureRow(text: f, included: true)),
-            _FeatureRow(
-              text: l10n.subscriptionFeatureCommunityPost,
-              included: false,
-            ),
-            _FeatureRow(
-              text: l10n.subscriptionFeatureUnlimitedChat,
-              included: false,
-            ),
-            if (isCurrentPlan)
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: OutlinedButton(
-                  onPressed: null,
-                  child: Text(l10n.subscriptionCurrentPlanBadge),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Paid Plan Card ──────────────────────────────────────────
-
-class _PlanCard extends ConsumerWidget {
-  const _PlanCard({
-    required this.plan,
-    required this.isCurrentPlan,
-    required this.isCancelling,
-  });
-
-  final SubscriptionPlan plan;
-  final bool isCurrentPlan;
-  final bool isCancelling;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final isPremiumPlus = plan.id == 'premium_plus_monthly';
-
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side:
-            isCurrentPlan
-                ? BorderSide(color: theme.colorScheme.primary, width: 2)
-                : isPremiumPlus
-                ? BorderSide(
-                  color: theme.colorScheme.tertiary.withValues(alpha: 0.5),
-                )
-                : BorderSide.none,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            if (isPremiumPlus)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 4,
-                ),
-                margin: const EdgeInsets.only(bottom: 8),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.tertiary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  l10n.subscriptionRecommended,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onTertiary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            Text(
-              plan.name,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.subscriptionPricePerMonth(plan.price),
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ...plan.features.map((f) => _FeatureRow(text: f, included: true)),
-            const SizedBox(height: 16),
-            if (isCurrentPlan)
-              isCancelling
-                  ? OutlinedButton(
-                    onPressed: null,
-                    child: Text(l10n.subscriptionCancelling),
-                  )
-                  : OutlinedButton(
-                    onPressed: null,
-                    child: Text(l10n.subscriptionCurrentPlanBadge),
-                  )
-            else
-              FilledButton(
-                onPressed: () => _checkout(context, ref),
-                child: Text(l10n.subscriptionCheckout),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _checkout(BuildContext context, WidgetRef ref) async {
+  Future<void> _checkout(
+    BuildContext context,
+    WidgetRef ref,
+    String planId,
+  ) async {
     try {
       final repo = ref.read(subscriptionRepositoryProvider);
-      final checkoutUrl = await repo.createCheckout(planId: plan.id);
-
+      final checkoutUrl = await repo.createCheckout(planId: planId);
       final uri = Uri.parse(checkoutUrl);
       if (await canLaunchUrl(uri)) {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -354,53 +244,320 @@ class _PlanCard extends ConsumerWidget {
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
+        ).showSnackBar(SnackBar(content: Text(l10n.subPurchaseError)));
       }
     }
   }
 }
 
-// ─── Feature Row ─────────────────────────────────────────────
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
 
-class _FeatureRow extends StatelessWidget {
-  const _FeatureRow({required this.text, required this.included});
+  final String title;
 
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenPadding,
+        0,
+        AppSpacing.screenPadding,
+        AppSpacing.spaceMd,
+      ),
+      child: Text(
+        title.toUpperCase(),
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+}
+
+class _CurrentPlanCard extends StatelessWidget {
+  const _CurrentPlanCard({required this.tier, this.subscription});
+
+  final String tier;
+  final UserSubscription? subscription;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    final planName =
+        tier == 'premium'
+            ? l10n.subCurrentPremium
+            : tier == 'standard'
+            ? l10n.subCurrentStandard
+            : l10n.subCurrentFree;
+
+    final icon =
+        tier == 'premium'
+            ? '💎'
+            : tier == 'standard'
+            ? '⭐'
+            : '🆓';
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.spaceLg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(icon, style: const TextStyle(fontSize: 24)),
+                const SizedBox(width: AppSpacing.spaceSm),
+                Text(planName, style: theme.textTheme.titleMedium),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.spaceSm),
+            if (tier == 'free')
+              ElevatedButton(
+                onPressed: () {
+                  // Scroll to plans section
+                },
+                child: Text(l10n.subUpgradeNow),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FeatureItem {
+  const _FeatureItem(this.text, this.included);
   final String text;
   final bool included;
+}
+
+class _PlanCard extends StatelessWidget {
+  const _PlanCard({
+    required this.planId,
+    required this.planName,
+    required this.price,
+    required this.interval,
+    required this.features,
+    required this.isCurrentPlan,
+    required this.isRecommended,
+    required this.onChoose,
+    required this.currentTier,
+  });
+
+  final String planId;
+  final String planName;
+  final String price;
+  final String interval;
+  final List<_FeatureItem> features;
+  final bool isCurrentPlan;
+  final bool isRecommended;
+  final VoidCallback? onChoose;
+  final String currentTier;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceXs),
+      child: Card(
+        color:
+            isRecommended ? AppColors.primaryFixed : theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side:
+              isRecommended
+                  ? BorderSide(color: theme.colorScheme.primary, width: 2)
+                  : isCurrentPlan
+                  ? BorderSide(color: theme.colorScheme.primary, width: 2)
+                  : BorderSide(color: theme.colorScheme.outlineVariant),
+        ),
+        elevation: isRecommended ? 1 : 0,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.spaceXl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Recommended badge
+              if (isRecommended)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.spaceMd,
+                    vertical: AppSpacing.spaceXs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    l10n.subRecommended,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                  ),
+                )
+              else
+                const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.spaceSm),
+
+              // Plan name
+              Text(planName, style: theme.textTheme.headlineMedium),
+              const SizedBox(height: AppSpacing.spaceSm),
+
+              // Price
+              Text(
+                price,
+                style: theme.textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                interval,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.spaceLg),
+              Divider(color: theme.colorScheme.outlineVariant),
+              const SizedBox(height: AppSpacing.spaceSm),
+
+              // Features
+              ...features.map(
+                (f) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppSpacing.spaceXs,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        f.included ? Icons.check : Icons.close,
+                        size: 20,
+                        color:
+                            f.included
+                                ? AppColors.success
+                                : theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: AppSpacing.spaceSm),
+                      Expanded(
+                        child: Text(f.text, style: theme.textTheme.bodyMedium),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              // CTA button
+              SizedBox(
+                width: double.infinity,
+                child:
+                    isCurrentPlan
+                        ? OutlinedButton(
+                          onPressed: null,
+                          child: Text(l10n.subButtonCurrent),
+                        )
+                        : isRecommended
+                        ? ElevatedButton(
+                          onPressed: onChoose,
+                          child: Text(l10n.subButtonChoose(planName)),
+                        )
+                        : OutlinedButton(
+                          onPressed: onChoose,
+                          child: Text(l10n.subButtonChoose(planName)),
+                        ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ChargePackCard extends StatelessWidget {
+  const _ChargePackCard({required this.title, required this.price});
+
+  final String title;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Icon(
-            included ? Icons.check_circle : Icons.cancel,
-            size: 20,
-            color:
-                included
-                    ? theme.colorScheme.tertiary
-                    : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color:
-                    included
-                        ? null
-                        : theme.colorScheme.onSurfaceVariant.withValues(
-                          alpha: 0.5,
-                        ),
-                decoration: included ? null : TextDecoration.lineThrough,
+    return Card(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          // IAP purchase placeholder
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.spaceLg),
+          child: Row(
+            children: [
+              Icon(
+                Icons.chat_bubble_outline,
+                size: 24,
+                color: theme.colorScheme.primary,
               ),
-            ),
+              const SizedBox(width: AppSpacing.spaceMd),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: theme.textTheme.titleSmall),
+                    Text(
+                      price,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
+    );
+  }
+}
+
+class _FaqItem extends StatelessWidget {
+  const _FaqItem({required this.question, required this.answer});
+
+  final String question;
+  final String answer;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ExpansionTile(
+      title: Text(question, style: theme.textTheme.titleSmall),
+      childrenPadding: const EdgeInsets.fromLTRB(
+        AppSpacing.spaceLg,
+        0,
+        AppSpacing.spaceLg,
+        AppSpacing.spaceLg,
+      ),
+      children: [
+        Text(
+          answer,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
     );
   }
 }

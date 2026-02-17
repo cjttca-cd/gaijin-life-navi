@@ -1076,4 +1076,475 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsConfirm => '확인';
+
+  @override
+  String get navTitle => '가이드';
+
+  @override
+  String get navSubtitle => '일본 생활에 도움이 되는 주제를 탐색하세요.';
+
+  @override
+  String navGuideCount(int count) {
+    return '$count개 가이드';
+  }
+
+  @override
+  String get navGuideCountOne => '1개 가이드';
+
+  @override
+  String get navComingSoon => '곧 출시';
+
+  @override
+  String get navComingSoonSnackbar => '곧 출시됩니다! 준비 중입니다.';
+
+  @override
+  String get navErrorLoad => '가이드를 불러올 수 없습니다.';
+
+  @override
+  String get navErrorRetry => '탭하여 다시 시도';
+
+  @override
+  String get domainBanking => '은행 및 금융';
+
+  @override
+  String get domainVisa => '비자 및 출입국';
+
+  @override
+  String get domainMedical => '의료 및 건강';
+
+  @override
+  String get domainConcierge => '생활 및 종합';
+
+  @override
+  String get domainHousing => '주거 및 공공요금';
+
+  @override
+  String get domainEmployment => '취업 및 세금';
+
+  @override
+  String get domainEducation => '교육 및 육아';
+
+  @override
+  String get domainLegal => '법률 및 보험';
+
+  @override
+  String get guideSearchPlaceholder => '가이드 검색...';
+
+  @override
+  String get guideComingSoonTitle => '곧 출시';
+
+  @override
+  String guideComingSoonSubtitle(String domain) {
+    return '$domain 가이드를 준비 중입니다. 곧 다시 확인해주세요!';
+  }
+
+  @override
+  String guideComingSoonAskAi(String domain) {
+    return 'AI에게 $domain에 대해 질문하기';
+  }
+
+  @override
+  String guideSearchEmpty(String query) {
+    return '\"$query\"에 대한 가이드를 찾을 수 없습니다.';
+  }
+
+  @override
+  String get guideSearchTry => '다른 검색어를 시도해보세요.';
+
+  @override
+  String get guideErrorLoad => '이 카테고리의 가이드를 불러올 수 없습니다.';
+
+  @override
+  String get guideAskAi => 'AI에게 이 주제에 대해 질문하기';
+
+  @override
+  String get guideDisclaimer => '이 정보는 일반적인 안내이며 법적 조언이 아닙니다. 관련 기관에 확인하세요.';
+
+  @override
+  String get guideShare => '공유';
+
+  @override
+  String get guideErrorNotFound => '이 가이드는 더 이상 이용할 수 없습니다.';
+
+  @override
+  String get guideErrorLoadDetail => '이 가이드를 불러올 수 없습니다. 다시 시도해주세요.';
+
+  @override
+  String get guideErrorRetryBack => '돌아가기';
+
+  @override
+  String get emergencyTitle => '긴급';
+
+  @override
+  String get emergencyWarning =>
+      '즉각적인 위험에 처해 있다면 110(경찰) 또는 119(소방/구급)에 즉시 전화하세요.';
+
+  @override
+  String get emergencySectionContacts => '긴급 연락처';
+
+  @override
+  String get emergencySectionAmbulance => '구급차 호출 방법';
+
+  @override
+  String get emergencySectionMoreHelp => '더 많은 도움이 필요하세요?';
+
+  @override
+  String get emergencyPoliceName => '경찰';
+
+  @override
+  String get emergencyPoliceNumber => '110';
+
+  @override
+  String get emergencyFireName => '소방/구급';
+
+  @override
+  String get emergencyFireNumber => '119';
+
+  @override
+  String get emergencyMedicalName => '의료 상담';
+
+  @override
+  String get emergencyMedicalNumber => '#7119';
+
+  @override
+  String get emergencyMedicalNote => '비응급 의료 상담';
+
+  @override
+  String get emergencyTellName => 'TELL Japan (정신건강)';
+
+  @override
+  String get emergencyTellNumber => '03-5774-0992';
+
+  @override
+  String get emergencyTellNote => '영어 상담';
+
+  @override
+  String get emergencyHelplineName => 'Japan Helpline';
+
+  @override
+  String get emergencyHelplineNumber => '0570-064-211';
+
+  @override
+  String get emergencyHelplineNote => '24시간, 다국어';
+
+  @override
+  String get emergencyStep1 => '119에 전화';
+
+  @override
+  String get emergencyStep2 => '\"큐큐데스\"라고 말하세요 (救急です — 응급입니다)';
+
+  @override
+  String get emergencyStep3 => '위치를 설명하세요 (주소, 근처 랜드마크)';
+
+  @override
+  String get emergencyStep4 => '상황을 설명하세요 (무슨 일이 있었는지, 증상)';
+
+  @override
+  String get emergencyStep5 => '건물 입구에서 구급차를 기다리세요';
+
+  @override
+  String get emergencyPhraseEmergencyHelp => '응급입니다';
+
+  @override
+  String get emergencyPhraseHelpHelp => '도와주세요';
+
+  @override
+  String get emergencyPhraseAmbulanceHelp => '구급차를 보내주세요';
+
+  @override
+  String get emergencyPhraseAddressHelp => '주소는 ○○입니다';
+
+  @override
+  String get emergencyAskAi => 'AI와 응급 상황에 대해 대화하기';
+
+  @override
+  String get emergencyDisclaimer =>
+      '이 가이드는 일반적인 건강 정보를 제공하며 전문 의료 조언을 대체하지 않습니다. 응급 상황에서는 즉시 119에 전화하세요.';
+
+  @override
+  String get emergencyCallButton => '전화';
+
+  @override
+  String get emergencyOffline =>
+      '추가 정보를 불러올 수 없습니다. 도움이 필요하면 110 또는 119에 전화하세요.';
+
+  @override
+  String get subTitle => '구독';
+
+  @override
+  String get subSectionCurrent => '현재 플랜';
+
+  @override
+  String get subSectionChoose => '플랜 선택';
+
+  @override
+  String get subSectionCharge => '더 많은 채팅이 필요하세요?';
+
+  @override
+  String get subSectionFaq => '자주 묻는 질문';
+
+  @override
+  String get subCurrentFree => '무료 플랜';
+
+  @override
+  String get subCurrentStandard => '스탠다드 플랜';
+
+  @override
+  String get subCurrentPremium => '프리미엄 플랜';
+
+  @override
+  String get subUpgradeNow => '지금 업그레이드';
+
+  @override
+  String get subPlanFree => '무료';
+
+  @override
+  String get subPlanStandard => '스탠다드';
+
+  @override
+  String get subPlanPremium => '프리미엄';
+
+  @override
+  String get subPriceFree => '¥0';
+
+  @override
+  String get subPriceStandard => '¥720';
+
+  @override
+  String get subPricePremium => '¥1,360';
+
+  @override
+  String get subPriceInterval => '/월';
+
+  @override
+  String get subRecommended => '추천';
+
+  @override
+  String get subFeatureChatFree => '하루 5회 채팅';
+
+  @override
+  String get subFeatureChatStandard => '월 300회 채팅';
+
+  @override
+  String get subFeatureChatPremium => '무제한 채팅';
+
+  @override
+  String get subFeatureTrackerFree => '최대 3개 트래커 항목';
+
+  @override
+  String get subFeatureTrackerPaid => '무제한 트래커 항목';
+
+  @override
+  String get subFeatureAdsYes => '광고 포함';
+
+  @override
+  String get subFeatureAdsNo => '광고 없음';
+
+  @override
+  String get subFeatureImageNo => '이미지 분석 (출시 예정)';
+
+  @override
+  String get subFeatureImageYes => '이미지 분석 (출시 예정)';
+
+  @override
+  String get subButtonCurrent => '현재 플랜';
+
+  @override
+  String subButtonChoose(String plan) {
+    return '$plan 선택';
+  }
+
+  @override
+  String get subCharge100 => '100회 채팅 팩';
+
+  @override
+  String get subCharge50 => '50회 채팅 팩';
+
+  @override
+  String get subCharge100Price => '¥360 (¥3.6/회)';
+
+  @override
+  String get subCharge50Price => '¥180 (¥3.6/회)';
+
+  @override
+  String get subChargeDescription => '만료되지 않는 추가 채팅. 플랜 한도 초과 후 사용.';
+
+  @override
+  String get subFaqBillingQ => '결제는 어떻게 이루어지나요?';
+
+  @override
+  String get subFaqBillingA =>
+      '구독은 App Store 또는 Google Play를 통해 매월 결제됩니다. 기기 설정에서 구독을 관리할 수 있습니다.';
+
+  @override
+  String get subFaqCancelQ => '언제든 취소할 수 있나요?';
+
+  @override
+  String get subFaqCancelA => '네! 언제든 취소할 수 있습니다. 플랜은 결제 기간이 끝날 때까지 유지됩니다.';
+
+  @override
+  String get subFaqDowngradeQ => '다운그레이드하면 어떻게 되나요?';
+
+  @override
+  String get subFaqDowngradeA =>
+      '다운그레이드 시 현재 결제 기간이 끝날 때까지 기존 플랜 혜택을 유지합니다. 그 후 새 등급으로 전환됩니다.';
+
+  @override
+  String get subFooter => 'App Store / Google Play를 통해 구독 관리';
+
+  @override
+  String subPurchaseSuccess(String plan) {
+    return '$plan에 오신 것을 환영합니다! 업그레이드가 활성화되었습니다.';
+  }
+
+  @override
+  String get subPurchaseError => '구매를 완료할 수 없습니다. 다시 시도해주세요.';
+
+  @override
+  String get subErrorLoad => '구독 플랜을 불러올 수 없습니다.';
+
+  @override
+  String get subErrorRetry => '탭하여 다시 시도';
+
+  @override
+  String get profileSectionInfo => '내 정보';
+
+  @override
+  String get profileSectionStats => '이용 통계';
+
+  @override
+  String get profileChatsToday => '오늘 채팅';
+
+  @override
+  String get profileMemberSince => '가입일';
+
+  @override
+  String get profileManageSubscription => '구독 관리';
+
+  @override
+  String get profileNotSet => '미설정';
+
+  @override
+  String get editTitle => '프로필 편집';
+
+  @override
+  String get editSave => '저장';
+
+  @override
+  String get editNameLabel => '표시 이름';
+
+  @override
+  String get editNameHint => '이름을 입력하세요';
+
+  @override
+  String get editNationalityLabel => '국적';
+
+  @override
+  String get editNationalityHint => '국적을 선택하세요';
+
+  @override
+  String get editStatusLabel => '체류 자격';
+
+  @override
+  String get editStatusHint => '체류 자격 선택';
+
+  @override
+  String get editRegionLabel => '지역';
+
+  @override
+  String get editRegionHint => '지역을 선택하세요';
+
+  @override
+  String get editLanguageLabel => '선호 언어';
+
+  @override
+  String get editChangePhoto => '사진 변경';
+
+  @override
+  String get editSuccess => '프로필이 업데이트되었습니다.';
+
+  @override
+  String get editError => '프로필을 업데이트할 수 없습니다. 다시 시도해주세요.';
+
+  @override
+  String get editUnsavedTitle => '저장되지 않은 변경';
+
+  @override
+  String get editUnsavedMessage => '저장되지 않은 변경사항이 있습니다. 취소하시겠습니까?';
+
+  @override
+  String get editUnsavedDiscard => '취소';
+
+  @override
+  String get editUnsavedKeep => '계속 편집';
+
+  @override
+  String get settingsSectionGeneral => '일반';
+
+  @override
+  String get settingsSectionAccount => '계정';
+
+  @override
+  String get settingsSectionDanger => '위험 영역';
+
+  @override
+  String get settingsSectionAbout => '정보';
+
+  @override
+  String get settingsLanguage => '언어';
+
+  @override
+  String get settingsNotifications => '알림';
+
+  @override
+  String get settingsSubscription => '구독';
+
+  @override
+  String get settingsTerms => '서비스 이용약관';
+
+  @override
+  String get settingsPrivacy => '개인정보 처리방침';
+
+  @override
+  String get settingsContact => '문의하기';
+
+  @override
+  String get settingsFooter => '일본에서 생활하는 모든 분을 위해 ❤️으로 만들었습니다';
+
+  @override
+  String get settingsLogoutTitle => '로그아웃';
+
+  @override
+  String get settingsLogoutMessage => '로그아웃 하시겠습니까?';
+
+  @override
+  String get settingsLogoutConfirm => '로그아웃';
+
+  @override
+  String get settingsLogoutCancel => '취소';
+
+  @override
+  String get settingsDeleteTitle => '계정 삭제';
+
+  @override
+  String get settingsDeleteMessage =>
+      '이 작업은 취소할 수 없습니다. 모든 데이터가 영구적으로 삭제됩니다. 확실합니까?';
+
+  @override
+  String get settingsDeleteConfirmAction => '내 계정 삭제';
+
+  @override
+  String get settingsDeleteCancel => '취소';
+
+  @override
+  String get settingsDeleteSuccess => '계정이 삭제되었습니다.';
+
+  @override
+  String get settingsLanguageTitle => '언어 선택';
+
+  @override
+  String get settingsErrorLogout => '로그아웃할 수 없습니다. 다시 시도해주세요.';
+
+  @override
+  String get settingsErrorDelete => '계정을 삭제할 수 없습니다. 다시 시도해주세요.';
 }

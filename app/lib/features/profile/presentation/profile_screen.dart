@@ -4,10 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_spacing.dart';
 import 'providers/profile_providers.dart';
 
-/// Profile screen — displays user information.
-/// Route: /profile
+/// S13: Profile (View Only) — per handoff-profile.md.
+///
+/// Shows avatar + name + email + tier badge, your information,
+/// usage statistics, and manage subscription link.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -22,127 +25,269 @@ class ProfileScreen extends ConsumerWidget {
         title: Text(l10n.profileTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.settings_outlined),
             tooltip: l10n.settingsTitle,
             onPressed: () => context.push(AppRoutes.settings),
           ),
         ],
       ),
       body: profileAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => _buildSkeleton(context),
         error:
-            (error, _) => Center(
-              child: Text(
-                l10n.profileLoadError,
-                style: theme.textTheme.bodyLarge,
-              ),
-            ),
-        data:
-            (profile) => SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+            (_, __) => Center(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Avatar + name header
-                  Center(
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 48,
-                          backgroundImage:
-                              profile.avatarUrl != null
-                                  ? NetworkImage(profile.avatarUrl!)
-                                  : null,
-                          child:
-                              profile.avatarUrl == null
-                                  ? Text(
-                                    profile.displayName.isNotEmpty
-                                        ? profile.displayName[0].toUpperCase()
-                                        : '?',
-                                    style: theme.textTheme.headlineMedium,
-                                  )
-                                  : null,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          profile.displayName.isNotEmpty
-                              ? profile.displayName
-                              : l10n.profileNoName,
-                          style: theme.textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color:
-                                profile.subscriptionTier == 'free'
-                                    ? theme.colorScheme.surfaceContainerHighest
-                                    : theme.colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            profile.tierLabel,
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color:
-                                  profile.subscriptionTier == 'free'
-                                      ? theme.colorScheme.onSurfaceVariant
-                                      : theme.colorScheme.onPrimaryContainer,
-                            ),
-                          ),
-                        ),
-                      ],
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(height: AppSpacing.spaceLg),
+                  Text(
+                    l10n.profileLoadError,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  // Info cards
-                  _InfoTile(
-                    icon: Icons.email_outlined,
-                    label: l10n.profileEmail,
-                    value: profile.email,
-                  ),
-                  _InfoTile(
-                    icon: Icons.public,
-                    label: l10n.profileNationality,
-                    value: profile.nationality ?? '-',
-                  ),
-                  _InfoTile(
-                    icon: Icons.badge_outlined,
-                    label: l10n.profileResidenceStatus,
-                    value: profile.residenceStatus ?? '-',
-                  ),
-                  _InfoTile(
-                    icon: Icons.location_on_outlined,
-                    label: l10n.profileRegion,
-                    value: profile.residenceRegion ?? '-',
-                  ),
-                  _InfoTile(
-                    icon: Icons.language,
-                    label: l10n.profileLanguage,
-                    value: _languageLabel(profile.preferredLanguage),
-                  ),
-                  _InfoTile(
-                    icon: Icons.calendar_today_outlined,
-                    label: l10n.profileArrivalDate,
-                    value: profile.arrivalDate ?? '-',
-                  ),
-                  const SizedBox(height: 24),
-                  // Edit button
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton.icon(
-                      onPressed: () => context.push(AppRoutes.profileEdit),
-                      icon: const Icon(Icons.edit),
-                      label: Text(l10n.profileEdit),
-                    ),
+                  const SizedBox(height: AppSpacing.spaceSm),
+                  TextButton(
+                    onPressed: () => ref.invalidate(userProfileProvider),
+                    child: Text(l10n.navErrorRetry),
                   ),
                 ],
               ),
             ),
+        data: (profile) {
+          final initials = _getInitials(profile.displayName, profile.email);
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(userProfileProvider);
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenPadding,
+                vertical: AppSpacing.spaceLg,
+              ),
+              child: Column(
+                children: [
+                  // Avatar
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: theme.colorScheme.primary,
+                    child: Text(
+                      initials,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        color: theme.colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.spaceMd),
+
+                  // Name
+                  Text(
+                    profile.displayName.isNotEmpty
+                        ? profile.displayName
+                        : l10n.profileNoName,
+                    style: theme.textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: AppSpacing.spaceXs),
+
+                  // Email
+                  Text(
+                    profile.email,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.spaceSm),
+
+                  // Tier badge
+                  _TierBadge(tier: profile.subscriptionTier),
+
+                  const SizedBox(height: AppSpacing.spaceLg),
+
+                  // Edit Profile row
+                  Card(
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.edit_outlined,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      title: Text(
+                        l10n.profileEdit,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      onTap: () => context.push(AppRoutes.profileEdit),
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.space2xl),
+
+                  // Your Information section
+                  _SectionHeader(title: l10n.profileSectionInfo),
+                  const SizedBox(height: AppSpacing.spaceSm),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.spaceSm,
+                      ),
+                      child: Column(
+                        children: [
+                          _InfoRow(
+                            label: l10n.profileNationality,
+                            value: profile.nationality ?? l10n.profileNotSet,
+                            isNotSet: profile.nationality == null,
+                          ),
+                          Divider(
+                            color: theme.colorScheme.outlineVariant,
+                            indent: AppSpacing.screenPadding,
+                            endIndent: AppSpacing.screenPadding,
+                          ),
+                          _InfoRow(
+                            label: l10n.profileResidenceStatus,
+                            value:
+                                profile.residenceStatus ?? l10n.profileNotSet,
+                            isNotSet: profile.residenceStatus == null,
+                          ),
+                          Divider(
+                            color: theme.colorScheme.outlineVariant,
+                            indent: AppSpacing.screenPadding,
+                            endIndent: AppSpacing.screenPadding,
+                          ),
+                          _InfoRow(
+                            label: l10n.profileRegion,
+                            value:
+                                profile.residenceRegion ?? l10n.profileNotSet,
+                            isNotSet: profile.residenceRegion == null,
+                          ),
+                          Divider(
+                            color: theme.colorScheme.outlineVariant,
+                            indent: AppSpacing.screenPadding,
+                            endIndent: AppSpacing.screenPadding,
+                          ),
+                          _InfoRow(
+                            label: l10n.profileArrivalDate,
+                            value: profile.arrivalDate ?? l10n.profileNotSet,
+                            isNotSet: profile.arrivalDate == null,
+                          ),
+                          Divider(
+                            color: theme.colorScheme.outlineVariant,
+                            indent: AppSpacing.screenPadding,
+                            endIndent: AppSpacing.screenPadding,
+                          ),
+                          _InfoRow(
+                            label: l10n.profileLanguage,
+                            value: _languageLabel(profile.preferredLanguage),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.space2xl),
+
+                  // Usage Statistics section
+                  _SectionHeader(title: l10n.profileSectionStats),
+                  const SizedBox(height: AppSpacing.spaceSm),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.spaceSm,
+                      ),
+                      child: Column(
+                        children: [
+                          _InfoRow(
+                            label: l10n.profileMemberSince,
+                            value:
+                                '${profile.createdAt.year}-${profile.createdAt.month.toString().padLeft(2, '0')}',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.spaceLg),
+
+                  // Manage Subscription
+                  Card(
+                    child: ListTile(
+                      leading: const Text('⭐', style: TextStyle(fontSize: 20)),
+                      title: Text(
+                        l10n.profileManageSubscription,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      onTap: () => context.push(AppRoutes.subscription),
+                    ),
+                  ),
+
+                  const SizedBox(height: AppSpacing.space3xl),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  Widget _buildSkeleton(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.screenPadding),
+      child: Column(
+        children: [
+          const SizedBox(height: AppSpacing.spaceLg),
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
+          ),
+          const SizedBox(height: AppSpacing.spaceMd),
+          Container(
+            width: 120,
+            height: 20,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.spaceSm),
+          Container(
+            width: 160,
+            height: 12,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getInitials(String name, String email) {
+    if (name.isNotEmpty) {
+      final words = name.trim().split(RegExp(r'\s+'));
+      if (words.length >= 2) {
+        return '${words[0][0]}${words[1][0]}'.toUpperCase();
+      }
+      return name[0].toUpperCase();
+    }
+    if (email.isNotEmpty) {
+      return email[0].toUpperCase();
+    }
+    return '?';
   }
 
   String _languageLabel(String code) {
@@ -163,40 +308,120 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _InfoTile extends StatelessWidget {
-  const _InfoTile({
-    required this.icon,
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title.toUpperCase(),
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({
     required this.label,
     required this.value,
+    this.isNotSet = false,
   });
 
-  final IconData icon;
   final String label;
   final String value;
+  final bool isNotSet;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenPadding,
+        vertical: AppSpacing.spaceSm,
+      ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(icon, size: 20, color: theme.colorScheme.onSurfaceVariant),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(value, style: theme.textTheme.bodyLarge),
-              ],
+          Text(
+            label,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
+          ),
+          Text(
+            value,
+            style:
+                isNotSet
+                    ? theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontStyle: FontStyle.italic,
+                    )
+                    : theme.textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TierBadge extends StatelessWidget {
+  const _TierBadge({required this.tier});
+
+  final String tier;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    Color bgColor;
+    Color textColor;
+    String icon;
+    String label;
+
+    switch (tier) {
+      case 'standard':
+        bgColor = theme.colorScheme.tertiaryContainer;
+        textColor = theme.colorScheme.onTertiaryContainer;
+        icon = '⭐';
+        label = 'Standard';
+        break;
+      case 'premium':
+        bgColor = theme.colorScheme.tertiaryContainer;
+        textColor = theme.colorScheme.onTertiaryContainer;
+        icon = '💎';
+        label = 'Premium';
+        break;
+      default:
+        bgColor = theme.colorScheme.surfaceContainerHighest;
+        textColor = theme.colorScheme.onSurfaceVariant;
+        icon = '';
+        label = 'Free';
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon.isNotEmpty) ...[
+            Text(icon, style: const TextStyle(fontSize: 12)),
+            const SizedBox(width: AppSpacing.spaceXs),
+          ],
+          Text(
+            label,
+            style: theme.textTheme.labelMedium?.copyWith(color: textColor),
           ),
         ],
       ),

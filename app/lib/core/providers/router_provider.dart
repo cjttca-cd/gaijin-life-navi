@@ -16,7 +16,10 @@ import '../../features/community/presentation/community_create_screen.dart';
 import '../../features/community/presentation/community_detail_screen.dart';
 import '../../features/community/presentation/community_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/medical/presentation/emergency_screen.dart';
 import '../../features/medical/presentation/medical_guide_screen.dart';
+import '../../features/navigate/presentation/guide_detail_screen.dart';
+import '../../features/navigate/presentation/guide_list_screen.dart';
 import '../../features/navigate/presentation/navigate_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_edit_screen.dart';
@@ -80,6 +83,13 @@ class AppRoutes {
 
   // Subscription
   static const String subscription = '/subscription';
+
+  // Navigator (Guide) sub-routes
+  static const String guideList = '/navigate/:domain';
+  static const String guideDetail = '/navigate/:domain/:slug';
+
+  // Emergency (SOS tab)
+  static const String emergency = '/emergency';
 }
 
 /// Navigation key for refreshing the router when auth state changes.
@@ -108,6 +118,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         AppRoutes.login,
         AppRoutes.register,
         AppRoutes.resetPassword,
+        AppRoutes.emergency,
       ];
 
       if (!isLoggedIn && !publicRoutes.contains(currentPath)) {
@@ -230,6 +241,31 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const MedicalGuideScreen(),
       ),
 
+      // Emergency (SOS) — full-screen, no auth required.
+      GoRoute(
+        path: AppRoutes.emergency,
+        builder: (context, state) => const EmergencyScreen(),
+      ),
+
+      // Navigator Guide List — domain guides.
+      GoRoute(
+        path: AppRoutes.guideList,
+        builder: (context, state) {
+          final domain = state.pathParameters['domain']!;
+          return GuideListScreen(domain: domain);
+        },
+      ),
+
+      // Navigator Guide Detail — single guide.
+      GoRoute(
+        path: AppRoutes.guideDetail,
+        builder: (context, state) {
+          final domain = state.pathParameters['domain']!;
+          final slug = state.pathParameters['slug']!;
+          return GuideDetailScreen(domain: domain, slug: slug);
+        },
+      ),
+
       // Community (full-screen).
       GoRoute(
         path: AppRoutes.community,
@@ -286,6 +322,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder:
                 (context, state) =>
                     const NoTransitionPage(child: NavigateScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.emergency,
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: EmergencyScreen()),
           ),
           GoRoute(
             path: AppRoutes.profile,

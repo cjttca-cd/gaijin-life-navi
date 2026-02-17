@@ -1072,4 +1072,470 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsConfirm => '确认';
+
+  @override
+  String get navTitle => '指南';
+
+  @override
+  String get navSubtitle => '探索各种主题，帮助你在日本生活。';
+
+  @override
+  String navGuideCount(int count) {
+    return '$count 篇指南';
+  }
+
+  @override
+  String get navGuideCountOne => '1 篇指南';
+
+  @override
+  String get navComingSoon => '即将上线';
+
+  @override
+  String get navComingSoonSnackbar => '即将上线！我们正在准备中。';
+
+  @override
+  String get navErrorLoad => '无法加载指南。';
+
+  @override
+  String get navErrorRetry => '点击重试';
+
+  @override
+  String get domainBanking => '银行与金融';
+
+  @override
+  String get domainVisa => '签证与入境';
+
+  @override
+  String get domainMedical => '医疗与健康';
+
+  @override
+  String get domainConcierge => '生活与综合';
+
+  @override
+  String get domainHousing => '住房与公共事业';
+
+  @override
+  String get domainEmployment => '就业与税务';
+
+  @override
+  String get domainEducation => '教育与育儿';
+
+  @override
+  String get domainLegal => '法律与保险';
+
+  @override
+  String get guideSearchPlaceholder => '搜索指南...';
+
+  @override
+  String get guideComingSoonTitle => '即将上线';
+
+  @override
+  String guideComingSoonSubtitle(String domain) {
+    return '我们正在准备$domain指南，请稍后查看！';
+  }
+
+  @override
+  String guideComingSoonAskAi(String domain) {
+    return '向 AI 询问$domain相关问题';
+  }
+
+  @override
+  String guideSearchEmpty(String query) {
+    return '未找到与\"$query\"相关的指南。';
+  }
+
+  @override
+  String get guideSearchTry => '试试其他搜索词。';
+
+  @override
+  String get guideErrorLoad => '无法加载该类别的指南。';
+
+  @override
+  String get guideAskAi => '向 AI 询问此话题';
+
+  @override
+  String get guideDisclaimer => '以上为一般性信息，不构成法律建议。请向相关机构确认。';
+
+  @override
+  String get guideShare => '分享';
+
+  @override
+  String get guideErrorNotFound => '此指南已不可用。';
+
+  @override
+  String get guideErrorLoadDetail => '无法加载此指南，请重试。';
+
+  @override
+  String get guideErrorRetryBack => '返回';
+
+  @override
+  String get emergencyTitle => '紧急情况';
+
+  @override
+  String get emergencyWarning => '如果你处于紧急危险中，请立即拨打110（警察）或119（消防/救护车）。';
+
+  @override
+  String get emergencySectionContacts => '紧急联系方式';
+
+  @override
+  String get emergencySectionAmbulance => '如何叫救护车';
+
+  @override
+  String get emergencySectionMoreHelp => '需要更多帮助？';
+
+  @override
+  String get emergencyPoliceName => '警察';
+
+  @override
+  String get emergencyPoliceNumber => '110';
+
+  @override
+  String get emergencyFireName => '消防/救护车';
+
+  @override
+  String get emergencyFireNumber => '119';
+
+  @override
+  String get emergencyMedicalName => '医疗咨询';
+
+  @override
+  String get emergencyMedicalNumber => '#7119';
+
+  @override
+  String get emergencyMedicalNote => '非紧急医疗咨询';
+
+  @override
+  String get emergencyTellName => 'TELL Japan（心理健康）';
+
+  @override
+  String get emergencyTellNumber => '03-5774-0992';
+
+  @override
+  String get emergencyTellNote => '英语心理咨询';
+
+  @override
+  String get emergencyHelplineName => 'Japan Helpline';
+
+  @override
+  String get emergencyHelplineNumber => '0570-064-211';
+
+  @override
+  String get emergencyHelplineNote => '24小时，多语言';
+
+  @override
+  String get emergencyStep1 => '拨打119';
+
+  @override
+  String get emergencyStep2 => '说\"Kyuukyuu desu\"（救急です——这是紧急情况）';
+
+  @override
+  String get emergencyStep3 => '说明你的位置（地址、附近的标志性建筑）';
+
+  @override
+  String get emergencyStep4 => '描述情况（发生了什么，症状）';
+
+  @override
+  String get emergencyStep5 => '在你的建筑入口处等待救护车';
+
+  @override
+  String get emergencyPhraseEmergencyHelp => '这是紧急情况';
+
+  @override
+  String get emergencyPhraseHelpHelp => '请帮忙';
+
+  @override
+  String get emergencyPhraseAmbulanceHelp => '请叫救护车';
+
+  @override
+  String get emergencyPhraseAddressHelp => '地址是○○';
+
+  @override
+  String get emergencyAskAi => '与 AI 聊聊紧急情况';
+
+  @override
+  String get emergencyDisclaimer => '本指南提供一般健康信息，不能替代专业医疗建议。紧急情况请立即拨打119。';
+
+  @override
+  String get emergencyCallButton => '拨打';
+
+  @override
+  String get emergencyOffline => '无法加载更多信息。如需帮助请拨打110或119。';
+
+  @override
+  String get subTitle => '订阅';
+
+  @override
+  String get subSectionCurrent => '当前方案';
+
+  @override
+  String get subSectionChoose => '选择方案';
+
+  @override
+  String get subSectionCharge => '需要更多对话次数？';
+
+  @override
+  String get subSectionFaq => '常见问题';
+
+  @override
+  String get subCurrentFree => '免费方案';
+
+  @override
+  String get subCurrentStandard => '标准方案';
+
+  @override
+  String get subCurrentPremium => '高级方案';
+
+  @override
+  String get subUpgradeNow => '立即升级';
+
+  @override
+  String get subPlanFree => '免费';
+
+  @override
+  String get subPlanStandard => '标准';
+
+  @override
+  String get subPlanPremium => '高级';
+
+  @override
+  String get subPriceFree => '¥0';
+
+  @override
+  String get subPriceStandard => '¥720';
+
+  @override
+  String get subPricePremium => '¥1,360';
+
+  @override
+  String get subPriceInterval => '/月';
+
+  @override
+  String get subRecommended => '推荐';
+
+  @override
+  String get subFeatureChatFree => '每日 5 次对话';
+
+  @override
+  String get subFeatureChatStandard => '每月 300 次对话';
+
+  @override
+  String get subFeatureChatPremium => '无限对话';
+
+  @override
+  String get subFeatureTrackerFree => '最多 3 个待办事项';
+
+  @override
+  String get subFeatureTrackerPaid => '无限待办事项';
+
+  @override
+  String get subFeatureAdsYes => '包含广告';
+
+  @override
+  String get subFeatureAdsNo => '无广告';
+
+  @override
+  String get subFeatureImageNo => '图片分析（即将推出）';
+
+  @override
+  String get subFeatureImageYes => '图片分析（即将推出）';
+
+  @override
+  String get subButtonCurrent => '当前方案';
+
+  @override
+  String subButtonChoose(String plan) {
+    return '选择$plan';
+  }
+
+  @override
+  String get subCharge100 => '100次对话包';
+
+  @override
+  String get subCharge50 => '50次对话包';
+
+  @override
+  String get subCharge100Price => '¥360（¥3.6/次）';
+
+  @override
+  String get subCharge50Price => '¥180（¥3.6/次）';
+
+  @override
+  String get subChargeDescription => '额外对话次数，永不过期。在方案用量用完后使用。';
+
+  @override
+  String get subFaqBillingQ => '如何计费？';
+
+  @override
+  String get subFaqBillingA =>
+      '订阅通过 App Store 或 Google Play 每月计费。你可以在设备设置中管理订阅。';
+
+  @override
+  String get subFaqCancelQ => '可以随时取消吗？';
+
+  @override
+  String get subFaqCancelA => '当然！你可以随时取消。你的方案将在计费周期结束前保持有效。';
+
+  @override
+  String get subFaqDowngradeQ => '降级后会怎样？';
+
+  @override
+  String get subFaqDowngradeA => '降级后，你将保留当前方案权益直到计费周期结束，然后切换到新级别。';
+
+  @override
+  String get subFooter => '订阅通过 App Store / Google Play 管理';
+
+  @override
+  String subPurchaseSuccess(String plan) {
+    return '欢迎使用$plan！升级已生效。';
+  }
+
+  @override
+  String get subPurchaseError => '无法完成购买，请重试。';
+
+  @override
+  String get subErrorLoad => '无法加载订阅方案。';
+
+  @override
+  String get subErrorRetry => '点击重试';
+
+  @override
+  String get profileSectionInfo => '你的信息';
+
+  @override
+  String get profileSectionStats => '使用统计';
+
+  @override
+  String get profileChatsToday => '今日对话';
+
+  @override
+  String get profileMemberSince => '加入时间';
+
+  @override
+  String get profileManageSubscription => '管理订阅';
+
+  @override
+  String get profileNotSet => '未设置';
+
+  @override
+  String get editTitle => '编辑资料';
+
+  @override
+  String get editSave => '保存';
+
+  @override
+  String get editNameLabel => '显示名称';
+
+  @override
+  String get editNameHint => '输入你的名字';
+
+  @override
+  String get editNationalityLabel => '国籍';
+
+  @override
+  String get editNationalityHint => '选择你的国籍';
+
+  @override
+  String get editStatusLabel => '在留资格';
+
+  @override
+  String get editStatusHint => '选择在留资格';
+
+  @override
+  String get editRegionLabel => '地区';
+
+  @override
+  String get editRegionHint => '选择地区';
+
+  @override
+  String get editLanguageLabel => '首选语言';
+
+  @override
+  String get editChangePhoto => '更换照片';
+
+  @override
+  String get editSuccess => '资料更新成功。';
+
+  @override
+  String get editError => '无法更新资料，请重试。';
+
+  @override
+  String get editUnsavedTitle => '未保存的更改';
+
+  @override
+  String get editUnsavedMessage => '你有未保存的更改，要放弃吗？';
+
+  @override
+  String get editUnsavedDiscard => '放弃';
+
+  @override
+  String get editUnsavedKeep => '继续编辑';
+
+  @override
+  String get settingsSectionGeneral => '通用';
+
+  @override
+  String get settingsSectionAccount => '账号';
+
+  @override
+  String get settingsSectionDanger => '危险操作';
+
+  @override
+  String get settingsSectionAbout => '关于';
+
+  @override
+  String get settingsLanguage => '语言';
+
+  @override
+  String get settingsNotifications => '通知';
+
+  @override
+  String get settingsSubscription => '订阅';
+
+  @override
+  String get settingsTerms => '服务条款';
+
+  @override
+  String get settingsPrivacy => '隐私政策';
+
+  @override
+  String get settingsContact => '联系我们';
+
+  @override
+  String get settingsFooter => '用 ❤️ 为每一位在日生活的人打造';
+
+  @override
+  String get settingsLogoutTitle => '退出登录';
+
+  @override
+  String get settingsLogoutMessage => '确定要退出登录吗？';
+
+  @override
+  String get settingsLogoutConfirm => '退出';
+
+  @override
+  String get settingsLogoutCancel => '取消';
+
+  @override
+  String get settingsDeleteTitle => '删除账号';
+
+  @override
+  String get settingsDeleteMessage => '此操作无法撤销。你的所有数据将被永久删除。确定吗？';
+
+  @override
+  String get settingsDeleteConfirmAction => '删除我的账号';
+
+  @override
+  String get settingsDeleteCancel => '取消';
+
+  @override
+  String get settingsDeleteSuccess => '你的账号已删除。';
+
+  @override
+  String get settingsLanguageTitle => '选择语言';
+
+  @override
+  String get settingsErrorLogout => '无法退出登录，请重试。';
+
+  @override
+  String get settingsErrorDelete => '无法删除账号，请重试。';
 }
