@@ -5,142 +5,147 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_spacing.dart';
 import '../../chat/presentation/providers/chat_providers.dart';
 
-/// Home / Dashboard screen (S07).
+/// Home / Dashboard screen (S07) — handoff-home.md spec.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
     final user = ref.watch(authStateProvider).valueOrNull;
 
+    // Determine greeting based on time.
+    final hour = DateTime.now().hour;
+    final name = user?.displayName ?? user?.email?.split('@').first ?? '';
+    final greeting = _greeting(l10n, hour, name);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.appTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: l10n.logout,
-            onPressed: () async {
-              await ref.read(firebaseAuthProvider).signOut();
-            },
-          ),
-        ],
-      ),
+      backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Welcome banner.
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.travel_explore,
-                        size: 48,
-                        color: theme.colorScheme.primary,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.homeWelcome,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              l10n.homeSubtitle,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                            if (user?.email != null) ...[
-                              const SizedBox(height: 4),
-                              Text(
-                                user!.email!,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            // Refresh usage data if available.
+          },
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: AppSpacing.space2xl),
 
-              // Quick actions.
-              Text(
-                l10n.homeQuickActions,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+                // ── Greeting ─────────────────────────────────
+                Text(greeting, style: tt.displayMedium),
+                const SizedBox(height: AppSpacing.spaceXs),
+                // Usage line.
+                Text(
+                  l10n.homeUsageFree(5, 5), // placeholder values
+                  style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
                 ),
-              ),
-              const SizedBox(height: 12),
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 1.4,
-                children: [
-                  _QuickActionCard(
-                    icon: Icons.smart_toy,
-                    label: l10n.homeActionAskAI,
-                    color: theme.colorScheme.primary,
-                    onTap: () => _startNewChat(context, ref),
-                  ),
-                  _QuickActionCard(
-                    icon: Icons.checklist,
-                    label: l10n.homeActionTracker,
-                    color: theme.colorScheme.tertiary,
-                    onTap: () => context.go(AppRoutes.tracker),
-                  ),
-                  _QuickActionCard(
-                    icon: Icons.account_balance,
-                    label: l10n.homeActionBanking,
-                    color: theme.colorScheme.secondary,
-                    onTap: () => context.go(AppRoutes.navigate),
-                  ),
-                  _QuickActionCard(
-                    icon: Icons.chat_bubble,
-                    label: l10n.homeActionChatHistory,
-                    color: theme.colorScheme.error,
-                    onTap: () => context.go(AppRoutes.chat),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
 
-              // Recent chats.
-              Text(
-                l10n.homeRecentChats,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // ── Quick Actions ─────────────────────────────
+                Text(
+                  l10n.homeSectionQuickActions.toUpperCase(),
+                  style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
                 ),
-              ),
-              const SizedBox(height: 12),
-              _RecentChatsList(),
-            ],
+                const SizedBox(height: AppSpacing.spaceMd),
+                GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: AppSpacing.spaceMd,
+                  crossAxisSpacing: AppSpacing.spaceMd,
+                  childAspectRatio: 1.3,
+                  children: [
+                    _QuickActionCard(
+                      icon: Icons.chat_bubble_outline,
+                      iconBgColor: AppColors.primaryContainer,
+                      iconColor: AppColors.primaryDark,
+                      title: l10n.homeQaChatTitle,
+                      subtitle: l10n.homeQaChatSubtitle,
+                      onTap: () => _startNewChat(context, ref),
+                    ),
+                    _QuickActionCard(
+                      icon: Icons.account_balance,
+                      iconBgColor: AppColors.bankingContainer,
+                      iconColor: AppColors.bankingIcon,
+                      title: l10n.homeQaBankingTitle,
+                      subtitle: l10n.homeQaBankingSubtitle,
+                      onTap: () => context.push(AppRoutes.banking),
+                    ),
+                    _QuickActionCard(
+                      icon: Icons.badge,
+                      iconBgColor: AppColors.visaContainer,
+                      iconColor: AppColors.visaIcon,
+                      title: l10n.homeQaVisaTitle,
+                      subtitle: l10n.homeQaVisaSubtitle,
+                      onTap: () => context.push(AppRoutes.visa),
+                    ),
+                    _QuickActionCard(
+                      icon: Icons.local_hospital,
+                      iconBgColor: AppColors.medicalContainer,
+                      iconColor: AppColors.medicalIcon,
+                      title: l10n.homeQaMedicalTitle,
+                      subtitle: l10n.homeQaMedicalSubtitle,
+                      onTap: () => context.push(AppRoutes.medical),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // ── Explore Guides ─────────────────────────────
+                Text(
+                  l10n.homeSectionExplore.toUpperCase(),
+                  style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
+                ),
+                const SizedBox(height: AppSpacing.spaceMd),
+                _ExploreItem(
+                  icon: Icons.explore_outlined,
+                  label: l10n.homeExploreGuides,
+                  onTap: () => context.go(AppRoutes.navigate),
+                ),
+                const SizedBox(height: AppSpacing.spaceSm),
+                _ExploreItem(
+                  icon: Icons.emergency_outlined,
+                  label: l10n.homeExploreEmergency,
+                  iconColor: AppColors.error,
+                  onTap: () => context.push(AppRoutes.medical),
+                ),
+
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // ── Upgrade Banner (Free only) ────────────────
+                _UpgradeBanner(
+                  title: l10n.homeUpgradeTitle,
+                  cta: l10n.homeUpgradeCta,
+                  onTap: () => context.push(AppRoutes.subscription),
+                ),
+
+                const SizedBox(height: AppSpacing.space3xl),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  String _greeting(AppLocalizations l10n, int hour, String name) {
+    if (name.isEmpty) return l10n.homeGreetingNoName;
+    if (hour >= 5 && hour < 12) return l10n.homeGreetingMorning(name);
+    if (hour >= 12 && hour < 17) return l10n.homeGreetingAfternoon(name);
+    if (hour >= 17 || hour < 5) return l10n.homeGreetingEvening(name);
+    return l10n.homeGreetingDefault(name);
   }
 
   Future<void> _startNewChat(BuildContext context, WidgetRef ref) async {
@@ -148,53 +153,72 @@ class HomeScreen extends ConsumerWidget {
       final session =
           await ref.read(chatSessionsProvider.notifier).createSession();
       if (context.mounted) {
-        context.go('${AppRoutes.chat}/${session.id}');
+        context.push('${AppRoutes.chat}/${session.id}');
       }
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).genericError),
-          ),
+          SnackBar(content: Text(AppLocalizations.of(context).genericError)),
         );
       }
     }
   }
 }
 
+/// Quick action card — handoff-home.md §3 component mapping.
 class _QuickActionCard extends StatelessWidget {
   const _QuickActionCard({
     required this.icon,
-    required this.label,
-    required this.color,
+    required this.iconBgColor,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
     required this.onTap,
   });
 
   final IconData icon;
-  final String label;
-  final Color color;
+  final Color iconBgColor;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
+    return Material(
+      color: cs.surface,
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
+        borderRadius: BorderRadius.circular(12),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.spaceLg),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: cs.outlineVariant),
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, size: 32, color: color),
-              const SizedBox(height: 8),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: iconBgColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 20, color: iconColor),
+              ),
+              const Spacer(),
+              Text(title, style: tt.titleMedium),
+              const SizedBox(height: 2),
               Text(
-                label,
-                style: theme.textTheme.labelLarge,
-                textAlign: TextAlign.center,
-                maxLines: 2,
+                subtitle,
+                style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -205,75 +229,98 @@ class _QuickActionCard extends StatelessWidget {
   }
 }
 
-class _RecentChatsList extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final sessionsAsync = ref.watch(chatSessionsProvider);
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+class _ExploreItem extends StatelessWidget {
+  const _ExploreItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.iconColor,
+  });
 
-    return sessionsAsync.when(
-      loading: () => const Center(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: CircularProgressIndicator(),
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final Color? iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    return Material(
+      color: cs.surface,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.spaceLg,
+            vertical: AppSpacing.spaceMd,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: cs.outlineVariant),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: iconColor ?? cs.onSurfaceVariant),
+              const SizedBox(width: AppSpacing.spaceMd),
+              Expanded(child: Text(label, style: tt.titleSmall)),
+              Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+            ],
+          ),
         ),
       ),
-      error: (_, __) => const SizedBox.shrink(),
-      data: (sessions) {
-        if (sessions.isEmpty) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.chat_bubble_outline,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    l10n.homeNoRecentChats,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
+    );
+  }
+}
 
-        final recentSessions = sessions.take(3).toList();
-        return Column(
-          children: recentSessions.map((session) {
-            return Card(
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Icon(
-                    Icons.chat,
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
+class _UpgradeBanner extends StatelessWidget {
+  const _UpgradeBanner({
+    required this.title,
+    required this.cta,
+    required this.onTap,
+  });
+
+  final String title;
+  final String cta;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+
+    return Material(
+      color: AppColors.tertiaryContainer,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.spaceLg),
+          child: Row(
+            children: [
+              const Icon(Icons.star, color: AppColors.tertiary, size: 24),
+              const SizedBox(width: AppSpacing.spaceMd),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: tt.titleSmall?.copyWith(
+                        color: AppColors.onTertiaryContainer,
+                      ),
+                    ),
+                  ],
                 ),
-                title: Text(
-                  session.title ?? l10n.chatUntitledSession,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Text(
-                  '${session.messageCount} ${l10n.homeMessagesLabel}',
-                  style: theme.textTheme.bodySmall,
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  context.go('${AppRoutes.chat}/${session.id}');
-                },
               ),
-            );
-          }).toList(),
-        );
-      },
+              TextButton(onPressed: onTap, child: Text(cta)),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -5,8 +5,9 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_spacing.dart';
 
-/// Language data for each supported language.
+/// Language option data.
 class _LanguageOption {
   const _LanguageOption({
     required this.code,
@@ -27,7 +28,7 @@ const _languages = [
   _LanguageOption(code: 'pt', nativeName: 'Português', flag: '🇧🇷'),
 ];
 
-/// Screen for selecting the app language (S02).
+/// Language selection screen (S02) — handoff-auth.md spec.
 class LanguageScreen extends ConsumerStatefulWidget {
   const LanguageScreen({super.key});
 
@@ -39,57 +40,83 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   String? _selectedCode;
 
   @override
+  void initState() {
+    super.initState();
+    // Pre-select based on device locale if it matches.
+    final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
+    final match =
+        _languages
+            .where((l) => l.code == deviceLocale.languageCode)
+            .firstOrNull;
+    if (match != null) {
+      _selectedCode = match.code;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
 
     return Scaffold(
+      backgroundColor: cs.surface,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screenPadding,
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Spacer(),
-              Text(
-                l10n.languageSelectionTitle,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: AppSpacing.space4xl),
+              // Logo — 48dp.
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: cs.primary,
+                  shape: BoxShape.circle,
                 ),
+                child: Icon(Icons.explore, size: 28, color: cs.onPrimary),
+              ),
+              const SizedBox(height: AppSpacing.spaceLg),
+              // Title.
+              Text(
+                l10n.langTitle,
+                style: tt.displayMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.languageSelectionSubtitle,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              ..._languages.map((lang) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: _LanguageTile(
-                      option: lang,
-                      isSelected: _selectedCode == lang.code,
-                      onTap: () {
-                        setState(() => _selectedCode = lang.code);
-                      },
-                    ),
-                  )),
+              const SizedBox(height: AppSpacing.space3xl),
+              // Language list.
+              ..._languages.map((lang) {
+                final isSelected = _selectedCode == lang.code;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.spaceSm),
+                  child: _LanguageRow(
+                    option: lang,
+                    isSelected: isSelected,
+                    onTap: () => setState(() => _selectedCode = lang.code),
+                  ),
+                );
+              }),
               const Spacer(),
-              ElevatedButton(
-                onPressed: _selectedCode != null
-                    ? () {
-                        ref
-                            .read(localeProvider.notifier)
-                            .setLocale(_selectedCode!);
-                        context.go(AppRoutes.login);
-                      }
-                    : null,
-                child: Text(l10n.continueButton),
+              // Continue button.
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed:
+                      _selectedCode != null
+                          ? () {
+                            ref
+                                .read(localeProvider.notifier)
+                                .setLocale(_selectedCode!);
+                            context.go(AppRoutes.login);
+                          }
+                          : null,
+                  child: Text(l10n.langContinue),
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.spaceLg),
             ],
           ),
         ),
@@ -98,8 +125,8 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
   }
 }
 
-class _LanguageTile extends StatelessWidget {
-  const _LanguageTile({
+class _LanguageRow extends StatelessWidget {
+  const _LanguageRow({
     required this.option,
     required this.isSelected,
     required this.onTap,
@@ -111,37 +138,54 @@ class _LanguageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
     return Material(
-      color: isSelected
-          ? theme.colorScheme.primaryContainer
-          : theme.colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(12),
+      color: isSelected ? cs.primaryContainer : Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceLg),
           child: Row(
             children: [
-              Text(
-                option.flag,
-                style: const TextStyle(fontSize: 24),
-              ),
-              const SizedBox(width: 16),
+              Text(option.flag, style: const TextStyle(fontSize: 24)),
+              const SizedBox(width: AppSpacing.spaceLg),
               Text(
                 option.nativeName,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight:
-                      isSelected ? FontWeight.w600 : FontWeight.normal,
+                style: tt.titleMedium?.copyWith(
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 ),
               ),
               const Spacer(),
-              if (isSelected)
-                Icon(
-                  Icons.check_circle,
-                  color: theme.colorScheme.primary,
+              // Radio indicator.
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected ? cs.primary : cs.outline,
+                    width: isSelected ? 2 : 1,
+                  ),
                 ),
+                child:
+                    isSelected
+                        ? Center(
+                          child: Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: cs.primary,
+                            ),
+                          ),
+                        )
+                        : null,
+              ),
             ],
           ),
         ),

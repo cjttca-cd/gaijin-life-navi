@@ -18,9 +18,7 @@ class TrackerScreen extends ConsumerWidget {
     final procedures = ref.watch(myProceduresProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.trackerTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.trackerTitle)),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(AppRoutes.trackerAdd),
         tooltip: l10n.trackerAddProcedure,
@@ -28,22 +26,26 @@ class TrackerScreen extends ConsumerWidget {
       ),
       body: procedures.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48,
-                  color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () => ref.invalidate(myProceduresProvider),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(myProceduresProvider),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (procs) {
           if (procs.isEmpty) {
             return Center(
@@ -76,15 +78,18 @@ class TrackerScreen extends ConsumerWidget {
           }
 
           // Group by status
-          final notStarted = procs
-              .where((p) => p.status == ProcedureStatus.notStarted)
-              .toList();
-          final inProgress = procs
-              .where((p) => p.status == ProcedureStatus.inProgress)
-              .toList();
-          final completed = procs
-              .where((p) => p.status == ProcedureStatus.completed)
-              .toList();
+          final notStarted =
+              procs
+                  .where((p) => p.status == ProcedureStatus.notStarted)
+                  .toList();
+          final inProgress =
+              procs
+                  .where((p) => p.status == ProcedureStatus.inProgress)
+                  .toList();
+          final completed =
+              procs
+                  .where((p) => p.status == ProcedureStatus.completed)
+                  .toList();
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -147,8 +152,11 @@ class _TierLimitBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.info_outline,
-              size: 20, color: theme.colorScheme.onSurfaceVariant),
+          Icon(
+            Icons.info_outline,
+            size: 20,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -229,7 +237,8 @@ class _ProcedureCard extends StatelessWidget {
         statusColor = theme.colorScheme.tertiary;
     }
 
-    final isOverdue = procedure.dueDate != null &&
+    final isOverdue =
+        procedure.dueDate != null &&
         procedure.status != ProcedureStatus.completed &&
         procedure.dueDate!.isBefore(DateTime.now());
 
@@ -238,21 +247,24 @@ class _ProcedureCard extends StatelessWidget {
       child: ListTile(
         leading: Icon(statusIcon, color: statusColor),
         title: Text(procedure.title),
-        subtitle: procedure.dueDate != null
-            ? Text(
-                '${l10n.trackerDueDate}: ${_formatDate(procedure.dueDate!)}',
-                style: TextStyle(
-                  color: isOverdue ? theme.colorScheme.error : null,
-                  fontWeight: isOverdue ? FontWeight.bold : null,
-                ),
-              )
-            : null,
-        trailing: isOverdue
-            ? Icon(Icons.warning_amber, color: theme.colorScheme.error)
-            : const Icon(Icons.chevron_right),
-        onTap: () => context.push(
-          AppRoutes.trackerDetail.replaceFirst(':id', procedure.id),
-        ),
+        subtitle:
+            procedure.dueDate != null
+                ? Text(
+                  '${l10n.trackerDueDate}: ${_formatDate(procedure.dueDate!)}',
+                  style: TextStyle(
+                    color: isOverdue ? theme.colorScheme.error : null,
+                    fontWeight: isOverdue ? FontWeight.bold : null,
+                  ),
+                )
+                : null,
+        trailing:
+            isOverdue
+                ? Icon(Icons.warning_amber, color: theme.colorScheme.error)
+                : const Icon(Icons.chevron_right),
+        onTap:
+            () => context.push(
+              AppRoutes.trackerDetail.replaceFirst(':id', procedure.id),
+            ),
       ),
     );
   }

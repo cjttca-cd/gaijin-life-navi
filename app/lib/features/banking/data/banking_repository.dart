@@ -17,9 +17,7 @@ class BankingRepository {
       queryParameters: {'lang': lang},
     );
     final items = response.data!['data'] as List<dynamic>;
-    return items
-        .map((e) => Bank.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return items.map((e) => Bank.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   /// Get bank recommendations based on user profile and priorities.
@@ -28,9 +26,7 @@ class BankingRepository {
   }) async {
     final response = await _client.post<Map<String, dynamic>>(
       '/banking/recommend',
-      data: {
-        if (priorities.isNotEmpty) 'priorities': priorities,
-      },
+      data: {if (priorities.isNotEmpty) 'priorities': priorities},
     );
     final items = response.data!['data'] as List<dynamic>;
     return items

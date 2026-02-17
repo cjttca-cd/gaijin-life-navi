@@ -26,20 +26,23 @@ class BankGuide {
     // Pass the entire json to Bank.fromJson.
     return BankGuide(
       bank: Bank.fromJson(json),
-      requirements: json['requirements'] is Map<String, dynamic>
-          ? json['requirements'] as Map<String, dynamic>
-          : <String, dynamic>{},
-      conversationTemplates: (json['conversation_templates'] as List<dynamic>?)
+      requirements:
+          json['requirements'] is Map<String, dynamic>
+              ? json['requirements'] as Map<String, dynamic>
+              : <String, dynamic>{},
+      conversationTemplates:
+          (json['conversation_templates'] as List<dynamic>?)
               ?.map(
-                (e) =>
-                    ConversationTemplate.fromJson(e as Map<String, dynamic>),
+                (e) => ConversationTemplate.fromJson(e as Map<String, dynamic>),
               )
               .toList() ??
           [],
-      troubleshooting: (json['troubleshooting'] as List<dynamic>?)
-          ?.map((e) =>
-              TroubleshootingItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      troubleshooting:
+          (json['troubleshooting'] as List<dynamic>?)
+              ?.map(
+                (e) => TroubleshootingItem.fromJson(e as Map<String, dynamic>),
+              )
+              .toList(),
       sourceUrl: json['source_url'] as String?,
     );
   }
@@ -72,10 +75,7 @@ class ConversationTemplate {
 
 /// A troubleshooting item with problem and solution.
 class TroubleshootingItem {
-  const TroubleshootingItem({
-    required this.problem,
-    required this.solution,
-  });
+  const TroubleshootingItem({required this.problem, required this.solution});
 
   final String problem;
   final String solution;

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_spacing.dart';
 import 'providers/chat_providers.dart';
 import 'widgets/message_bubble.dart';
+import 'widgets/typing_indicator.dart';
 import 'widgets/usage_counter.dart';
 
-/// Chat conversation screen (S09) — SSE streaming + message bubbles.
+/// Chat conversation screen (S08) — handoff-chat.md spec.
 class ChatConversationScreen extends ConsumerStatefulWidget {
   const ChatConversationScreen({super.key, required this.sessionId});
 
@@ -49,39 +54,28 @@ class _ChatConversationScreenState
 
     final usage = ref.read(chatUsageProvider);
     if (usage != null && usage.chatRemaining <= 0 && usage.chatLimit > 0) {
-      _showLimitReachedDialog();
+      _showLimitReachedSnackbar();
       return;
     }
 
     _textController.clear();
+    setState(() {}); // Update send button state.
 
     final controller = ref.read(chatStreamControllerProvider);
     await controller.sendMessage(widget.sessionId, text);
 
-    // Refresh session list to get updated title.
     ref.read(chatSessionsProvider.notifier).refresh();
   }
 
-  void _showLimitReachedDialog() {
+  void _showLimitReachedSnackbar() {
     final l10n = AppLocalizations.of(context);
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.chatLimitReachedTitle),
-        content: Text(l10n.chatLimitReachedMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(l10n.chatDeleteCancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-              // TODO: Navigate to subscription screen.
-            },
-            child: Text(l10n.chatUpgradeToPremium),
-          ),
-        ],
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.chatLimitExhausted),
+        action: SnackBarAction(
+          label: l10n.chatLimitUpgrade,
+          onPressed: () => context.push(AppRoutes.subscription),
+        ),
       ),
     );
   }
@@ -91,21 +85,18 @@ class _ChatConversationScreenState
     final messagesAsync = ref.watch(chatMessagesProvider(widget.sessionId));
     final isStreaming = ref.watch(isChatStreamingProvider);
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
 
-    // Auto-scroll when messages change.
     ref.listen(chatMessagesProvider(widget.sessionId), (_, __) {
       _scrollToBottom();
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.chatConversationTitle),
+        title: Text(l10n.chatTitle),
         actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 8),
-            child: UsageCounter(),
-          ),
+          Padding(padding: EdgeInsets.only(right: 8), child: UsageCounter()),
         ],
       ),
       body: Column(
@@ -113,57 +104,45 @@ class _ChatConversationScreenState
           // Messages list.
           Expanded(
             child: messagesAsync.when(
-              loading: () =>
-                  const Center(child: CircularProgressIndicator()),
-              error: (error, _) => Center(
-                child: Text(l10n.genericError),
-              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (_, __) => Center(child: Text(l10n.genericError)),
               data: (messages) {
                 if (messages.isEmpty && !isStreaming) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.smart_toy,
-                            size: 64,
-                            color: theme.colorScheme.primary
-                                .withValues(alpha: 0.5),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            l10n.chatWelcomePrompt,
-                            style: theme.textTheme.titleMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            l10n.chatWelcomeHint,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return _buildEmptyState(l10n, cs, tt);
                 }
 
                 return ListView.builder(
                   controller: _scrollController,
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  itemCount: messages.length + (isStreaming ? 0 : 0),
+                  itemCount: messages.length + (isStreaming ? 1 : 0),
                   itemBuilder: (context, index) {
+                    if (index == messages.length && isStreaming) {
+                      // Show typing indicator if streaming and last message is user or content is empty.
+                      final lastMsg =
+                          messages.isNotEmpty ? messages.last : null;
+                      if (lastMsg == null ||
+                          lastMsg.isUser ||
+                          lastMsg.content.isEmpty) {
+                        return const TypingIndicator();
+                      }
+                      return const SizedBox.shrink();
+                    }
+
                     final message = messages[index];
-                    final isLastAssistant = message.isAssistant &&
+                    final isLastAssistant =
+                        message.isAssistant &&
                         index == messages.length - 1 &&
                         isStreaming;
+
+                    // Determine if we should show avatar (first in group).
+                    final showAvatar =
+                        index == 0 ||
+                        messages[index - 1].isUser != message.isUser;
+
                     return MessageBubble(
                       message: message,
                       isStreaming: isLastAssistant,
+                      showAvatar: showAvatar && message.isAssistant,
                     );
                   },
                 );
@@ -171,26 +150,32 @@ class _ChatConversationScreenState
             ),
           ),
 
-          // Input area.
+          // Input bar — §6.3.4.
           Container(
             decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 4,
-                  offset: const Offset(0, -1),
-                ),
-              ],
+              color: cs.surface,
+              border: Border(top: BorderSide(color: cs.outlineVariant)),
             ),
             padding: EdgeInsets.only(
-              left: 12,
-              right: 12,
-              top: 8,
-              bottom: MediaQuery.of(context).padding.bottom + 8,
+              left: AppSpacing.spaceLg,
+              right: AppSpacing.spaceLg,
+              top: AppSpacing.spaceSm,
+              bottom:
+                  MediaQuery.of(context).padding.bottom + AppSpacing.spaceSm,
             ),
             child: Row(
               children: [
+                // Attach button (disabled Phase 0).
+                Opacity(
+                  opacity: 0.4,
+                  child: Icon(
+                    Icons.attach_file,
+                    color: cs.onSurfaceVariant,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.spaceSm),
+                // Input field.
                 Expanded(
                   child: TextField(
                     controller: _textController,
@@ -198,34 +183,197 @@ class _ChatConversationScreenState
                     maxLines: 4,
                     minLines: 1,
                     textInputAction: TextInputAction.newline,
+                    onChanged: (_) => setState(() {}),
                     decoration: InputDecoration(
-                      hintText: l10n.chatInputHint,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
+                      hintText: l10n.chatInputPlaceholder,
+                      filled: true,
+                      fillColor: AppColors.surfaceVariant,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 10,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(999),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(999),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(999),
+                        borderSide: BorderSide.none,
                       ),
                     ),
                     enabled: !isStreaming,
                   ),
                 ),
-                const SizedBox(width: 8),
-                IconButton.filled(
-                  onPressed: isStreaming ? null : _sendMessage,
-                  icon: isStreaming
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.send),
+                const SizedBox(width: AppSpacing.spaceSm),
+                // Send button.
+                _SendButton(
+                  enabled:
+                      !isStreaming && _textController.text.trim().isNotEmpty,
+                  onPressed: _sendMessage,
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(AppLocalizations l10n, ColorScheme cs, TextTheme tt) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppSpacing.space3xl),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.chat_bubble_outline,
+              size: 64,
+              color: cs.onSurfaceVariant.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: AppSpacing.spaceLg),
+            Text(
+              l10n.chatEmptyTitle,
+              style: tt.headlineMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.spaceSm),
+            Text(
+              l10n.chatEmptySubtitle,
+              style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.space2xl),
+            // Suggestion chips.
+            _SuggestionChip(
+              icon: Icons.account_balance,
+              iconColor: AppColors.bankingIcon,
+              text: l10n.chatSuggestBank,
+              onTap: () {
+                _textController.text = l10n.chatSuggestBank;
+                _sendMessage();
+              },
+            ),
+            const SizedBox(height: AppSpacing.spaceSm),
+            _SuggestionChip(
+              icon: Icons.badge,
+              iconColor: AppColors.visaIcon,
+              text: l10n.chatSuggestVisa,
+              onTap: () {
+                _textController.text = l10n.chatSuggestVisa;
+                _sendMessage();
+              },
+            ),
+            const SizedBox(height: AppSpacing.spaceSm),
+            _SuggestionChip(
+              icon: Icons.local_hospital,
+              iconColor: AppColors.medicalIcon,
+              text: l10n.chatSuggestMedical,
+              onTap: () {
+                _textController.text = l10n.chatSuggestMedical;
+                _sendMessage();
+              },
+            ),
+            const SizedBox(height: AppSpacing.spaceSm),
+            _SuggestionChip(
+              icon: Icons.explore,
+              iconColor: cs.primary,
+              text: l10n.chatSuggestGeneral,
+              onTap: () {
+                _textController.text = l10n.chatSuggestGeneral;
+                _sendMessage();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SendButton extends StatelessWidget {
+  const _SendButton({required this.enabled, required this.onPressed});
+
+  final bool enabled;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: Material(
+        color: enabled ? cs.primary : AppColors.surfaceDim,
+        shape: const CircleBorder(),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: enabled ? onPressed : null,
+          child: Icon(
+            Icons.send,
+            size: 20,
+            color: enabled ? cs.onPrimary : AppColors.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SuggestionChip extends StatelessWidget {
+  const _SuggestionChip({
+    required this.icon,
+    required this.iconColor,
+    required this.text,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final Color iconColor;
+  final String text;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    return SizedBox(
+      width: double.infinity,
+      child: Material(
+        color: cs.surface,
+        borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: onTap,
+          child: Container(
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.spaceMd),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: cs.outline),
+            ),
+            child: Row(
+              children: [
+                Icon(icon, size: 20, color: iconColor),
+                const SizedBox(width: AppSpacing.spaceMd),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: tt.bodyMedium?.copyWith(color: cs.onSurface),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

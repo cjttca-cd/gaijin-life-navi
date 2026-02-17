@@ -17,28 +17,29 @@ class BankingGuideScreen extends ConsumerWidget {
     final guideAsync = ref.watch(bankGuideProvider(bankId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.bankingGuideTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.bankingGuideTitle)),
       body: guideAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48,
-                  color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () =>
-                    ref.invalidate(bankGuideProvider(bankId)),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(bankGuideProvider(bankId)),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (guide) {
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -53,13 +54,11 @@ class BankingGuideScreen extends ConsumerWidget {
                       children: [
                         CircleAvatar(
                           radius: 28,
-                          backgroundColor:
-                              theme.colorScheme.primaryContainer,
+                          backgroundColor: theme.colorScheme.primaryContainer,
                           child: Text(
                             '${guide.bank.foreignerFriendlyScore}',
                             style: theme.textTheme.headlineSmall?.copyWith(
-                              color:
-                                  theme.colorScheme.onPrimaryContainer,
+                              color: theme.colorScheme.onPrimaryContainer,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -67,8 +66,7 @@ class BankingGuideScreen extends ConsumerWidget {
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 guide.bank.bankName,
@@ -76,10 +74,8 @@ class BankingGuideScreen extends ConsumerWidget {
                               ),
                               Text(
                                 '${l10n.bankingFriendlyScore}: ${guide.bank.foreignerFriendlyScore}/5',
-                                style: theme.textTheme.bodyMedium
-                                    ?.copyWith(
-                                  color: theme
-                                      .colorScheme.onSurfaceVariant,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -113,36 +109,30 @@ class BankingGuideScreen extends ConsumerWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(12),
                         child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               template.situation,
-                              style: theme.textTheme.labelLarge
-                                  ?.copyWith(
+                              style: theme.textTheme.labelLarge?.copyWith(
                                 color: theme.colorScheme.primary,
                               ),
                             ),
                             const Divider(),
                             Text(
                               template.japanese,
-                              style:
-                                  theme.textTheme.titleSmall,
+                              style: theme.textTheme.titleSmall,
                             ),
                             if (template.reading.isNotEmpty)
                               Text(
                                 template.reading,
-                                style: theme.textTheme.bodySmall
-                                    ?.copyWith(
-                                  color: theme.colorScheme
-                                      .onSurfaceVariant,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             const SizedBox(height: 4),
                             Text(
                               template.translation,
-                              style:
-                                  theme.textTheme.bodyMedium,
+                              style: theme.textTheme.bodyMedium,
                             ),
                           ],
                         ),
@@ -166,37 +156,36 @@ class BankingGuideScreen extends ConsumerWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(12),
                         child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.help_outline,
-                                    size: 20,
-                                    color: theme
-                                        .colorScheme.tertiary),
+                                Icon(
+                                  Icons.help_outline,
+                                  size: 20,
+                                  color: theme.colorScheme.tertiary,
+                                ),
                                 const SizedBox(width: 8),
                                 Expanded(
-                                  child: Text(item.problem,
-                                      style: theme
-                                          .textTheme.titleSmall),
+                                  child: Text(
+                                    item.problem,
+                                    style: theme.textTheme.titleSmall,
+                                  ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 4),
                             Row(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.lightbulb_outline,
-                                    size: 20,
-                                    color: theme
-                                        .colorScheme.primary),
+                                Icon(
+                                  Icons.lightbulb_outline,
+                                  size: 20,
+                                  color: theme.colorScheme.primary,
+                                ),
                                 const SizedBox(width: 8),
-                                Expanded(
-                                    child: Text(item.solution)),
+                                Expanded(child: Text(item.solution)),
                               ],
                             ),
                           ],
@@ -211,17 +200,17 @@ class BankingGuideScreen extends ConsumerWidget {
                 if (guide.sourceUrl != null) ...[
                   Row(
                     children: [
-                      Icon(Icons.link,
-                          size: 16,
-                          color:
-                              theme.colorScheme.onSurfaceVariant),
+                      Icon(
+                        Icons.link,
+                        size: 16,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           '${l10n.bankingSource}: ${guide.sourceUrl}',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color:
-                                theme.colorScheme.onSurfaceVariant,
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -243,7 +232,9 @@ class BankingGuideScreen extends ConsumerWidget {
   /// Build requirements display from the requirements map structure.
   /// Extracts the 'documents' list if present, otherwise shows key-value pairs.
   List<Widget> _buildRequirementsList(
-      Map<String, dynamic> requirements, ThemeData theme) {
+    Map<String, dynamic> requirements,
+    ThemeData theme,
+  ) {
     final widgets = <Widget>[];
     final documents = requirements['documents'];
     if (documents is List) {
@@ -254,8 +245,11 @@ class BankingGuideScreen extends ConsumerWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.description_outlined,
-                    size: 20, color: theme.colorScheme.primary),
+                Icon(
+                  Icons.description_outlined,
+                  size: 20,
+                  color: theme.colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 Expanded(child: Text(doc.toString())),
               ],
@@ -273,9 +267,11 @@ class BankingGuideScreen extends ConsumerWidget {
           padding: const EdgeInsets.only(bottom: 4),
           child: Row(
             children: [
-              Icon(Icons.info_outline,
-                  size: 16,
-                  color: theme.colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.info_outline,
+                size: 16,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(

@@ -62,15 +62,13 @@ class SseParser {
             role: (data['role'] as String?) ?? 'assistant',
           );
         case 'content_delta':
-          return ContentDeltaEvent(
-            delta: data['delta'] as String,
-          );
+          return ContentDeltaEvent(delta: data['delta'] as String);
         case 'message_end':
           return MessageEndEvent(
-            sources: data['sources'] != null
-                ? (data['sources'] as List)
-                    .cast<Map<String, dynamic>>()
-                : null,
+            sources:
+                data['sources'] != null
+                    ? (data['sources'] as List).cast<Map<String, dynamic>>()
+                    : null,
             tokensUsed: data['tokens_used'] as int?,
             disclaimer: data['disclaimer'] as String?,
             usage: data['usage'] as Map<String, dynamic>?,

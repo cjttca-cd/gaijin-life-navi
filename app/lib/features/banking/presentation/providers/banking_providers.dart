@@ -26,17 +26,19 @@ final bankListProvider = FutureProvider<List<Bank>>((ref) async {
 /// Provider for bank recommendations.
 /// Pass priorities as family parameter.
 final bankRecommendationsProvider =
-    FutureProvider.family<List<BankRecommendation>, List<String>>(
-  (ref, priorities) async {
-    final repo = ref.watch(bankingRepositoryProvider);
-    return repo.getRecommendations(priorities: priorities);
-  },
-);
+    FutureProvider.family<List<BankRecommendation>, List<String>>((
+      ref,
+      priorities,
+    ) async {
+      final repo = ref.watch(bankingRepositoryProvider);
+      return repo.getRecommendations(priorities: priorities);
+    });
 
 /// Provider for a specific bank guide.
-final bankGuideProvider = FutureProvider.family<BankGuide, String>(
-  (ref, bankId) async {
-    final repo = ref.watch(bankingRepositoryProvider);
-    return repo.getBankGuide(bankId);
-  },
-);
+final bankGuideProvider = FutureProvider.family<BankGuide, String>((
+  ref,
+  bankId,
+) async {
+  final repo = ref.watch(bankingRepositoryProvider);
+  return repo.getBankGuide(bankId);
+});

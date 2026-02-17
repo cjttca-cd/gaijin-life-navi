@@ -29,14 +29,14 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(AppLocalizations.of(context).trackerStatusUpdated)),
+            content: Text(AppLocalizations.of(context).trackerStatusUpdated),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(AppLocalizations.of(context).genericError)),
+          SnackBar(content: Text(AppLocalizations.of(context).genericError)),
         );
       }
     } finally {
@@ -48,20 +48,21 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
     final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.trackerDeleteTitle),
-        content: Text(l10n.trackerDeleteConfirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.chatDeleteCancel),
+      builder:
+          (context) => AlertDialog(
+            title: Text(l10n.trackerDeleteTitle),
+            content: Text(l10n.trackerDeleteConfirm),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(l10n.chatDeleteCancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(l10n.chatDeleteAction),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(l10n.chatDeleteAction),
-          ),
-        ],
-      ),
     );
 
     if (confirmed != true) return;
@@ -101,9 +102,7 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, __) => Center(child: Text(l10n.genericError)),
         data: (procedures) {
-          final procedure = procedures.where(
-            (p) => p.id == widget.procedureId,
-          );
+          final procedure = procedures.where((p) => p.id == widget.procedureId);
           if (procedure.isEmpty) {
             return Center(child: Text(l10n.genericError));
           }
@@ -125,8 +124,10 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(l10n.trackerCurrentStatus,
-                            style: theme.textTheme.titleMedium),
+                        Text(
+                          l10n.trackerCurrentStatus,
+                          style: theme.textTheme.titleMedium,
+                        ),
                         const SizedBox(height: 8),
                         _StatusChip(status: proc.status),
                       ],
@@ -142,14 +143,18 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
                       padding: const EdgeInsets.all(16),
                       child: Row(
                         children: [
-                          Icon(Icons.calendar_today,
-                              color: theme.colorScheme.primary),
+                          Icon(
+                            Icons.calendar_today,
+                            color: theme.colorScheme.primary,
+                          ),
                           const SizedBox(width: 12),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(l10n.trackerDueDate,
-                                  style: theme.textTheme.labelMedium),
+                              Text(
+                                l10n.trackerDueDate,
+                                style: theme.textTheme.labelMedium,
+                              ),
                               Text(
                                 _formatDate(proc.dueDate!),
                                 style: theme.textTheme.bodyLarge,
@@ -171,8 +176,10 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(l10n.trackerNotes,
-                              style: theme.textTheme.labelMedium),
+                          Text(
+                            l10n.trackerNotes,
+                            style: theme.textTheme.labelMedium,
+                          ),
                           const SizedBox(height: 4),
                           Text(proc.notes!),
                         ],
@@ -183,8 +190,10 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
                 ],
 
                 // Status change buttons
-                Text(l10n.trackerChangeStatus,
-                    style: theme.textTheme.titleMedium),
+                Text(
+                  l10n.trackerChangeStatus,
+                  style: theme.textTheme.titleMedium,
+                ),
                 const SizedBox(height: 12),
 
                 if (_isUpdating)
@@ -194,8 +203,8 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: FilledButton.icon(
-                        onPressed: () =>
-                            _updateStatus(ProcedureStatus.inProgress),
+                        onPressed:
+                            () => _updateStatus(ProcedureStatus.inProgress),
                         icon: const Icon(Icons.play_arrow),
                         label: Text(l10n.trackerMarkInProgress),
                       ),
@@ -204,16 +213,16 @@ class _TrackerDetailScreenState extends ConsumerState<TrackerDetailScreen> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: FilledButton.tonalIcon(
-                        onPressed: () =>
-                            _updateStatus(ProcedureStatus.completed),
+                        onPressed:
+                            () => _updateStatus(ProcedureStatus.completed),
                         icon: const Icon(Icons.check),
                         label: Text(l10n.trackerMarkCompleted),
                       ),
                     ),
                   if (proc.status == ProcedureStatus.completed)
                     OutlinedButton.icon(
-                      onPressed: () =>
-                          _updateStatus(ProcedureStatus.inProgress),
+                      onPressed:
+                          () => _updateStatus(ProcedureStatus.inProgress),
                       icon: const Icon(Icons.undo),
                       label: Text(l10n.trackerMarkIncomplete),
                     ),

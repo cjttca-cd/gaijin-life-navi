@@ -18,27 +18,29 @@ class ScannerHistoryScreen extends ConsumerWidget {
     final historyAsync = ref.watch(scanHistoryProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.scannerHistoryTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.scannerHistoryTitle)),
       body: historyAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48,
-                  color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () => ref.invalidate(scanHistoryProvider),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(scanHistoryProvider),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (scans) {
           if (scans.isEmpty) {
             return Center(
@@ -70,17 +72,16 @@ class ScannerHistoryScreen extends ConsumerWidget {
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
                   leading: _scanStatusIcon(scan.status, theme),
-                  title: Text(
-                    scan.documentType ?? l10n.scannerUnknownType,
-                  ),
-                  subtitle: scan.createdAt != null
-                      ? Text(_formatDate(scan.createdAt!))
-                      : null,
+                  title: Text(scan.documentType ?? l10n.scannerUnknownType),
+                  subtitle:
+                      scan.createdAt != null
+                          ? Text(_formatDate(scan.createdAt!))
+                          : null,
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push(
-                    AppRoutes.scannerResult
-                        .replaceFirst(':id', scan.id),
-                  ),
+                  onTap:
+                      () => context.push(
+                        AppRoutes.scannerResult.replaceFirst(':id', scan.id),
+                      ),
                 ),
               );
             },
@@ -95,8 +96,7 @@ class ScannerHistoryScreen extends ConsumerWidget {
       case ScanStatus.completed:
         return CircleAvatar(
           backgroundColor: theme.colorScheme.primaryContainer,
-          child: Icon(Icons.check,
-              color: theme.colorScheme.onPrimaryContainer),
+          child: Icon(Icons.check, color: theme.colorScheme.onPrimaryContainer),
         );
       case ScanStatus.processing:
       case ScanStatus.uploading:
@@ -111,8 +111,10 @@ class ScannerHistoryScreen extends ConsumerWidget {
       case ScanStatus.failed:
         return CircleAvatar(
           backgroundColor: theme.colorScheme.errorContainer,
-          child: Icon(Icons.error_outline,
-              color: theme.colorScheme.onErrorContainer),
+          child: Icon(
+            Icons.error_outline,
+            color: theme.colorScheme.onErrorContainer,
+          ),
         );
     }
   }

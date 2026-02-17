@@ -6,8 +6,9 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_spacing.dart';
 
-/// Login screen (S03).
+/// Login screen (S03) — handoff-auth.md spec.
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -21,7 +22,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
-  String? _errorMessage;
 
   @override
   void dispose() {
@@ -33,44 +33,57 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+    setState(() => _isLoading = true);
 
     try {
-      await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
+      await ref
+          .read(firebaseAuthProvider)
+          .signInWithEmailAndPassword(
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
-      // Redirect is handled by the router's auth guard.
+      // Router redirect handles navigation.
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message;
-      });
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      final msg = switch (e.code) {
+        'invalid-email' => l10n.loginErrorInvalidEmail,
+        'user-not-found' ||
+        'wrong-password' ||
+        'invalid-credential' => l10n.loginErrorInvalidCredentials,
+        'too-many-requests' => l10n.loginErrorTooManyAttempts,
+        _ => l10n.loginErrorNetwork,
+      };
+      _showSnackBar(msg);
     } catch (_) {
       if (mounted) {
-        setState(() {
-          _errorMessage = AppLocalizations.of(context).genericError;
-        });
+        _showSnackBar(AppLocalizations.of(context).loginErrorNetwork);
       }
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
 
     return Scaffold(
+      backgroundColor: cs.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400),
               child: Form(
@@ -79,63 +92,74 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      l10n.loginTitle,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                    // Logo.
+                    Center(
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: cs.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.explore,
+                          size: 28,
+                          color: cs.onPrimary,
+                        ),
                       ),
+                    ),
+                    const SizedBox(height: AppSpacing.spaceSm),
+                    // App name.
+                    Text(
+                      'Gaijin Life Navi',
+                      style: tt.titleLarge,
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.space3xl),
+                    // Welcome text.
+                    Text(
+                      l10n.loginWelcome,
+                      style: tt.displayMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSpacing.spaceSm),
                     Text(
                       l10n.loginSubtitle,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                      style: tt.bodyMedium?.copyWith(
+                        color: cs.onSurfaceVariant,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 32),
-                    if (_errorMessage != null) ...[
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.errorContainer,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          _errorMessage!,
-                          style: TextStyle(
-                            color: theme.colorScheme.onErrorContainer,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                    const SizedBox(height: AppSpacing.space3xl),
+                    // Email field.
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       autofillHints: const [AutofillHints.email],
                       decoration: InputDecoration(
-                        labelText: l10n.emailLabel,
+                        labelText: l10n.loginEmailLabel,
+                        hintText: l10n.loginEmailHint,
                         prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return l10n.emailRequired;
+                          return l10n.loginErrorInvalidEmail;
                         }
                         if (!value.contains('@') || !value.contains('.')) {
-                          return l10n.emailInvalid;
+                          return l10n.loginErrorInvalidEmail;
                         }
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.spaceSm),
+                    // Password field.
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       autofillHints: const [AutofillHints.password],
                       decoration: InputDecoration(
-                        labelText: l10n.passwordLabel,
+                        labelText: l10n.loginPasswordLabel,
+                        hintText: l10n.loginPasswordHint,
                         prefixIcon: const Icon(Icons.lock_outlined),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -143,49 +167,53 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
                           ),
-                          onPressed: () {
-                            setState(
-                                () => _obscurePassword = !_obscurePassword);
-                          },
+                          onPressed:
+                              () => setState(
+                                () => _obscurePassword = !_obscurePassword,
+                              ),
                         ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return l10n.passwordRequired;
+                          return l10n.loginErrorInvalidEmail; // reuse for empty
                         }
                         return null;
                       },
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.spaceSm),
+                    // Forgot password.
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () =>
-                            context.go(AppRoutes.resetPassword),
-                        child: Text(l10n.forgotPassword),
+                        onPressed: () => context.push(AppRoutes.resetPassword),
+                        child: Text(l10n.loginForgotPassword),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
+                    const SizedBox(height: AppSpacing.spaceLg),
+                    // Sign in button.
+                    FilledButton(
                       onPressed: _isLoading ? null : _handleLogin,
-                      child: _isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : Text(l10n.loginButton),
+                      child:
+                          _isLoading
+                              ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                              : Text(l10n.loginButton),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.space2xl),
+                    // Sign up link.
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(l10n.noAccount),
+                        Text(l10n.loginNoAccount, style: tt.bodyMedium),
                         TextButton(
-                          onPressed: () => context.go(AppRoutes.register),
-                          child: Text(l10n.signUp),
+                          onPressed: () => context.push(AppRoutes.register),
+                          child: Text(l10n.loginSignUp),
                         ),
                       ],
                     ),

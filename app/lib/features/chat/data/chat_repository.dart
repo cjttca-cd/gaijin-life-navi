@@ -75,16 +75,18 @@ class ChatRepository {
   Stream<SseEvent> sendMessage(String sessionId, String content) {
     final controller = StreamController<SseEvent>();
 
-    _streamMessage(sessionId, content, controller).then((_) {
-      if (!controller.isClosed) {
-        controller.close();
-      }
-    }).catchError((Object error) {
-      if (!controller.isClosed) {
-        controller.addError(error);
-        controller.close();
-      }
-    });
+    _streamMessage(sessionId, content, controller)
+        .then((_) {
+          if (!controller.isClosed) {
+            controller.close();
+          }
+        })
+        .catchError((Object error) {
+          if (!controller.isClosed) {
+            controller.addError(error);
+            controller.close();
+          }
+        });
 
     return controller.stream;
   }

@@ -29,9 +29,7 @@ class _ScannerHomeScreenState extends ConsumerState<ScannerHomeScreen> {
       final repo = ref.read(scannerRepositoryProvider);
 
       // Mock file bytes for demo — in production, use image_picker
-      final mockBytes = Uint8List.fromList(
-        List.generate(100, (i) => i % 256),
-      );
+      final mockBytes = Uint8List.fromList(List.generate(100, (i) => i % 256));
 
       final scan = await repo.scanDocument(
         fileBytes: mockBytes,
@@ -41,9 +39,7 @@ class _ScannerHomeScreenState extends ConsumerState<ScannerHomeScreen> {
       ref.invalidate(scanHistoryProvider);
 
       if (mounted) {
-        context.push(
-          AppRoutes.scannerResult.replaceFirst(':id', scan.id),
-        );
+        context.push(AppRoutes.scannerResult.replaceFirst(':id', scan.id));
       }
     } on DioException catch (e) {
       if (mounted) {
@@ -51,15 +47,15 @@ class _ScannerHomeScreenState extends ConsumerState<ScannerHomeScreen> {
         if (e.response?.statusCode == 403) {
           message = l10n.scannerLimitReached;
         }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.genericError)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
       }
     } finally {
       if (mounted) setState(() => _isScanning = false);
@@ -121,9 +117,11 @@ class _ScannerHomeScreenState extends ConsumerState<ScannerHomeScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.info_outline,
-                        size: 16,
-                        color: theme.colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.info_outline,
+                      size: 16,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(

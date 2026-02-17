@@ -32,21 +32,24 @@ class EmergencyGuide {
   factory EmergencyGuide.fromJson(Map<String, dynamic> json) {
     return EmergencyGuide(
       emergencyNumber: json['emergency_number'] as String? ?? '119',
-      howToCall: (json['how_to_call'] as List<dynamic>?)
+      howToCall:
+          (json['how_to_call'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
-      whatToPrepare: (json['what_to_prepare'] as List<dynamic>?)
+      whatToPrepare:
+          (json['what_to_prepare'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
       policeNumber: json['police_number'] as String?,
-      usefulPhrases: (json['useful_phrases'] as List<dynamic>?)
-              ?.map((e) =>
-                  EmergencyPhrase.fromJson(e as Map<String, dynamic>))
+      usefulPhrases:
+          (json['useful_phrases'] as List<dynamic>?)
+              ?.map((e) => EmergencyPhrase.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      importantNotes: (json['important_notes'] as List<dynamic>?)
+      importantNotes:
+          (json['important_notes'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],

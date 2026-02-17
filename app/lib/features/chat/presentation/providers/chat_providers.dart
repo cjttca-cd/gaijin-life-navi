@@ -26,8 +26,8 @@ final chatRepositoryProvider = Provider<ChatRepository>((ref) {
 /// Provider for chat session list.
 final chatSessionsProvider =
     AsyncNotifierProvider<ChatSessionsNotifier, List<ChatSession>>(
-  ChatSessionsNotifier.new,
-);
+      ChatSessionsNotifier.new,
+    );
 
 class ChatSessionsNotifier extends AsyncNotifier<List<ChatSession>> {
   @override
@@ -73,9 +73,10 @@ class ChatSessionsNotifier extends AsyncNotifier<List<ChatSession>> {
 
 /// Provider for messages within a specific session.
 final chatMessagesProvider = AsyncNotifierProvider.family<
-    ChatMessagesNotifier, List<ChatMessage>, String>(
-  ChatMessagesNotifier.new,
-);
+  ChatMessagesNotifier,
+  List<ChatMessage>,
+  String
+>(ChatMessagesNotifier.new);
 
 class ChatMessagesNotifier
     extends FamilyAsyncNotifier<List<ChatMessage>, String> {
@@ -108,8 +109,7 @@ class ChatMessagesNotifier
 // ─── Chat usage (remaining daily count) ──────────────────────
 
 /// Holds the current chat usage info.
-final chatUsageProvider =
-    StateProvider<ChatUsage?>((ref) => null);
+final chatUsageProvider = StateProvider<ChatUsage?>((ref) => null);
 
 // ─── Streaming state ─────────────────────────────────────────
 
@@ -126,8 +126,9 @@ class ChatStreamController {
   /// Send a message and process the SSE stream.
   Future<void> sendMessage(String sessionId, String content) async {
     final repo = _ref.read(chatRepositoryProvider);
-    final messagesNotifier =
-        _ref.read(chatMessagesProvider(sessionId).notifier);
+    final messagesNotifier = _ref.read(
+      chatMessagesProvider(sessionId).notifier,
+    );
 
     // Add user message optimistically.
     final userMessage = ChatMessage(
@@ -174,15 +175,14 @@ class ChatStreamController {
             messagesNotifier.upsertAssistantMessage(msg);
 
           case MessageEndEvent(
-              :final sources,
-              :final disclaimer,
-              :final tokensUsed,
-              :final usage,
-            ):
+            :final sources,
+            :final disclaimer,
+            :final tokensUsed,
+            :final usage,
+          ):
             // Finalize the message.
-            final sourceCitations = sources
-                ?.map((s) => SourceCitation.fromJson(s))
-                .toList();
+            final sourceCitations =
+                sources?.map((s) => SourceCitation.fromJson(s)).toList();
             final msg = ChatMessage(
               id: assistantId,
               sessionId: sessionId,
@@ -197,8 +197,9 @@ class ChatStreamController {
 
             // Update usage.
             if (usage != null) {
-              _ref.read(chatUsageProvider.notifier).state =
-                  ChatUsage.fromJson(usage);
+              _ref.read(chatUsageProvider.notifier).state = ChatUsage.fromJson(
+                usage,
+              );
             }
 
             _ref.read(isChatStreamingProvider.notifier).state = false;

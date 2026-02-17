@@ -24,17 +24,16 @@ class ProcedureTemplate {
     return ProcedureTemplate(
       id: json['id'] as String,
       // Backend uses 'procedure_code', not 'procedure_type'.
-      procedureType: json['procedure_code'] as String? ??
+      procedureType:
+          json['procedure_code'] as String? ??
           json['procedure_type'] as String? ??
           '',
       // Backend uses 'procedure_name', not 'title'.
-      title: json['procedure_name'] as String? ??
-          json['title'] as String? ??
-          '',
+      title:
+          json['procedure_name'] as String? ?? json['title'] as String? ?? '',
       description: json['description'] as String?,
       category: json['category'] as String?,
-      isArrivalEssential:
-          json['is_arrival_essential'] as bool? ?? false,
+      isArrivalEssential: json['is_arrival_essential'] as bool? ?? false,
     );
   }
 }

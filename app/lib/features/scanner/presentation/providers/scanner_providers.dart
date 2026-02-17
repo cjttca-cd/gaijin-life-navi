@@ -22,9 +22,10 @@ final scanHistoryProvider = FutureProvider<List<DocumentScan>>((ref) async {
 });
 
 /// Provider for a specific scan result.
-final scanResultProvider = FutureProvider.family<DocumentScan, String>(
-  (ref, scanId) async {
-    final repo = ref.watch(scannerRepositoryProvider);
-    return repo.getScan(scanId);
-  },
-);
+final scanResultProvider = FutureProvider.family<DocumentScan, String>((
+  ref,
+  scanId,
+) async {
+  final repo = ref.watch(scannerRepositoryProvider);
+  return repo.getScan(scanId);
+});

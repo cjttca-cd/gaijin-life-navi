@@ -52,9 +52,7 @@ class NavigateScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.tabNavigate),
-      ),
+      appBar: AppBar(title: Text(l10n.tabGuide)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
@@ -116,11 +114,7 @@ class _NavigateCard extends StatelessWidget {
                   color: item.color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Icon(
-                  item.icon,
-                  size: 32,
-                  color: item.color,
-                ),
+                child: Icon(item.icon, size: 32, color: item.color),
               ),
               const SizedBox(height: 12),
               Text(

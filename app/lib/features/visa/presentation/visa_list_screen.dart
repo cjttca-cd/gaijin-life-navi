@@ -25,9 +25,7 @@ class _VisaListScreenState extends ConsumerState<VisaListScreen> {
     final procedures = ref.watch(visaProceduresProvider(_selectedStatus));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.visaTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.visaTitle)),
       body: Column(
         children: [
           // Disclaimer banner (mandatory for Visa Navigator)
@@ -71,30 +69,37 @@ class _VisaListScreenState extends ConsumerState<VisaListScreen> {
           // Procedure list
           Expanded(
             child: procedures.when(
-              loading: () =>
-                  const Center(child: CircularProgressIndicator()),
-              error: (error, _) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error_outline,
-                        size: 48, color: theme.colorScheme.error),
-                    const SizedBox(height: 16),
-                    Text(l10n.genericError),
-                    const SizedBox(height: 8),
-                    FilledButton(
-                      onPressed: () => ref.invalidate(
-                          visaProceduresProvider(_selectedStatus)),
-                      child: Text(l10n.chatRetry),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error:
+                  (error, _) => Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 48,
+                          color: theme.colorScheme.error,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(l10n.genericError),
+                        const SizedBox(height: 8),
+                        FilledButton(
+                          onPressed:
+                              () => ref.invalidate(
+                                visaProceduresProvider(_selectedStatus),
+                              ),
+                          child: Text(l10n.chatRetry),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
               data: (procs) {
                 if (procs.isEmpty) {
                   return Center(
-                    child: Text(l10n.visaEmpty,
-                        style: theme.textTheme.bodyLarge),
+                    child: Text(
+                      l10n.visaEmpty,
+                      style: theme.textTheme.bodyLarge,
+                    ),
                   );
                 }
                 return ListView.builder(
@@ -106,27 +111,29 @@ class _VisaListScreenState extends ConsumerState<VisaListScreen> {
                       margin: const EdgeInsets.only(bottom: 12),
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor:
-                              theme.colorScheme.secondaryContainer,
+                          backgroundColor: theme.colorScheme.secondaryContainer,
                           child: Icon(
                             Icons.assignment_outlined,
-                            color: theme
-                                .colorScheme.onSecondaryContainer,
+                            color: theme.colorScheme.onSecondaryContainer,
                           ),
                         ),
                         title: Text(proc.title),
-                        subtitle: proc.description != null
-                            ? Text(
-                                proc.description!,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : null,
+                        subtitle:
+                            proc.description != null
+                                ? Text(
+                                  proc.description!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                                : null,
                         trailing: const Icon(Icons.chevron_right),
-                        onTap: () => context.push(
-                          AppRoutes.visaDetail.replaceFirst(
-                              ':procedureId', proc.id),
-                        ),
+                        onTap:
+                            () => context.push(
+                              AppRoutes.visaDetail.replaceFirst(
+                                ':procedureId',
+                                proc.id,
+                              ),
+                            ),
                       ),
                     );
                   },
@@ -141,11 +148,11 @@ class _VisaListScreenState extends ConsumerState<VisaListScreen> {
 
   List<MapEntry<String, String>> _statusFilters(AppLocalizations l10n) {
     return [
-      MapEntry('engineer_specialist', l10n.visaEngineer),
-      MapEntry('student', l10n.visaStudent),
-      MapEntry('dependent', l10n.visaDependent),
-      MapEntry('permanent_resident', l10n.visaPermanent),
-      MapEntry('spouse_of_japanese', l10n.visaSpouse),
+      MapEntry('engineer_specialist', l10n.statusEngineer),
+      MapEntry('student', l10n.statusStudent),
+      MapEntry('dependent', l10n.statusDependent),
+      MapEntry('permanent_resident', l10n.statusPermanent),
+      MapEntry('spouse_of_japanese', l10n.statusSpouse),
     ];
   }
 }

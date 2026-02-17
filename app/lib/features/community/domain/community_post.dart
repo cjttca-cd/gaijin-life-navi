@@ -79,14 +79,17 @@ class CommunityPost {
       upvoteCount: json['upvote_count'] as int? ?? 0,
       replyCount: json['reply_count'] as int? ?? 0,
       moderationStatus: ModerationStatus.fromString(
-          json['ai_moderation_status'] as String? ?? 'pending'),
+        json['ai_moderation_status'] as String? ?? 'pending',
+      ),
       userVoted: json['user_voted'] as bool? ?? false,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'] as String)
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.tryParse(json['updated_at'] as String)
-          : null,
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.tryParse(json['created_at'] as String)
+              : null,
+      updatedAt:
+          json['updated_at'] != null
+              ? DateTime.tryParse(json['updated_at'] as String)
+              : null,
     );
   }
 

@@ -18,28 +18,32 @@ class VisaDetailScreen extends ConsumerWidget {
     final detail = ref.watch(visaProcedureDetailProvider(procedureId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.visaDetailTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.visaDetailTitle)),
       body: detail.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48,
-                  color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () => ref.invalidate(
-                    visaProcedureDetailProvider(procedureId)),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed:
+                        () => ref.invalidate(
+                          visaProcedureDetailProvider(procedureId),
+                        ),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (proc) {
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -50,21 +54,17 @@ class VisaDetailScreen extends ConsumerWidget {
                 Text(proc.title, style: theme.textTheme.headlineSmall),
                 if (proc.description != null) ...[
                   const SizedBox(height: 8),
-                  Text(proc.description!,
-                      style: theme.textTheme.bodyLarge),
+                  Text(proc.description!, style: theme.textTheme.bodyLarge),
                 ],
                 const SizedBox(height: 16),
 
                 // Disclaimer banner (mandatory)
-                DisclaimerBanner(
-                  text: proc.disclaimer ?? l10n.visaDisclaimer,
-                ),
+                DisclaimerBanner(text: proc.disclaimer ?? l10n.visaDisclaimer),
                 const SizedBox(height: 24),
 
                 // Steps
                 if (proc.steps.isNotEmpty) ...[
-                  Text(l10n.visaSteps,
-                      style: theme.textTheme.titleMedium),
+                  Text(l10n.visaSteps, style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
                   ...proc.steps.map(
                     (step) => Card(
@@ -72,21 +72,20 @@ class VisaDetailScreen extends ConsumerWidget {
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: 16,
-                          backgroundColor:
-                              theme.colorScheme.primaryContainer,
+                          backgroundColor: theme.colorScheme.primaryContainer,
                           child: Text(
                             '${step.stepNumber}',
                             style: TextStyle(
-                              color: theme
-                                  .colorScheme.onPrimaryContainer,
+                              color: theme.colorScheme.onPrimaryContainer,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                         title: Text(step.title),
-                        subtitle: step.description != null
-                            ? Text(step.description!)
-                            : null,
+                        subtitle:
+                            step.description != null
+                                ? Text(step.description!)
+                                : null,
                       ),
                     ),
                   ),
@@ -95,8 +94,10 @@ class VisaDetailScreen extends ConsumerWidget {
 
                 // Required documents
                 if (proc.requiredDocuments.isNotEmpty) ...[
-                  Text(l10n.visaRequiredDocuments,
-                      style: theme.textTheme.titleMedium),
+                  Text(
+                    l10n.visaRequiredDocuments,
+                    style: theme.textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 8),
                   ...proc.requiredDocuments.map(
                     (doc) => Card(
@@ -104,30 +105,34 @@ class VisaDetailScreen extends ConsumerWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(12),
                         child: Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.check_circle_outline,
-                                size: 20,
-                                color: theme.colorScheme.primary),
+                            Icon(
+                              Icons.check_circle_outline,
+                              size: 20,
+                              color: theme.colorScheme.primary,
+                            ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(doc.name,
-                                      style: theme
-                                          .textTheme.bodyMedium),
+                                  Text(
+                                    doc.name,
+                                    style: theme.textTheme.bodyMedium,
+                                  ),
                                   if (doc.howToGet != null &&
                                       doc.howToGet!.isNotEmpty)
-                                    Text(doc.howToGet!,
-                                        style: theme
-                                            .textTheme.bodySmall
-                                            ?.copyWith(
-                                          color: theme.colorScheme
-                                              .onSurfaceVariant,
-                                        )),
+                                    Text(
+                                      doc.howToGet!,
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            color:
+                                                theme
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                          ),
+                                    ),
                                 ],
                               ),
                             ),
@@ -141,20 +146,19 @@ class VisaDetailScreen extends ConsumerWidget {
 
                 // Fees
                 if (proc.fees != null) ...[
-                  Text(l10n.visaFees,
-                      style: theme.textTheme.titleMedium),
+                  Text(l10n.visaFees, style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Row(
                         children: [
-                          Icon(Icons.payments_outlined,
-                              color: theme.colorScheme.primary),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(_formatFees(proc.fees!)),
+                          Icon(
+                            Icons.payments_outlined,
+                            color: theme.colorScheme.primary,
                           ),
+                          const SizedBox(width: 12),
+                          Expanded(child: Text(_formatFees(proc.fees!))),
                         ],
                       ),
                     ),
@@ -164,16 +168,20 @@ class VisaDetailScreen extends ConsumerWidget {
 
                 // Processing time
                 if (proc.processingTime != null) ...[
-                  Text(l10n.visaProcessingTime,
-                      style: theme.textTheme.titleMedium),
+                  Text(
+                    l10n.visaProcessingTime,
+                    style: theme.textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 8),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Row(
                         children: [
-                          Icon(Icons.schedule_outlined,
-                              color: theme.colorScheme.primary),
+                          Icon(
+                            Icons.schedule_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
                           const SizedBox(width: 12),
                           Expanded(child: Text(proc.processingTime!)),
                         ],
@@ -187,9 +195,11 @@ class VisaDetailScreen extends ConsumerWidget {
                 if (proc.sourceUrl != null) ...[
                   Row(
                     children: [
-                      Icon(Icons.link,
-                          size: 16,
-                          color: theme.colorScheme.onSurfaceVariant),
+                      Icon(
+                        Icons.link,
+                        size: 16,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(

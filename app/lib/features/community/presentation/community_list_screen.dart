@@ -28,12 +28,11 @@ class CommunityListScreen extends ConsumerWidget {
         actions: [
           // Sort toggle
           IconButton(
-            icon: Icon(
-              sort == 'newest' ? Icons.schedule : Icons.trending_up,
-            ),
-            tooltip: sort == 'newest'
-                ? l10n.communitySortPopular
-                : l10n.communitySortNewest,
+            icon: Icon(sort == 'newest' ? Icons.schedule : Icons.trending_up),
+            tooltip:
+                sort == 'newest'
+                    ? l10n.communitySortPopular
+                    : l10n.communitySortNewest,
             onPressed: () {
               ref.read(communitySortProvider.notifier).state =
                   sort == 'newest' ? 'popular' : 'newest';
@@ -57,39 +56,44 @@ class CommunityListScreen extends ConsumerWidget {
           // Channel selector (language tabs)
           _ChannelSelector(
             selected: channel,
-            onChanged: (value) =>
-                ref.read(communityChannelProvider.notifier).state = value,
+            onChanged:
+                (value) =>
+                    ref.read(communityChannelProvider.notifier).state = value,
           ),
 
           // Category filter chips
           _CategoryFilter(
             selected: category,
-            onChanged: (value) =>
-                ref.read(communityCategoryProvider.notifier).state = value,
+            onChanged:
+                (value) =>
+                    ref.read(communityCategoryProvider.notifier).state = value,
           ),
 
           // Post list
           Expanded(
             child: posts.when(
-              loading: () =>
-                  const Center(child: CircularProgressIndicator()),
-              error: (error, _) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.error_outline,
-                        size: 48, color: theme.colorScheme.error),
-                    const SizedBox(height: 16),
-                    Text(l10n.genericError),
-                    const SizedBox(height: 8),
-                    FilledButton(
-                      onPressed: () =>
-                          ref.invalidate(communityPostsProvider),
-                      child: Text(l10n.chatRetry),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error:
+                  (error, _) => Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 48,
+                          color: theme.colorScheme.error,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(l10n.genericError),
+                        const SizedBox(height: 8),
+                        FilledButton(
+                          onPressed:
+                              () => ref.invalidate(communityPostsProvider),
+                          child: Text(l10n.chatRetry),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
               data: (postList) {
                 if (postList.isEmpty) {
                   return Center(
@@ -114,9 +118,8 @@ class CommunityListScreen extends ConsumerWidget {
                 }
 
                 return RefreshIndicator(
-                  onRefresh: () => ref
-                      .read(communityPostsProvider.notifier)
-                      .refresh(),
+                  onRefresh:
+                      () => ref.read(communityPostsProvider.notifier).refresh(),
                   child: ListView.builder(
                     padding: const EdgeInsets.only(bottom: 80),
                     itemCount: postList.length,
@@ -137,10 +140,7 @@ class CommunityListScreen extends ConsumerWidget {
 // ─── Channel Selector ────────────────────────────────────────
 
 class _ChannelSelector extends StatelessWidget {
-  const _ChannelSelector({
-    required this.selected,
-    required this.onChanged,
-  });
+  const _ChannelSelector({required this.selected, required this.onChanged});
 
   final String selected;
   final ValueChanged<String> onChanged;
@@ -160,17 +160,18 @@ class _ChannelSelector extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
-        children: _channels.map((ch) {
-          final isSelected = ch == selected;
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: FilterChip(
-              label: Text(_channelLabels[ch] ?? ch),
-              selected: isSelected,
-              onSelected: (_) => onChanged(ch),
-            ),
-          );
-        }).toList(),
+        children:
+            _channels.map((ch) {
+              final isSelected = ch == selected;
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: FilterChip(
+                  label: Text(_channelLabels[ch] ?? ch),
+                  selected: isSelected,
+                  onSelected: (_) => onChanged(ch),
+                ),
+              );
+            }).toList(),
       ),
     );
   }
@@ -179,10 +180,7 @@ class _ChannelSelector extends StatelessWidget {
 // ─── Category Filter ─────────────────────────────────────────
 
 class _CategoryFilter extends StatelessWidget {
-  const _CategoryFilter({
-    required this.selected,
-    required this.onChanged,
-  });
+  const _CategoryFilter({required this.selected, required this.onChanged});
 
   final String? selected;
   final ValueChanged<String?> onChanged;
@@ -208,17 +206,18 @@ class _CategoryFilter extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        children: categoryLabels.entries.map((entry) {
-          final isSelected = entry.key == selected;
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: ChoiceChip(
-              label: Text(entry.value),
-              selected: isSelected,
-              onSelected: (_) => onChanged(entry.key),
-            ),
-          );
-        }).toList(),
+        children:
+            categoryLabels.entries.map((entry) {
+              final isSelected = entry.key == selected;
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ChoiceChip(
+                  label: Text(entry.value),
+                  selected: isSelected,
+                  onSelected: (_) => onChanged(entry.key),
+                ),
+              );
+            }).toList(),
       ),
     );
   }
@@ -240,9 +239,10 @@ class _PostCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => context.push(
-          AppRoutes.communityDetail.replaceFirst(':id', post.id),
-        ),
+        onTap:
+            () => context.push(
+              AppRoutes.communityDetail.replaceFirst(':id', post.id),
+            ),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -260,7 +260,9 @@ class _PostCard extends StatelessWidget {
                   if (post.isAnswered)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.tertiaryContainer,
                         borderRadius: BorderRadius.circular(12),
@@ -268,16 +270,16 @@ class _PostCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.check_circle,
-                              size: 14,
-                              color:
-                                  theme.colorScheme.onTertiaryContainer),
+                          Icon(
+                            Icons.check_circle,
+                            size: 14,
+                            color: theme.colorScheme.onTertiaryContainer,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             l10n.communityAnswered,
                             style: theme.textTheme.labelSmall?.copyWith(
-                              color:
-                                  theme.colorScheme.onTertiaryContainer,
+                              color: theme.colorScheme.onTertiaryContainer,
                             ),
                           ),
                         ],
@@ -310,9 +312,11 @@ class _PostCard extends StatelessWidget {
               // Stats row
               Row(
                 children: [
-                  Icon(Icons.thumb_up_outlined,
-                      size: 16,
-                      color: theme.colorScheme.onSurfaceVariant),
+                  Icon(
+                    Icons.thumb_up_outlined,
+                    size: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     '${post.upvoteCount}',
@@ -321,9 +325,11 @@ class _PostCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Icon(Icons.comment_outlined,
-                      size: 16,
-                      color: theme.colorScheme.onSurfaceVariant),
+                  Icon(
+                    Icons.comment_outlined,
+                    size: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     '${post.replyCount}',
@@ -332,9 +338,11 @@ class _PostCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Icon(Icons.visibility_outlined,
-                      size: 16,
-                      color: theme.colorScheme.onSurfaceVariant),
+                  Icon(
+                    Icons.visibility_outlined,
+                    size: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     '${post.viewCount}',
@@ -407,15 +415,18 @@ class _ModerationBadge extends StatelessWidget {
     final theme = Theme.of(context);
 
     final isPending = status == ModerationStatus.pending;
-    final color = isPending
-        ? theme.colorScheme.tertiaryContainer
-        : theme.colorScheme.errorContainer;
-    final textColor = isPending
-        ? theme.colorScheme.onTertiaryContainer
-        : theme.colorScheme.onErrorContainer;
-    final label = isPending
-        ? l10n.communityModerationPending
-        : l10n.communityModerationFlagged;
+    final color =
+        isPending
+            ? theme.colorScheme.tertiaryContainer
+            : theme.colorScheme.errorContainer;
+    final textColor =
+        isPending
+            ? theme.colorScheme.onTertiaryContainer
+            : theme.colorScheme.onErrorContainer;
+    final label =
+        isPending
+            ? l10n.communityModerationPending
+            : l10n.communityModerationFlagged;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),

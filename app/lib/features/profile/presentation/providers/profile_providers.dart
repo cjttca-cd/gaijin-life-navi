@@ -27,10 +27,12 @@ final userProfileProvider = FutureProvider<UserProfile>((ref) async {
 
 /// Update profile and refresh provider.
 final updateProfileProvider =
-    FutureProvider.family<UserProfile, Map<String, dynamic>>(
-        (ref, fields) async {
-  final repo = ref.read(profileRepositoryProvider);
-  final updated = await repo.updateProfile(fields);
-  ref.invalidate(userProfileProvider);
-  return updated;
-});
+    FutureProvider.family<UserProfile, Map<String, dynamic>>((
+      ref,
+      fields,
+    ) async {
+      final repo = ref.read(profileRepositoryProvider);
+      final updated = await repo.updateProfile(fields);
+      ref.invalidate(userProfileProvider);
+      return updated;
+    });

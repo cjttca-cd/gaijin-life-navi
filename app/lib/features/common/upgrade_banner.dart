@@ -43,11 +43,7 @@ class UpgradeBanner extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 40,
-            color: theme.colorScheme.primary,
-          ),
+          Icon(icon, size: 40, color: theme.colorScheme.primary),
           const SizedBox(height: 12),
           Text(
             message,
@@ -78,11 +74,7 @@ class UpgradeChip extends StatelessWidget {
     final theme = Theme.of(context);
 
     return ActionChip(
-      avatar: Icon(
-        Icons.star,
-        size: 16,
-        color: theme.colorScheme.primary,
-      ),
+      avatar: Icon(Icons.star, size: 16, color: theme.colorScheme.primary),
       label: Text(l10n.upgradeToPremium),
       onPressed: () => context.push(AppRoutes.subscription),
     );

@@ -18,18 +18,14 @@ final visaRepositoryProvider = Provider<VisaRepository>((ref) {
 /// Provider for the list of visa procedures.
 /// Family parameter is optional residence status filter.
 final visaProceduresProvider =
-    FutureProvider.family<List<VisaProcedure>, String?>(
-  (ref, status) async {
-    final repo = ref.watch(visaRepositoryProvider);
-    return repo.getProcedures(status: status);
-  },
-);
+    FutureProvider.family<List<VisaProcedure>, String?>((ref, status) async {
+      final repo = ref.watch(visaRepositoryProvider);
+      return repo.getProcedures(status: status);
+    });
 
 /// Provider for a specific visa procedure detail.
 final visaProcedureDetailProvider =
-    FutureProvider.family<VisaProcedure, String>(
-  (ref, procedureId) async {
-    final repo = ref.watch(visaRepositoryProvider);
-    return repo.getProcedure(procedureId);
-  },
-);
+    FutureProvider.family<VisaProcedure, String>((ref, procedureId) async {
+      final repo = ref.watch(visaRepositoryProvider);
+      return repo.getProcedure(procedureId);
+    });

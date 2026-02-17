@@ -21,34 +21,37 @@ class ChatListScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.chatTitle),
         actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 8),
-            child: UsageCounter(),
-          ),
+          Padding(padding: EdgeInsets.only(right: 8), child: UsageCounter()),
         ],
       ),
       body: sessionsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline,
-                  size: 48, color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: () =>
-                    ref.read(chatSessionsProvider.notifier).refresh(),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 16),
+                  FilledButton(
+                    onPressed:
+                        () => ref.read(chatSessionsProvider.notifier).refresh(),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        data: (sessions) => sessions.isEmpty
-            ? _buildEmptyState(context, l10n, theme, ref)
-            : _buildSessionList(context, sessions, l10n, theme, ref),
+            ),
+        data:
+            (sessions) =>
+                sessions.isEmpty
+                    ? _buildEmptyState(context, l10n, theme, ref)
+                    : _buildSessionList(context, sessions, l10n, theme, ref),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _createNewChat(context, ref),
@@ -126,26 +129,25 @@ class ChatListScreen extends ConsumerWidget {
             confirmDismiss: (_) async {
               return await showDialog<bool>(
                 context: context,
-                builder: (ctx) => AlertDialog(
-                  title: Text(l10n.chatDeleteTitle),
-                  content: Text(l10n.chatDeleteConfirm),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(false),
-                      child: Text(l10n.chatDeleteCancel),
+                builder:
+                    (ctx) => AlertDialog(
+                      title: Text(l10n.chatDeleteTitle),
+                      content: Text(l10n.chatDeleteConfirm),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(false),
+                          child: Text(l10n.chatDeleteCancel),
+                        ),
+                        FilledButton(
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          child: Text(l10n.chatDeleteAction),
+                        ),
+                      ],
                     ),
-                    FilledButton(
-                      onPressed: () => Navigator.of(ctx).pop(true),
-                      child: Text(l10n.chatDeleteAction),
-                    ),
-                  ],
-                ),
               );
             },
             onDismissed: (_) {
-              ref
-                  .read(chatSessionsProvider.notifier)
-                  .deleteSession(session.id);
+              ref.read(chatSessionsProvider.notifier).deleteSession(session.id);
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -190,9 +192,7 @@ class ChatListScreen extends ConsumerWidget {
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).genericError),
-          ),
+          SnackBar(content: Text(AppLocalizations.of(context).genericError)),
         );
       }
     }

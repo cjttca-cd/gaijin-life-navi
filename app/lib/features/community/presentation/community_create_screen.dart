@@ -14,8 +14,7 @@ class CommunityCreateScreen extends ConsumerStatefulWidget {
       _CommunityCreateScreenState();
 }
 
-class _CommunityCreateScreenState
-    extends ConsumerState<CommunityCreateScreen> {
+class _CommunityCreateScreenState extends ConsumerState<CommunityCreateScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
@@ -53,13 +52,14 @@ class _CommunityCreateScreenState
         actions: [
           FilledButton(
             onPressed: _isSubmitting ? null : _submit,
-            child: _isSubmitting
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : Text(l10n.communitySubmit),
+            child:
+                _isSubmitting
+                    ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                    : Text(l10n.communitySubmit),
           ),
           const SizedBox(width: 8),
         ],
@@ -102,12 +102,13 @@ class _CommunityCreateScreenState
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                items: categoryLabels.entries.map((entry) {
-                  return DropdownMenuItem(
-                    value: entry.key,
-                    child: Text(entry.value),
-                  );
-                }).toList(),
+                items:
+                    categoryLabels.entries.map((entry) {
+                      return DropdownMenuItem(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      );
+                    }).toList(),
                 onChanged: (value) {
                   if (value != null) {
                     setState(() => _selectedCategory = value);
@@ -169,9 +170,11 @@ class _CommunityCreateScreenState
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline,
-                        size: 20,
-                        color: theme.colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.info_outline,
+                      size: 20,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -225,9 +228,9 @@ class _CommunityCreateScreenState
     } catch (_) {
       if (mounted) {
         final l10n = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.genericError)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
       }
     } finally {
       if (mounted) {

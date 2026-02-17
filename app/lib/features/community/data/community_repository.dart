@@ -47,9 +47,10 @@ class CommunityRepository {
     final pagination = response.data!['pagination'] as Map<String, dynamic>;
 
     return PaginatedResponse(
-      items: data
-          .map((e) => CommunityPost.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      items:
+          data
+              .map((e) => CommunityPost.fromJson(e as Map<String, dynamic>))
+              .toList(),
       nextCursor: pagination['next_cursor'] as String?,
       hasMore: pagination['has_more'] as bool? ?? false,
     );
@@ -61,7 +62,8 @@ class CommunityRepository {
       '/community/posts/$postId',
     );
     return CommunityPost.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   /// Create a new post. Requires Premium.
@@ -81,7 +83,8 @@ class CommunityRepository {
       },
     );
     return CommunityPost.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   // ─── Replies ───────────────────────────────────────────────
@@ -94,19 +97,17 @@ class CommunityRepository {
   }) async {
     final response = await _client.get<Map<String, dynamic>>(
       '/community/posts/$postId/replies',
-      queryParameters: {
-        'limit': limit,
-        if (cursor != null) 'cursor': cursor,
-      },
+      queryParameters: {'limit': limit, if (cursor != null) 'cursor': cursor},
     );
 
     final data = response.data!['data'] as List;
     final pagination = response.data!['pagination'] as Map<String, dynamic>;
 
     return PaginatedResponse(
-      items: data
-          .map((e) => CommunityReply.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      items:
+          data
+              .map((e) => CommunityReply.fromJson(e as Map<String, dynamic>))
+              .toList(),
       nextCursor: pagination['next_cursor'] as String?,
       hasMore: pagination['has_more'] as bool? ?? false,
     );
@@ -122,7 +123,8 @@ class CommunityRepository {
       data: {'content': content},
     );
     return CommunityReply.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   // ─── Votes ─────────────────────────────────────────────────
@@ -155,7 +157,8 @@ class CommunityRepository {
 
   /// Set/toggle best answer on a reply (post author only).
   Future<({bool isBestAnswer, bool postIsAnswered})> setBestAnswer(
-      String replyId) async {
+    String replyId,
+  ) async {
     final response = await _client.post<Map<String, dynamic>>(
       '/community/replies/$replyId/best-answer',
     );

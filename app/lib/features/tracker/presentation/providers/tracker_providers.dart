@@ -23,8 +23,9 @@ final myProceduresProvider = FutureProvider<List<UserProcedure>>((ref) async {
 });
 
 /// Provider for procedure templates (for adding new ones).
-final procedureTemplatesProvider =
-    FutureProvider<List<ProcedureTemplate>>((ref) async {
+final procedureTemplatesProvider = FutureProvider<List<ProcedureTemplate>>((
+  ref,
+) async {
   final repo = ref.watch(trackerRepositoryProvider);
   return repo.getTemplates();
 });

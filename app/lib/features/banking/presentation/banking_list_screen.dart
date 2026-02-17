@@ -29,28 +29,30 @@ class BankingListScreen extends ConsumerWidget {
       ),
       body: bankList.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48,
-                  color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError,
-                  style: theme.textTheme.bodyLarge),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () => ref.invalidate(bankListProvider),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError, style: theme.textTheme.bodyLarge),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(bankListProvider),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (banks) {
           if (banks.isEmpty) {
             return Center(
-              child: Text(l10n.bankingEmpty,
-                  style: theme.textTheme.bodyLarge),
+              child: Text(l10n.bankingEmpty, style: theme.textTheme.bodyLarge),
             );
           }
           return ListView.builder(
@@ -76,10 +78,10 @@ class BankingListScreen extends ConsumerWidget {
                     '${l10n.bankingFriendlyScore}: ${bank.foreignerFriendlyScore}/5',
                   ),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push(
-                    AppRoutes.bankingGuide
-                        .replaceFirst(':bankId', bank.id),
-                  ),
+                  onTap:
+                      () => context.push(
+                        AppRoutes.bankingGuide.replaceFirst(':bankId', bank.id),
+                      ),
                 ),
               );
             },

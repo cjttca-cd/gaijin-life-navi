@@ -12,88 +12,247 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Gaijin Life Navi';
 
   @override
-  String get languageSelectionTitle => 'Choose Your Language';
+  String get langTitle => 'Choose your language';
 
   @override
-  String get languageSelectionSubtitle =>
-      'You can change this later in settings';
+  String get langContinue => 'Continue';
 
   @override
-  String get continueButton => 'Continue';
+  String get langEn => 'English';
 
   @override
-  String get loginTitle => 'Welcome Back';
+  String get langZh => '中文';
 
   @override
-  String get loginSubtitle => 'Sign in to your account';
+  String get langVi => 'Tiếng Việt';
 
   @override
-  String get emailLabel => 'Email';
+  String get langKo => '한국어';
 
   @override
-  String get passwordLabel => 'Password';
+  String get langPt => 'Português';
+
+  @override
+  String get loginWelcome => 'Welcome back';
+
+  @override
+  String get loginSubtitle => 'Sign in to continue';
+
+  @override
+  String get loginEmailLabel => 'Email';
+
+  @override
+  String get loginEmailHint => 'your@email.com';
+
+  @override
+  String get loginPasswordLabel => 'Password';
+
+  @override
+  String get loginPasswordHint => 'Enter your password';
+
+  @override
+  String get loginForgotPassword => 'Forgot password?';
 
   @override
   String get loginButton => 'Sign In';
 
   @override
-  String get forgotPassword => 'Forgot Password?';
+  String get loginNoAccount => 'Don\'t have an account?';
 
   @override
-  String get noAccount => 'Don\'t have an account?';
+  String get loginSignUp => 'Sign Up';
 
   @override
-  String get signUp => 'Sign Up';
+  String get loginErrorInvalidEmail => 'Please enter a valid email address.';
 
   @override
-  String get registerTitle => 'Create Account';
+  String get loginErrorInvalidCredentials =>
+      'Incorrect email or password. Please try again.';
 
   @override
-  String get registerSubtitle => 'Start your life in Japan with confidence';
+  String get loginErrorNetwork =>
+      'Unable to connect. Please check your internet connection.';
 
   @override
-  String get confirmPasswordLabel => 'Confirm Password';
+  String get loginErrorTooManyAttempts =>
+      'Too many attempts. Please try again later.';
+
+  @override
+  String get registerTitle => 'Create your account';
+
+  @override
+  String get registerSubtitle => 'Start your journey in Japan';
+
+  @override
+  String get registerEmailLabel => 'Email';
+
+  @override
+  String get registerEmailHint => 'your@email.com';
+
+  @override
+  String get registerPasswordLabel => 'Password';
+
+  @override
+  String get registerPasswordHint => 'Create a password';
+
+  @override
+  String get registerPasswordHelper => '8 or more characters';
+
+  @override
+  String get registerConfirmLabel => 'Confirm password';
+
+  @override
+  String get registerConfirmHint => 'Re-enter your password';
+
+  @override
+  String get registerTermsAgree => 'I agree to the ';
+
+  @override
+  String get registerTermsLink => 'Terms of Service';
+
+  @override
+  String get registerPrivacyAnd => 'and';
+
+  @override
+  String get registerPrivacyLink => 'Privacy Policy';
 
   @override
   String get registerButton => 'Create Account';
 
   @override
-  String get hasAccount => 'Already have an account?';
+  String get registerHasAccount => 'Already have an account?';
 
   @override
-  String get signIn => 'Sign In';
+  String get registerSignIn => 'Sign In';
 
   @override
-  String get resetPasswordTitle => 'Reset Password';
+  String get registerErrorEmailInvalid => 'Please enter a valid email address.';
 
   @override
-  String get resetPasswordSubtitle =>
-      'Enter your email to receive a reset link';
+  String get registerErrorEmailInUse =>
+      'This email is already registered. Try signing in instead.';
 
   @override
-  String get sendResetLink => 'Send Reset Link';
+  String get registerErrorPasswordShort =>
+      'Password must be at least 8 characters.';
 
   @override
-  String get backToLogin => 'Back to Login';
+  String get registerErrorPasswordMismatch => 'Passwords don\'t match.';
 
   @override
-  String get resetPasswordSuccess =>
-      'Password reset email sent. Check your inbox.';
+  String get registerErrorTermsRequired =>
+      'Please agree to the Terms of Service.';
 
   @override
-  String get emailRequired => 'Email is required';
+  String get resetTitle => 'Reset your password';
 
   @override
-  String get emailInvalid => 'Please enter a valid email';
+  String get resetSubtitle =>
+      'Enter your email and we\'ll send you a reset link.';
 
   @override
-  String get passwordRequired => 'Password is required';
+  String get resetEmailLabel => 'Email';
 
   @override
-  String get passwordTooShort => 'Password must be at least 8 characters';
+  String get resetEmailHint => 'your@email.com';
 
   @override
-  String get passwordMismatch => 'Passwords do not match';
+  String get resetButton => 'Send Reset Link';
+
+  @override
+  String get resetBackToLogin => 'Back to Sign In';
+
+  @override
+  String get resetSuccessTitle => 'Check your email';
+
+  @override
+  String resetSuccessSubtitle(String email) {
+    return 'We\'ve sent a reset link to $email';
+  }
+
+  @override
+  String get resetResend => 'Didn\'t receive it? Resend';
+
+  @override
+  String get resetErrorEmailInvalid => 'Please enter a valid email address.';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingGetStarted => 'Get Started';
+
+  @override
+  String onboardingStepOf(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get onboardingS1Title => 'What\'s your nationality?';
+
+  @override
+  String get onboardingS1Subtitle =>
+      'This helps us give you relevant information.';
+
+  @override
+  String get onboardingS2Title => 'What\'s your residence status?';
+
+  @override
+  String get onboardingS2Subtitle =>
+      'We can tailor visa-related information for you.';
+
+  @override
+  String get onboardingS3Title => 'Where do you live in Japan?';
+
+  @override
+  String get onboardingS3Subtitle => 'For location-specific guides.';
+
+  @override
+  String get onboardingS4Title => 'When did you arrive in Japan?';
+
+  @override
+  String get onboardingS4Subtitle =>
+      'We\'ll suggest time-sensitive tasks you may need to complete.';
+
+  @override
+  String get onboardingS4Placeholder => 'Select date';
+
+  @override
+  String get onboardingS4NotYet => 'I haven\'t arrived yet';
+
+  @override
+  String get onboardingChangeDate => 'Change Date';
+
+  @override
+  String get onboardingErrorSave =>
+      'Unable to save your information. Please try again.';
+
+  @override
+  String get statusEngineer => 'Engineer / Specialist in Humanities';
+
+  @override
+  String get statusStudent => 'Student';
+
+  @override
+  String get statusDependent => 'Dependent';
+
+  @override
+  String get statusPermanent => 'Permanent Resident';
+
+  @override
+  String get statusSpouse => 'Spouse of Japanese National';
+
+  @override
+  String get statusWorkingHoliday => 'Working Holiday';
+
+  @override
+  String get statusSpecifiedSkilled => 'Specified Skilled Worker';
+
+  @override
+  String get statusOther => 'Other';
 
   @override
   String get tabHome => 'Home';
@@ -102,76 +261,145 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabChat => 'Chat';
 
   @override
-  String get tabTracker => 'Tracker';
+  String get tabGuide => 'Guide';
 
   @override
-  String get tabNavigate => 'Navigate';
+  String get tabSOS => 'SOS';
 
   @override
   String get tabProfile => 'Profile';
 
   @override
-  String get homeWelcome => 'Welcome to Gaijin Life Navi';
+  String homeGreetingMorning(String name) {
+    return 'Good morning, $name 👋';
+  }
 
   @override
-  String get homeSubtitle => 'Your guide to life in Japan';
+  String homeGreetingAfternoon(String name) {
+    return 'Good afternoon, $name 👋';
+  }
 
   @override
-  String get homeQuickActions => 'Quick Actions';
+  String homeGreetingEvening(String name) {
+    return 'Good evening, $name 👋';
+  }
 
   @override
-  String get homeActionAskAI => 'Ask AI';
+  String homeGreetingDefault(String name) {
+    return 'Hello, $name 👋';
+  }
 
   @override
-  String get homeActionTracker => 'Tracker';
+  String get homeGreetingNoName => 'Welcome! 👋';
 
   @override
-  String get homeActionBanking => 'Banking';
+  String homeUsageFree(int remaining, int limit) {
+    return 'Free • $remaining/$limit chats remaining today';
+  }
 
   @override
-  String get homeActionChatHistory => 'Chat History';
+  String get homeSectionQuickActions => 'Quick Actions';
 
   @override
-  String get homeRecentChats => 'Recent Chats';
+  String get homeSectionExplore => 'Explore Guides';
 
   @override
-  String get homeNoRecentChats => 'No recent chats yet';
+  String get homeQaChatTitle => 'AI Chat';
 
   @override
-  String get homeMessagesLabel => 'messages';
+  String get homeQaChatSubtitle => 'Ask anything about life in Japan';
 
   @override
-  String get chatPlaceholder => 'AI Chat — Coming Soon';
+  String get homeQaBankingTitle => 'Banking';
+
+  @override
+  String get homeQaBankingSubtitle => 'Account opening, transfers & more';
+
+  @override
+  String get homeQaVisaTitle => 'Visa';
+
+  @override
+  String get homeQaVisaSubtitle => 'Immigration guides & procedures';
+
+  @override
+  String get homeQaMedicalTitle => 'Medical';
+
+  @override
+  String get homeQaMedicalSubtitle => 'Health guides & emergency info';
+
+  @override
+  String get homeExploreGuides => 'Browse all guides';
+
+  @override
+  String get homeExploreEmergency => 'Emergency contacts';
+
+  @override
+  String get homeUpgradeTitle => 'Get more from your AI assistant';
+
+  @override
+  String get homeUpgradeCta => 'Upgrade now';
 
   @override
   String get chatTitle => 'AI Chat';
 
   @override
+  String get chatInputPlaceholder => 'Type your message...';
+
+  @override
+  String get chatEmptyTitle => 'Ask me anything!';
+
+  @override
+  String get chatEmptySubtitle =>
+      'I can help you with banking, visa, medical questions and more about life in Japan.';
+
+  @override
+  String get chatSuggestBank => 'How do I open a bank account?';
+
+  @override
+  String get chatSuggestVisa => 'How to renew my visa?';
+
+  @override
+  String get chatSuggestMedical => 'How to see a doctor?';
+
+  @override
+  String get chatSuggestGeneral => 'What do I need after arriving in Japan?';
+
+  @override
+  String get chatSourcesHeader => 'Sources';
+
+  @override
+  String get chatDisclaimer =>
+      'This is general information only. It does not constitute legal advice. Please verify with relevant authorities.';
+
+  @override
+  String chatLimitRemaining(int remaining, int limit) {
+    return '$remaining/$limit free chats remaining today.';
+  }
+
+  @override
+  String get chatLimitUpgrade => 'Upgrade';
+
+  @override
+  String get chatLimitExhausted =>
+      'You\'ve used all your free chats for today. Upgrade to keep chatting!';
+
+  @override
+  String get chatErrorSend => 'Unable to send your message. Please try again.';
+
+  @override
+  String get chatErrorRetry => 'Retry';
+
+  @override
+  String get chatDateToday => 'Today';
+
+  @override
+  String get chatDateYesterday => 'Yesterday';
+
+  @override
   String get chatNewSession => 'New Chat';
 
   @override
-  String get chatEmptyTitle => 'Start a Conversation';
-
-  @override
-  String get chatEmptySubtitle => 'Ask the AI anything about living in Japan';
-
-  @override
   String get chatUntitledSession => 'New Conversation';
-
-  @override
-  String get chatConversationTitle => 'Chat';
-
-  @override
-  String get chatInputHint => 'Ask about life in Japan...';
-
-  @override
-  String get chatTyping => 'Thinking...';
-
-  @override
-  String get chatSources => 'Sources';
-
-  @override
-  String get chatRetry => 'Retry';
 
   @override
   String get chatDeleteTitle => 'Delete Chat';
@@ -186,80 +414,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatDeleteAction => 'Delete';
 
   @override
-  String get chatLimitReached => 'Daily limit reached';
-
-  @override
-  String chatRemainingCount(int remaining, int limit) {
-    return '$remaining/$limit remaining';
-  }
-
-  @override
-  String get chatLimitReachedTitle => 'Daily Limit Reached';
-
-  @override
-  String get chatLimitReachedMessage =>
-      'You have used all your free chats for today. Upgrade to Premium for unlimited access.';
-
-  @override
-  String get chatUpgradeToPremium => 'Upgrade to Premium';
-
-  @override
-  String get chatWelcomePrompt => 'How can I help you today?';
-
-  @override
-  String get chatWelcomeHint =>
-      'Ask about visa procedures, banking, housing, or anything about life in Japan.';
-
-  @override
-  String get onboardingTitle => 'Setup Your Profile';
-
-  @override
-  String get onboardingSkip => 'Skip';
-
-  @override
-  String get onboardingNext => 'Next';
-
-  @override
-  String get onboardingComplete => 'Complete';
-
-  @override
-  String onboardingStepOf(int current, int total) {
-    return 'Step $current of $total';
-  }
-
-  @override
-  String get onboardingNationalityTitle => 'What is your nationality?';
-
-  @override
-  String get onboardingNationalitySubtitle =>
-      'This helps us provide relevant information for your situation.';
-
-  @override
-  String get onboardingResidenceStatusTitle => 'What is your residence status?';
-
-  @override
-  String get onboardingResidenceStatusSubtitle =>
-      'Select your current visa type in Japan.';
-
-  @override
-  String get onboardingRegionTitle => 'Where do you live?';
-
-  @override
-  String get onboardingRegionSubtitle =>
-      'Select the area you currently live in or plan to move to.';
-
-  @override
-  String get onboardingArrivalDateTitle => 'When did you arrive in Japan?';
-
-  @override
-  String get onboardingArrivalDateSubtitle =>
-      'This helps us suggest relevant procedures and deadlines.';
-
-  @override
-  String get onboardingSelectDate => 'Select Date';
-
-  @override
-  String get onboardingChangeDate => 'Change Date';
+  String get chatRetry => 'Retry';
 
   @override
   String get countryCN => 'China';
@@ -322,36 +477,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get countryOther => 'Other';
 
   @override
-  String get visaEngineer => 'Engineer / Specialist';
-
-  @override
-  String get visaStudent => 'Student';
-
-  @override
-  String get visaDependent => 'Dependent';
-
-  @override
-  String get visaPermanent => 'Permanent Resident';
-
-  @override
-  String get visaSpouse => 'Spouse of Japanese National';
-
-  @override
-  String get visaWorkingHoliday => 'Working Holiday';
-
-  @override
-  String get visaSpecifiedSkilled => 'Specified Skilled Worker';
-
-  @override
-  String get visaTechnicalIntern => 'Technical Intern';
-
-  @override
-  String get visaHighlySkilled => 'Highly Skilled Professional';
-
-  @override
-  String get visaOther => 'Other';
-
-  @override
   String get regionTokyo => 'Tokyo';
 
   @override
@@ -383,15 +508,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get regionOther => 'Other';
-
-  @override
-  String get trackerPlaceholder => 'Admin Tracker — Coming Soon';
-
-  @override
-  String get navigatePlaceholder => 'Navigate — Coming Soon';
-
-  @override
-  String get profilePlaceholder => 'Profile — Coming Soon';
 
   @override
   String get genericError => 'Something went wrong. Please try again.';
@@ -486,7 +602,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get visaDisclaimer =>
-      'IMPORTANT: This is general information about visa procedures and does not constitute immigration advice. Immigration laws and procedures may change. Always consult the Immigration Services Agency or a qualified immigration lawyer (行政書士) for your specific situation.';
+      'IMPORTANT: This is general information about visa procedures and does not constitute immigration advice.';
 
   @override
   String get trackerTitle => 'Admin Tracker';
@@ -689,6 +805,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navigateMedicalDesc => 'Emergency guide & phrases';
 
   @override
+  String get navigateCommunity => 'Community';
+
+  @override
+  String get navigateCommunityDesc => 'Q&A with other foreigners';
+
+  @override
   String get upgradeToPremium => 'Upgrade to Premium';
 
   @override
@@ -818,12 +940,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String communityTimeAgoMinutes(int minutes) {
     return '${minutes}m ago';
   }
-
-  @override
-  String get navigateCommunity => 'Community';
-
-  @override
-  String get navigateCommunityDesc => 'Q&A with other foreigners';
 
   @override
   String get subscriptionTitle => 'Subscription';

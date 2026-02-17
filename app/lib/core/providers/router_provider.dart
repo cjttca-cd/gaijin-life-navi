@@ -6,6 +6,7 @@ import '../../features/auth/presentation/language_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/reset_password_screen.dart';
+import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/banking/presentation/banking_guide_screen.dart';
 import '../../features/banking/presentation/banking_list_screen.dart';
 import '../../features/banking/presentation/banking_recommend_screen.dart';
@@ -14,7 +15,6 @@ import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/community/presentation/community_create_screen.dart';
 import '../../features/community/presentation/community_detail_screen.dart';
 import '../../features/community/presentation/community_list_screen.dart';
-import '../../features/home/presentation/main_shell.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/medical/presentation/medical_guide_screen.dart';
 import '../../features/navigate/presentation/navigate_screen.dart';
@@ -28,9 +28,9 @@ import '../../features/scanner/presentation/scanner_result_screen.dart';
 import '../../features/subscription/presentation/subscription_screen.dart';
 import '../../features/tracker/presentation/tracker_add_screen.dart';
 import '../../features/tracker/presentation/tracker_detail_screen.dart';
-import '../../features/tracker/presentation/tracker_screen.dart';
 import '../../features/visa/presentation/visa_detail_screen.dart';
 import '../../features/visa/presentation/visa_list_screen.dart';
+import '../navigation/main_shell.dart';
 import 'auth_provider.dart';
 import 'locale_provider.dart';
 
@@ -38,6 +38,7 @@ import 'locale_provider.dart';
 class AppRoutes {
   const AppRoutes._();
 
+  static const String splash = '/';
   static const String root = '/';
   static const String language = '/language';
   static const String login = '/login';
@@ -88,68 +89,53 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 /// Provider for the GoRouter instance.
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
-  // Watch locale to trigger router refresh on language change.
   ref.watch(localeProvider);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: AppRoutes.root,
+    initialLocation: AppRoutes.splash,
     debugLogDiagnostics: true,
     redirect: (BuildContext context, GoRouterState state) {
       final isLoggedIn = authState.valueOrNull != null;
       final isLoading = authState.isLoading;
-      final hasSelectedLanguage = ref.read(localeProvider.notifier).hasSelectedLanguage;
       final currentPath = state.matchedLocation;
 
-      // While auth is loading, don't redirect.
       if (isLoading) return null;
 
-      // Public routes that don't require auth.
       final publicRoutes = [
-        AppRoutes.root,
+        AppRoutes.splash,
         AppRoutes.language,
         AppRoutes.login,
         AppRoutes.register,
         AppRoutes.resetPassword,
       ];
 
-      // If not logged in and trying to access a protected route, redirect to login.
       if (!isLoggedIn && !publicRoutes.contains(currentPath)) {
         return AppRoutes.login;
       }
 
-      // If logged in and on a public auth route, redirect to home.
       if (isLoggedIn &&
           (currentPath == AppRoutes.login ||
-           currentPath == AppRoutes.register ||
-           currentPath == AppRoutes.root)) {
+              currentPath == AppRoutes.register)) {
         return AppRoutes.home;
-      }
-
-      // Root route: if no language selected, go to language selection.
-      if (currentPath == AppRoutes.root && !isLoggedIn) {
-        if (!hasSelectedLanguage) {
-          return AppRoutes.language;
-        }
-        return AppRoutes.login;
       }
 
       return null;
     },
     routes: [
-      // Root redirect route
+      // Splash screen (S01).
       GoRoute(
-        path: AppRoutes.root,
-        builder: (context, state) => const SizedBox.shrink(),
+        path: AppRoutes.splash,
+        builder: (context, state) => const SplashScreen(),
       ),
 
-      // Language selection
+      // Language selection (S02).
       GoRoute(
         path: AppRoutes.language,
         builder: (context, state) => const LanguageScreen(),
       ),
 
-      // Auth routes
+      // Auth routes.
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
@@ -163,13 +149,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ResetPasswordScreen(),
       ),
 
-      // Onboarding (full-screen, not in shell)
+      // Onboarding (S06, full-screen).
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingScreen(),
       ),
 
-      // Chat conversation (full-screen, not in shell)
+      // Chat conversation (full-screen, not in shell).
       GoRoute(
         path: AppRoutes.chatConversation,
         builder: (context, state) {
@@ -178,7 +164,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Banking Navigator (full-screen routes)
+      // Banking Navigator (full-screen).
       GoRoute(
         path: AppRoutes.banking,
         builder: (context, state) => const BankingListScreen(),
@@ -195,7 +181,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Visa Navigator (full-screen routes)
+      // Visa Navigator (full-screen).
       GoRoute(
         path: AppRoutes.visa,
         builder: (context, state) => const VisaListScreen(),
@@ -208,7 +194,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Admin Tracker detail and add (full-screen)
+      // Tracker (full-screen).
       GoRoute(
         path: AppRoutes.trackerAdd,
         builder: (context, state) => const TrackerAddScreen(),
@@ -221,7 +207,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Document Scanner (full-screen routes)
+      // Scanner (full-screen).
       GoRoute(
         path: AppRoutes.scanner,
         builder: (context, state) => const ScannerHomeScreen(),
@@ -238,13 +224,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Medical Guide (full-screen)
+      // Medical Guide (full-screen).
       GoRoute(
         path: AppRoutes.medical,
         builder: (context, state) => const MedicalGuideScreen(),
       ),
 
-      // Community Q&A (full-screen routes)
+      // Community (full-screen).
       GoRoute(
         path: AppRoutes.community,
         builder: (context, state) => const CommunityListScreen(),
@@ -261,58 +247,51 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Subscription (full-screen)
+      // Subscription (full-screen).
       GoRoute(
         path: AppRoutes.subscription,
         builder: (context, state) => const SubscriptionScreen(),
       ),
 
-      // Profile Edit (full-screen)
+      // Profile Edit (full-screen).
       GoRoute(
         path: AppRoutes.profileEdit,
         builder: (context, state) => const ProfileEditScreen(),
       ),
 
-      // Settings (full-screen)
+      // Settings (full-screen).
       GoRoute(
         path: AppRoutes.settings,
         builder: (context, state) => const SettingsScreen(),
       ),
 
-      // Main shell with bottom navigation
+      // Main shell with bottom navigation.
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) => MainShell(child: child),
         routes: [
           GoRoute(
             path: AppRoutes.home,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: HomeScreen(),
-            ),
+            pageBuilder:
+                (context, state) => const NoTransitionPage(child: HomeScreen()),
           ),
           GoRoute(
             path: AppRoutes.chat,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ChatListScreen(),
-            ),
-          ),
-          GoRoute(
-            path: AppRoutes.tracker,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: TrackerScreen(),
-            ),
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: ChatListScreen()),
           ),
           GoRoute(
             path: AppRoutes.navigate,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: NavigateScreen(),
-            ),
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: NavigateScreen()),
           ),
           GoRoute(
             path: AppRoutes.profile,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ProfileScreen(),
-            ),
+            pageBuilder:
+                (context, state) =>
+                    const NoTransitionPage(child: ProfileScreen()),
           ),
         ],
       ),

@@ -34,8 +34,8 @@ final communitySortProvider = StateProvider<String>((ref) => 'newest');
 /// Provider for community post list with current filters.
 final communityPostsProvider =
     AsyncNotifierProvider<CommunityPostsNotifier, List<CommunityPost>>(
-  CommunityPostsNotifier.new,
-);
+      CommunityPostsNotifier.new,
+    );
 
 class CommunityPostsNotifier extends AsyncNotifier<List<CommunityPost>> {
   String? _nextCursor;
@@ -101,17 +101,18 @@ class CommunityPostsNotifier extends AsyncNotifier<List<CommunityPost>> {
 /// Provider for a single post detail.
 final communityPostDetailProvider =
     FutureProvider.family<CommunityPost, String>((ref, postId) async {
-  final repo = ref.watch(communityRepositoryProvider);
-  return repo.getPost(postId);
-});
+      final repo = ref.watch(communityRepositoryProvider);
+      return repo.getPost(postId);
+    });
 
 // ─── Replies ─────────────────────────────────────────────────
 
 /// Provider for replies of a specific post.
 final communityRepliesProvider = AsyncNotifierProvider.family<
-    CommunityRepliesNotifier, List<CommunityReply>, String>(
-  CommunityRepliesNotifier.new,
-);
+  CommunityRepliesNotifier,
+  List<CommunityReply>,
+  String
+>(CommunityRepliesNotifier.new);
 
 class CommunityRepliesNotifier
     extends FamilyAsyncNotifier<List<CommunityReply>, String> {
@@ -138,10 +139,7 @@ class CommunityRepliesNotifier
     if (!_hasMore || _nextCursor == null) return;
 
     final repo = ref.read(communityRepositoryProvider);
-    final result = await repo.listReplies(
-      postId: arg,
-      cursor: _nextCursor,
-    );
+    final result = await repo.listReplies(postId: arg, cursor: _nextCursor);
 
     _nextCursor = result.nextCursor;
     _hasMore = result.hasMore;

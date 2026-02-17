@@ -15,10 +15,7 @@ class VisaRepository {
   }) async {
     final response = await _client.get<Map<String, dynamic>>(
       '/visa/procedures',
-      queryParameters: {
-        'lang': lang,
-        if (status != null) 'status': status,
-      },
+      queryParameters: {'lang': lang, if (status != null) 'status': status},
     );
     final items = response.data!['data'] as List<dynamic>;
     return items
@@ -27,13 +24,16 @@ class VisaRepository {
   }
 
   /// Fetch detailed procedure information.
-  Future<VisaProcedure> getProcedure(String procedureId,
-      {String lang = 'en'}) async {
+  Future<VisaProcedure> getProcedure(
+    String procedureId, {
+    String lang = 'en',
+  }) async {
     final response = await _client.get<Map<String, dynamic>>(
       '/visa/procedures/$procedureId',
       queryParameters: {'lang': lang},
     );
     return VisaProcedure.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// Displays the mandatory disclaimer for AI responses.
+import '../../../../core/theme/app_colors.dart';
+
+/// Disclaimer text — shown OUTSIDE the AI bubble per handoff-chat.md.
+///
+/// labelSmall (11sp), colorOnSurfaceVariant, with warning icon.
 class DisclaimerBanner extends StatelessWidget {
   const DisclaimerBanner({super.key, required this.text});
 
@@ -8,38 +12,27 @@ class DisclaimerBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final tt = Theme.of(context).textTheme;
 
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: theme.colorScheme.tertiary.withValues(alpha: 0.3),
-          width: 0.5,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(
+          Icons.warning_amber,
+          size: 14,
+          color: AppColors.onSurfaceVariant,
         ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.info_outline,
-            size: 14,
-            color: theme.colorScheme.tertiary,
-          ),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              text,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onTertiaryContainer,
-                fontStyle: FontStyle.italic,
-              ),
+        const SizedBox(width: 4),
+        Expanded(
+          child: Text(
+            text,
+            style: tt.labelSmall?.copyWith(
+              color: AppColors.onSurfaceVariant,
+              fontWeight: FontWeight.w400,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

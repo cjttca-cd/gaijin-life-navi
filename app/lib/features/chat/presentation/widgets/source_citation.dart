@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/theme/app_spacing.dart';
 import '../../domain/chat_message.dart';
 
-/// Displays source citation URLs from RAG results.
+/// Source citation section — handoff-chat.md §3 Source Citation Section.
+///
+/// Displayed inside AI bubble below the divider.
 class SourceCitationWidget extends StatelessWidget {
   const SourceCitationWidget({super.key, required this.sources});
 
@@ -11,59 +15,36 @@ class SourceCitationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant,
-          width: 0.5,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.link,
-                size: 14,
-                color: theme.colorScheme.primary,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                l10n.chatSources,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header.
+        Text(
+          l10n.chatSourcesHeader,
+          style: tt.labelSmall?.copyWith(
+            color: cs.onSurfaceVariant,
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 4),
-          ...sources.map(
-            (source) => Padding(
-              padding: const EdgeInsets.only(bottom: 2),
+        ),
+        const SizedBox(height: AppSpacing.spaceXs),
+        // Source rows.
+        ...sources.map(
+          (source) => InkWell(
+            onTap: () => _openUrl(source.url),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '• ',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
+                  Icon(Icons.attach_file, size: 16, color: cs.primary),
+                  const SizedBox(width: AppSpacing.spaceXs),
                   Expanded(
                     child: Text(
                       source.title.isNotEmpty ? source.title : source.url,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        decoration: TextDecoration.underline,
-                      ),
+                      style: tt.bodySmall?.copyWith(color: cs.primary),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -72,8 +53,15 @@ class SourceCitationWidget extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }

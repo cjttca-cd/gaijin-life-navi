@@ -9,88 +9,240 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => '외국인 생활 내비';
+  String get appTitle => 'Gaijin Life Navi';
 
   @override
-  String get languageSelectionTitle => '언어를 선택하세요';
+  String get langTitle => '언어를 선택하세요';
 
   @override
-  String get languageSelectionSubtitle => '나중에 설정에서 변경할 수 있습니다';
+  String get langContinue => '계속';
 
   @override
-  String get continueButton => '계속';
+  String get langEn => 'English';
 
   @override
-  String get loginTitle => '다시 오신 것을 환영합니다';
+  String get langZh => '中文';
 
   @override
-  String get loginSubtitle => '계정에 로그인하세요';
+  String get langVi => 'Tiếng Việt';
 
   @override
-  String get emailLabel => '이메일';
+  String get langKo => '한국어';
 
   @override
-  String get passwordLabel => '비밀번호';
+  String get langPt => 'Português';
+
+  @override
+  String get loginWelcome => '다시 오신 것을 환영합니다';
+
+  @override
+  String get loginSubtitle => '로그인하여 계속하기';
+
+  @override
+  String get loginEmailLabel => '이메일';
+
+  @override
+  String get loginEmailHint => 'your@email.com';
+
+  @override
+  String get loginPasswordLabel => '비밀번호';
+
+  @override
+  String get loginPasswordHint => '비밀번호를 입력하세요';
+
+  @override
+  String get loginForgotPassword => '비밀번호를 잊으셨나요?';
 
   @override
   String get loginButton => '로그인';
 
   @override
-  String get forgotPassword => '비밀번호를 잊으셨나요?';
+  String get loginNoAccount => '계정이 없으신가요?';
 
   @override
-  String get noAccount => '계정이 없으신가요?';
+  String get loginSignUp => '회원가입';
 
   @override
-  String get signUp => '회원가입';
+  String get loginErrorInvalidEmail => '유효한 이메일 주소를 입력해주세요.';
+
+  @override
+  String get loginErrorInvalidCredentials =>
+      '이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.';
+
+  @override
+  String get loginErrorNetwork => '연결할 수 없습니다. 인터넷 연결을 확인해주세요.';
+
+  @override
+  String get loginErrorTooManyAttempts => '시도 횟수가 너무 많습니다. 나중에 다시 시도해주세요.';
 
   @override
   String get registerTitle => '계정 만들기';
 
   @override
-  String get registerSubtitle => '자신감 있게 일본 생활을 시작하세요';
+  String get registerSubtitle => '일본에서의 여정을 시작하세요';
 
   @override
-  String get confirmPasswordLabel => '비밀번호 확인';
+  String get registerEmailLabel => '이메일';
+
+  @override
+  String get registerEmailHint => 'your@email.com';
+
+  @override
+  String get registerPasswordLabel => '비밀번호';
+
+  @override
+  String get registerPasswordHint => '비밀번호를 만드세요';
+
+  @override
+  String get registerPasswordHelper => '8자 이상';
+
+  @override
+  String get registerConfirmLabel => '비밀번호 확인';
+
+  @override
+  String get registerConfirmHint => '비밀번호를 다시 입력하세요';
+
+  @override
+  String get registerTermsAgree => '에 동의합니다 ';
+
+  @override
+  String get registerTermsLink => '서비스 이용약관';
+
+  @override
+  String get registerPrivacyAnd => '및';
+
+  @override
+  String get registerPrivacyLink => '개인정보 처리방침';
 
   @override
   String get registerButton => '계정 만들기';
 
   @override
-  String get hasAccount => '이미 계정이 있으신가요?';
+  String get registerHasAccount => '이미 계정이 있으신가요?';
 
   @override
-  String get signIn => '로그인';
+  String get registerSignIn => '로그인';
 
   @override
-  String get resetPasswordTitle => '비밀번호 재설정';
+  String get registerErrorEmailInvalid => '유효한 이메일 주소를 입력해주세요.';
 
   @override
-  String get resetPasswordSubtitle => '재설정 링크를 받을 이메일을 입력하세요';
+  String get registerErrorEmailInUse => '이미 등록된 이메일입니다. 로그인을 시도해보세요.';
 
   @override
-  String get sendResetLink => '재설정 링크 보내기';
+  String get registerErrorPasswordShort => '비밀번호는 8자 이상이어야 합니다.';
 
   @override
-  String get backToLogin => '로그인으로 돌아가기';
+  String get registerErrorPasswordMismatch => '비밀번호가 일치하지 않습니다.';
 
   @override
-  String get resetPasswordSuccess => '비밀번호 재설정 이메일이 전송되었습니다. 받은 편지함을 확인하세요.';
+  String get registerErrorTermsRequired => '서비스 이용약관에 동의해주세요.';
 
   @override
-  String get emailRequired => '이메일을 입력해주세요';
+  String get resetTitle => '비밀번호 재설정';
 
   @override
-  String get emailInvalid => '유효한 이메일을 입력해주세요';
+  String get resetSubtitle => '이메일을 입력하면 재설정 링크를 보내드립니다.';
 
   @override
-  String get passwordRequired => '비밀번호를 입력해주세요';
+  String get resetEmailLabel => '이메일';
 
   @override
-  String get passwordTooShort => '비밀번호는 최소 8자 이상이어야 합니다';
+  String get resetEmailHint => 'your@email.com';
 
   @override
-  String get passwordMismatch => '비밀번호가 일치하지 않습니다';
+  String get resetButton => '재설정 링크 보내기';
+
+  @override
+  String get resetBackToLogin => '로그인으로 돌아가기';
+
+  @override
+  String get resetSuccessTitle => '이메일을 확인하세요';
+
+  @override
+  String resetSuccessSubtitle(String email) {
+    return '$email로 재설정 링크를 보냈습니다';
+  }
+
+  @override
+  String get resetResend => '받지 못하셨나요? 재전송';
+
+  @override
+  String get resetErrorEmailInvalid => '유효한 이메일 주소를 입력해주세요.';
+
+  @override
+  String get onboardingSkip => '건너뛰기';
+
+  @override
+  String get onboardingNext => '다음';
+
+  @override
+  String get onboardingGetStarted => '시작하기';
+
+  @override
+  String onboardingStepOf(int current, int total) {
+    return '$total단계 중 $current단계';
+  }
+
+  @override
+  String get onboardingS1Title => '국적이 어디인가요?';
+
+  @override
+  String get onboardingS1Subtitle => '관련 정보를 제공하는 데 도움이 됩니다.';
+
+  @override
+  String get onboardingS2Title => '체류 자격이 무엇인가요?';
+
+  @override
+  String get onboardingS2Subtitle => '비자 관련 정보를 맞춤 제공해드립니다.';
+
+  @override
+  String get onboardingS3Title => '일본 어디에 살고 계신가요?';
+
+  @override
+  String get onboardingS3Subtitle => '지역별 가이드를 제공해드립니다.';
+
+  @override
+  String get onboardingS4Title => '일본에 언제 도착하셨나요?';
+
+  @override
+  String get onboardingS4Subtitle => '기한이 있는 할 일을 안내해드립니다.';
+
+  @override
+  String get onboardingS4Placeholder => '날짜를 선택하세요';
+
+  @override
+  String get onboardingS4NotYet => '아직 도착하지 않았습니다';
+
+  @override
+  String get onboardingChangeDate => '날짜 변경';
+
+  @override
+  String get onboardingErrorSave => '정보를 저장할 수 없습니다. 다시 시도해주세요.';
+
+  @override
+  String get statusEngineer => '기술·인문지식·국제업무';
+
+  @override
+  String get statusStudent => '유학';
+
+  @override
+  String get statusDependent => '가족체재';
+
+  @override
+  String get statusPermanent => '영주자';
+
+  @override
+  String get statusSpouse => '일본인의 배우자';
+
+  @override
+  String get statusWorkingHoliday => '워킹홀리데이';
+
+  @override
+  String get statusSpecifiedSkilled => '특정기능';
+
+  @override
+  String get statusOther => '기타';
 
   @override
   String get tabHome => '홈';
@@ -99,76 +251,142 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tabChat => '채팅';
 
   @override
-  String get tabTracker => '추적';
+  String get tabGuide => '가이드';
 
   @override
-  String get tabNavigate => '탐색';
+  String get tabSOS => 'SOS';
 
   @override
   String get tabProfile => '프로필';
 
   @override
-  String get homeWelcome => '외국인 생활 내비에 오신 것을 환영합니다';
+  String homeGreetingMorning(String name) {
+    return '좋은 아침이에요, $name 👋';
+  }
 
   @override
-  String get homeSubtitle => '일본 생활 가이드';
+  String homeGreetingAfternoon(String name) {
+    return '좋은 오후예요, $name 👋';
+  }
 
   @override
-  String get homeQuickActions => '빠른 실행';
+  String homeGreetingEvening(String name) {
+    return '좋은 저녁이에요, $name 👋';
+  }
 
   @override
-  String get homeActionAskAI => 'AI에게 질문';
+  String homeGreetingDefault(String name) {
+    return '안녕하세요, $name 👋';
+  }
 
   @override
-  String get homeActionTracker => '추적기';
+  String get homeGreetingNoName => '환영합니다! 👋';
 
   @override
-  String get homeActionBanking => '은행';
+  String homeUsageFree(int remaining, int limit) {
+    return '무료 • 오늘 $remaining/$limit회 채팅 남음';
+  }
 
   @override
-  String get homeActionChatHistory => '채팅 기록';
+  String get homeSectionQuickActions => '빠른 실행';
 
   @override
-  String get homeRecentChats => '최근 채팅';
+  String get homeSectionExplore => '가이드 둘러보기';
 
   @override
-  String get homeNoRecentChats => '아직 채팅 기록이 없습니다';
+  String get homeQaChatTitle => 'AI 채팅';
 
   @override
-  String get homeMessagesLabel => '개 메시지';
+  String get homeQaChatSubtitle => '일본 생활에 대해 무엇이든 물어보세요';
 
   @override
-  String get chatPlaceholder => 'AI 채팅 — 곧 출시';
+  String get homeQaBankingTitle => '은행';
+
+  @override
+  String get homeQaBankingSubtitle => '계좌 개설, 송금 등';
+
+  @override
+  String get homeQaVisaTitle => '비자';
+
+  @override
+  String get homeQaVisaSubtitle => '이민 가이드 및 절차';
+
+  @override
+  String get homeQaMedicalTitle => '의료';
+
+  @override
+  String get homeQaMedicalSubtitle => '건강 가이드 및 응급 정보';
+
+  @override
+  String get homeExploreGuides => '모든 가이드 보기';
+
+  @override
+  String get homeExploreEmergency => '긴급 연락처';
+
+  @override
+  String get homeUpgradeTitle => 'AI 어시스턴트를 더 활용하세요';
+
+  @override
+  String get homeUpgradeCta => '지금 업그레이드';
 
   @override
   String get chatTitle => 'AI 채팅';
 
   @override
+  String get chatInputPlaceholder => '메시지를 입력하세요...';
+
+  @override
+  String get chatEmptyTitle => '무엇이든 물어보세요!';
+
+  @override
+  String get chatEmptySubtitle => '은행, 비자, 의료 등 일본 생활에 대한 질문에 도움을 드릴 수 있습니다.';
+
+  @override
+  String get chatSuggestBank => '은행 계좌는 어떻게 만드나요?';
+
+  @override
+  String get chatSuggestVisa => '비자 갱신은 어떻게 하나요?';
+
+  @override
+  String get chatSuggestMedical => '병원에 가려면 어떻게 하나요?';
+
+  @override
+  String get chatSuggestGeneral => '일본에 도착하면 무엇을 해야 하나요?';
+
+  @override
+  String get chatSourcesHeader => '출처';
+
+  @override
+  String get chatDisclaimer => '이 정보는 일반적인 안내이며 법적 조언이 아닙니다. 관련 기관에 확인하세요.';
+
+  @override
+  String chatLimitRemaining(int remaining, int limit) {
+    return '오늘 무료 채팅 $remaining/$limit회 남음.';
+  }
+
+  @override
+  String get chatLimitUpgrade => '업그레이드';
+
+  @override
+  String get chatLimitExhausted => '오늘의 무료 채팅을 모두 사용했습니다. 업그레이드하여 계속하세요!';
+
+  @override
+  String get chatErrorSend => '메시지를 보낼 수 없습니다. 다시 시도해주세요.';
+
+  @override
+  String get chatErrorRetry => '다시 시도';
+
+  @override
+  String get chatDateToday => '오늘';
+
+  @override
+  String get chatDateYesterday => '어제';
+
+  @override
   String get chatNewSession => '새 채팅';
 
   @override
-  String get chatEmptyTitle => '대화를 시작하세요';
-
-  @override
-  String get chatEmptySubtitle => '일본 생활에 대해 AI에게 무엇이든 물어보세요';
-
-  @override
   String get chatUntitledSession => '새 대화';
-
-  @override
-  String get chatConversationTitle => '대화';
-
-  @override
-  String get chatInputHint => '일본 생활에 대해 질문하세요...';
-
-  @override
-  String get chatTyping => '생각 중...';
-
-  @override
-  String get chatSources => '출처';
-
-  @override
-  String get chatRetry => '다시 시도';
 
   @override
   String get chatDeleteTitle => '채팅 삭제';
@@ -183,75 +401,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chatDeleteAction => '삭제';
 
   @override
-  String get chatLimitReached => '일일 한도 도달';
-
-  @override
-  String chatRemainingCount(int remaining, int limit) {
-    return '남은 횟수 $remaining/$limit';
-  }
-
-  @override
-  String get chatLimitReachedTitle => '일일 한도에 도달했습니다';
-
-  @override
-  String get chatLimitReachedMessage =>
-      '오늘의 무료 채팅을 모두 사용했습니다. 프리미엄으로 업그레이드하면 무제한으로 이용할 수 있습니다.';
-
-  @override
-  String get chatUpgradeToPremium => '프리미엄으로 업그레이드';
-
-  @override
-  String get chatWelcomePrompt => '오늘 무엇을 도와드릴까요?';
-
-  @override
-  String get chatWelcomeHint => '비자 절차, 은행, 주거 또는 일본 생활에 관한 모든 것을 물어보세요.';
-
-  @override
-  String get onboardingTitle => '프로필 설정';
-
-  @override
-  String get onboardingSkip => '건너뛰기';
-
-  @override
-  String get onboardingNext => '다음';
-
-  @override
-  String get onboardingComplete => '완료';
-
-  @override
-  String onboardingStepOf(int current, int total) {
-    return '$total단계 중 $current단계';
-  }
-
-  @override
-  String get onboardingNationalityTitle => '국적이 어떻게 되시나요?';
-
-  @override
-  String get onboardingNationalitySubtitle => '귀하의 상황에 맞는 정보를 제공하는 데 도움이 됩니다.';
-
-  @override
-  String get onboardingResidenceStatusTitle => '재류 자격은 무엇인가요?';
-
-  @override
-  String get onboardingResidenceStatusSubtitle => '현재 일본에서의 비자 유형을 선택하세요.';
-
-  @override
-  String get onboardingRegionTitle => '어디에 살고 계신가요?';
-
-  @override
-  String get onboardingRegionSubtitle => '현재 거주하거나 이사할 예정인 지역을 선택하세요.';
-
-  @override
-  String get onboardingArrivalDateTitle => '일본에 언제 도착하셨나요?';
-
-  @override
-  String get onboardingArrivalDateSubtitle => '관련 절차와 기한을 제안하는 데 도움이 됩니다.';
-
-  @override
-  String get onboardingSelectDate => '날짜 선택';
-
-  @override
-  String get onboardingChangeDate => '날짜 변경';
+  String get chatRetry => '다시 시도';
 
   @override
   String get countryCN => '중국';
@@ -314,36 +464,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get countryOther => '기타';
 
   @override
-  String get visaEngineer => '기술·인문지식·국제업무';
-
-  @override
-  String get visaStudent => '유학';
-
-  @override
-  String get visaDependent => '가족체재';
-
-  @override
-  String get visaPermanent => '영주자';
-
-  @override
-  String get visaSpouse => '일본인 배우자';
-
-  @override
-  String get visaWorkingHoliday => '워킹홀리데이';
-
-  @override
-  String get visaSpecifiedSkilled => '특정기능';
-
-  @override
-  String get visaTechnicalIntern => '기능실습';
-
-  @override
-  String get visaHighlySkilled => '고도전문직';
-
-  @override
-  String get visaOther => '기타';
-
-  @override
   String get regionTokyo => '도쿄';
 
   @override
@@ -377,15 +497,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get regionOther => '기타';
 
   @override
-  String get trackerPlaceholder => '행정 추적 — 곧 출시';
-
-  @override
-  String get navigatePlaceholder => '탐색 — 곧 출시';
-
-  @override
-  String get profilePlaceholder => '프로필 — 곧 출시';
-
-  @override
   String get genericError => '문제가 발생했습니다. 다시 시도해주세요.';
 
   @override
@@ -395,10 +506,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get logout => '로그아웃';
 
   @override
-  String get bankingTitle => '은행 가이드';
+  String get bankingTitle => '은행 안내';
 
   @override
-  String get bankingFriendlyScore => '외국인 친화 점수';
+  String get bankingFriendlyScore => '외국인 친화도';
 
   @override
   String get bankingEmpty => '은행을 찾을 수 없습니다';
@@ -428,10 +539,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get bankingGetRecommendations => '추천 받기';
 
   @override
-  String get bankingRecommendHint => '우선순위를 선택하고 추천 받기를 눌러주세요';
+  String get bankingRecommendHint => '우선순위를 선택하고 추천 받기를 누르세요';
 
   @override
-  String get bankingNoRecommendations => '추천을 찾을 수 없습니다';
+  String get bankingNoRecommendations => '추천 결과 없음';
 
   @override
   String get bankingViewGuide => '가이드 보기';
@@ -446,13 +557,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get bankingConversationTemplates => '은행에서 유용한 표현';
 
   @override
-  String get bankingTroubleshooting => '문제 해결 팁';
+  String get bankingTroubleshooting => '문제 해결';
 
   @override
   String get bankingSource => '출처';
 
   @override
-  String get visaTitle => '비자 가이드';
+  String get visaTitle => '비자 안내';
 
   @override
   String get visaEmpty => '절차를 찾을 수 없습니다';
@@ -473,11 +584,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get visaFees => '수수료';
 
   @override
-  String get visaProcessingTime => '처리 시간';
+  String get visaProcessingTime => '처리 기간';
 
   @override
-  String get visaDisclaimer =>
-      '중요: 이것은 비자 절차에 대한 일반적인 정보이며 이민 조언을 구성하지 않습니다. 이민법과 절차는 변경될 수 있습니다. 구체적인 상황은 출입국관리국 또는 자격을 갖춘 행정서사(行政書士)에게 문의하세요.';
+  String get visaDisclaimer => '중요: 비자 절차에 대한 일반적인 정보이며 이민 조언이 아닙니다.';
 
   @override
   String get trackerTitle => '행정 추적';
@@ -486,13 +596,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trackerEmpty => '추적 중인 절차 없음';
 
   @override
-  String get trackerEmptyHint => '+ 를 눌러 추적할 절차를 추가하세요';
+  String get trackerEmptyHint => '+를 눌러 절차를 추가하세요';
 
   @override
   String get trackerAddProcedure => '절차 추가';
 
   @override
-  String get trackerStatusNotStarted => '시작 전';
+  String get trackerStatusNotStarted => '미시작';
 
   @override
   String get trackerStatusInProgress => '진행 중';
@@ -504,7 +614,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trackerDueDate => '마감일';
 
   @override
-  String get trackerFreeLimitInfo => '무료 플랜: 최대 3개 절차. 업그레이드하면 무제한.';
+  String get trackerFreeLimitInfo => '무료: 최대 3개 절차. 업그레이드하면 무제한.';
 
   @override
   String get trackerDetailTitle => '절차 상세';
@@ -519,13 +629,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trackerChangeStatus => '상태 변경';
 
   @override
-  String get trackerMarkInProgress => '진행 중으로 변경';
+  String get trackerMarkInProgress => '진행 중으로 표시';
 
   @override
-  String get trackerMarkCompleted => '완료로 변경';
+  String get trackerMarkCompleted => '완료로 표시';
 
   @override
-  String get trackerMarkIncomplete => '미완료로 변경';
+  String get trackerMarkIncomplete => '미완료로 표시';
 
   @override
   String get trackerStatusUpdated => '상태 업데이트됨';
@@ -534,16 +644,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trackerDeleteTitle => '절차 삭제';
 
   @override
-  String get trackerDeleteConfirm => '이 절차를 추적에서 삭제하시겠습니까?';
+  String get trackerDeleteConfirm => '이 절차를 삭제하시겠습니까?';
 
   @override
-  String get trackerProcedureAdded => '절차가 추적에 추가되었습니다';
+  String get trackerProcedureAdded => '추적에 추가됨';
 
   @override
-  String get trackerLimitReached => '무료 플랜 한도 도달 (3개 절차). 프리미엄으로 업그레이드하면 무제한.';
+  String get trackerLimitReached => '무료 한도 도달 (3개). 업그레이드하면 무제한.';
 
   @override
-  String get trackerAlreadyTracking => '이미 이 절차를 추적 중입니다';
+  String get trackerAlreadyTracking => '이미 추적 중인 절차입니다';
 
   @override
   String get trackerEssentialProcedures => '필수 (도착 후)';
@@ -552,10 +662,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trackerOtherProcedures => '기타 절차';
 
   @override
-  String get trackerNoTemplates => '사용 가능한 절차 템플릿 없음';
+  String get trackerNoTemplates => '절차 템플릿 없음';
 
   @override
-  String get scannerTitle => '문서 스캐너';
+  String get scannerTitle => '문서 스캔';
 
   @override
   String get scannerDescription => '일본어 문서를 스캔하여 즉시 번역과 설명을 받으세요';
@@ -573,7 +683,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scannerHistoryTitle => '스캔 기록';
 
   @override
-  String get scannerHistoryEmpty => '아직 스캔 기록이 없습니다';
+  String get scannerHistoryEmpty => '스캔 기록 없음';
 
   @override
   String get scannerUnknownType => '알 수 없는 문서';
@@ -582,16 +692,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scannerResultTitle => '스캔 결과';
 
   @override
-  String get scannerOriginalText => '원본 텍스트 (일본어)';
+  String get scannerOriginalText => '원문 (일본어)';
 
   @override
   String get scannerTranslation => '번역';
 
   @override
-  String get scannerExplanation => '이것이 의미하는 바';
+  String get scannerExplanation => '의미 설명';
 
   @override
-  String get scannerProcessing => '문서를 처리 중...';
+  String get scannerProcessing => '처리 중...';
 
   @override
   String get scannerRefresh => '새로고침';
@@ -600,11 +710,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scannerFailed => '스캔 실패. 다시 시도해주세요.';
 
   @override
-  String get scannerFreeLimitInfo => '무료 플랜: 월 3회 스캔. 업그레이드하면 더 많이.';
+  String get scannerFreeLimitInfo => '무료: 월 3회 스캔. 업그레이드하면 추가.';
 
   @override
-  String get scannerLimitReached =>
-      '월간 스캔 한도에 도달했습니다. 프리미엄으로 업그레이드하면 더 많은 스캔이 가능합니다.';
+  String get scannerLimitReached => '월간 스캔 한도 도달. 업그레이드하면 추가.';
 
   @override
   String get medicalTitle => '의료 가이드';
@@ -622,7 +731,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get medicalHowToCall => '전화 방법';
 
   @override
-  String get medicalWhatToPrepare => '준비 사항';
+  String get medicalWhatToPrepare => '준비물';
 
   @override
   String get medicalUsefulPhrases => '유용한 표현';
@@ -643,23 +752,23 @@ class AppLocalizationsKo extends AppLocalizations {
   String get medicalCategoryGeneral => '일반';
 
   @override
-  String get medicalNoPhrases => '표현을 찾을 수 없습니다';
+  String get medicalNoPhrases => '표현을 찾을 수 없음';
 
   @override
   String get medicalDisclaimer =>
-      '이 가이드는 일반적인 건강 정보를 제공하며 전문적인 의료 조언을 대체하지 않습니다. 응급 상황에서는 즉시 119에 전화하세요.';
+      '이 가이드는 일반적인 건강 정보를 제공하며 전문 의료 조언을 대체하지 않습니다. 응급 상황에서는 즉시 119에 전화하세요.';
 
   @override
   String get navigateBanking => '은행';
 
   @override
-  String get navigateBankingDesc => '외국인 친화적인 은행 찾기';
+  String get navigateBankingDesc => '외국인 친화 은행 찾기';
 
   @override
   String get navigateVisa => '비자';
 
   @override
-  String get navigateVisaDesc => '비자 절차 및 서류';
+  String get navigateVisaDesc => '비자 절차 & 서류';
 
   @override
   String get navigateScanner => '스캐너';
@@ -671,7 +780,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get navigateMedical => '의료';
 
   @override
-  String get navigateMedicalDesc => '응급 가이드 및 표현';
+  String get navigateMedicalDesc => '응급 가이드 & 표현';
+
+  @override
+  String get navigateCommunity => '커뮤니티';
+
+  @override
+  String get navigateCommunityDesc => '다른 외국인과 Q&A';
 
   @override
   String get upgradeToPremium => '프리미엄으로 업그레이드';
@@ -680,28 +795,28 @@ class AppLocalizationsKo extends AppLocalizations {
   String get communityTitle => '커뮤니티 Q&A';
 
   @override
-  String get communityEmpty => '아직 게시글이 없습니다';
+  String get communityEmpty => '게시물 없음';
 
   @override
-  String get communityNewPost => '새 게시글';
+  String get communityNewPost => '새 게시물';
 
   @override
-  String get communityDetailTitle => '게시글 상세';
+  String get communityDetailTitle => '게시물 상세';
 
   @override
   String get communityAnswered => '답변됨';
 
   @override
-  String get communityBestAnswer => '최고 답변';
+  String get communityBestAnswer => '베스트 답변';
 
   @override
   String get communityFilterAll => '전체';
 
   @override
-  String get communitySortNewest => '최신';
+  String get communitySortNewest => '최신순';
 
   @override
-  String get communitySortPopular => '인기';
+  String get communitySortPopular => '인기순';
 
   @override
   String get communityCategoryVisa => '비자';
@@ -713,7 +828,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get communityCategoryBanking => '은행';
 
   @override
-  String get communityCategoryWork => '직장';
+  String get communityCategoryWork => '취업';
 
   @override
   String get communityCategoryDailyLife => '일상생활';
@@ -732,32 +847,32 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String communityReplies(int count) {
-    return '$count개 답변';
+    return '답변 $count개';
   }
 
   @override
-  String get communityNoReplies => '아직 답변이 없습니다. 첫 번째로 답변해보세요!';
+  String get communityNoReplies => '아직 답변이 없습니다. 첫 번째 답변을 남겨보세요!';
 
   @override
   String get communityReplyHint => '답변 작성...';
 
   @override
-  String get communityReplyPremiumOnly => '게시글 작성 및 답변에는 프리미엄 구독이 필요합니다.';
+  String get communityReplyPremiumOnly => '게시 및 답변은 프리미엄 구독이 필요합니다.';
 
   @override
   String communityVoteCount(int count) {
-    return '$count표';
+    return '투표 $count개';
   }
 
   @override
   String get communityModerationPending => '검토 중';
 
   @override
-  String get communityModerationFlagged => '검토를 위해 표시됨';
+  String get communityModerationFlagged => '검토 대상';
 
   @override
   String get communityModerationNotice =>
-      '게시글은 AI 검토 시스템에 의해 검토된 후 다른 사용자에게 표시됩니다.';
+      '게시물은 AI 검토 시스템을 통해 검토 후 다른 사용자에게 표시됩니다.';
 
   @override
   String get communityChannelLabel => '언어 채널';
@@ -775,7 +890,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get communityTitleMinLength => '제목은 5자 이상이어야 합니다';
 
   @override
-  String get communityContentLabel => '상세 내용';
+  String get communityContentLabel => '내용';
 
   @override
   String get communityContentHint => '질문이나 상황을 자세히 설명해주세요...';
@@ -802,25 +917,19 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get navigateCommunity => '커뮤니티';
-
-  @override
-  String get navigateCommunityDesc => '다른 외국인과의 Q&A';
-
-  @override
   String get subscriptionTitle => '구독';
 
   @override
-  String get subscriptionPlansTitle => '플랜 선택';
+  String get subscriptionPlansTitle => '요금제를 선택하세요';
 
   @override
-  String get subscriptionPlansSubtitle => 'Gaijin Life Navi의 모든 기능을 잠금 해제하세요';
+  String get subscriptionPlansSubtitle => 'Gaijin Life Navi의 모든 기능을 활용하세요';
 
   @override
-  String get subscriptionCurrentPlan => '현재 플랜';
+  String get subscriptionCurrentPlan => '현재 요금제';
 
   @override
-  String get subscriptionCurrentPlanBadge => '현재 플랜';
+  String get subscriptionCurrentPlanBadge => '현재 요금제';
 
   @override
   String get subscriptionTierFree => '무료';
@@ -840,33 +949,33 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get subscriptionCheckout => '지금 구독하기';
+  String get subscriptionCheckout => '지금 구독';
 
   @override
   String get subscriptionRecommended => '추천';
 
   @override
-  String get subscriptionCancelling => '취소 중...';
+  String get subscriptionCancelling => '해지 중...';
 
   @override
   String subscriptionCancellingAt(String date) {
-    return '플랜이 $date에 종료됩니다';
+    return '요금제가 $date에 종료됩니다';
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '매일 AI 채팅 5회';
+  String get subscriptionFeatureFreeChat => '하루 5회 AI 채팅';
 
   @override
-  String get subscriptionFeatureFreeScans => '매월 문서 스캔 3회';
+  String get subscriptionFeatureFreeScans => '월 3회 문서 스캔';
 
   @override
   String get subscriptionFeatureFreeTracker => '최대 3개 절차 추적';
 
   @override
-  String get subscriptionFeatureFreeCommunityRead => '커뮤니티 게시글 읽기';
+  String get subscriptionFeatureFreeCommunityRead => '커뮤니티 게시물 읽기';
 
   @override
-  String get subscriptionFeatureCommunityPost => '커뮤니티에 게시 및 답변';
+  String get subscriptionFeatureCommunityPost => '커뮤니티 게시 & 답변';
 
   @override
   String get subscriptionFeatureUnlimitedChat => '무제한 AI 채팅';
@@ -896,7 +1005,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get profileLanguage => '언어';
 
   @override
-  String get profileArrivalDate => '입국일';
+  String get profileArrivalDate => '도착일';
 
   @override
   String get profileDisplayName => '표시 이름';
@@ -914,10 +1023,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get profileSaveButton => '저장';
 
   @override
-  String get profileSaveError => '프로필 저장 실패';
+  String get profileSaveError => '저장 실패';
 
   @override
-  String get profileLoadError => '프로필 로드 실패';
+  String get profileLoadError => '로딩 실패';
 
   @override
   String get settingsTitle => '설정';
@@ -947,17 +1056,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsLogoutConfirmTitle => '로그아웃';
 
   @override
-  String get settingsLogoutConfirmMessage => '로그아웃 하시겠습니까?';
+  String get settingsLogoutConfirmMessage => '로그아웃하시겠습니까?';
 
   @override
   String get settingsDeleteConfirmTitle => '계정 삭제';
 
   @override
   String get settingsDeleteConfirmMessage =>
-      '계정을 삭제하시겠습니까? 이 작업은 취소할 수 없으며 모든 데이터가 영구적으로 삭제됩니다.';
+      '계정을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다. 모든 데이터가 영구적으로 삭제됩니다.';
 
   @override
-  String get settingsDeleteError => '계정 삭제 실패';
+  String get settingsDeleteError => '삭제 실패';
 
   @override
   String get settingsCancel => '취소';

@@ -28,20 +28,15 @@ class ScannerRepository {
       options: Options(contentType: 'multipart/form-data'),
     );
     return DocumentScan.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   /// Fetch scan history list.
-  Future<List<DocumentScan>> getScans({
-    int limit = 20,
-    String? cursor,
-  }) async {
+  Future<List<DocumentScan>> getScans({int limit = 20, String? cursor}) async {
     final response = await _client.get<Map<String, dynamic>>(
       '/ai/documents',
-      queryParameters: {
-        'limit': limit,
-        if (cursor != null) 'cursor': cursor,
-      },
+      queryParameters: {'limit': limit, if (cursor != null) 'cursor': cursor},
     );
     final items = response.data!['data'] as List<dynamic>;
     return items
@@ -55,7 +50,8 @@ class ScannerRepository {
       '/ai/documents/$scanId',
     );
     return DocumentScan.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   /// Delete a scan (soft-delete).

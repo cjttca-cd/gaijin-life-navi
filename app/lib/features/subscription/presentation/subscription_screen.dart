@@ -18,28 +18,29 @@ class SubscriptionScreen extends ConsumerWidget {
     final mySubAsync = ref.watch(mySubscriptionProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.subscriptionTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.subscriptionTitle)),
       body: plansAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline,
-                  size: 48, color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () =>
-                    ref.invalidate(subscriptionPlansProvider),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(subscriptionPlansProvider),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (plans) {
           final mySub = mySubAsync.valueOrNull;
 
@@ -72,7 +73,8 @@ class SubscriptionScreen extends ConsumerWidget {
 
               // Paid plan cards
               ...plans.map((plan) {
-                final isCurrent = mySub != null &&
+                final isCurrent =
+                    mySub != null &&
                     !mySub.isFree &&
                     ((plan.id == 'premium_monthly' &&
                             mySub.tier == 'premium') ||
@@ -107,16 +109,18 @@ class _CurrentPlanCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final isFree = subscription?.isFree ?? true;
-    final tierName = isFree
-        ? l10n.subscriptionTierFree
-        : subscription?.tier == 'premium_plus'
+    final tierName =
+        isFree
+            ? l10n.subscriptionTierFree
+            : subscription?.tier == 'premium_plus'
             ? l10n.subscriptionTierPremiumPlus
             : l10n.subscriptionTierPremium;
 
     return Card(
-      color: isFree
-          ? theme.colorScheme.surfaceContainerHighest
-          : theme.colorScheme.primaryContainer,
+      color:
+          isFree
+              ? theme.colorScheme.surfaceContainerHighest
+              : theme.colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -124,26 +128,29 @@ class _CurrentPlanCard extends StatelessWidget {
             Icon(
               isFree ? Icons.person_outline : Icons.star,
               size: 32,
-              color: isFree
-                  ? theme.colorScheme.onSurfaceVariant
-                  : theme.colorScheme.onPrimaryContainer,
+              color:
+                  isFree
+                      ? theme.colorScheme.onSurfaceVariant
+                      : theme.colorScheme.onPrimaryContainer,
             ),
             const SizedBox(height: 8),
             Text(
               l10n.subscriptionCurrentPlan,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: isFree
-                    ? theme.colorScheme.onSurfaceVariant
-                    : theme.colorScheme.onPrimaryContainer,
+                color:
+                    isFree
+                        ? theme.colorScheme.onSurfaceVariant
+                        : theme.colorScheme.onPrimaryContainer,
               ),
             ),
             Text(
               tierName,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: isFree
-                    ? theme.colorScheme.onSurface
-                    : theme.colorScheme.onPrimaryContainer,
+                color:
+                    isFree
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onPrimaryContainer,
               ),
             ),
             if (subscription != null &&
@@ -193,9 +200,10 @@ class _FreePlanCard extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: isCurrentPlan
-            ? BorderSide(color: theme.colorScheme.primary, width: 2)
-            : BorderSide.none,
+        side:
+            isCurrentPlan
+                ? BorderSide(color: theme.colorScheme.primary, width: 2)
+                : BorderSide.none,
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -262,11 +270,13 @@ class _PlanCard extends ConsumerWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: isCurrentPlan
-            ? BorderSide(color: theme.colorScheme.primary, width: 2)
-            : isPremiumPlus
+        side:
+            isCurrentPlan
+                ? BorderSide(color: theme.colorScheme.primary, width: 2)
+                : isPremiumPlus
                 ? BorderSide(
-                    color: theme.colorScheme.tertiary.withValues(alpha: 0.5))
+                  color: theme.colorScheme.tertiary.withValues(alpha: 0.5),
+                )
                 : BorderSide.none,
       ),
       child: Padding(
@@ -275,8 +285,10 @@ class _PlanCard extends ConsumerWidget {
           children: [
             if (isPremiumPlus)
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 margin: const EdgeInsets.only(bottom: 8),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.tertiary,
@@ -305,19 +317,18 @@ class _PlanCard extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
-            ...plan.features
-                .map((f) => _FeatureRow(text: f, included: true)),
+            ...plan.features.map((f) => _FeatureRow(text: f, included: true)),
             const SizedBox(height: 16),
             if (isCurrentPlan)
               isCancelling
                   ? OutlinedButton(
-                      onPressed: null,
-                      child: Text(l10n.subscriptionCancelling),
-                    )
+                    onPressed: null,
+                    child: Text(l10n.subscriptionCancelling),
+                  )
                   : OutlinedButton(
-                      onPressed: null,
-                      child: Text(l10n.subscriptionCurrentPlanBadge),
-                    )
+                    onPressed: null,
+                    child: Text(l10n.subscriptionCurrentPlanBadge),
+                  )
             else
               FilledButton(
                 onPressed: () => _checkout(context, ref),
@@ -341,9 +352,9 @@ class _PlanCard extends ConsumerWidget {
     } catch (_) {
       if (context.mounted) {
         final l10n = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.genericError)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
       }
     }
   }
@@ -368,18 +379,22 @@ class _FeatureRow extends StatelessWidget {
           Icon(
             included ? Icons.check_circle : Icons.cancel,
             size: 20,
-            color: included
-                ? theme.colorScheme.tertiary
-                : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+            color:
+                included
+                    ? theme.colorScheme.tertiary
+                    : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: included
-                    ? null
-                    : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                color:
+                    included
+                        ? null
+                        : theme.colorScheme.onSurfaceVariant.withValues(
+                          alpha: 0.5,
+                        ),
                 decoration: included ? null : TextDecoration.lineThrough,
               ),
             ),

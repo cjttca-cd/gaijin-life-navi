@@ -53,9 +53,10 @@ class UserProfile {
       preferredLanguage: json['preferred_language'] as String? ?? 'en',
       subscriptionTier: json['subscription_tier'] as String? ?? 'free',
       onboardingCompleted: json['onboarding_completed'] as bool? ?? false,
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'] as String)
-          : DateTime.now(),
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.parse(json['created_at'] as String)
+              : DateTime.now(),
     );
   }
 

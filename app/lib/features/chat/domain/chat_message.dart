@@ -31,12 +31,14 @@ class ChatMessage {
       sessionId: json['session_id'] as String,
       role: json['role'] as String,
       content: json['content'] as String,
-      sources: json['sources'] != null
-          ? (json['sources'] as List)
-              .map((s) =>
-                  SourceCitation.fromJson(s as Map<String, dynamic>))
-              .toList()
-          : null,
+      sources:
+          json['sources'] != null
+              ? (json['sources'] as List)
+                  .map(
+                    (s) => SourceCitation.fromJson(s as Map<String, dynamic>),
+                  )
+                  .toList()
+              : null,
       disclaimer: json['disclaimer'] as String?,
       tokensUsed: json['tokens_used'] as int?,
       createdAt: DateTime.parse(json['created_at'] as String),
@@ -68,11 +70,7 @@ class ChatMessage {
 
 /// A source citation from RAG results.
 class SourceCitation {
-  const SourceCitation({
-    required this.title,
-    required this.url,
-    this.snippet,
-  });
+  const SourceCitation({required this.title, required this.url, this.snippet});
 
   final String title;
   final String url;

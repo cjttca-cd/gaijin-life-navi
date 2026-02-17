@@ -23,7 +23,8 @@ class SubscriptionPlan {
       price: json['price'] as int? ?? 0,
       currency: json['currency'] as String? ?? 'jpy',
       interval: json['interval'] as String? ?? 'month',
-      features: (json['features'] as List<dynamic>?)
+      features:
+          (json['features'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
@@ -68,16 +69,19 @@ class UserSubscription {
       status: json['status'] as String?,
       stripeCustomerId: json['stripe_customer_id'] as String?,
       stripeSubscriptionId: json['stripe_subscription_id'] as String?,
-      currentPeriodEnd: json['current_period_end'] != null
-          ? DateTime.tryParse(json['current_period_end'] as String)
-          : null,
+      currentPeriodEnd:
+          json['current_period_end'] != null
+              ? DateTime.tryParse(json['current_period_end'] as String)
+              : null,
       cancelAtPeriodEnd: json['cancel_at_period_end'] as bool? ?? false,
-      cancelledAt: json['cancelled_at'] != null
-          ? DateTime.tryParse(json['cancelled_at'] as String)
-          : null,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'] as String)
-          : null,
+      cancelledAt:
+          json['cancelled_at'] != null
+              ? DateTime.tryParse(json['cancelled_at'] as String)
+              : null,
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.tryParse(json['created_at'] as String)
+              : null,
     );
   }
 }

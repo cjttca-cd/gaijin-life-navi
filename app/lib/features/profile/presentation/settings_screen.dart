@@ -63,9 +63,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       if (mounted) context.go('/login');
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.settingsDeleteError)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.settingsDeleteError)));
       }
     } finally {
       if (mounted) setState(() => _isDeleting = false);
@@ -79,29 +79,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }) {
     return showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(AppLocalizations.of(context).settingsCancel),
+      builder:
+          (ctx) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(AppLocalizations.of(context).settingsCancel),
+              ),
+              TextButton(
+                style:
+                    isDestructive
+                        ? TextButton.styleFrom(
+                          foregroundColor: Theme.of(ctx).colorScheme.error,
+                        )
+                        : null,
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(
+                  isDestructive
+                      ? AppLocalizations.of(context).settingsDelete
+                      : AppLocalizations.of(context).settingsConfirm,
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            style: isDestructive
-                ? TextButton.styleFrom(
-                    foregroundColor: Theme.of(ctx).colorScheme.error,
-                  )
-                : null,
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(
-              isDestructive
-                  ? AppLocalizations.of(context).settingsDelete
-                  : AppLocalizations.of(context).settingsConfirm,
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -131,9 +133,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             return ListTile(
               leading: const Icon(Icons.language),
               title: Text(_languageLabel(lang)),
-              trailing: isSelected
-                  ? Icon(Icons.check, color: theme.colorScheme.primary)
-                  : null,
+              trailing:
+                  isSelected
+                      ? Icon(Icons.check, color: theme.colorScheme.primary)
+                      : null,
               selected: isSelected,
               onTap: () => _changeLanguage(lang),
             );
@@ -156,8 +159,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: _logout,
           ),
           ListTile(
-            leading: Icon(Icons.delete_forever,
-                color: theme.colorScheme.error),
+            leading: Icon(Icons.delete_forever, color: theme.colorScheme.error),
             title: Text(
               l10n.settingsDeleteAccount,
               style: TextStyle(color: theme.colorScheme.error),

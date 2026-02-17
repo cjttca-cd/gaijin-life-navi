@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
-/// A simple typing indicator shown while the AI is generating a response.
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_spacing.dart';
+
+/// Typing indicator (S08) — DESIGN_SYSTEM.md §6.9.5.
+///
+/// 3 dots bouncing with 300ms offset, in AI bubble shape.
 class TypingIndicator extends StatefulWidget {
   const TypingIndicator({super.key});
 
@@ -30,75 +34,66 @@ class _TypingIndicatorState extends State<TypingIndicator>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final cs = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      child: Row(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.spaceMd,
+        vertical: AppSpacing.spaceXs,
+      ),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 16,
-            backgroundColor: theme.colorScheme.primary,
-            child: Icon(
-              Icons.smart_toy,
-              size: 18,
-              color: theme.colorScheme.onPrimary,
+          // AI Avatar.
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: cs.primary,
+              shape: BoxShape.circle,
             ),
+            child: Icon(Icons.explore, size: 16, color: cs.onPrimary),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(height: AppSpacing.spaceXs),
+          // Bubble with dots.
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-                bottomRight: Radius.circular(16),
+            decoration: const BoxDecoration(
+              color: AppColors.surfaceVariant,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+                bottomLeft: Radius.circular(2),
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, _) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(3, (index) {
-                        final offset = index * 0.2;
-                        final value =
-                            ((_controller.value + offset) % 1.0);
-                        final opacity = (value < 0.5)
-                            ? 0.3 + 0.7 * (value * 2)
-                            : 0.3 + 0.7 * ((1 - value) * 2);
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2),
-                          child: Opacity(
-                            opacity: opacity.clamp(0.3, 1.0),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.onSurfaceVariant,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(3, (index) {
+                    final offset = index * 0.25;
+                    final t = ((_controller.value + offset) % 1.0);
+                    // Bounce: 0→0.5 goes up, 0.5→1.0 goes down.
+                    final bounce = t < 0.5 ? t * 2 * 4 : (1 - t) * 2 * 4;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: Transform.translate(
+                        offset: Offset(0, -bounce),
+                        child: Container(
+                          width: 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: AppColors.onSurfaceVariant,
+                            shape: BoxShape.circle,
                           ),
-                        );
-                      }),
+                        ),
+                      ),
                     );
-                  },
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  l10n.chatTyping,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
+                  }),
+                );
+              },
             ),
           ),
         ],

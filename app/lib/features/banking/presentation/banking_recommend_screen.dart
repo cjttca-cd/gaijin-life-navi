@@ -20,12 +20,7 @@ class _BankingRecommendScreenState
   final Set<String> _selectedPriorities = {};
   bool _hasSearched = false;
 
-  static const _priorityKeys = [
-    'multilingual',
-    'low_fee',
-    'atm',
-    'online',
-  ];
+  static const _priorityKeys = ['multilingual', 'low_fee', 'atm', 'online'];
 
   String _priorityLabel(AppLocalizations l10n, String key) {
     switch (key) {
@@ -54,9 +49,7 @@ class _BankingRecommendScreenState
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.bankingRecommendTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.bankingRecommendTitle)),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -74,23 +67,24 @@ class _BankingRecommendScreenState
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: _priorityKeys.map((key) {
-                    final isSelected = _selectedPriorities.contains(key);
-                    return FilterChip(
-                      label: Text(_priorityLabel(l10n, key)),
-                      selected: isSelected,
-                      onSelected: (selected) {
-                        setState(() {
-                          if (selected) {
-                            _selectedPriorities.add(key);
-                          } else {
-                            _selectedPriorities.remove(key);
-                          }
-                          _hasSearched = false;
-                        });
-                      },
-                    );
-                  }).toList(),
+                  children:
+                      _priorityKeys.map((key) {
+                        final isSelected = _selectedPriorities.contains(key);
+                        return FilterChip(
+                          label: Text(_priorityLabel(l10n, key)),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _selectedPriorities.add(key);
+                              } else {
+                                _selectedPriorities.remove(key);
+                              }
+                              _hasSearched = false;
+                            });
+                          },
+                        );
+                      }).toList(),
                 ),
                 const SizedBox(height: 16),
                 FilledButton(
@@ -139,14 +133,10 @@ class _RecommendationResults extends ConsumerWidget {
 
     return results.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(
-        child: Text(l10n.genericError),
-      ),
+      error: (error, _) => Center(child: Text(l10n.genericError)),
       data: (recommendations) {
         if (recommendations.isEmpty) {
-          return Center(
-            child: Text(l10n.bankingNoRecommendations),
-          );
+          return Center(child: Text(l10n.bankingNoRecommendations));
         }
         return ListView.builder(
           padding: const EdgeInsets.all(16),
@@ -194,9 +184,11 @@ class _RecommendationResults extends ConsumerWidget {
                         padding: const EdgeInsets.only(bottom: 4),
                         child: Row(
                           children: [
-                            Icon(Icons.check_circle_outline,
-                                size: 16,
-                                color: theme.colorScheme.primary),
+                            Icon(
+                              Icons.check_circle_outline,
+                              size: 16,
+                              color: theme.colorScheme.primary,
+                            ),
                             const SizedBox(width: 8),
                             Expanded(child: Text(reason)),
                           ],
@@ -209,15 +201,18 @@ class _RecommendationResults extends ConsumerWidget {
                         padding: const EdgeInsets.only(bottom: 4),
                         child: Row(
                           children: [
-                            Icon(Icons.warning_amber,
-                                size: 16,
-                                color: theme.colorScheme.error),
+                            Icon(
+                              Icons.warning_amber,
+                              size: 16,
+                              color: theme.colorScheme.error,
+                            ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 warning,
                                 style: TextStyle(
-                                    color: theme.colorScheme.error),
+                                  color: theme.colorScheme.error,
+                                ),
                               ),
                             ),
                           ],
@@ -228,10 +223,13 @@ class _RecommendationResults extends ConsumerWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () => context.push(
-                          AppRoutes.bankingGuide
-                              .replaceFirst(':bankId', rec.bank.id),
-                        ),
+                        onPressed:
+                            () => context.push(
+                              AppRoutes.bankingGuide.replaceFirst(
+                                ':bankId',
+                                rec.bank.id,
+                              ),
+                            ),
                         child: Text(l10n.bankingViewGuide),
                       ),
                     ),

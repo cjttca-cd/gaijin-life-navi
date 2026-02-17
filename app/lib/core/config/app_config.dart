@@ -21,13 +21,7 @@ class AppConfig {
   static const String apiVersion = '/api/v1';
 
   /// Supported languages
-  static const List<String> supportedLanguages = [
-    'en',
-    'zh',
-    'vi',
-    'ko',
-    'pt',
-  ];
+  static const List<String> supportedLanguages = ['en', 'zh', 'vi', 'ko', 'pt'];
 
   /// Default language fallback
   static const String defaultLanguage = 'en';

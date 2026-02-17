@@ -16,7 +16,8 @@ class MedicalRepository {
       queryParameters: {'lang': lang},
     );
     return EmergencyGuide.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   /// Fetch medical phrases, optionally filtered by category.

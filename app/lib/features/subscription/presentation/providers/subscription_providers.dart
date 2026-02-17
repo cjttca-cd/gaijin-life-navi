@@ -14,15 +14,15 @@ final _subscriptionDioProvider = Provider<Dio>((ref) {
 
 /// Subscription repository provider.
 final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) {
-  return SubscriptionRepository(
-      apiClient: ref.watch(_subscriptionDioProvider));
+  return SubscriptionRepository(apiClient: ref.watch(_subscriptionDioProvider));
 });
 
 // ─── Plans ───────────────────────────────────────────────────
 
 /// Available subscription plans.
-final subscriptionPlansProvider =
-    FutureProvider<List<SubscriptionPlan>>((ref) async {
+final subscriptionPlansProvider = FutureProvider<List<SubscriptionPlan>>((
+  ref,
+) async {
   final repo = ref.watch(subscriptionRepositoryProvider);
   return repo.getPlans();
 });
@@ -30,8 +30,7 @@ final subscriptionPlansProvider =
 // ─── My Subscription ─────────────────────────────────────────
 
 /// Current user's subscription status.
-final mySubscriptionProvider =
-    FutureProvider<UserSubscription>((ref) async {
+final mySubscriptionProvider = FutureProvider<UserSubscription>((ref) async {
   final repo = ref.watch(subscriptionRepositoryProvider);
   return repo.getMySubscription();
 });

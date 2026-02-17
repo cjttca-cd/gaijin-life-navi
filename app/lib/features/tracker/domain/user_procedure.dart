@@ -60,17 +60,21 @@ class UserProcedure {
       procedureRefId: json['procedure_ref_id'] as String? ?? '',
       title: json['title'] as String? ?? '',
       status: ProcedureStatus.fromString(
-          json['status'] as String? ?? 'not_started'),
-      dueDate: json['due_date'] != null
-          ? DateTime.tryParse(json['due_date'] as String)
-          : null,
+        json['status'] as String? ?? 'not_started',
+      ),
+      dueDate:
+          json['due_date'] != null
+              ? DateTime.tryParse(json['due_date'] as String)
+              : null,
       notes: json['notes'] as String?,
-      completedAt: json['completed_at'] != null
-          ? DateTime.tryParse(json['completed_at'] as String)
-          : null,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'] as String)
-          : null,
+      completedAt:
+          json['completed_at'] != null
+              ? DateTime.tryParse(json['completed_at'] as String)
+              : null,
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.tryParse(json['created_at'] as String)
+              : null,
     );
   }
 }

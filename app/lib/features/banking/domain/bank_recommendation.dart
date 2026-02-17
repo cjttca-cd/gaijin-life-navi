@@ -18,11 +18,13 @@ class BankRecommendation {
     return BankRecommendation(
       bank: Bank.fromJson(json['bank'] as Map<String, dynamic>),
       matchScore: json['match_score'] as int,
-      matchReasons: (json['match_reasons'] as List<dynamic>?)
+      matchReasons:
+          (json['match_reasons'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
-      warnings: (json['warnings'] as List<dynamic>?)
+      warnings:
+          (json['warnings'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],

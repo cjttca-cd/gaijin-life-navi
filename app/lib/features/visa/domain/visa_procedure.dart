@@ -38,25 +38,29 @@ class VisaProcedure {
       procedureType: json['procedure_type'] as String? ?? '',
       title: json['title'] as String? ?? '',
       description: json['description'] as String?,
-      applicableStatuses: (json['applicable_statuses'] as List<dynamic>?)
+      applicableStatuses:
+          (json['applicable_statuses'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
-      steps: (json['steps'] as List<dynamic>?)
+      steps:
+          (json['steps'] as List<dynamic>?)
               ?.map((e) => VisaStep.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      requiredDocuments: (json['required_documents'] as List<dynamic>?)
-              ?.map((e) =>
-                  VisaDocument.fromJson(e as Map<String, dynamic>))
+      requiredDocuments:
+          (json['required_documents'] as List<dynamic>?)
+              ?.map((e) => VisaDocument.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       // Backend returns dict, not String.
-      fees: json['fees'] is Map<String, dynamic>
-          ? json['fees'] as Map<String, dynamic>
-          : null,
+      fees:
+          json['fees'] is Map<String, dynamic>
+              ? json['fees'] as Map<String, dynamic>
+              : null,
       // Backend uses 'estimated_duration', not 'processing_time'.
-      processingTime: json['estimated_duration'] as String? ??
+      processingTime:
+          json['estimated_duration'] as String? ??
           json['processing_time'] as String?,
       disclaimer: json['disclaimer'] as String?,
       sourceUrl: json['source_url'] as String?,
@@ -88,10 +92,7 @@ class VisaStep {
 
 /// A required document for a visa procedure.
 class VisaDocument {
-  const VisaDocument({
-    required this.name,
-    this.howToGet,
-  });
+  const VisaDocument({required this.name, this.howToGet});
 
   final String name;
   final String? howToGet;

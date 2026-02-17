@@ -28,9 +28,9 @@ class _TrackerAddScreenState extends ConsumerState<TrackerAddScreen> {
       );
       ref.invalidate(myProceduresProvider);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.trackerProcedureAdded)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.trackerProcedureAdded)));
         context.pop();
       }
     } on DioException catch (e) {
@@ -41,15 +41,15 @@ class _TrackerAddScreenState extends ConsumerState<TrackerAddScreen> {
         } else if (e.response?.statusCode == 409) {
           message = l10n.trackerAlreadyTracking;
         }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.genericError)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.genericError)));
       }
     } finally {
       if (mounted) setState(() => _isAdding = false);
@@ -63,37 +63,32 @@ class _TrackerAddScreenState extends ConsumerState<TrackerAddScreen> {
     final templates = ref.watch(procedureTemplatesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.trackerAddProcedure),
-      ),
+      appBar: AppBar(title: Text(l10n.trackerAddProcedure)),
       body: templates.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () => ref.invalidate(procedureTemplatesProvider),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(procedureTemplatesProvider),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (templateList) {
           if (templateList.isEmpty) {
-            return Center(
-              child: Text(l10n.trackerNoTemplates),
-            );
+            return Center(child: Text(l10n.trackerNoTemplates));
           }
 
-          final essential = templateList
-              .where((t) => t.isArrivalEssential)
-              .toList();
-          final others = templateList
-              .where((t) => !t.isArrivalEssential)
-              .toList();
+          final essential =
+              templateList.where((t) => t.isArrivalEssential).toList();
+          final others =
+              templateList.where((t) => !t.isArrivalEssential).toList();
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -107,9 +102,11 @@ class _TrackerAddScreenState extends ConsumerState<TrackerAddScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline,
-                        size: 20,
-                        color: theme.colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.info_outline,
+                      size: 20,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -135,32 +132,35 @@ class _TrackerAddScreenState extends ConsumerState<TrackerAddScreen> {
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor:
-                            theme.colorScheme.errorContainer,
-                        child: Icon(Icons.priority_high,
-                            color:
-                                theme.colorScheme.onErrorContainer),
+                        backgroundColor: theme.colorScheme.errorContainer,
+                        child: Icon(
+                          Icons.priority_high,
+                          color: theme.colorScheme.onErrorContainer,
+                        ),
                       ),
                       title: Text(t.title),
-                      subtitle: t.description != null
-                          ? Text(
-                              t.description!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          : null,
-                      trailing: _isAdding
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                  strokeWidth: 2),
-                            )
-                          : IconButton(
-                              icon: const Icon(Icons.add_circle_outline),
-                              onPressed: () => _addProcedure(
-                                  t.id, t.procedureType),
-                            ),
+                      subtitle:
+                          t.description != null
+                              ? Text(
+                                t.description!,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                              : null,
+                      trailing:
+                          _isAdding
+                              ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : IconButton(
+                                icon: const Icon(Icons.add_circle_outline),
+                                onPressed:
+                                    () => _addProcedure(t.id, t.procedureType),
+                              ),
                     ),
                   ),
                 ),
@@ -178,32 +178,35 @@ class _TrackerAddScreenState extends ConsumerState<TrackerAddScreen> {
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor:
-                            theme.colorScheme.secondaryContainer,
-                        child: Icon(Icons.assignment_outlined,
-                            color: theme
-                                .colorScheme.onSecondaryContainer),
+                        backgroundColor: theme.colorScheme.secondaryContainer,
+                        child: Icon(
+                          Icons.assignment_outlined,
+                          color: theme.colorScheme.onSecondaryContainer,
+                        ),
                       ),
                       title: Text(t.title),
-                      subtitle: t.description != null
-                          ? Text(
-                              t.description!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          : null,
-                      trailing: _isAdding
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                  strokeWidth: 2),
-                            )
-                          : IconButton(
-                              icon: const Icon(Icons.add_circle_outline),
-                              onPressed: () => _addProcedure(
-                                  t.id, t.procedureType),
-                            ),
+                      subtitle:
+                          t.description != null
+                              ? Text(
+                                t.description!,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                              : null,
+                      trailing:
+                          _isAdding
+                              ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : IconButton(
+                                icon: const Icon(Icons.add_circle_outline),
+                                onPressed:
+                                    () => _addProcedure(t.id, t.procedureType),
+                              ),
                     ),
                   ),
                 ),

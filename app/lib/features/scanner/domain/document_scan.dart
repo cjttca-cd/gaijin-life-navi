@@ -46,16 +46,16 @@ class DocumentScan {
   factory DocumentScan.fromJson(Map<String, dynamic> json) {
     return DocumentScan(
       id: json['id'] as String,
-      status:
-          ScanStatus.fromString(json['status'] as String? ?? 'processing'),
+      status: ScanStatus.fromString(json['status'] as String? ?? 'processing'),
       fileUrl: json['file_url'] as String?,
       ocrText: json['ocr_text'] as String?,
       translation: json['translation'] as String?,
       explanation: json['explanation'] as String?,
       documentType: json['document_type'] as String?,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'] as String)
-          : null,
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.tryParse(json['created_at'] as String)
+              : null,
     );
   }
 }

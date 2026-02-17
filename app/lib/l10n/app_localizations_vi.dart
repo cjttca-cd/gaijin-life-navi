@@ -12,207 +12,168 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appTitle => 'Gaijin Life Navi';
 
   @override
-  String get languageSelectionTitle => 'Chọn Ngôn Ngữ';
+  String get langTitle => 'Chọn ngôn ngữ của bạn';
 
   @override
-  String get languageSelectionSubtitle =>
-      'Bạn có thể thay đổi sau trong cài đặt';
+  String get langContinue => 'Tiếp tục';
 
   @override
-  String get continueButton => 'Tiếp tục';
+  String get langEn => 'English';
 
   @override
-  String get loginTitle => 'Chào Mừng Trở Lại';
+  String get langZh => '中文';
 
   @override
-  String get loginSubtitle => 'Đăng nhập vào tài khoản của bạn';
+  String get langVi => 'Tiếng Việt';
 
   @override
-  String get emailLabel => 'Email';
+  String get langKo => '한국어';
 
   @override
-  String get passwordLabel => 'Mật khẩu';
+  String get langPt => 'Português';
+
+  @override
+  String get loginWelcome => 'Chào mừng trở lại';
+
+  @override
+  String get loginSubtitle => 'Đăng nhập để tiếp tục';
+
+  @override
+  String get loginEmailLabel => 'Email';
+
+  @override
+  String get loginEmailHint => 'your@email.com';
+
+  @override
+  String get loginPasswordLabel => 'Mật khẩu';
+
+  @override
+  String get loginPasswordHint => 'Nhập mật khẩu';
+
+  @override
+  String get loginForgotPassword => 'Quên mật khẩu?';
 
   @override
   String get loginButton => 'Đăng nhập';
 
   @override
-  String get forgotPassword => 'Quên mật khẩu?';
+  String get loginNoAccount => 'Chưa có tài khoản?';
 
   @override
-  String get noAccount => 'Chưa có tài khoản?';
+  String get loginSignUp => 'Đăng ký';
 
   @override
-  String get signUp => 'Đăng ký';
+  String get loginErrorInvalidEmail => 'Vui lòng nhập địa chỉ email hợp lệ.';
 
   @override
-  String get registerTitle => 'Tạo Tài Khoản';
+  String get loginErrorInvalidCredentials =>
+      'Email hoặc mật khẩu không đúng. Vui lòng thử lại.';
 
   @override
-  String get registerSubtitle => 'Bắt đầu cuộc sống tại Nhật Bản với sự tự tin';
+  String get loginErrorNetwork =>
+      'Không thể kết nối. Vui lòng kiểm tra kết nối internet.';
 
   @override
-  String get confirmPasswordLabel => 'Xác nhận mật khẩu';
+  String get loginErrorTooManyAttempts =>
+      'Quá nhiều lần thử. Vui lòng thử lại sau.';
 
   @override
-  String get registerButton => 'Tạo Tài Khoản';
+  String get registerTitle => 'Tạo tài khoản của bạn';
 
   @override
-  String get hasAccount => 'Đã có tài khoản?';
+  String get registerSubtitle => 'Bắt đầu hành trình tại Nhật Bản';
 
   @override
-  String get signIn => 'Đăng nhập';
+  String get registerEmailLabel => 'Email';
 
   @override
-  String get resetPasswordTitle => 'Đặt Lại Mật Khẩu';
+  String get registerEmailHint => 'your@email.com';
 
   @override
-  String get resetPasswordSubtitle => 'Nhập email để nhận liên kết đặt lại';
+  String get registerPasswordLabel => 'Mật khẩu';
 
   @override
-  String get sendResetLink => 'Gửi Liên Kết Đặt Lại';
+  String get registerPasswordHint => 'Tạo mật khẩu';
 
   @override
-  String get backToLogin => 'Quay lại Đăng nhập';
+  String get registerPasswordHelper => '8 ký tự trở lên';
 
   @override
-  String get resetPasswordSuccess =>
-      'Email đặt lại mật khẩu đã được gửi. Kiểm tra hộp thư của bạn.';
+  String get registerConfirmLabel => 'Xác nhận mật khẩu';
 
   @override
-  String get emailRequired => 'Vui lòng nhập email';
+  String get registerConfirmHint => 'Nhập lại mật khẩu';
 
   @override
-  String get emailInvalid => 'Vui lòng nhập email hợp lệ';
+  String get registerTermsAgree => 'Tôi đồng ý với ';
 
   @override
-  String get passwordRequired => 'Vui lòng nhập mật khẩu';
+  String get registerTermsLink => 'Điều khoản dịch vụ';
 
   @override
-  String get passwordTooShort => 'Mật khẩu phải có ít nhất 8 ký tự';
+  String get registerPrivacyAnd => 'và';
 
   @override
-  String get passwordMismatch => 'Mật khẩu không khớp';
+  String get registerPrivacyLink => 'Chính sách bảo mật';
 
   @override
-  String get tabHome => 'Trang chủ';
+  String get registerButton => 'Tạo tài khoản';
 
   @override
-  String get tabChat => 'Trò chuyện';
+  String get registerHasAccount => 'Đã có tài khoản?';
 
   @override
-  String get tabTracker => 'Theo dõi';
+  String get registerSignIn => 'Đăng nhập';
 
   @override
-  String get tabNavigate => 'Điều hướng';
+  String get registerErrorEmailInvalid => 'Vui lòng nhập địa chỉ email hợp lệ.';
 
   @override
-  String get tabProfile => 'Hồ sơ';
+  String get registerErrorEmailInUse =>
+      'Email này đã được đăng ký. Hãy thử đăng nhập.';
 
   @override
-  String get homeWelcome => 'Chào mừng đến với Gaijin Life Navi';
+  String get registerErrorPasswordShort => 'Mật khẩu phải có ít nhất 8 ký tự.';
 
   @override
-  String get homeSubtitle => 'Hướng dẫn cuộc sống tại Nhật Bản';
+  String get registerErrorPasswordMismatch => 'Mật khẩu không khớp.';
 
   @override
-  String get homeQuickActions => 'Thao tác nhanh';
+  String get registerErrorTermsRequired =>
+      'Vui lòng đồng ý với Điều khoản dịch vụ.';
 
   @override
-  String get homeActionAskAI => 'Hỏi AI';
+  String get resetTitle => 'Đặt lại mật khẩu';
 
   @override
-  String get homeActionTracker => 'Theo dõi';
+  String get resetSubtitle =>
+      'Nhập email và chúng tôi sẽ gửi liên kết đặt lại.';
 
   @override
-  String get homeActionBanking => 'Ngân hàng';
+  String get resetEmailLabel => 'Email';
 
   @override
-  String get homeActionChatHistory => 'Lịch sử chat';
+  String get resetEmailHint => 'your@email.com';
 
   @override
-  String get homeRecentChats => 'Chat gần đây';
+  String get resetButton => 'Gửi liên kết đặt lại';
 
   @override
-  String get homeNoRecentChats => 'Chưa có cuộc trò chuyện nào';
+  String get resetBackToLogin => 'Quay lại đăng nhập';
 
   @override
-  String get homeMessagesLabel => 'tin nhắn';
+  String get resetSuccessTitle => 'Kiểm tra email của bạn';
 
   @override
-  String get chatPlaceholder => 'AI Chat — Sắp ra mắt';
-
-  @override
-  String get chatTitle => 'AI Chat';
-
-  @override
-  String get chatNewSession => 'Chat mới';
-
-  @override
-  String get chatEmptyTitle => 'Bắt đầu cuộc trò chuyện';
-
-  @override
-  String get chatEmptySubtitle =>
-      'Hỏi AI bất cứ điều gì về cuộc sống tại Nhật Bản';
-
-  @override
-  String get chatUntitledSession => 'Cuộc trò chuyện mới';
-
-  @override
-  String get chatConversationTitle => 'Trò chuyện';
-
-  @override
-  String get chatInputHint => 'Hỏi về cuộc sống tại Nhật Bản...';
-
-  @override
-  String get chatTyping => 'Đang suy nghĩ...';
-
-  @override
-  String get chatSources => 'Nguồn';
-
-  @override
-  String get chatRetry => 'Thử lại';
-
-  @override
-  String get chatDeleteTitle => 'Xóa chat';
-
-  @override
-  String get chatDeleteConfirm =>
-      'Bạn có chắc chắn muốn xóa cuộc trò chuyện này?';
-
-  @override
-  String get chatDeleteCancel => 'Hủy';
-
-  @override
-  String get chatDeleteAction => 'Xóa';
-
-  @override
-  String get chatLimitReached => 'Đã đạt giới hạn hàng ngày';
-
-  @override
-  String chatRemainingCount(int remaining, int limit) {
-    return 'Còn lại $remaining/$limit';
+  String resetSuccessSubtitle(String email) {
+    return 'Chúng tôi đã gửi liên kết đặt lại đến $email';
   }
 
   @override
-  String get chatLimitReachedTitle => 'Đã đạt giới hạn hàng ngày';
+  String get resetResend => 'Không nhận được? Gửi lại';
 
   @override
-  String get chatLimitReachedMessage =>
-      'Bạn đã sử dụng hết lượt chat miễn phí hôm nay. Nâng cấp lên Premium để sử dụng không giới hạn.';
-
-  @override
-  String get chatUpgradeToPremium => 'Nâng cấp lên Premium';
-
-  @override
-  String get chatWelcomePrompt => 'Hôm nay tôi có thể giúp gì cho bạn?';
-
-  @override
-  String get chatWelcomeHint =>
-      'Hỏi về thủ tục visa, ngân hàng, nhà ở, hoặc bất cứ điều gì về cuộc sống tại Nhật Bản.';
-
-  @override
-  String get onboardingTitle => 'Thiết lập hồ sơ';
+  String get resetErrorEmailInvalid => 'Vui lòng nhập địa chỉ email hợp lệ.';
 
   @override
   String get onboardingSkip => 'Bỏ qua';
@@ -221,46 +182,238 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onboardingNext => 'Tiếp theo';
 
   @override
-  String get onboardingComplete => 'Hoàn thành';
+  String get onboardingGetStarted => 'Bắt đầu';
 
   @override
   String onboardingStepOf(int current, int total) {
-    return 'Bước $current / $total';
+    return 'Bước $current/$total';
   }
 
   @override
-  String get onboardingNationalityTitle => 'Quốc tịch của bạn là gì?';
+  String get onboardingS1Title => 'Quốc tịch của bạn là gì?';
 
   @override
-  String get onboardingNationalitySubtitle =>
-      'Điều này giúp chúng tôi cung cấp thông tin phù hợp với tình huống của bạn.';
+  String get onboardingS1Subtitle =>
+      'Điều này giúp chúng tôi cung cấp thông tin phù hợp.';
 
   @override
-  String get onboardingResidenceStatusTitle => 'Tư cách cư trú của bạn là gì?';
+  String get onboardingS2Title => 'Tình trạng cư trú của bạn là gì?';
 
   @override
-  String get onboardingResidenceStatusSubtitle =>
-      'Chọn loại visa hiện tại của bạn tại Nhật Bản.';
+  String get onboardingS2Subtitle =>
+      'Chúng tôi có thể điều chỉnh thông tin visa cho bạn.';
 
   @override
-  String get onboardingRegionTitle => 'Bạn sống ở đâu?';
+  String get onboardingS3Title => 'Bạn sống ở đâu tại Nhật Bản?';
 
   @override
-  String get onboardingRegionSubtitle =>
-      'Chọn khu vực bạn đang sống hoặc dự định chuyển đến.';
+  String get onboardingS3Subtitle => 'Để cung cấp hướng dẫn theo khu vực.';
 
   @override
-  String get onboardingArrivalDateTitle => 'Bạn đến Nhật Bản khi nào?';
+  String get onboardingS4Title => 'Bạn đến Nhật Bản khi nào?';
 
   @override
-  String get onboardingArrivalDateSubtitle =>
-      'Điều này giúp chúng tôi đề xuất các thủ tục và hạn chót liên quan.';
+  String get onboardingS4Subtitle =>
+      'Chúng tôi sẽ gợi ý các nhiệm vụ cần hoàn thành đúng hạn.';
 
   @override
-  String get onboardingSelectDate => 'Chọn ngày';
+  String get onboardingS4Placeholder => 'Chọn ngày';
 
   @override
-  String get onboardingChangeDate => 'Đổi ngày';
+  String get onboardingS4NotYet => 'Tôi chưa đến Nhật';
+
+  @override
+  String get onboardingChangeDate => 'Thay đổi ngày';
+
+  @override
+  String get onboardingErrorSave =>
+      'Không thể lưu thông tin. Vui lòng thử lại.';
+
+  @override
+  String get statusEngineer => 'Kỹ sư / Chuyên gia nhân văn';
+
+  @override
+  String get statusStudent => 'Du học sinh';
+
+  @override
+  String get statusDependent => 'Người phụ thuộc';
+
+  @override
+  String get statusPermanent => 'Thường trú nhân';
+
+  @override
+  String get statusSpouse => 'Vợ/chồng công dân Nhật';
+
+  @override
+  String get statusWorkingHoliday => 'Kỳ nghỉ làm việc';
+
+  @override
+  String get statusSpecifiedSkilled => 'Lao động kỹ năng đặc định';
+
+  @override
+  String get statusOther => 'Khác';
+
+  @override
+  String get tabHome => 'Trang chủ';
+
+  @override
+  String get tabChat => 'Chat';
+
+  @override
+  String get tabGuide => 'Hướng dẫn';
+
+  @override
+  String get tabSOS => 'SOS';
+
+  @override
+  String get tabProfile => 'Hồ sơ';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return 'Chào buổi sáng, $name 👋';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return 'Chào buổi chiều, $name 👋';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return 'Chào buổi tối, $name 👋';
+  }
+
+  @override
+  String homeGreetingDefault(String name) {
+    return 'Xin chào, $name 👋';
+  }
+
+  @override
+  String get homeGreetingNoName => 'Chào mừng! 👋';
+
+  @override
+  String homeUsageFree(int remaining, int limit) {
+    return 'Miễn phí • Còn $remaining/$limit lượt chat hôm nay';
+  }
+
+  @override
+  String get homeSectionQuickActions => 'Thao tác nhanh';
+
+  @override
+  String get homeSectionExplore => 'Khám phá hướng dẫn';
+
+  @override
+  String get homeQaChatTitle => 'AI Chat';
+
+  @override
+  String get homeQaChatSubtitle => 'Hỏi bất kỳ điều gì về cuộc sống tại Nhật';
+
+  @override
+  String get homeQaBankingTitle => 'Ngân hàng';
+
+  @override
+  String get homeQaBankingSubtitle => 'Mở tài khoản, chuyển tiền & hơn thế';
+
+  @override
+  String get homeQaVisaTitle => 'Visa';
+
+  @override
+  String get homeQaVisaSubtitle => 'Hướng dẫn nhập cư & thủ tục';
+
+  @override
+  String get homeQaMedicalTitle => 'Y tế';
+
+  @override
+  String get homeQaMedicalSubtitle => 'Hướng dẫn sức khỏe & thông tin khẩn cấp';
+
+  @override
+  String get homeExploreGuides => 'Xem tất cả hướng dẫn';
+
+  @override
+  String get homeExploreEmergency => 'Liên hệ khẩn cấp';
+
+  @override
+  String get homeUpgradeTitle => 'Nhận thêm từ trợ lý AI của bạn';
+
+  @override
+  String get homeUpgradeCta => 'Nâng cấp ngay';
+
+  @override
+  String get chatTitle => 'AI Chat';
+
+  @override
+  String get chatInputPlaceholder => 'Nhập tin nhắn...';
+
+  @override
+  String get chatEmptyTitle => 'Hãy hỏi bất cứ điều gì!';
+
+  @override
+  String get chatEmptySubtitle =>
+      'Tôi có thể giúp bạn về ngân hàng, visa, y tế và nhiều vấn đề khác về cuộc sống tại Nhật.';
+
+  @override
+  String get chatSuggestBank => 'Làm sao để mở tài khoản ngân hàng?';
+
+  @override
+  String get chatSuggestVisa => 'Làm sao để gia hạn visa?';
+
+  @override
+  String get chatSuggestMedical => 'Làm sao để khám bệnh?';
+
+  @override
+  String get chatSuggestGeneral => 'Cần làm gì sau khi đến Nhật?';
+
+  @override
+  String get chatSourcesHeader => 'Nguồn tham khảo';
+
+  @override
+  String get chatDisclaimer =>
+      'Đây chỉ là thông tin chung, không phải tư vấn pháp lý. Vui lòng xác nhận với cơ quan liên quan.';
+
+  @override
+  String chatLimitRemaining(int remaining, int limit) {
+    return 'Còn $remaining/$limit lượt chat miễn phí hôm nay.';
+  }
+
+  @override
+  String get chatLimitUpgrade => 'Nâng cấp';
+
+  @override
+  String get chatLimitExhausted =>
+      'Bạn đã dùng hết lượt chat miễn phí hôm nay. Nâng cấp để tiếp tục!';
+
+  @override
+  String get chatErrorSend => 'Không thể gửi tin nhắn. Vui lòng thử lại.';
+
+  @override
+  String get chatErrorRetry => 'Thử lại';
+
+  @override
+  String get chatDateToday => 'Hôm nay';
+
+  @override
+  String get chatDateYesterday => 'Hôm qua';
+
+  @override
+  String get chatNewSession => 'Chat mới';
+
+  @override
+  String get chatUntitledSession => 'Cuộc trò chuyện mới';
+
+  @override
+  String get chatDeleteTitle => 'Xóa chat';
+
+  @override
+  String get chatDeleteConfirm => 'Bạn có chắc muốn xóa cuộc trò chuyện này?';
+
+  @override
+  String get chatDeleteCancel => 'Hủy';
+
+  @override
+  String get chatDeleteAction => 'Xóa';
+
+  @override
+  String get chatRetry => 'Thử lại';
 
   @override
   String get countryCN => 'Trung Quốc';
@@ -323,36 +476,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get countryOther => 'Khác';
 
   @override
-  String get visaEngineer => 'Kỹ sư / Chuyên gia';
-
-  @override
-  String get visaStudent => 'Du học sinh';
-
-  @override
-  String get visaDependent => 'Gia đình';
-
-  @override
-  String get visaPermanent => 'Thường trú nhân';
-
-  @override
-  String get visaSpouse => 'Vợ/chồng người Nhật';
-
-  @override
-  String get visaWorkingHoliday => 'Working Holiday';
-
-  @override
-  String get visaSpecifiedSkilled => 'Kỹ năng đặc định';
-
-  @override
-  String get visaTechnicalIntern => 'Thực tập kỹ thuật';
-
-  @override
-  String get visaHighlySkilled => 'Nhân lực trình độ cao';
-
-  @override
-  String get visaOther => 'Khác';
-
-  @override
   String get regionTokyo => 'Tokyo';
 
   @override
@@ -386,16 +509,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get regionOther => 'Khác';
 
   @override
-  String get trackerPlaceholder => 'Theo dõi thủ tục — Sắp ra mắt';
-
-  @override
-  String get navigatePlaceholder => 'Điều hướng — Sắp ra mắt';
-
-  @override
-  String get profilePlaceholder => 'Hồ sơ — Sắp ra mắt';
-
-  @override
-  String get genericError => 'Có lỗi xảy ra. Vui lòng thử lại.';
+  String get genericError => 'Đã xảy ra lỗi. Vui lòng thử lại.';
 
   @override
   String get networkError => 'Lỗi mạng. Vui lòng kiểm tra kết nối.';
@@ -416,7 +530,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get bankingRecommendButton => 'Gợi ý';
 
   @override
-  String get bankingRecommendTitle => 'Gợi ý Ngân hàng';
+  String get bankingRecommendTitle => 'Gợi ý ngân hàng';
 
   @override
   String get bankingSelectPriorities => 'Chọn ưu tiên của bạn';
@@ -428,7 +542,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get bankingPriorityLowFee => 'Phí thấp';
 
   @override
-  String get bankingPriorityAtm => 'Mạng lưới ATM';
+  String get bankingPriorityAtm => 'Mạng ATM';
 
   @override
   String get bankingPriorityOnline => 'Ngân hàng trực tuyến';
@@ -449,13 +563,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get bankingGuideTitle => 'Hướng dẫn mở tài khoản';
 
   @override
-  String get bankingRequiredDocs => 'Tài liệu cần thiết';
+  String get bankingRequiredDocs => 'Giấy tờ cần thiết';
 
   @override
   String get bankingConversationTemplates => 'Cụm từ hữu ích tại ngân hàng';
 
   @override
-  String get bankingTroubleshooting => 'Mẹo xử lý sự cố';
+  String get bankingTroubleshooting => 'Xử lý sự cố';
 
   @override
   String get bankingSource => 'Nguồn';
@@ -476,26 +590,26 @@ class AppLocalizationsVi extends AppLocalizations {
   String get visaSteps => 'Các bước';
 
   @override
-  String get visaRequiredDocuments => 'Tài liệu cần thiết';
+  String get visaRequiredDocuments => 'Giấy tờ cần thiết';
 
   @override
-  String get visaFees => 'Lệ phí';
+  String get visaFees => 'Phí';
 
   @override
   String get visaProcessingTime => 'Thời gian xử lý';
 
   @override
   String get visaDisclaimer =>
-      'QUAN TRỌNG: Đây là thông tin chung về thủ tục visa và không cấu thành tư vấn nhập cư. Luật và thủ tục nhập cư có thể thay đổi. Luôn tham khảo ý kiến của Cục Quản lý Xuất nhập cảnh hoặc luật sư nhập cư có chuyên môn (行政書士) cho tình huống cụ thể của bạn.';
+      'QUAN TRỌNG: Đây là thông tin chung về thủ tục visa, không phải tư vấn nhập cư.';
 
   @override
-  String get trackerTitle => 'Theo dõi Thủ tục';
+  String get trackerTitle => 'Theo dõi hành chính';
 
   @override
-  String get trackerEmpty => 'Chưa theo dõi thủ tục nào';
+  String get trackerEmpty => 'Chưa có thủ tục nào';
 
   @override
-  String get trackerEmptyHint => 'Nhấn + để thêm thủ tục cần theo dõi';
+  String get trackerEmptyHint => 'Nhấn + để thêm thủ tục';
 
   @override
   String get trackerAddProcedure => 'Thêm thủ tục';
@@ -507,14 +621,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get trackerStatusInProgress => 'Đang tiến hành';
 
   @override
-  String get trackerStatusCompleted => 'Đã hoàn thành';
+  String get trackerStatusCompleted => 'Hoàn thành';
 
   @override
   String get trackerDueDate => 'Hạn chót';
 
   @override
   String get trackerFreeLimitInfo =>
-      'Gói miễn phí: tối đa 3 thủ tục. Nâng cấp để không giới hạn.';
+      'Miễn phí: tối đa 3 thủ tục. Nâng cấp để không giới hạn.';
 
   @override
   String get trackerDetailTitle => 'Chi tiết thủ tục';
@@ -538,21 +652,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get trackerMarkIncomplete => 'Đánh dấu chưa hoàn thành';
 
   @override
-  String get trackerStatusUpdated => 'Đã cập nhật trạng thái';
+  String get trackerStatusUpdated => 'Trạng thái đã cập nhật';
 
   @override
   String get trackerDeleteTitle => 'Xóa thủ tục';
 
   @override
-  String get trackerDeleteConfirm =>
-      'Bạn có chắc chắn muốn xóa thủ tục này khỏi theo dõi?';
+  String get trackerDeleteConfirm => 'Bạn có chắc muốn xóa thủ tục này?';
 
   @override
-  String get trackerProcedureAdded => 'Đã thêm thủ tục vào theo dõi';
+  String get trackerProcedureAdded => 'Đã thêm vào danh sách theo dõi';
 
   @override
   String get trackerLimitReached =>
-      'Đã đạt giới hạn gói miễn phí (3 thủ tục). Nâng cấp lên Premium để không giới hạn.';
+      'Đã đạt giới hạn miễn phí (3 thủ tục). Nâng cấp để không giới hạn.';
 
   @override
   String get trackerAlreadyTracking => 'Bạn đã theo dõi thủ tục này';
@@ -564,14 +677,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get trackerOtherProcedures => 'Thủ tục khác';
 
   @override
-  String get trackerNoTemplates => 'Không có mẫu thủ tục';
+  String get trackerNoTemplates => 'Chưa có mẫu thủ tục';
 
   @override
   String get scannerTitle => 'Quét tài liệu';
 
   @override
   String get scannerDescription =>
-      'Quét tài liệu tiếng Nhật để nhận bản dịch và giải thích ngay lập tức';
+      'Quét tài liệu tiếng Nhật để dịch và giải thích ngay';
 
   @override
   String get scannerFromCamera => 'Quét từ Camera';
@@ -586,7 +699,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get scannerHistoryTitle => 'Lịch sử quét';
 
   @override
-  String get scannerHistoryEmpty => 'Chưa có bản quét nào';
+  String get scannerHistoryEmpty => 'Chưa có lần quét nào';
 
   @override
   String get scannerUnknownType => 'Tài liệu không xác định';
@@ -595,16 +708,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get scannerResultTitle => 'Kết quả quét';
 
   @override
-  String get scannerOriginalText => 'Văn bản gốc (Tiếng Nhật)';
+  String get scannerOriginalText => 'Văn bản gốc (Nhật)';
 
   @override
   String get scannerTranslation => 'Bản dịch';
 
   @override
-  String get scannerExplanation => 'Điều này có nghĩa gì';
+  String get scannerExplanation => 'Ý nghĩa';
 
   @override
-  String get scannerProcessing => 'Đang xử lý tài liệu...';
+  String get scannerProcessing => 'Đang xử lý...';
 
   @override
   String get scannerRefresh => 'Làm mới';
@@ -614,11 +727,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get scannerFreeLimitInfo =>
-      'Gói miễn phí: 3 lần quét/tháng. Nâng cấp để có thêm.';
+      'Miễn phí: 3 lần quét/tháng. Nâng cấp để có thêm.';
 
   @override
   String get scannerLimitReached =>
-      'Đã đạt giới hạn quét hàng tháng. Nâng cấp lên Premium để quét thêm.';
+      'Đã hết lượt quét tháng này. Nâng cấp để có thêm.';
 
   @override
   String get medicalTitle => 'Hướng dẫn Y tế';
@@ -636,7 +749,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get medicalHowToCall => 'Cách gọi';
 
   @override
-  String get medicalWhatToPrepare => 'Chuẩn bị gì';
+  String get medicalWhatToPrepare => 'Cần chuẩn bị';
 
   @override
   String get medicalUsefulPhrases => 'Cụm từ hữu ích';
@@ -661,7 +774,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get medicalDisclaimer =>
-      'Hướng dẫn này cung cấp thông tin sức khỏe chung và không thay thế lời khuyên y tế chuyên nghiệp. Trong trường hợp khẩn cấp, hãy gọi 119 ngay lập tức.';
+      'Hướng dẫn này cung cấp thông tin sức khỏe chung, không thay thế tư vấn y tế chuyên nghiệp. Trong trường hợp khẩn cấp, hãy gọi 119 ngay.';
 
   @override
   String get navigateBanking => 'Ngân hàng';
@@ -674,7 +787,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get navigateVisa => 'Visa';
 
   @override
-  String get navigateVisaDesc => 'Thủ tục visa và tài liệu';
+  String get navigateVisaDesc => 'Thủ tục & giấy tờ visa';
 
   @override
   String get navigateScanner => 'Quét';
@@ -686,19 +799,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get navigateMedical => 'Y tế';
 
   @override
-  String get navigateMedicalDesc => 'Hướng dẫn cấp cứu và cụm từ';
+  String get navigateMedicalDesc => 'Hướng dẫn cấp cứu & cụm từ';
+
+  @override
+  String get navigateCommunity => 'Cộng đồng';
+
+  @override
+  String get navigateCommunityDesc => 'Hỏi đáp với người nước ngoài khác';
 
   @override
   String get upgradeToPremium => 'Nâng cấp lên Premium';
 
   @override
-  String get communityTitle => 'Cộng đồng Hỏi đáp';
+  String get communityTitle => 'Hỏi đáp Cộng đồng';
 
   @override
   String get communityEmpty => 'Chưa có bài viết';
 
   @override
-  String get communityNewPost => 'Bài viết mới';
+  String get communityNewPost => 'Bài mới';
 
   @override
   String get communityDetailTitle => 'Chi tiết bài viết';
@@ -707,7 +826,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get communityAnswered => 'Đã trả lời';
 
   @override
-  String get communityBestAnswer => 'Câu trả lời tốt nhất';
+  String get communityBestAnswer => 'Câu trả lời hay nhất';
 
   @override
   String get communityFilterAll => 'Tất cả';
@@ -731,7 +850,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get communityCategoryWork => 'Công việc';
 
   @override
-  String get communityCategoryDailyLife => 'Cuộc sống hàng ngày';
+  String get communityCategoryDailyLife => 'Cuộc sống';
 
   @override
   String get communityCategoryMedical => 'Y tế';
@@ -747,19 +866,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String communityReplies(int count) {
-    return '$count Trả lời';
+    return '$count Phản hồi';
   }
 
   @override
-  String get communityNoReplies =>
-      'Chưa có câu trả lời. Hãy là người đầu tiên!';
+  String get communityNoReplies => 'Chưa có phản hồi. Hãy là người đầu tiên!';
 
   @override
-  String get communityReplyHint => 'Viết câu trả lời...';
+  String get communityReplyHint => 'Viết phản hồi...';
 
   @override
   String get communityReplyPremiumOnly =>
-      'Đăng bài và trả lời cần đăng ký Premium.';
+      'Đăng và phản hồi yêu cầu đăng ký Premium.';
 
   @override
   String communityVoteCount(int count) {
@@ -770,11 +888,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get communityModerationPending => 'Đang xem xét';
 
   @override
-  String get communityModerationFlagged => 'Đã gắn cờ để xem xét';
+  String get communityModerationFlagged => 'Đã đánh dấu xem xét';
 
   @override
   String get communityModerationNotice =>
-      'Bài viết của bạn sẽ được hệ thống AI kiểm duyệt trước khi hiển thị cho người khác.';
+      'Bài viết của bạn sẽ được hệ thống AI kiểm duyệt trước khi hiển thị.';
 
   @override
   String get communityChannelLabel => 'Kênh ngôn ngữ';
@@ -789,17 +907,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get communityTitleHint => 'Câu hỏi của bạn là gì?';
 
   @override
-  String get communityTitleMinLength => 'Tiêu đề phải có ít nhất 5 ký tự';
+  String get communityTitleMinLength => 'Tiêu đề ít nhất 5 ký tự';
 
   @override
   String get communityContentLabel => 'Chi tiết';
 
   @override
   String get communityContentHint =>
-      'Mô tả chi tiết câu hỏi hoặc tình huống của bạn...';
+      'Mô tả câu hỏi hoặc tình huống chi tiết...';
 
   @override
-  String get communityContentMinLength => 'Nội dung phải có ít nhất 10 ký tự';
+  String get communityContentMinLength => 'Nội dung ít nhất 10 ký tự';
 
   @override
   String get communitySubmit => 'Đăng';
@@ -818,12 +936,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String communityTimeAgoMinutes(int minutes) {
     return '$minutes phút trước';
   }
-
-  @override
-  String get navigateCommunity => 'Cộng đồng';
-
-  @override
-  String get navigateCommunityDesc => 'Hỏi đáp với người nước ngoài khác';
 
   @override
   String get subscriptionTitle => 'Đăng ký';
@@ -862,7 +974,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get subscriptionCheckout => 'Đăng ký ngay';
 
   @override
-  String get subscriptionRecommended => 'KHUYẾN NGHỊ';
+  String get subscriptionRecommended => 'ĐỀ XUẤT';
 
   @override
   String get subscriptionCancelling => 'Đang hủy...';
@@ -873,10 +985,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '5 cuộc trò chuyện AI mỗi ngày';
+  String get subscriptionFeatureFreeChat => '5 lượt chat AI mỗi ngày';
 
   @override
-  String get subscriptionFeatureFreeScans => '3 lần quét tài liệu mỗi tháng';
+  String get subscriptionFeatureFreeScans => '3 lượt quét tài liệu mỗi tháng';
 
   @override
   String get subscriptionFeatureFreeTracker => 'Theo dõi tối đa 3 thủ tục';
@@ -886,10 +998,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get subscriptionFeatureCommunityPost =>
-      'Đăng bài và trả lời trong cộng đồng';
+      'Đăng & phản hồi trong cộng đồng';
 
   @override
-  String get subscriptionFeatureUnlimitedChat => 'Trò chuyện AI không giới hạn';
+  String get subscriptionFeatureUnlimitedChat => 'Chat AI không giới hạn';
 
   @override
   String get profileTitle => 'Hồ sơ';
@@ -907,7 +1019,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileNationality => 'Quốc tịch';
 
   @override
-  String get profileResidenceStatus => 'Tư cách cư trú';
+  String get profileResidenceStatus => 'Tình trạng cư trú';
 
   @override
   String get profileRegion => 'Khu vực';
@@ -934,10 +1046,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileSaveButton => 'Lưu';
 
   @override
-  String get profileSaveError => 'Lưu hồ sơ thất bại';
+  String get profileSaveError => 'Lưu thất bại';
 
   @override
-  String get profileLoadError => 'Tải hồ sơ thất bại';
+  String get profileLoadError => 'Tải thất bại';
 
   @override
   String get settingsTitle => 'Cài đặt';
@@ -949,7 +1061,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsAccountSection => 'Tài khoản';
 
   @override
-  String get settingsAboutSection => 'Giới thiệu';
+  String get settingsAboutSection => 'Thông tin';
 
   @override
   String get settingsLogout => 'Đăng xuất';
@@ -978,7 +1090,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Bạn có chắc muốn xóa tài khoản? Hành động này không thể hoàn tác. Tất cả dữ liệu sẽ bị xóa vĩnh viễn.';
 
   @override
-  String get settingsDeleteError => 'Xóa tài khoản thất bại';
+  String get settingsDeleteError => 'Xóa thất bại';
 
   @override
   String get settingsCancel => 'Hủy';

@@ -104,1873 +104,2071 @@ abstract class AppLocalizations {
     Locale('zh'),
   ];
 
-  /// Application title
+  /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
   /// **'Gaijin Life Navi'**
   String get appTitle;
 
-  /// Title on language selection screen
+  /// No description provided for @langTitle.
   ///
   /// In en, this message translates to:
-  /// **'Choose Your Language'**
-  String get languageSelectionTitle;
+  /// **'Choose your language'**
+  String get langTitle;
 
-  /// Subtitle on language selection screen
-  ///
-  /// In en, this message translates to:
-  /// **'You can change this later in settings'**
-  String get languageSelectionSubtitle;
-
-  /// Continue button label
+  /// No description provided for @langContinue.
   ///
   /// In en, this message translates to:
   /// **'Continue'**
-  String get continueButton;
+  String get langContinue;
 
-  /// Login screen title
+  /// No description provided for @langEn.
   ///
   /// In en, this message translates to:
-  /// **'Welcome Back'**
-  String get loginTitle;
+  /// **'English'**
+  String get langEn;
 
-  /// Login screen subtitle
+  /// No description provided for @langZh.
   ///
   /// In en, this message translates to:
-  /// **'Sign in to your account'**
+  /// **'中文'**
+  String get langZh;
+
+  /// No description provided for @langVi.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiếng Việt'**
+  String get langVi;
+
+  /// No description provided for @langKo.
+  ///
+  /// In en, this message translates to:
+  /// **'한국어'**
+  String get langKo;
+
+  /// No description provided for @langPt.
+  ///
+  /// In en, this message translates to:
+  /// **'Português'**
+  String get langPt;
+
+  /// No description provided for @loginWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get loginWelcome;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to continue'**
   String get loginSubtitle;
 
-  /// Email field label
+  /// No description provided for @loginEmailLabel.
   ///
   /// In en, this message translates to:
   /// **'Email'**
-  String get emailLabel;
+  String get loginEmailLabel;
 
-  /// Password field label
+  /// No description provided for @loginEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'your@email.com'**
+  String get loginEmailHint;
+
+  /// No description provided for @loginPasswordLabel.
   ///
   /// In en, this message translates to:
   /// **'Password'**
-  String get passwordLabel;
+  String get loginPasswordLabel;
 
-  /// Login button label
+  /// No description provided for @loginPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get loginPasswordHint;
+
+  /// No description provided for @loginForgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get loginForgotPassword;
+
+  /// No description provided for @loginButton.
   ///
   /// In en, this message translates to:
   /// **'Sign In'**
   String get loginButton;
 
-  /// Forgot password link text
-  ///
-  /// In en, this message translates to:
-  /// **'Forgot Password?'**
-  String get forgotPassword;
-
-  /// No account text
+  /// No description provided for @loginNoAccount.
   ///
   /// In en, this message translates to:
   /// **'Don\'t have an account?'**
-  String get noAccount;
+  String get loginNoAccount;
 
-  /// Sign up link text
+  /// No description provided for @loginSignUp.
   ///
   /// In en, this message translates to:
   /// **'Sign Up'**
-  String get signUp;
+  String get loginSignUp;
 
-  /// Register screen title
+  /// No description provided for @loginErrorInvalidEmail.
   ///
   /// In en, this message translates to:
-  /// **'Create Account'**
+  /// **'Please enter a valid email address.'**
+  String get loginErrorInvalidEmail;
+
+  /// No description provided for @loginErrorInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password. Please try again.'**
+  String get loginErrorInvalidCredentials;
+
+  /// No description provided for @loginErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to connect. Please check your internet connection.'**
+  String get loginErrorNetwork;
+
+  /// No description provided for @loginErrorTooManyAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please try again later.'**
+  String get loginErrorTooManyAttempts;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account'**
   String get registerTitle;
 
-  /// Register screen subtitle
+  /// No description provided for @registerSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Start your life in Japan with confidence'**
+  /// **'Start your journey in Japan'**
   String get registerSubtitle;
 
-  /// Confirm password field label
+  /// No description provided for @registerEmailLabel.
   ///
   /// In en, this message translates to:
-  /// **'Confirm Password'**
-  String get confirmPasswordLabel;
+  /// **'Email'**
+  String get registerEmailLabel;
 
-  /// Register button label
+  /// No description provided for @registerEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'your@email.com'**
+  String get registerEmailHint;
+
+  /// No description provided for @registerPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get registerPasswordLabel;
+
+  /// No description provided for @registerPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a password'**
+  String get registerPasswordHint;
+
+  /// No description provided for @registerPasswordHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'8 or more characters'**
+  String get registerPasswordHelper;
+
+  /// No description provided for @registerConfirmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get registerConfirmLabel;
+
+  /// No description provided for @registerConfirmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your password'**
+  String get registerConfirmHint;
+
+  /// No description provided for @registerTermsAgree.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the '**
+  String get registerTermsAgree;
+
+  /// No description provided for @registerTermsLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get registerTermsLink;
+
+  /// No description provided for @registerPrivacyAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get registerPrivacyAnd;
+
+  /// No description provided for @registerPrivacyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get registerPrivacyLink;
+
+  /// No description provided for @registerButton.
   ///
   /// In en, this message translates to:
   /// **'Create Account'**
   String get registerButton;
 
-  /// Has account text
+  /// No description provided for @registerHasAccount.
   ///
   /// In en, this message translates to:
   /// **'Already have an account?'**
-  String get hasAccount;
+  String get registerHasAccount;
 
-  /// Sign in link text
+  /// No description provided for @registerSignIn.
   ///
   /// In en, this message translates to:
   /// **'Sign In'**
-  String get signIn;
+  String get registerSignIn;
 
-  /// Reset password screen title
+  /// No description provided for @registerErrorEmailInvalid.
   ///
   /// In en, this message translates to:
-  /// **'Reset Password'**
-  String get resetPasswordTitle;
+  /// **'Please enter a valid email address.'**
+  String get registerErrorEmailInvalid;
 
-  /// Reset password screen subtitle
+  /// No description provided for @registerErrorEmailInUse.
   ///
   /// In en, this message translates to:
-  /// **'Enter your email to receive a reset link'**
-  String get resetPasswordSubtitle;
+  /// **'This email is already registered. Try signing in instead.'**
+  String get registerErrorEmailInUse;
 
-  /// Send reset link button label
+  /// No description provided for @registerErrorPasswordShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters.'**
+  String get registerErrorPasswordShort;
+
+  /// No description provided for @registerErrorPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords don\'t match.'**
+  String get registerErrorPasswordMismatch;
+
+  /// No description provided for @registerErrorTermsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the Terms of Service.'**
+  String get registerErrorTermsRequired;
+
+  /// No description provided for @resetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset your password'**
+  String get resetTitle;
+
+  /// No description provided for @resetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we\'ll send you a reset link.'**
+  String get resetSubtitle;
+
+  /// No description provided for @resetEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get resetEmailLabel;
+
+  /// No description provided for @resetEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'your@email.com'**
+  String get resetEmailHint;
+
+  /// No description provided for @resetButton.
   ///
   /// In en, this message translates to:
   /// **'Send Reset Link'**
-  String get sendResetLink;
+  String get resetButton;
 
-  /// Back to login link text
+  /// No description provided for @resetBackToLogin.
   ///
   /// In en, this message translates to:
-  /// **'Back to Login'**
-  String get backToLogin;
+  /// **'Back to Sign In'**
+  String get resetBackToLogin;
 
-  /// Reset password success message
+  /// No description provided for @resetSuccessTitle.
   ///
   /// In en, this message translates to:
-  /// **'Password reset email sent. Check your inbox.'**
-  String get resetPasswordSuccess;
+  /// **'Check your email'**
+  String get resetSuccessTitle;
 
-  /// Email required validation
+  /// No description provided for @resetSuccessSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Email is required'**
-  String get emailRequired;
+  /// **'We\'ve sent a reset link to {email}'**
+  String resetSuccessSubtitle(String email);
 
-  /// Email invalid validation
+  /// No description provided for @resetResend.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid email'**
-  String get emailInvalid;
+  /// **'Didn\'t receive it? Resend'**
+  String get resetResend;
 
-  /// Password required validation
+  /// No description provided for @resetErrorEmailInvalid.
   ///
   /// In en, this message translates to:
-  /// **'Password is required'**
-  String get passwordRequired;
+  /// **'Please enter a valid email address.'**
+  String get resetErrorEmailInvalid;
 
-  /// Password too short validation
-  ///
-  /// In en, this message translates to:
-  /// **'Password must be at least 8 characters'**
-  String get passwordTooShort;
-
-  /// Password mismatch validation
-  ///
-  /// In en, this message translates to:
-  /// **'Passwords do not match'**
-  String get passwordMismatch;
-
-  /// Home tab label
-  ///
-  /// In en, this message translates to:
-  /// **'Home'**
-  String get tabHome;
-
-  /// Chat tab label
-  ///
-  /// In en, this message translates to:
-  /// **'Chat'**
-  String get tabChat;
-
-  /// Tracker tab label
-  ///
-  /// In en, this message translates to:
-  /// **'Tracker'**
-  String get tabTracker;
-
-  /// Navigate tab label
-  ///
-  /// In en, this message translates to:
-  /// **'Navigate'**
-  String get tabNavigate;
-
-  /// Profile tab label
-  ///
-  /// In en, this message translates to:
-  /// **'Profile'**
-  String get tabProfile;
-
-  /// Welcome message on home screen
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome to Gaijin Life Navi'**
-  String get homeWelcome;
-
-  /// Home screen subtitle
-  ///
-  /// In en, this message translates to:
-  /// **'Your guide to life in Japan'**
-  String get homeSubtitle;
-
-  /// Quick actions section title
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Actions'**
-  String get homeQuickActions;
-
-  /// Ask AI quick action
-  ///
-  /// In en, this message translates to:
-  /// **'Ask AI'**
-  String get homeActionAskAI;
-
-  /// Tracker quick action
-  ///
-  /// In en, this message translates to:
-  /// **'Tracker'**
-  String get homeActionTracker;
-
-  /// Banking quick action
-  ///
-  /// In en, this message translates to:
-  /// **'Banking'**
-  String get homeActionBanking;
-
-  /// Chat history quick action
-  ///
-  /// In en, this message translates to:
-  /// **'Chat History'**
-  String get homeActionChatHistory;
-
-  /// Recent chats section title
-  ///
-  /// In en, this message translates to:
-  /// **'Recent Chats'**
-  String get homeRecentChats;
-
-  /// No recent chats message
-  ///
-  /// In en, this message translates to:
-  /// **'No recent chats yet'**
-  String get homeNoRecentChats;
-
-  /// Messages count label
-  ///
-  /// In en, this message translates to:
-  /// **'messages'**
-  String get homeMessagesLabel;
-
-  /// Chat placeholder text
-  ///
-  /// In en, this message translates to:
-  /// **'AI Chat — Coming Soon'**
-  String get chatPlaceholder;
-
-  /// Chat screen title
-  ///
-  /// In en, this message translates to:
-  /// **'AI Chat'**
-  String get chatTitle;
-
-  /// New chat session button
-  ///
-  /// In en, this message translates to:
-  /// **'New Chat'**
-  String get chatNewSession;
-
-  /// Empty chat list title
-  ///
-  /// In en, this message translates to:
-  /// **'Start a Conversation'**
-  String get chatEmptyTitle;
-
-  /// Empty chat list subtitle
-  ///
-  /// In en, this message translates to:
-  /// **'Ask the AI anything about living in Japan'**
-  String get chatEmptySubtitle;
-
-  /// Untitled session label
-  ///
-  /// In en, this message translates to:
-  /// **'New Conversation'**
-  String get chatUntitledSession;
-
-  /// Chat conversation screen title
-  ///
-  /// In en, this message translates to:
-  /// **'Chat'**
-  String get chatConversationTitle;
-
-  /// Chat input hint text
-  ///
-  /// In en, this message translates to:
-  /// **'Ask about life in Japan...'**
-  String get chatInputHint;
-
-  /// Typing indicator text
-  ///
-  /// In en, this message translates to:
-  /// **'Thinking...'**
-  String get chatTyping;
-
-  /// Sources section label
-  ///
-  /// In en, this message translates to:
-  /// **'Sources'**
-  String get chatSources;
-
-  /// Retry button label
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get chatRetry;
-
-  /// Delete chat dialog title
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Chat'**
-  String get chatDeleteTitle;
-
-  /// Delete chat confirmation
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete this chat?'**
-  String get chatDeleteConfirm;
-
-  /// Cancel button
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get chatDeleteCancel;
-
-  /// Delete button
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get chatDeleteAction;
-
-  /// Daily limit reached label
-  ///
-  /// In en, this message translates to:
-  /// **'Daily limit reached'**
-  String get chatLimitReached;
-
-  /// Remaining chat count
-  ///
-  /// In en, this message translates to:
-  /// **'{remaining}/{limit} remaining'**
-  String chatRemainingCount(int remaining, int limit);
-
-  /// Limit reached dialog title
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Limit Reached'**
-  String get chatLimitReachedTitle;
-
-  /// Limit reached dialog message
-  ///
-  /// In en, this message translates to:
-  /// **'You have used all your free chats for today. Upgrade to Premium for unlimited access.'**
-  String get chatLimitReachedMessage;
-
-  /// Upgrade to premium button
-  ///
-  /// In en, this message translates to:
-  /// **'Upgrade to Premium'**
-  String get chatUpgradeToPremium;
-
-  /// Chat welcome prompt
-  ///
-  /// In en, this message translates to:
-  /// **'How can I help you today?'**
-  String get chatWelcomePrompt;
-
-  /// Chat welcome hint
-  ///
-  /// In en, this message translates to:
-  /// **'Ask about visa procedures, banking, housing, or anything about life in Japan.'**
-  String get chatWelcomeHint;
-
-  /// Onboarding screen title
-  ///
-  /// In en, this message translates to:
-  /// **'Setup Your Profile'**
-  String get onboardingTitle;
-
-  /// Skip onboarding button
+  /// No description provided for @onboardingSkip.
   ///
   /// In en, this message translates to:
   /// **'Skip'**
   String get onboardingSkip;
 
-  /// Next step button
+  /// No description provided for @onboardingNext.
   ///
   /// In en, this message translates to:
   /// **'Next'**
   String get onboardingNext;
 
-  /// Complete onboarding button
+  /// No description provided for @onboardingGetStarted.
   ///
   /// In en, this message translates to:
-  /// **'Complete'**
-  String get onboardingComplete;
+  /// **'Get Started'**
+  String get onboardingGetStarted;
 
-  /// Step indicator
+  /// No description provided for @onboardingStepOf.
   ///
   /// In en, this message translates to:
   /// **'Step {current} of {total}'**
   String onboardingStepOf(int current, int total);
 
-  /// Nationality step title
+  /// No description provided for @onboardingS1Title.
   ///
   /// In en, this message translates to:
-  /// **'What is your nationality?'**
-  String get onboardingNationalityTitle;
+  /// **'What\'s your nationality?'**
+  String get onboardingS1Title;
 
-  /// Nationality step subtitle
+  /// No description provided for @onboardingS1Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'This helps us provide relevant information for your situation.'**
-  String get onboardingNationalitySubtitle;
+  /// **'This helps us give you relevant information.'**
+  String get onboardingS1Subtitle;
 
-  /// Residence status step title
+  /// No description provided for @onboardingS2Title.
   ///
   /// In en, this message translates to:
-  /// **'What is your residence status?'**
-  String get onboardingResidenceStatusTitle;
+  /// **'What\'s your residence status?'**
+  String get onboardingS2Title;
 
-  /// Residence status step subtitle
+  /// No description provided for @onboardingS2Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Select your current visa type in Japan.'**
-  String get onboardingResidenceStatusSubtitle;
+  /// **'We can tailor visa-related information for you.'**
+  String get onboardingS2Subtitle;
 
-  /// Region step title
+  /// No description provided for @onboardingS3Title.
   ///
   /// In en, this message translates to:
-  /// **'Where do you live?'**
-  String get onboardingRegionTitle;
+  /// **'Where do you live in Japan?'**
+  String get onboardingS3Title;
 
-  /// Region step subtitle
+  /// No description provided for @onboardingS3Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Select the area you currently live in or plan to move to.'**
-  String get onboardingRegionSubtitle;
+  /// **'For location-specific guides.'**
+  String get onboardingS3Subtitle;
 
-  /// Arrival date step title
+  /// No description provided for @onboardingS4Title.
   ///
   /// In en, this message translates to:
   /// **'When did you arrive in Japan?'**
-  String get onboardingArrivalDateTitle;
+  String get onboardingS4Title;
 
-  /// Arrival date step subtitle
+  /// No description provided for @onboardingS4Subtitle.
   ///
   /// In en, this message translates to:
-  /// **'This helps us suggest relevant procedures and deadlines.'**
-  String get onboardingArrivalDateSubtitle;
+  /// **'We\'ll suggest time-sensitive tasks you may need to complete.'**
+  String get onboardingS4Subtitle;
 
-  /// Select date button
+  /// No description provided for @onboardingS4Placeholder.
   ///
   /// In en, this message translates to:
-  /// **'Select Date'**
-  String get onboardingSelectDate;
+  /// **'Select date'**
+  String get onboardingS4Placeholder;
 
-  /// Change date button
+  /// No description provided for @onboardingS4NotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'I haven\'t arrived yet'**
+  String get onboardingS4NotYet;
+
+  /// No description provided for @onboardingChangeDate.
   ///
   /// In en, this message translates to:
   /// **'Change Date'**
   String get onboardingChangeDate;
 
-  /// Country name
+  /// No description provided for @onboardingErrorSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save your information. Please try again.'**
+  String get onboardingErrorSave;
+
+  /// No description provided for @statusEngineer.
+  ///
+  /// In en, this message translates to:
+  /// **'Engineer / Specialist in Humanities'**
+  String get statusEngineer;
+
+  /// No description provided for @statusStudent.
+  ///
+  /// In en, this message translates to:
+  /// **'Student'**
+  String get statusStudent;
+
+  /// No description provided for @statusDependent.
+  ///
+  /// In en, this message translates to:
+  /// **'Dependent'**
+  String get statusDependent;
+
+  /// No description provided for @statusPermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent Resident'**
+  String get statusPermanent;
+
+  /// No description provided for @statusSpouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Spouse of Japanese National'**
+  String get statusSpouse;
+
+  /// No description provided for @statusWorkingHoliday.
+  ///
+  /// In en, this message translates to:
+  /// **'Working Holiday'**
+  String get statusWorkingHoliday;
+
+  /// No description provided for @statusSpecifiedSkilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Specified Skilled Worker'**
+  String get statusSpecifiedSkilled;
+
+  /// No description provided for @statusOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get statusOther;
+
+  /// No description provided for @tabHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get tabHome;
+
+  /// No description provided for @tabChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get tabChat;
+
+  /// No description provided for @tabGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Guide'**
+  String get tabGuide;
+
+  /// No description provided for @tabSOS.
+  ///
+  /// In en, this message translates to:
+  /// **'SOS'**
+  String get tabSOS;
+
+  /// No description provided for @tabProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get tabProfile;
+
+  /// No description provided for @homeGreetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning, {name} 👋'**
+  String homeGreetingMorning(String name);
+
+  /// No description provided for @homeGreetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon, {name} 👋'**
+  String homeGreetingAfternoon(String name);
+
+  /// No description provided for @homeGreetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening, {name} 👋'**
+  String homeGreetingEvening(String name);
+
+  /// No description provided for @homeGreetingDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {name} 👋'**
+  String homeGreetingDefault(String name);
+
+  /// No description provided for @homeGreetingNoName.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome! 👋'**
+  String get homeGreetingNoName;
+
+  /// No description provided for @homeUsageFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free • {remaining}/{limit} chats remaining today'**
+  String homeUsageFree(int remaining, int limit);
+
+  /// No description provided for @homeSectionQuickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get homeSectionQuickActions;
+
+  /// No description provided for @homeSectionExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Guides'**
+  String get homeSectionExplore;
+
+  /// No description provided for @homeQaChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get homeQaChatTitle;
+
+  /// No description provided for @homeQaChatSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask anything about life in Japan'**
+  String get homeQaChatSubtitle;
+
+  /// No description provided for @homeQaBankingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Banking'**
+  String get homeQaBankingTitle;
+
+  /// No description provided for @homeQaBankingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account opening, transfers & more'**
+  String get homeQaBankingSubtitle;
+
+  /// No description provided for @homeQaVisaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa'**
+  String get homeQaVisaTitle;
+
+  /// No description provided for @homeQaVisaSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Immigration guides & procedures'**
+  String get homeQaVisaSubtitle;
+
+  /// No description provided for @homeQaMedicalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get homeQaMedicalTitle;
+
+  /// No description provided for @homeQaMedicalSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health guides & emergency info'**
+  String get homeQaMedicalSubtitle;
+
+  /// No description provided for @homeExploreGuides.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse all guides'**
+  String get homeExploreGuides;
+
+  /// No description provided for @homeExploreEmergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contacts'**
+  String get homeExploreEmergency;
+
+  /// No description provided for @homeUpgradeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get more from your AI assistant'**
+  String get homeUpgradeTitle;
+
+  /// No description provided for @homeUpgradeCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade now'**
+  String get homeUpgradeCta;
+
+  /// No description provided for @chatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get chatTitle;
+
+  /// No description provided for @chatInputPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your message...'**
+  String get chatInputPlaceholder;
+
+  /// No description provided for @chatEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me anything!'**
+  String get chatEmptyTitle;
+
+  /// No description provided for @chatEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I can help you with banking, visa, medical questions and more about life in Japan.'**
+  String get chatEmptySubtitle;
+
+  /// No description provided for @chatSuggestBank.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I open a bank account?'**
+  String get chatSuggestBank;
+
+  /// No description provided for @chatSuggestVisa.
+  ///
+  /// In en, this message translates to:
+  /// **'How to renew my visa?'**
+  String get chatSuggestVisa;
+
+  /// No description provided for @chatSuggestMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'How to see a doctor?'**
+  String get chatSuggestMedical;
+
+  /// No description provided for @chatSuggestGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'What do I need after arriving in Japan?'**
+  String get chatSuggestGeneral;
+
+  /// No description provided for @chatSourcesHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get chatSourcesHeader;
+
+  /// No description provided for @chatDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This is general information only. It does not constitute legal advice. Please verify with relevant authorities.'**
+  String get chatDisclaimer;
+
+  /// No description provided for @chatLimitRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining}/{limit} free chats remaining today.'**
+  String chatLimitRemaining(int remaining, int limit);
+
+  /// No description provided for @chatLimitUpgrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade'**
+  String get chatLimitUpgrade;
+
+  /// No description provided for @chatLimitExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used all your free chats for today. Upgrade to keep chatting!'**
+  String get chatLimitExhausted;
+
+  /// No description provided for @chatErrorSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to send your message. Please try again.'**
+  String get chatErrorSend;
+
+  /// No description provided for @chatErrorRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get chatErrorRetry;
+
+  /// No description provided for @chatDateToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get chatDateToday;
+
+  /// No description provided for @chatDateYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get chatDateYesterday;
+
+  /// No description provided for @chatNewSession.
+  ///
+  /// In en, this message translates to:
+  /// **'New Chat'**
+  String get chatNewSession;
+
+  /// No description provided for @chatUntitledSession.
+  ///
+  /// In en, this message translates to:
+  /// **'New Conversation'**
+  String get chatUntitledSession;
+
+  /// No description provided for @chatDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Chat'**
+  String get chatDeleteTitle;
+
+  /// No description provided for @chatDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this chat?'**
+  String get chatDeleteConfirm;
+
+  /// No description provided for @chatDeleteCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get chatDeleteCancel;
+
+  /// No description provided for @chatDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get chatDeleteAction;
+
+  /// No description provided for @chatRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get chatRetry;
+
+  /// No description provided for @countryCN.
   ///
   /// In en, this message translates to:
   /// **'China'**
   String get countryCN;
 
-  /// Country name
+  /// No description provided for @countryVN.
   ///
   /// In en, this message translates to:
   /// **'Vietnam'**
   String get countryVN;
 
-  /// Country name
+  /// No description provided for @countryKR.
   ///
   /// In en, this message translates to:
   /// **'South Korea'**
   String get countryKR;
 
-  /// Country name
+  /// No description provided for @countryPH.
   ///
   /// In en, this message translates to:
   /// **'Philippines'**
   String get countryPH;
 
-  /// Country name
+  /// No description provided for @countryBR.
   ///
   /// In en, this message translates to:
   /// **'Brazil'**
   String get countryBR;
 
-  /// Country name
+  /// No description provided for @countryNP.
   ///
   /// In en, this message translates to:
   /// **'Nepal'**
   String get countryNP;
 
-  /// Country name
+  /// No description provided for @countryID.
   ///
   /// In en, this message translates to:
   /// **'Indonesia'**
   String get countryID;
 
-  /// Country name
+  /// No description provided for @countryUS.
   ///
   /// In en, this message translates to:
   /// **'United States'**
   String get countryUS;
 
-  /// Country name
+  /// No description provided for @countryTH.
   ///
   /// In en, this message translates to:
   /// **'Thailand'**
   String get countryTH;
 
-  /// Country name
+  /// No description provided for @countryIN.
   ///
   /// In en, this message translates to:
   /// **'India'**
   String get countryIN;
 
-  /// Country name
+  /// No description provided for @countryMM.
   ///
   /// In en, this message translates to:
   /// **'Myanmar'**
   String get countryMM;
 
-  /// Country name
+  /// No description provided for @countryTW.
   ///
   /// In en, this message translates to:
   /// **'Taiwan'**
   String get countryTW;
 
-  /// Country name
+  /// No description provided for @countryPE.
   ///
   /// In en, this message translates to:
   /// **'Peru'**
   String get countryPE;
 
-  /// Country name
+  /// No description provided for @countryGB.
   ///
   /// In en, this message translates to:
   /// **'United Kingdom'**
   String get countryGB;
 
-  /// Country name
+  /// No description provided for @countryPK.
   ///
   /// In en, this message translates to:
   /// **'Pakistan'**
   String get countryPK;
 
-  /// Country name
+  /// No description provided for @countryBD.
   ///
   /// In en, this message translates to:
   /// **'Bangladesh'**
   String get countryBD;
 
-  /// Country name
+  /// No description provided for @countryLK.
   ///
   /// In en, this message translates to:
   /// **'Sri Lanka'**
   String get countryLK;
 
-  /// Country name
+  /// No description provided for @countryFR.
   ///
   /// In en, this message translates to:
   /// **'France'**
   String get countryFR;
 
-  /// Country name
+  /// No description provided for @countryDE.
   ///
   /// In en, this message translates to:
   /// **'Germany'**
   String get countryDE;
 
-  /// Other country
+  /// No description provided for @countryOther.
   ///
   /// In en, this message translates to:
   /// **'Other'**
   String get countryOther;
 
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Engineer / Specialist'**
-  String get visaEngineer;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Student'**
-  String get visaStudent;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Dependent'**
-  String get visaDependent;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Permanent Resident'**
-  String get visaPermanent;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Spouse of Japanese National'**
-  String get visaSpouse;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Working Holiday'**
-  String get visaWorkingHoliday;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Specified Skilled Worker'**
-  String get visaSpecifiedSkilled;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Technical Intern'**
-  String get visaTechnicalIntern;
-
-  /// Visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Highly Skilled Professional'**
-  String get visaHighlySkilled;
-
-  /// Other visa type
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get visaOther;
-
-  /// Region name
+  /// No description provided for @regionTokyo.
   ///
   /// In en, this message translates to:
   /// **'Tokyo'**
   String get regionTokyo;
 
-  /// Region name
+  /// No description provided for @regionOsaka.
   ///
   /// In en, this message translates to:
   /// **'Osaka'**
   String get regionOsaka;
 
-  /// Region name
+  /// No description provided for @regionNagoya.
   ///
   /// In en, this message translates to:
   /// **'Nagoya'**
   String get regionNagoya;
 
-  /// Region name
+  /// No description provided for @regionYokohama.
   ///
   /// In en, this message translates to:
   /// **'Yokohama'**
   String get regionYokohama;
 
-  /// Region name
+  /// No description provided for @regionFukuoka.
   ///
   /// In en, this message translates to:
   /// **'Fukuoka'**
   String get regionFukuoka;
 
-  /// Region name
+  /// No description provided for @regionSapporo.
   ///
   /// In en, this message translates to:
   /// **'Sapporo'**
   String get regionSapporo;
 
-  /// Region name
+  /// No description provided for @regionKobe.
   ///
   /// In en, this message translates to:
   /// **'Kobe'**
   String get regionKobe;
 
-  /// Region name
+  /// No description provided for @regionKyoto.
   ///
   /// In en, this message translates to:
   /// **'Kyoto'**
   String get regionKyoto;
 
-  /// Region name
+  /// No description provided for @regionSendai.
   ///
   /// In en, this message translates to:
   /// **'Sendai'**
   String get regionSendai;
 
-  /// Region name
+  /// No description provided for @regionHiroshima.
   ///
   /// In en, this message translates to:
   /// **'Hiroshima'**
   String get regionHiroshima;
 
-  /// Other region
+  /// No description provided for @regionOther.
   ///
   /// In en, this message translates to:
   /// **'Other'**
   String get regionOther;
 
-  /// Tracker placeholder text
-  ///
-  /// In en, this message translates to:
-  /// **'Admin Tracker — Coming Soon'**
-  String get trackerPlaceholder;
-
-  /// Navigate placeholder text
-  ///
-  /// In en, this message translates to:
-  /// **'Navigate — Coming Soon'**
-  String get navigatePlaceholder;
-
-  /// Profile placeholder text
-  ///
-  /// In en, this message translates to:
-  /// **'Profile — Coming Soon'**
-  String get profilePlaceholder;
-
-  /// Generic error message
+  /// No description provided for @genericError.
   ///
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get genericError;
 
-  /// Network error message
+  /// No description provided for @networkError.
   ///
   /// In en, this message translates to:
   /// **'Network error. Please check your connection.'**
   String get networkError;
 
-  /// Logout button label
+  /// No description provided for @logout.
   ///
   /// In en, this message translates to:
   /// **'Logout'**
   String get logout;
 
-  /// Banking list screen title
+  /// No description provided for @bankingTitle.
   ///
   /// In en, this message translates to:
   /// **'Banking Navigator'**
   String get bankingTitle;
 
-  /// Bank friendly score label
+  /// No description provided for @bankingFriendlyScore.
   ///
   /// In en, this message translates to:
   /// **'Foreigner-Friendly Score'**
   String get bankingFriendlyScore;
 
-  /// Empty bank list message
+  /// No description provided for @bankingEmpty.
   ///
   /// In en, this message translates to:
   /// **'No banks found'**
   String get bankingEmpty;
 
-  /// Recommend button
+  /// No description provided for @bankingRecommendButton.
   ///
   /// In en, this message translates to:
   /// **'Recommend'**
   String get bankingRecommendButton;
 
-  /// Recommend screen title
+  /// No description provided for @bankingRecommendTitle.
   ///
   /// In en, this message translates to:
   /// **'Bank Recommendations'**
   String get bankingRecommendTitle;
 
-  /// Priority selection label
+  /// No description provided for @bankingSelectPriorities.
   ///
   /// In en, this message translates to:
   /// **'Select your priorities'**
   String get bankingSelectPriorities;
 
-  /// Priority chip
+  /// No description provided for @bankingPriorityMultilingual.
   ///
   /// In en, this message translates to:
   /// **'Multilingual Support'**
   String get bankingPriorityMultilingual;
 
-  /// Priority chip
+  /// No description provided for @bankingPriorityLowFee.
   ///
   /// In en, this message translates to:
   /// **'Low Fees'**
   String get bankingPriorityLowFee;
 
-  /// Priority chip
+  /// No description provided for @bankingPriorityAtm.
   ///
   /// In en, this message translates to:
   /// **'ATM Network'**
   String get bankingPriorityAtm;
 
-  /// Priority chip
+  /// No description provided for @bankingPriorityOnline.
   ///
   /// In en, this message translates to:
   /// **'Online Banking'**
   String get bankingPriorityOnline;
 
-  /// Get recommendations button
+  /// No description provided for @bankingGetRecommendations.
   ///
   /// In en, this message translates to:
   /// **'Get Recommendations'**
   String get bankingGetRecommendations;
 
-  /// Recommend screen hint
+  /// No description provided for @bankingRecommendHint.
   ///
   /// In en, this message translates to:
   /// **'Select your priorities and tap Get Recommendations'**
   String get bankingRecommendHint;
 
-  /// No recommendations message
+  /// No description provided for @bankingNoRecommendations.
   ///
   /// In en, this message translates to:
   /// **'No recommendations found'**
   String get bankingNoRecommendations;
 
-  /// View guide button
+  /// No description provided for @bankingViewGuide.
   ///
   /// In en, this message translates to:
   /// **'View Guide'**
   String get bankingViewGuide;
 
-  /// Guide screen title
+  /// No description provided for @bankingGuideTitle.
   ///
   /// In en, this message translates to:
   /// **'Account Opening Guide'**
   String get bankingGuideTitle;
 
-  /// Required documents section
+  /// No description provided for @bankingRequiredDocs.
   ///
   /// In en, this message translates to:
   /// **'Required Documents'**
   String get bankingRequiredDocs;
 
-  /// Conversation templates section
+  /// No description provided for @bankingConversationTemplates.
   ///
   /// In en, this message translates to:
   /// **'Useful Phrases at the Bank'**
   String get bankingConversationTemplates;
 
-  /// Troubleshooting section
+  /// No description provided for @bankingTroubleshooting.
   ///
   /// In en, this message translates to:
   /// **'Troubleshooting Tips'**
   String get bankingTroubleshooting;
 
-  /// Source citation label
+  /// No description provided for @bankingSource.
   ///
   /// In en, this message translates to:
   /// **'Source'**
   String get bankingSource;
 
-  /// Visa list screen title
+  /// No description provided for @visaTitle.
   ///
   /// In en, this message translates to:
   /// **'Visa Navigator'**
   String get visaTitle;
 
-  /// Empty visa list message
+  /// No description provided for @visaEmpty.
   ///
   /// In en, this message translates to:
   /// **'No procedures found'**
   String get visaEmpty;
 
-  /// All filter chip
+  /// No description provided for @visaFilterAll.
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get visaFilterAll;
 
-  /// Visa detail screen title
+  /// No description provided for @visaDetailTitle.
   ///
   /// In en, this message translates to:
   /// **'Procedure Details'**
   String get visaDetailTitle;
 
-  /// Steps section title
+  /// No description provided for @visaSteps.
   ///
   /// In en, this message translates to:
   /// **'Steps'**
   String get visaSteps;
 
-  /// Required documents section
+  /// No description provided for @visaRequiredDocuments.
   ///
   /// In en, this message translates to:
   /// **'Required Documents'**
   String get visaRequiredDocuments;
 
-  /// Fees section title
+  /// No description provided for @visaFees.
   ///
   /// In en, this message translates to:
   /// **'Fees'**
   String get visaFees;
 
-  /// Processing time section
+  /// No description provided for @visaProcessingTime.
   ///
   /// In en, this message translates to:
   /// **'Processing Time'**
   String get visaProcessingTime;
 
-  /// Visa disclaimer text
+  /// No description provided for @visaDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'IMPORTANT: This is general information about visa procedures and does not constitute immigration advice. Immigration laws and procedures may change. Always consult the Immigration Services Agency or a qualified immigration lawyer (行政書士) for your specific situation.'**
+  /// **'IMPORTANT: This is general information about visa procedures and does not constitute immigration advice.'**
   String get visaDisclaimer;
 
-  /// Tracker screen title
+  /// No description provided for @trackerTitle.
   ///
   /// In en, this message translates to:
   /// **'Admin Tracker'**
   String get trackerTitle;
 
-  /// Empty tracker message
+  /// No description provided for @trackerEmpty.
   ///
   /// In en, this message translates to:
   /// **'No procedures tracked'**
   String get trackerEmpty;
 
-  /// Empty tracker hint
+  /// No description provided for @trackerEmptyHint.
   ///
   /// In en, this message translates to:
   /// **'Tap + to add procedures to track'**
   String get trackerEmptyHint;
 
-  /// Add procedure button
+  /// No description provided for @trackerAddProcedure.
   ///
   /// In en, this message translates to:
   /// **'Add Procedure'**
   String get trackerAddProcedure;
 
-  /// Not started status
+  /// No description provided for @trackerStatusNotStarted.
   ///
   /// In en, this message translates to:
   /// **'Not Started'**
   String get trackerStatusNotStarted;
 
-  /// In progress status
+  /// No description provided for @trackerStatusInProgress.
   ///
   /// In en, this message translates to:
   /// **'In Progress'**
   String get trackerStatusInProgress;
 
-  /// Completed status
+  /// No description provided for @trackerStatusCompleted.
   ///
   /// In en, this message translates to:
   /// **'Completed'**
   String get trackerStatusCompleted;
 
-  /// Due date label
+  /// No description provided for @trackerDueDate.
   ///
   /// In en, this message translates to:
   /// **'Due Date'**
   String get trackerDueDate;
 
-  /// Free tier limit info
+  /// No description provided for @trackerFreeLimitInfo.
   ///
   /// In en, this message translates to:
   /// **'Free plan: up to 3 procedures. Upgrade for unlimited.'**
   String get trackerFreeLimitInfo;
 
-  /// Tracker detail screen title
+  /// No description provided for @trackerDetailTitle.
   ///
   /// In en, this message translates to:
   /// **'Procedure Details'**
   String get trackerDetailTitle;
 
-  /// Current status label
+  /// No description provided for @trackerCurrentStatus.
   ///
   /// In en, this message translates to:
   /// **'Current Status'**
   String get trackerCurrentStatus;
 
-  /// Notes label
+  /// No description provided for @trackerNotes.
   ///
   /// In en, this message translates to:
   /// **'Notes'**
   String get trackerNotes;
 
-  /// Change status section title
+  /// No description provided for @trackerChangeStatus.
   ///
   /// In en, this message translates to:
   /// **'Change Status'**
   String get trackerChangeStatus;
 
-  /// Mark in progress button
+  /// No description provided for @trackerMarkInProgress.
   ///
   /// In en, this message translates to:
   /// **'Mark as In Progress'**
   String get trackerMarkInProgress;
 
-  /// Mark completed button
+  /// No description provided for @trackerMarkCompleted.
   ///
   /// In en, this message translates to:
   /// **'Mark as Completed'**
   String get trackerMarkCompleted;
 
-  /// Mark incomplete button
+  /// No description provided for @trackerMarkIncomplete.
   ///
   /// In en, this message translates to:
   /// **'Mark as Incomplete'**
   String get trackerMarkIncomplete;
 
-  /// Status updated snackbar
+  /// No description provided for @trackerStatusUpdated.
   ///
   /// In en, this message translates to:
   /// **'Status updated'**
   String get trackerStatusUpdated;
 
-  /// Delete procedure dialog title
+  /// No description provided for @trackerDeleteTitle.
   ///
   /// In en, this message translates to:
   /// **'Delete Procedure'**
   String get trackerDeleteTitle;
 
-  /// Delete procedure confirmation
+  /// No description provided for @trackerDeleteConfirm.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to remove this procedure from your tracker?'**
   String get trackerDeleteConfirm;
 
-  /// Procedure added snackbar
+  /// No description provided for @trackerProcedureAdded.
   ///
   /// In en, this message translates to:
   /// **'Procedure added to tracker'**
   String get trackerProcedureAdded;
 
-  /// Tracker limit reached message
+  /// No description provided for @trackerLimitReached.
   ///
   /// In en, this message translates to:
   /// **'Free plan limit reached (3 procedures). Upgrade to Premium for unlimited.'**
   String get trackerLimitReached;
 
-  /// Already tracking message
+  /// No description provided for @trackerAlreadyTracking.
   ///
   /// In en, this message translates to:
   /// **'You are already tracking this procedure'**
   String get trackerAlreadyTracking;
 
-  /// Essential procedures section
+  /// No description provided for @trackerEssentialProcedures.
   ///
   /// In en, this message translates to:
   /// **'Essential (After Arrival)'**
   String get trackerEssentialProcedures;
 
-  /// Other procedures section
+  /// No description provided for @trackerOtherProcedures.
   ///
   /// In en, this message translates to:
   /// **'Other Procedures'**
   String get trackerOtherProcedures;
 
-  /// No templates message
+  /// No description provided for @trackerNoTemplates.
   ///
   /// In en, this message translates to:
   /// **'No procedure templates available'**
   String get trackerNoTemplates;
 
-  /// Scanner screen title
+  /// No description provided for @scannerTitle.
   ///
   /// In en, this message translates to:
   /// **'Document Scanner'**
   String get scannerTitle;
 
-  /// Scanner description
+  /// No description provided for @scannerDescription.
   ///
   /// In en, this message translates to:
   /// **'Scan Japanese documents to get instant translations and explanations'**
   String get scannerDescription;
 
-  /// Camera scan button
+  /// No description provided for @scannerFromCamera.
   ///
   /// In en, this message translates to:
   /// **'Scan from Camera'**
   String get scannerFromCamera;
 
-  /// Gallery scan button
+  /// No description provided for @scannerFromGallery.
   ///
   /// In en, this message translates to:
   /// **'Choose from Gallery'**
   String get scannerFromGallery;
 
-  /// History button
+  /// No description provided for @scannerHistory.
   ///
   /// In en, this message translates to:
   /// **'History'**
   String get scannerHistory;
 
-  /// History screen title
+  /// No description provided for @scannerHistoryTitle.
   ///
   /// In en, this message translates to:
   /// **'Scan History'**
   String get scannerHistoryTitle;
 
-  /// Empty history message
+  /// No description provided for @scannerHistoryEmpty.
   ///
   /// In en, this message translates to:
   /// **'No scans yet'**
   String get scannerHistoryEmpty;
 
-  /// Unknown document type
+  /// No description provided for @scannerUnknownType.
   ///
   /// In en, this message translates to:
   /// **'Unknown Document'**
   String get scannerUnknownType;
 
-  /// Result screen title
+  /// No description provided for @scannerResultTitle.
   ///
   /// In en, this message translates to:
   /// **'Scan Result'**
   String get scannerResultTitle;
 
-  /// Original OCR text section
+  /// No description provided for @scannerOriginalText.
   ///
   /// In en, this message translates to:
   /// **'Original Text (Japanese)'**
   String get scannerOriginalText;
 
-  /// Translation section
+  /// No description provided for @scannerTranslation.
   ///
   /// In en, this message translates to:
   /// **'Translation'**
   String get scannerTranslation;
 
-  /// Explanation section
+  /// No description provided for @scannerExplanation.
   ///
   /// In en, this message translates to:
   /// **'What This Means'**
   String get scannerExplanation;
 
-  /// Processing status
+  /// No description provided for @scannerProcessing.
   ///
   /// In en, this message translates to:
   /// **'Processing your document...'**
   String get scannerProcessing;
 
-  /// Refresh button
+  /// No description provided for @scannerRefresh.
   ///
   /// In en, this message translates to:
   /// **'Refresh'**
   String get scannerRefresh;
 
-  /// Scan failed message
+  /// No description provided for @scannerFailed.
   ///
   /// In en, this message translates to:
   /// **'Scan failed. Please try again.'**
   String get scannerFailed;
 
-  /// Free tier limit info
+  /// No description provided for @scannerFreeLimitInfo.
   ///
   /// In en, this message translates to:
   /// **'Free plan: 3 scans/month. Upgrade for more.'**
   String get scannerFreeLimitInfo;
 
-  /// Scanner limit reached message
+  /// No description provided for @scannerLimitReached.
   ///
   /// In en, this message translates to:
   /// **'Monthly scan limit reached. Upgrade to Premium for more scans.'**
   String get scannerLimitReached;
 
-  /// Medical screen title
+  /// No description provided for @medicalTitle.
   ///
   /// In en, this message translates to:
   /// **'Medical Guide'**
   String get medicalTitle;
 
-  /// Emergency tab
+  /// No description provided for @medicalTabEmergency.
   ///
   /// In en, this message translates to:
   /// **'Emergency'**
   String get medicalTabEmergency;
 
-  /// Phrases tab
+  /// No description provided for @medicalTabPhrases.
   ///
   /// In en, this message translates to:
   /// **'Phrases'**
   String get medicalTabPhrases;
 
-  /// Emergency number label
+  /// No description provided for @medicalEmergencyNumber.
   ///
   /// In en, this message translates to:
   /// **'Emergency Number'**
   String get medicalEmergencyNumber;
 
-  /// How to call section
+  /// No description provided for @medicalHowToCall.
   ///
   /// In en, this message translates to:
   /// **'How to Call'**
   String get medicalHowToCall;
 
-  /// What to prepare section
+  /// No description provided for @medicalWhatToPrepare.
   ///
   /// In en, this message translates to:
   /// **'What to Prepare'**
   String get medicalWhatToPrepare;
 
-  /// Useful phrases section
+  /// No description provided for @medicalUsefulPhrases.
   ///
   /// In en, this message translates to:
   /// **'Useful Phrases'**
   String get medicalUsefulPhrases;
 
-  /// All categories filter
+  /// No description provided for @medicalCategoryAll.
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get medicalCategoryAll;
 
-  /// Emergency category
+  /// No description provided for @medicalCategoryEmergency.
   ///
   /// In en, this message translates to:
   /// **'Emergency'**
   String get medicalCategoryEmergency;
 
-  /// Symptoms category
+  /// No description provided for @medicalCategorySymptom.
   ///
   /// In en, this message translates to:
   /// **'Symptoms'**
   String get medicalCategorySymptom;
 
-  /// Insurance category
+  /// No description provided for @medicalCategoryInsurance.
   ///
   /// In en, this message translates to:
   /// **'Insurance'**
   String get medicalCategoryInsurance;
 
-  /// General category
+  /// No description provided for @medicalCategoryGeneral.
   ///
   /// In en, this message translates to:
   /// **'General'**
   String get medicalCategoryGeneral;
 
-  /// No phrases message
+  /// No description provided for @medicalNoPhrases.
   ///
   /// In en, this message translates to:
   /// **'No phrases found'**
   String get medicalNoPhrases;
 
-  /// Medical disclaimer text
+  /// No description provided for @medicalDisclaimer.
   ///
   /// In en, this message translates to:
   /// **'This guide provides general health information and is not a substitute for professional medical advice. In an emergency, call 119 immediately.'**
   String get medicalDisclaimer;
 
-  /// Navigate hub banking title
+  /// No description provided for @navigateBanking.
   ///
   /// In en, this message translates to:
   /// **'Banking'**
   String get navigateBanking;
 
-  /// Navigate hub banking description
+  /// No description provided for @navigateBankingDesc.
   ///
   /// In en, this message translates to:
   /// **'Find foreigner-friendly banks'**
   String get navigateBankingDesc;
 
-  /// Navigate hub visa title
+  /// No description provided for @navigateVisa.
   ///
   /// In en, this message translates to:
   /// **'Visa'**
   String get navigateVisa;
 
-  /// Navigate hub visa description
+  /// No description provided for @navigateVisaDesc.
   ///
   /// In en, this message translates to:
   /// **'Visa procedures & documents'**
   String get navigateVisaDesc;
 
-  /// Navigate hub scanner title
+  /// No description provided for @navigateScanner.
   ///
   /// In en, this message translates to:
   /// **'Scanner'**
   String get navigateScanner;
 
-  /// Navigate hub scanner description
+  /// No description provided for @navigateScannerDesc.
   ///
   /// In en, this message translates to:
   /// **'Translate Japanese documents'**
   String get navigateScannerDesc;
 
-  /// Navigate hub medical title
+  /// No description provided for @navigateMedical.
   ///
   /// In en, this message translates to:
   /// **'Medical'**
   String get navigateMedical;
 
-  /// Navigate hub medical description
+  /// No description provided for @navigateMedicalDesc.
   ///
   /// In en, this message translates to:
   /// **'Emergency guide & phrases'**
   String get navigateMedicalDesc;
 
-  /// Upgrade to premium button
-  ///
-  /// In en, this message translates to:
-  /// **'Upgrade to Premium'**
-  String get upgradeToPremium;
-
-  /// Community screen title
-  ///
-  /// In en, this message translates to:
-  /// **'Community Q&A'**
-  String get communityTitle;
-
-  /// Empty community list message
-  ///
-  /// In en, this message translates to:
-  /// **'No posts yet'**
-  String get communityEmpty;
-
-  /// New post button
-  ///
-  /// In en, this message translates to:
-  /// **'New Post'**
-  String get communityNewPost;
-
-  /// Post detail screen title
-  ///
-  /// In en, this message translates to:
-  /// **'Post Detail'**
-  String get communityDetailTitle;
-
-  /// Answered badge
-  ///
-  /// In en, this message translates to:
-  /// **'Answered'**
-  String get communityAnswered;
-
-  /// Best answer badge
-  ///
-  /// In en, this message translates to:
-  /// **'Best Answer'**
-  String get communityBestAnswer;
-
-  /// All category filter
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get communityFilterAll;
-
-  /// Sort by newest
-  ///
-  /// In en, this message translates to:
-  /// **'Newest'**
-  String get communitySortNewest;
-
-  /// Sort by popular
-  ///
-  /// In en, this message translates to:
-  /// **'Popular'**
-  String get communitySortPopular;
-
-  /// Visa category
-  ///
-  /// In en, this message translates to:
-  /// **'Visa'**
-  String get communityCategoryVisa;
-
-  /// Housing category
-  ///
-  /// In en, this message translates to:
-  /// **'Housing'**
-  String get communityCategoryHousing;
-
-  /// Banking category
-  ///
-  /// In en, this message translates to:
-  /// **'Banking'**
-  String get communityCategoryBanking;
-
-  /// Work category
-  ///
-  /// In en, this message translates to:
-  /// **'Work'**
-  String get communityCategoryWork;
-
-  /// Daily life category
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Life'**
-  String get communityCategoryDailyLife;
-
-  /// Medical category
-  ///
-  /// In en, this message translates to:
-  /// **'Medical'**
-  String get communityCategoryMedical;
-
-  /// Education category
-  ///
-  /// In en, this message translates to:
-  /// **'Education'**
-  String get communityCategoryEducation;
-
-  /// Tax category
-  ///
-  /// In en, this message translates to:
-  /// **'Tax'**
-  String get communityCategoryTax;
-
-  /// Other category
-  ///
-  /// In en, this message translates to:
-  /// **'Other'**
-  String get communityCategoryOther;
-
-  /// Reply count header
-  ///
-  /// In en, this message translates to:
-  /// **'{count} Replies'**
-  String communityReplies(int count);
-
-  /// No replies message
-  ///
-  /// In en, this message translates to:
-  /// **'No replies yet. Be the first to answer!'**
-  String get communityNoReplies;
-
-  /// Reply input hint
-  ///
-  /// In en, this message translates to:
-  /// **'Write a reply...'**
-  String get communityReplyHint;
-
-  /// Free user reply restriction
-  ///
-  /// In en, this message translates to:
-  /// **'Posting and replying requires a Premium subscription.'**
-  String get communityReplyPremiumOnly;
-
-  /// Vote count label
-  ///
-  /// In en, this message translates to:
-  /// **'{count} votes'**
-  String communityVoteCount(int count);
-
-  /// Pending moderation badge
-  ///
-  /// In en, this message translates to:
-  /// **'Under review'**
-  String get communityModerationPending;
-
-  /// Flagged moderation badge
-  ///
-  /// In en, this message translates to:
-  /// **'Flagged for review'**
-  String get communityModerationFlagged;
-
-  /// Moderation notice on create
-  ///
-  /// In en, this message translates to:
-  /// **'Your post will be reviewed by our AI moderation system before it becomes visible to others.'**
-  String get communityModerationNotice;
-
-  /// Channel selector label
-  ///
-  /// In en, this message translates to:
-  /// **'Language Channel'**
-  String get communityChannelLabel;
-
-  /// Category selector label
-  ///
-  /// In en, this message translates to:
-  /// **'Category'**
-  String get communityCategoryLabel;
-
-  /// Post title field label
-  ///
-  /// In en, this message translates to:
-  /// **'Title'**
-  String get communityTitleLabel;
-
-  /// Post title hint
-  ///
-  /// In en, this message translates to:
-  /// **'What\'s your question?'**
-  String get communityTitleHint;
-
-  /// Title min length validation
-  ///
-  /// In en, this message translates to:
-  /// **'Title must be at least 5 characters'**
-  String get communityTitleMinLength;
-
-  /// Post content field label
-  ///
-  /// In en, this message translates to:
-  /// **'Details'**
-  String get communityContentLabel;
-
-  /// Post content hint
-  ///
-  /// In en, this message translates to:
-  /// **'Describe your question or situation in detail...'**
-  String get communityContentHint;
-
-  /// Content min length validation
-  ///
-  /// In en, this message translates to:
-  /// **'Content must be at least 10 characters'**
-  String get communityContentMinLength;
-
-  /// Submit post button
-  ///
-  /// In en, this message translates to:
-  /// **'Post'**
-  String get communitySubmit;
-
-  /// Time ago in days
-  ///
-  /// In en, this message translates to:
-  /// **'{days}d ago'**
-  String communityTimeAgoDays(int days);
-
-  /// Time ago in hours
-  ///
-  /// In en, this message translates to:
-  /// **'{hours}h ago'**
-  String communityTimeAgoHours(int hours);
-
-  /// Time ago in minutes
-  ///
-  /// In en, this message translates to:
-  /// **'{minutes}m ago'**
-  String communityTimeAgoMinutes(int minutes);
-
-  /// Navigate hub community title
+  /// No description provided for @navigateCommunity.
   ///
   /// In en, this message translates to:
   /// **'Community'**
   String get navigateCommunity;
 
-  /// Navigate hub community description
+  /// No description provided for @navigateCommunityDesc.
   ///
   /// In en, this message translates to:
   /// **'Q&A with other foreigners'**
   String get navigateCommunityDesc;
 
-  /// Subscription screen title
+  /// No description provided for @upgradeToPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium'**
+  String get upgradeToPremium;
+
+  /// No description provided for @communityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Community Q&A'**
+  String get communityTitle;
+
+  /// No description provided for @communityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No posts yet'**
+  String get communityEmpty;
+
+  /// No description provided for @communityNewPost.
+  ///
+  /// In en, this message translates to:
+  /// **'New Post'**
+  String get communityNewPost;
+
+  /// No description provided for @communityDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Post Detail'**
+  String get communityDetailTitle;
+
+  /// No description provided for @communityAnswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Answered'**
+  String get communityAnswered;
+
+  /// No description provided for @communityBestAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Answer'**
+  String get communityBestAnswer;
+
+  /// No description provided for @communityFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get communityFilterAll;
+
+  /// No description provided for @communitySortNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get communitySortNewest;
+
+  /// No description provided for @communitySortPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get communitySortPopular;
+
+  /// No description provided for @communityCategoryVisa.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa'**
+  String get communityCategoryVisa;
+
+  /// No description provided for @communityCategoryHousing.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing'**
+  String get communityCategoryHousing;
+
+  /// No description provided for @communityCategoryBanking.
+  ///
+  /// In en, this message translates to:
+  /// **'Banking'**
+  String get communityCategoryBanking;
+
+  /// No description provided for @communityCategoryWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get communityCategoryWork;
+
+  /// No description provided for @communityCategoryDailyLife.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Life'**
+  String get communityCategoryDailyLife;
+
+  /// No description provided for @communityCategoryMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get communityCategoryMedical;
+
+  /// No description provided for @communityCategoryEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get communityCategoryEducation;
+
+  /// No description provided for @communityCategoryTax.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get communityCategoryTax;
+
+  /// No description provided for @communityCategoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get communityCategoryOther;
+
+  /// No description provided for @communityReplies.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Replies'**
+  String communityReplies(int count);
+
+  /// No description provided for @communityNoReplies.
+  ///
+  /// In en, this message translates to:
+  /// **'No replies yet. Be the first to answer!'**
+  String get communityNoReplies;
+
+  /// No description provided for @communityReplyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reply...'**
+  String get communityReplyHint;
+
+  /// No description provided for @communityReplyPremiumOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Posting and replying requires a Premium subscription.'**
+  String get communityReplyPremiumOnly;
+
+  /// No description provided for @communityVoteCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} votes'**
+  String communityVoteCount(int count);
+
+  /// No description provided for @communityModerationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get communityModerationPending;
+
+  /// No description provided for @communityModerationFlagged.
+  ///
+  /// In en, this message translates to:
+  /// **'Flagged for review'**
+  String get communityModerationFlagged;
+
+  /// No description provided for @communityModerationNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your post will be reviewed by our AI moderation system before it becomes visible to others.'**
+  String get communityModerationNotice;
+
+  /// No description provided for @communityChannelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Channel'**
+  String get communityChannelLabel;
+
+  /// No description provided for @communityCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get communityCategoryLabel;
+
+  /// No description provided for @communityTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get communityTitleLabel;
+
+  /// No description provided for @communityTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s your question?'**
+  String get communityTitleHint;
+
+  /// No description provided for @communityTitleMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Title must be at least 5 characters'**
+  String get communityTitleMinLength;
+
+  /// No description provided for @communityContentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get communityContentLabel;
+
+  /// No description provided for @communityContentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your question or situation in detail...'**
+  String get communityContentHint;
+
+  /// No description provided for @communityContentMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Content must be at least 10 characters'**
+  String get communityContentMinLength;
+
+  /// No description provided for @communitySubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get communitySubmit;
+
+  /// No description provided for @communityTimeAgoDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d ago'**
+  String communityTimeAgoDays(int days);
+
+  /// No description provided for @communityTimeAgoHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h ago'**
+  String communityTimeAgoHours(int hours);
+
+  /// No description provided for @communityTimeAgoMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m ago'**
+  String communityTimeAgoMinutes(int minutes);
+
+  /// No description provided for @subscriptionTitle.
   ///
   /// In en, this message translates to:
   /// **'Subscription'**
   String get subscriptionTitle;
 
-  /// Plans section title
+  /// No description provided for @subscriptionPlansTitle.
   ///
   /// In en, this message translates to:
   /// **'Choose Your Plan'**
   String get subscriptionPlansTitle;
 
-  /// Plans section subtitle
+  /// No description provided for @subscriptionPlansSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Unlock the full potential of Gaijin Life Navi'**
   String get subscriptionPlansSubtitle;
 
-  /// Current plan label
+  /// No description provided for @subscriptionCurrentPlan.
   ///
   /// In en, this message translates to:
   /// **'Current Plan'**
   String get subscriptionCurrentPlan;
 
-  /// Current plan badge on card
+  /// No description provided for @subscriptionCurrentPlanBadge.
   ///
   /// In en, this message translates to:
   /// **'Current Plan'**
   String get subscriptionCurrentPlanBadge;
 
-  /// Free tier name
+  /// No description provided for @subscriptionTierFree.
   ///
   /// In en, this message translates to:
   /// **'Free'**
   String get subscriptionTierFree;
 
-  /// Premium tier name
+  /// No description provided for @subscriptionTierPremium.
   ///
   /// In en, this message translates to:
   /// **'Premium'**
   String get subscriptionTierPremium;
 
-  /// Premium+ tier name
+  /// No description provided for @subscriptionTierPremiumPlus.
   ///
   /// In en, this message translates to:
   /// **'Premium+'**
   String get subscriptionTierPremiumPlus;
 
-  /// Free plan price
+  /// No description provided for @subscriptionFreePrice.
   ///
   /// In en, this message translates to:
   /// **'¥0'**
   String get subscriptionFreePrice;
 
-  /// Price per month
+  /// No description provided for @subscriptionPricePerMonth.
   ///
   /// In en, this message translates to:
   /// **'¥{price}/month'**
   String subscriptionPricePerMonth(int price);
 
-  /// Checkout button
+  /// No description provided for @subscriptionCheckout.
   ///
   /// In en, this message translates to:
   /// **'Subscribe Now'**
   String get subscriptionCheckout;
 
-  /// Recommended badge
+  /// No description provided for @subscriptionRecommended.
   ///
   /// In en, this message translates to:
   /// **'RECOMMENDED'**
   String get subscriptionRecommended;
 
-  /// Cancelling status
+  /// No description provided for @subscriptionCancelling.
   ///
   /// In en, this message translates to:
   /// **'Cancelling...'**
   String get subscriptionCancelling;
 
-  /// Cancellation date message
+  /// No description provided for @subscriptionCancellingAt.
   ///
   /// In en, this message translates to:
   /// **'Your plan will end on {date}'**
   String subscriptionCancellingAt(String date);
 
-  /// Free plan chat feature
+  /// No description provided for @subscriptionFeatureFreeChat.
   ///
   /// In en, this message translates to:
   /// **'5 AI chats per day'**
   String get subscriptionFeatureFreeChat;
 
-  /// Free plan scan feature
+  /// No description provided for @subscriptionFeatureFreeScans.
   ///
   /// In en, this message translates to:
   /// **'3 document scans per month'**
   String get subscriptionFeatureFreeScans;
 
-  /// Free plan tracker feature
+  /// No description provided for @subscriptionFeatureFreeTracker.
   ///
   /// In en, this message translates to:
   /// **'Track up to 3 procedures'**
   String get subscriptionFeatureFreeTracker;
 
-  /// Free plan community feature
+  /// No description provided for @subscriptionFeatureFreeCommunityRead.
   ///
   /// In en, this message translates to:
   /// **'Read community posts'**
   String get subscriptionFeatureFreeCommunityRead;
 
-  /// Premium community feature
+  /// No description provided for @subscriptionFeatureCommunityPost.
   ///
   /// In en, this message translates to:
   /// **'Post & reply in community'**
   String get subscriptionFeatureCommunityPost;
 
-  /// Premium chat feature
+  /// No description provided for @subscriptionFeatureUnlimitedChat.
   ///
   /// In en, this message translates to:
   /// **'Unlimited AI chats'**
   String get subscriptionFeatureUnlimitedChat;
 
-  /// Profile screen title
+  /// No description provided for @profileTitle.
   ///
   /// In en, this message translates to:
   /// **'Profile'**
   String get profileTitle;
 
-  /// Profile edit screen title
+  /// No description provided for @profileEditTitle.
   ///
   /// In en, this message translates to:
   /// **'Edit Profile'**
   String get profileEditTitle;
 
-  /// Edit profile button
+  /// No description provided for @profileEdit.
   ///
   /// In en, this message translates to:
   /// **'Edit Profile'**
   String get profileEdit;
 
-  /// Profile email label
+  /// No description provided for @profileEmail.
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get profileEmail;
 
-  /// Profile nationality label
+  /// No description provided for @profileNationality.
   ///
   /// In en, this message translates to:
   /// **'Nationality'**
   String get profileNationality;
 
-  /// Profile residence status label
+  /// No description provided for @profileResidenceStatus.
   ///
   /// In en, this message translates to:
   /// **'Residence Status'**
   String get profileResidenceStatus;
 
-  /// Profile region label
+  /// No description provided for @profileRegion.
   ///
   /// In en, this message translates to:
   /// **'Region'**
   String get profileRegion;
 
-  /// Profile language label
+  /// No description provided for @profileLanguage.
   ///
   /// In en, this message translates to:
   /// **'Language'**
   String get profileLanguage;
 
-  /// Profile arrival date label
+  /// No description provided for @profileArrivalDate.
   ///
   /// In en, this message translates to:
   /// **'Arrival Date'**
   String get profileArrivalDate;
 
-  /// Profile display name field
+  /// No description provided for @profileDisplayName.
   ///
   /// In en, this message translates to:
   /// **'Display Name'**
   String get profileDisplayName;
 
-  /// Placeholder when name is empty
+  /// No description provided for @profileNoName.
   ///
   /// In en, this message translates to:
   /// **'No Name'**
   String get profileNoName;
 
-  /// Validation for name length
+  /// No description provided for @profileNameTooLong.
   ///
   /// In en, this message translates to:
   /// **'Name must be 100 characters or less'**
   String get profileNameTooLong;
 
-  /// Snackbar after profile save
+  /// No description provided for @profileSaved.
   ///
   /// In en, this message translates to:
   /// **'Profile saved'**
   String get profileSaved;
 
-  /// Save button label
+  /// No description provided for @profileSaveButton.
   ///
   /// In en, this message translates to:
   /// **'Save'**
   String get profileSaveButton;
 
-  /// Error saving profile
+  /// No description provided for @profileSaveError.
   ///
   /// In en, this message translates to:
   /// **'Failed to save profile'**
   String get profileSaveError;
 
-  /// Error loading profile
+  /// No description provided for @profileLoadError.
   ///
   /// In en, this message translates to:
   /// **'Failed to load profile'**
   String get profileLoadError;
 
-  /// Settings screen title
+  /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsTitle;
 
-  /// Language section header
+  /// No description provided for @settingsLanguageSection.
   ///
   /// In en, this message translates to:
   /// **'Language'**
   String get settingsLanguageSection;
 
-  /// Account section header
+  /// No description provided for @settingsAccountSection.
   ///
   /// In en, this message translates to:
   /// **'Account'**
   String get settingsAccountSection;
 
-  /// About section header
+  /// No description provided for @settingsAboutSection.
   ///
   /// In en, this message translates to:
   /// **'About'**
   String get settingsAboutSection;
 
-  /// Logout button
+  /// No description provided for @settingsLogout.
   ///
   /// In en, this message translates to:
   /// **'Log Out'**
   String get settingsLogout;
 
-  /// Delete account button
+  /// No description provided for @settingsDeleteAccount.
   ///
   /// In en, this message translates to:
   /// **'Delete Account'**
   String get settingsDeleteAccount;
 
-  /// Delete account subtitle
+  /// No description provided for @settingsDeleteAccountSubtitle.
   ///
   /// In en, this message translates to:
   /// **'This action cannot be undone'**
   String get settingsDeleteAccountSubtitle;
 
-  /// App version label
+  /// No description provided for @settingsVersion.
   ///
   /// In en, this message translates to:
   /// **'Version'**
   String get settingsVersion;
 
-  /// Logout confirmation title
+  /// No description provided for @settingsLogoutConfirmTitle.
   ///
   /// In en, this message translates to:
   /// **'Log Out'**
   String get settingsLogoutConfirmTitle;
 
-  /// Logout confirmation message
+  /// No description provided for @settingsLogoutConfirmMessage.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to log out?'**
   String get settingsLogoutConfirmMessage;
 
-  /// Delete confirmation title
+  /// No description provided for @settingsDeleteConfirmTitle.
   ///
   /// In en, this message translates to:
   /// **'Delete Account'**
   String get settingsDeleteConfirmTitle;
 
-  /// Delete confirmation message
+  /// No description provided for @settingsDeleteConfirmMessage.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to delete your account? This action cannot be undone. All your data will be permanently removed.'**
   String get settingsDeleteConfirmMessage;
 
-  /// Error deleting account
+  /// No description provided for @settingsDeleteError.
   ///
   /// In en, this message translates to:
   /// **'Failed to delete account'**
   String get settingsDeleteError;
 
-  /// Cancel button
+  /// No description provided for @settingsCancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get settingsCancel;
 
-  /// Delete button in dialog
+  /// No description provided for @settingsDelete.
   ///
   /// In en, this message translates to:
   /// **'Delete'**
   String get settingsDelete;
 
-  /// Confirm button in dialog
+  /// No description provided for @settingsConfirm.
   ///
   /// In en, this message translates to:
   /// **'Confirm'**

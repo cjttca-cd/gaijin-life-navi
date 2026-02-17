@@ -25,9 +25,9 @@ class GaijinLifeNaviApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Gaijin Life Navi',
       debugShowCheckedModeBanner: false,
+      // Phase 0: Light theme only (DESIGN_SYSTEM.md §1.8).
       theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

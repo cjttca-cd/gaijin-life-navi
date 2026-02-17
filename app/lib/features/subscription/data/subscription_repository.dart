@@ -25,7 +25,8 @@ class SubscriptionRepository {
       '/subscriptions/me',
     );
     return UserSubscription.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   /// Create a Stripe Checkout session. Returns checkout URL.

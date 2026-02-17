@@ -9,204 +9,165 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => '外国人生活导航';
+  String get appTitle => 'Gaijin Life Navi';
 
   @override
-  String get languageSelectionTitle => '选择您的语言';
+  String get langTitle => '选择你的语言';
 
   @override
-  String get languageSelectionSubtitle => '您可以稍后在设置中更改';
+  String get langContinue => '继续';
 
   @override
-  String get continueButton => '继续';
+  String get langEn => 'English';
 
   @override
-  String get loginTitle => '欢迎回来';
+  String get langZh => '中文';
 
   @override
-  String get loginSubtitle => '登录您的账户';
+  String get langVi => 'Tiếng Việt';
 
   @override
-  String get emailLabel => '邮箱';
+  String get langKo => '한국어';
 
   @override
-  String get passwordLabel => '密码';
+  String get langPt => 'Português';
+
+  @override
+  String get loginWelcome => '欢迎回来';
+
+  @override
+  String get loginSubtitle => '登录以继续';
+
+  @override
+  String get loginEmailLabel => '邮箱';
+
+  @override
+  String get loginEmailHint => 'your@email.com';
+
+  @override
+  String get loginPasswordLabel => '密码';
+
+  @override
+  String get loginPasswordHint => '请输入密码';
+
+  @override
+  String get loginForgotPassword => '忘记密码？';
 
   @override
   String get loginButton => '登录';
 
   @override
-  String get forgotPassword => '忘记密码？';
+  String get loginNoAccount => '还没有账号？';
 
   @override
-  String get noAccount => '还没有账户？';
+  String get loginSignUp => '注册';
 
   @override
-  String get signUp => '注册';
+  String get loginErrorInvalidEmail => '请输入有效的邮箱地址。';
 
   @override
-  String get registerTitle => '创建账户';
+  String get loginErrorInvalidCredentials => '邮箱或密码不正确，请重试。';
 
   @override
-  String get registerSubtitle => '自信地开始您的日本生活';
+  String get loginErrorNetwork => '无法连接，请检查网络。';
 
   @override
-  String get confirmPasswordLabel => '确认密码';
+  String get loginErrorTooManyAttempts => '尝试次数过多，请稍后再试。';
 
   @override
-  String get registerButton => '创建账户';
+  String get registerTitle => '创建你的账号';
 
   @override
-  String get hasAccount => '已有账户？';
+  String get registerSubtitle => '开始你的日本生活之旅';
 
   @override
-  String get signIn => '登录';
+  String get registerEmailLabel => '邮箱';
 
   @override
-  String get resetPasswordTitle => '重置密码';
+  String get registerEmailHint => 'your@email.com';
 
   @override
-  String get resetPasswordSubtitle => '输入您的邮箱以接收重置链接';
+  String get registerPasswordLabel => '密码';
 
   @override
-  String get sendResetLink => '发送重置链接';
+  String get registerPasswordHint => '创建密码';
 
   @override
-  String get backToLogin => '返回登录';
+  String get registerPasswordHelper => '8个字符以上';
 
   @override
-  String get resetPasswordSuccess => '密码重置邮件已发送，请检查收件箱。';
+  String get registerConfirmLabel => '确认密码';
 
   @override
-  String get emailRequired => '请输入邮箱';
+  String get registerConfirmHint => '再次输入密码';
 
   @override
-  String get emailInvalid => '请输入有效的邮箱';
+  String get registerTermsAgree => '我同意';
 
   @override
-  String get passwordRequired => '请输入密码';
+  String get registerTermsLink => '服务条款';
 
   @override
-  String get passwordTooShort => '密码至少需要8个字符';
+  String get registerPrivacyAnd => '和';
 
   @override
-  String get passwordMismatch => '两次输入的密码不一致';
+  String get registerPrivacyLink => '隐私政策';
 
   @override
-  String get tabHome => '首页';
+  String get registerButton => '创建账号';
 
   @override
-  String get tabChat => '聊天';
+  String get registerHasAccount => '已有账号？';
 
   @override
-  String get tabTracker => '追踪';
+  String get registerSignIn => '登录';
 
   @override
-  String get tabNavigate => '导航';
+  String get registerErrorEmailInvalid => '请输入有效的邮箱地址。';
 
   @override
-  String get tabProfile => '个人';
+  String get registerErrorEmailInUse => '该邮箱已注册，请直接登录。';
 
   @override
-  String get homeWelcome => '欢迎来到外国人生活导航';
+  String get registerErrorPasswordShort => '密码至少需要8个字符。';
 
   @override
-  String get homeSubtitle => '您的日本生活指南';
+  String get registerErrorPasswordMismatch => '两次密码不一致。';
 
   @override
-  String get homeQuickActions => '快捷操作';
+  String get registerErrorTermsRequired => '请同意服务条款。';
 
   @override
-  String get homeActionAskAI => 'AI 问答';
+  String get resetTitle => '重置密码';
 
   @override
-  String get homeActionTracker => '追踪器';
+  String get resetSubtitle => '输入你的邮箱，我们将发送重置链接。';
 
   @override
-  String get homeActionBanking => '银行';
+  String get resetEmailLabel => '邮箱';
 
   @override
-  String get homeActionChatHistory => '聊天记录';
+  String get resetEmailHint => 'your@email.com';
 
   @override
-  String get homeRecentChats => '最近的聊天';
+  String get resetButton => '发送重置链接';
 
   @override
-  String get homeNoRecentChats => '暂无聊天记录';
+  String get resetBackToLogin => '返回登录';
 
   @override
-  String get homeMessagesLabel => '条消息';
+  String get resetSuccessTitle => '检查你的邮箱';
 
   @override
-  String get chatPlaceholder => 'AI 聊天 — 即将推出';
-
-  @override
-  String get chatTitle => 'AI 聊天';
-
-  @override
-  String get chatNewSession => '新对话';
-
-  @override
-  String get chatEmptyTitle => '开始对话';
-
-  @override
-  String get chatEmptySubtitle => '向 AI 询问有关在日本生活的任何问题';
-
-  @override
-  String get chatUntitledSession => '新对话';
-
-  @override
-  String get chatConversationTitle => '对话';
-
-  @override
-  String get chatInputHint => '询问有关日本生活的问题...';
-
-  @override
-  String get chatTyping => '思考中...';
-
-  @override
-  String get chatSources => '来源';
-
-  @override
-  String get chatRetry => '重试';
-
-  @override
-  String get chatDeleteTitle => '删除聊天';
-
-  @override
-  String get chatDeleteConfirm => '确定要删除这个聊天吗？';
-
-  @override
-  String get chatDeleteCancel => '取消';
-
-  @override
-  String get chatDeleteAction => '删除';
-
-  @override
-  String get chatLimitReached => '已达每日上限';
-
-  @override
-  String chatRemainingCount(int remaining, int limit) {
-    return '剩余 $remaining/$limit';
+  String resetSuccessSubtitle(String email) {
+    return '我们已向 $email 发送了重置链接';
   }
 
   @override
-  String get chatLimitReachedTitle => '已达每日上限';
+  String get resetResend => '没收到？重新发送';
 
   @override
-  String get chatLimitReachedMessage => '您今天的免费聊天次数已用完。升级到高级版可无限使用。';
-
-  @override
-  String get chatUpgradeToPremium => '升级到高级版';
-
-  @override
-  String get chatWelcomePrompt => '今天我能帮您什么？';
-
-  @override
-  String get chatWelcomeHint => '询问有关签证手续、银行、住房或在日本生活的任何问题。';
-
-  @override
-  String get onboardingTitle => '设置您的个人资料';
+  String get resetErrorEmailInvalid => '请输入有效的邮箱地址。';
 
   @override
   String get onboardingSkip => '跳过';
@@ -215,42 +176,231 @@ class AppLocalizationsZh extends AppLocalizations {
   String get onboardingNext => '下一步';
 
   @override
-  String get onboardingComplete => '完成';
+  String get onboardingGetStarted => '开始使用';
 
   @override
   String onboardingStepOf(int current, int total) {
-    return '第 $current 步，共 $total 步';
+    return '第$current步，共$total步';
   }
 
   @override
-  String get onboardingNationalityTitle => '您的国籍是什么？';
+  String get onboardingS1Title => '你的国籍是什么？';
 
   @override
-  String get onboardingNationalitySubtitle => '这有助于我们为您提供相关信息。';
+  String get onboardingS1Subtitle => '这有助于我们提供相关信息。';
 
   @override
-  String get onboardingResidenceStatusTitle => '您的在留资格是什么？';
+  String get onboardingS2Title => '你的在留资格是什么？';
 
   @override
-  String get onboardingResidenceStatusSubtitle => '选择您在日本的当前签证类型。';
+  String get onboardingS2Subtitle => '我们可以为你定制签证相关信息。';
 
   @override
-  String get onboardingRegionTitle => '您住在哪里？';
+  String get onboardingS3Title => '你住在日本哪里？';
 
   @override
-  String get onboardingRegionSubtitle => '选择您目前居住或计划搬迁的地区。';
+  String get onboardingS3Subtitle => '用于提供本地化指南。';
 
   @override
-  String get onboardingArrivalDateTitle => '您什么时候到日本的？';
+  String get onboardingS4Title => '你什么时候来日本的？';
 
   @override
-  String get onboardingArrivalDateSubtitle => '这有助于我们建议相关手续和截止日期。';
+  String get onboardingS4Subtitle => '我们会提醒你需要完成的时间敏感任务。';
 
   @override
-  String get onboardingSelectDate => '选择日期';
+  String get onboardingS4Placeholder => '选择日期';
+
+  @override
+  String get onboardingS4NotYet => '我还没来日本';
 
   @override
   String get onboardingChangeDate => '更改日期';
+
+  @override
+  String get onboardingErrorSave => '无法保存信息，请重试。';
+
+  @override
+  String get statusEngineer => '技术·人文知识·国际业务';
+
+  @override
+  String get statusStudent => '留学';
+
+  @override
+  String get statusDependent => '家族滞在';
+
+  @override
+  String get statusPermanent => '永住者';
+
+  @override
+  String get statusSpouse => '日本人配偶者';
+
+  @override
+  String get statusWorkingHoliday => '打工度假';
+
+  @override
+  String get statusSpecifiedSkilled => '特定技能';
+
+  @override
+  String get statusOther => '其他';
+
+  @override
+  String get tabHome => '首页';
+
+  @override
+  String get tabChat => '对话';
+
+  @override
+  String get tabGuide => '指南';
+
+  @override
+  String get tabSOS => '紧急';
+
+  @override
+  String get tabProfile => '我的';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return '早上好，$name 👋';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return '下午好，$name 👋';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return '晚上好，$name 👋';
+  }
+
+  @override
+  String homeGreetingDefault(String name) {
+    return '你好，$name 👋';
+  }
+
+  @override
+  String get homeGreetingNoName => '欢迎！👋';
+
+  @override
+  String homeUsageFree(int remaining, int limit) {
+    return '免费版 • 今日剩余 $remaining/$limit 次对话';
+  }
+
+  @override
+  String get homeSectionQuickActions => '快捷操作';
+
+  @override
+  String get homeSectionExplore => '浏览指南';
+
+  @override
+  String get homeQaChatTitle => 'AI 对话';
+
+  @override
+  String get homeQaChatSubtitle => '关于日本生活的任何问题';
+
+  @override
+  String get homeQaBankingTitle => '银行';
+
+  @override
+  String get homeQaBankingSubtitle => '开户、转账等';
+
+  @override
+  String get homeQaVisaTitle => '签证';
+
+  @override
+  String get homeQaVisaSubtitle => '入境指南和手续';
+
+  @override
+  String get homeQaMedicalTitle => '医疗';
+
+  @override
+  String get homeQaMedicalSubtitle => '健康指南和急救信息';
+
+  @override
+  String get homeExploreGuides => '浏览所有指南';
+
+  @override
+  String get homeExploreEmergency => '紧急联系方式';
+
+  @override
+  String get homeUpgradeTitle => '从 AI 助手获得更多帮助';
+
+  @override
+  String get homeUpgradeCta => '立即升级';
+
+  @override
+  String get chatTitle => 'AI 对话';
+
+  @override
+  String get chatInputPlaceholder => '输入你的消息...';
+
+  @override
+  String get chatEmptyTitle => '有什么想问的？';
+
+  @override
+  String get chatEmptySubtitle => '我可以帮你解答银行、签证、医疗等日本生活问题。';
+
+  @override
+  String get chatSuggestBank => '如何开设银行账户？';
+
+  @override
+  String get chatSuggestVisa => '如何续签签证？';
+
+  @override
+  String get chatSuggestMedical => '如何就医？';
+
+  @override
+  String get chatSuggestGeneral => '来日本后需要做什么？';
+
+  @override
+  String get chatSourcesHeader => '参考来源';
+
+  @override
+  String get chatDisclaimer => '以上为一般性信息，不构成法律建议。请向相关机构确认。';
+
+  @override
+  String chatLimitRemaining(int remaining, int limit) {
+    return '今日剩余 $remaining/$limit 次免费对话。';
+  }
+
+  @override
+  String get chatLimitUpgrade => '升级';
+
+  @override
+  String get chatLimitExhausted => '你今天的免费对话已用完。升级以继续对话！';
+
+  @override
+  String get chatErrorSend => '无法发送消息，请重试。';
+
+  @override
+  String get chatErrorRetry => '重试';
+
+  @override
+  String get chatDateToday => '今天';
+
+  @override
+  String get chatDateYesterday => '昨天';
+
+  @override
+  String get chatNewSession => '新对话';
+
+  @override
+  String get chatUntitledSession => '新对话';
+
+  @override
+  String get chatDeleteTitle => '删除对话';
+
+  @override
+  String get chatDeleteConfirm => '确定要删除这个对话吗？';
+
+  @override
+  String get chatDeleteCancel => '取消';
+
+  @override
+  String get chatDeleteAction => '删除';
+
+  @override
+  String get chatRetry => '重试';
 
   @override
   String get countryCN => '中国';
@@ -313,36 +463,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get countryOther => '其他';
 
   @override
-  String get visaEngineer => '技术·人文知识·国际业务';
-
-  @override
-  String get visaStudent => '留学';
-
-  @override
-  String get visaDependent => '家族滞在';
-
-  @override
-  String get visaPermanent => '永住者';
-
-  @override
-  String get visaSpouse => '日本人配偶者';
-
-  @override
-  String get visaWorkingHoliday => '工作假期';
-
-  @override
-  String get visaSpecifiedSkilled => '特定技能';
-
-  @override
-  String get visaTechnicalIntern => '技能实习';
-
-  @override
-  String get visaHighlySkilled => '高度专业人才';
-
-  @override
-  String get visaOther => '其他';
-
-  @override
   String get regionTokyo => '东京';
 
   @override
@@ -376,19 +496,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get regionOther => '其他';
 
   @override
-  String get trackerPlaceholder => '行政追踪 — 即将推出';
+  String get genericError => '出了点问题，请重试。';
 
   @override
-  String get navigatePlaceholder => '导航 — 即将推出';
-
-  @override
-  String get profilePlaceholder => '个人资料 — 即将推出';
-
-  @override
-  String get genericError => '出现错误，请重试。';
-
-  @override
-  String get networkError => '网络错误，请检查您的连接。';
+  String get networkError => '网络错误，请检查连接。';
 
   @override
   String get logout => '退出登录';
@@ -397,7 +508,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bankingTitle => '银行导航';
 
   @override
-  String get bankingFriendlyScore => '外国人友好评分';
+  String get bankingFriendlyScore => '外国人友好度';
 
   @override
   String get bankingEmpty => '未找到银行';
@@ -409,16 +520,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bankingRecommendTitle => '银行推荐';
 
   @override
-  String get bankingSelectPriorities => '选择您的优先条件';
+  String get bankingSelectPriorities => '选择你的优先项';
 
   @override
   String get bankingPriorityMultilingual => '多语言支持';
 
   @override
-  String get bankingPriorityLowFee => '低手续费';
+  String get bankingPriorityLowFee => '低费用';
 
   @override
-  String get bankingPriorityAtm => 'ATM 网络';
+  String get bankingPriorityAtm => 'ATM网络';
 
   @override
   String get bankingPriorityOnline => '网上银行';
@@ -427,7 +538,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bankingGetRecommendations => '获取推荐';
 
   @override
-  String get bankingRecommendHint => '选择您的优先条件并点击获取推荐';
+  String get bankingRecommendHint => '选择优先项并点击获取推荐';
 
   @override
   String get bankingNoRecommendations => '未找到推荐';
@@ -445,7 +556,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bankingConversationTemplates => '银行常用短语';
 
   @override
-  String get bankingTroubleshooting => '故障排除提示';
+  String get bankingTroubleshooting => '常见问题';
 
   @override
   String get bankingSource => '来源';
@@ -475,17 +586,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get visaProcessingTime => '处理时间';
 
   @override
-  String get visaDisclaimer =>
-      '重要提示：这是关于签证手续的一般信息，不构成移民建议。移民法律和程序可能会变更。请务必咨询出入国管理局或合格的行政书士以了解您的具体情况。';
+  String get visaDisclaimer => '重要：以上是签证手续的一般信息，不构成移民建议。';
 
   @override
-  String get trackerTitle => '行政追踪';
+  String get trackerTitle => '行政跟踪';
 
   @override
-  String get trackerEmpty => '未追踪任何手续';
+  String get trackerEmpty => '暂无跟踪手续';
 
   @override
-  String get trackerEmptyHint => '点击 + 添加要追踪的手续';
+  String get trackerEmptyHint => '点击 + 添加手续';
 
   @override
   String get trackerAddProcedure => '添加手续';
@@ -503,7 +613,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trackerDueDate => '截止日期';
 
   @override
-  String get trackerFreeLimitInfo => '免费版：最多3个手续。升级可无限使用。';
+  String get trackerFreeLimitInfo => '免费版：最多3个手续。升级解锁更多。';
 
   @override
   String get trackerDetailTitle => '手续详情';
@@ -533,16 +643,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trackerDeleteTitle => '删除手续';
 
   @override
-  String get trackerDeleteConfirm => '确定要从追踪中移除此手续吗？';
+  String get trackerDeleteConfirm => '确定要从跟踪器中删除此手续吗？';
 
   @override
-  String get trackerProcedureAdded => '手续已添加到追踪';
+  String get trackerProcedureAdded => '手续已添加到跟踪器';
 
   @override
-  String get trackerLimitReached => '免费版限制已达到（3个手续）。升级到高级版可无限使用。';
+  String get trackerLimitReached => '免费版限制已达（3个手续）。升级解锁更多。';
 
   @override
-  String get trackerAlreadyTracking => '您已在追踪此手续';
+  String get trackerAlreadyTracking => '你已在跟踪此手续';
 
   @override
   String get trackerEssentialProcedures => '必要手续（到达后）';
@@ -551,16 +661,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trackerOtherProcedures => '其他手续';
 
   @override
-  String get trackerNoTemplates => '没有可用的手续模板';
+  String get trackerNoTemplates => '暂无手续模板';
 
   @override
-  String get scannerTitle => '文档扫描';
+  String get scannerTitle => '文件扫描';
 
   @override
-  String get scannerDescription => '扫描日语文档，获取即时翻译和解释';
+  String get scannerDescription => '扫描日语文件获取即时翻译和解释';
 
   @override
-  String get scannerFromCamera => '从相机扫描';
+  String get scannerFromCamera => '拍照扫描';
 
   @override
   String get scannerFromGallery => '从相册选择';
@@ -572,10 +682,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get scannerHistoryTitle => '扫描历史';
 
   @override
-  String get scannerHistoryEmpty => '暂无扫描记录';
+  String get scannerHistoryEmpty => '暂无扫描';
 
   @override
-  String get scannerUnknownType => '未知文档';
+  String get scannerUnknownType => '未知文件';
 
   @override
   String get scannerResultTitle => '扫描结果';
@@ -587,10 +697,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get scannerTranslation => '翻译';
 
   @override
-  String get scannerExplanation => '这意味着什么';
+  String get scannerExplanation => '含义说明';
 
   @override
-  String get scannerProcessing => '正在处理您的文档...';
+  String get scannerProcessing => '正在处理...';
 
   @override
   String get scannerRefresh => '刷新';
@@ -599,19 +709,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get scannerFailed => '扫描失败，请重试。';
 
   @override
-  String get scannerFreeLimitInfo => '免费版：每月3次扫描。升级可获取更多。';
+  String get scannerFreeLimitInfo => '免费版：每月3次扫描。升级获取更多。';
 
   @override
-  String get scannerLimitReached => '已达每月扫描上限。升级到高级版可获取更多扫描次数。';
+  String get scannerLimitReached => '月度扫描次数已用完。升级获取更多。';
 
   @override
   String get medicalTitle => '医疗指南';
 
   @override
-  String get medicalTabEmergency => '紧急';
+  String get medicalTabEmergency => '急救';
 
   @override
-  String get medicalTabPhrases => '短语';
+  String get medicalTabPhrases => '常用语';
 
   @override
   String get medicalEmergencyNumber => '急救电话';
@@ -629,7 +739,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get medicalCategoryAll => '全部';
 
   @override
-  String get medicalCategoryEmergency => '紧急';
+  String get medicalCategoryEmergency => '急救';
 
   @override
   String get medicalCategorySymptom => '症状';
@@ -638,19 +748,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get medicalCategoryInsurance => '保险';
 
   @override
-  String get medicalCategoryGeneral => '一般';
+  String get medicalCategoryGeneral => '常规';
 
   @override
   String get medicalNoPhrases => '未找到短语';
 
   @override
-  String get medicalDisclaimer => '本指南提供一般健康信息，不能替代专业医疗建议。紧急情况下请立即拨打119。';
+  String get medicalDisclaimer => '本指南提供一般健康信息，不能替代专业医疗建议。紧急情况请立即拨打119。';
 
   @override
   String get navigateBanking => '银行';
 
   @override
-  String get navigateBankingDesc => '查找外国人友好的银行';
+  String get navigateBankingDesc => '查找对外国人友好的银行';
 
   @override
   String get navigateVisa => '签证';
@@ -662,13 +772,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get navigateScanner => '扫描';
 
   @override
-  String get navigateScannerDesc => '翻译日语文档';
+  String get navigateScannerDesc => '翻译日语文件';
 
   @override
   String get navigateMedical => '医疗';
 
   @override
-  String get navigateMedicalDesc => '紧急指南和短语';
+  String get navigateMedicalDesc => '急救指南和常用语';
+
+  @override
+  String get navigateCommunity => '社区';
+
+  @override
+  String get navigateCommunityDesc => '与其他外国人交流';
 
   @override
   String get upgradeToPremium => '升级到高级版';
@@ -680,7 +796,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get communityEmpty => '暂无帖子';
 
   @override
-  String get communityNewPost => '发新帖';
+  String get communityNewPost => '发帖';
 
   @override
   String get communityDetailTitle => '帖子详情';
@@ -689,7 +805,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get communityAnswered => '已回答';
 
   @override
-  String get communityBestAnswer => '最佳答案';
+  String get communityBestAnswer => '最佳回答';
 
   @override
   String get communityFilterAll => '全部';
@@ -729,7 +845,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String communityReplies(int count) {
-    return '$count 条回复';
+    return '$count 回复';
   }
 
   @override
@@ -750,10 +866,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get communityModerationPending => '审核中';
 
   @override
-  String get communityModerationFlagged => '已标记待审';
+  String get communityModerationFlagged => '已标记审核';
 
   @override
-  String get communityModerationNotice => '您的帖子将由AI审核系统审核后才会对其他人可见。';
+  String get communityModerationNotice => '你的帖子将由 AI 审核系统审核后对其他人可见。';
 
   @override
   String get communityChannelLabel => '语言频道';
@@ -765,7 +881,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get communityTitleLabel => '标题';
 
   @override
-  String get communityTitleHint => '您的问题是什么？';
+  String get communityTitleHint => '你的问题是什么？';
 
   @override
   String get communityTitleMinLength => '标题至少5个字符';
@@ -774,13 +890,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get communityContentLabel => '详情';
 
   @override
-  String get communityContentHint => '详细描述您的问题或情况...';
+  String get communityContentHint => '详细描述你的问题或情况...';
 
   @override
   String get communityContentMinLength => '内容至少10个字符';
 
   @override
-  String get communitySubmit => '发布';
+  String get communitySubmit => '发帖';
 
   @override
   String communityTimeAgoDays(int days) {
@@ -798,34 +914,28 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get navigateCommunity => '社区';
-
-  @override
-  String get navigateCommunityDesc => '与其他外国人问答';
-
-  @override
   String get subscriptionTitle => '订阅';
 
   @override
-  String get subscriptionPlansTitle => '选择您的方案';
+  String get subscriptionPlansTitle => '选择你的计划';
 
   @override
-  String get subscriptionPlansSubtitle => '解锁 Gaijin Life Navi 的全部功能';
+  String get subscriptionPlansSubtitle => '解锁 Gaijin Life Navi 的全部潜力';
 
   @override
-  String get subscriptionCurrentPlan => '当前方案';
+  String get subscriptionCurrentPlan => '当前计划';
 
   @override
-  String get subscriptionCurrentPlanBadge => '当前方案';
+  String get subscriptionCurrentPlanBadge => '当前计划';
 
   @override
   String get subscriptionTierFree => '免费';
 
   @override
-  String get subscriptionTierPremium => '高级版';
+  String get subscriptionTierPremium => '高级';
 
   @override
-  String get subscriptionTierPremiumPlus => '高级版+';
+  String get subscriptionTierPremiumPlus => '高级+';
 
   @override
   String get subscriptionFreePrice => '¥0';
@@ -846,17 +956,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String subscriptionCancellingAt(String date) {
-    return '您的方案将于 $date 结束';
+    return '你的计划将于 $date 结束';
   }
 
   @override
   String get subscriptionFeatureFreeChat => '每天5次AI对话';
 
   @override
-  String get subscriptionFeatureFreeScans => '每月3次文档扫描';
+  String get subscriptionFeatureFreeScans => '每月3次文件扫描';
 
   @override
-  String get subscriptionFeatureFreeTracker => '追踪最多3个手续';
+  String get subscriptionFeatureFreeTracker => '跟踪最多3个手续';
 
   @override
   String get subscriptionFeatureFreeCommunityRead => '阅读社区帖子';
@@ -892,7 +1002,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get profileLanguage => '语言';
 
   @override
-  String get profileArrivalDate => '来日日期';
+  String get profileArrivalDate => '到达日期';
 
   @override
   String get profileDisplayName => '显示名称';
@@ -913,7 +1023,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get profileSaveError => '保存失败';
 
   @override
-  String get profileLoadError => '加载资料失败';
+  String get profileLoadError => '加载失败';
 
   @override
   String get settingsTitle => '设置';
@@ -922,7 +1032,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsLanguageSection => '语言';
 
   @override
-  String get settingsAccountSection => '账户';
+  String get settingsAccountSection => '账号';
 
   @override
   String get settingsAboutSection => '关于';
@@ -931,10 +1041,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsLogout => '退出登录';
 
   @override
-  String get settingsDeleteAccount => '删除账户';
+  String get settingsDeleteAccount => '删除账号';
 
   @override
-  String get settingsDeleteAccountSubtitle => '此操作无法撤销';
+  String get settingsDeleteAccountSubtitle => '此操作无法撤消';
 
   @override
   String get settingsVersion => '版本';
@@ -946,13 +1056,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsLogoutConfirmMessage => '确定要退出登录吗？';
 
   @override
-  String get settingsDeleteConfirmTitle => '删除账户';
+  String get settingsDeleteConfirmTitle => '删除账号';
 
   @override
-  String get settingsDeleteConfirmMessage => '确定要删除账户吗？此操作无法撤销，所有数据将被永久删除。';
+  String get settingsDeleteConfirmMessage => '确定要删除账号吗？此操作无法撤消。所有数据将被永久删除。';
 
   @override
-  String get settingsDeleteError => '删除账户失败';
+  String get settingsDeleteError => '删除失败';
 
   @override
   String get settingsCancel => '取消';

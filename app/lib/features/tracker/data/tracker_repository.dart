@@ -10,9 +10,7 @@ class TrackerRepository {
   final Dio _client;
 
   /// Fetch procedure templates for adding new procedures.
-  Future<List<ProcedureTemplate>> getTemplates({
-    String lang = 'en',
-  }) async {
+  Future<List<ProcedureTemplate>> getTemplates({String lang = 'en'}) async {
     final response = await _client.get<Map<String, dynamic>>(
       '/procedures/templates',
       queryParameters: {'lang': lang},
@@ -24,14 +22,10 @@ class TrackerRepository {
   }
 
   /// Fetch user's tracked procedures.
-  Future<List<UserProcedure>> getMyProcedures({
-    ProcedureStatus? status,
-  }) async {
+  Future<List<UserProcedure>> getMyProcedures({ProcedureStatus? status}) async {
     final response = await _client.get<Map<String, dynamic>>(
       '/procedures/my',
-      queryParameters: {
-        if (status != null) 'status': status.apiValue,
-      },
+      queryParameters: {if (status != null) 'status': status.apiValue},
     );
     final items = response.data!['data'] as List<dynamic>;
     return items
@@ -57,7 +51,8 @@ class TrackerRepository {
       },
     );
     return UserProcedure.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   /// Update a tracked procedure (status, due_date, notes).
@@ -76,7 +71,8 @@ class TrackerRepository {
       },
     );
     return UserProcedure.fromJson(
-        response.data!['data'] as Map<String, dynamic>);
+      response.data!['data'] as Map<String, dynamic>,
+    );
   }
 
   /// Delete a tracked procedure (soft-delete).

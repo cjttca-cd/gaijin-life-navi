@@ -21,8 +21,7 @@ class CommunityDetailScreen extends ConsumerStatefulWidget {
       _CommunityDetailScreenState();
 }
 
-class _CommunityDetailScreenState
-    extends ConsumerState<CommunityDetailScreen> {
+class _CommunityDetailScreenState extends ConsumerState<CommunityDetailScreen> {
   final _replyController = TextEditingController();
   bool _isSubmitting = false;
 
@@ -41,38 +40,40 @@ class _CommunityDetailScreenState
     final isPremium = ref.watch(isPremiumProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.communityDetailTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.communityDetailTitle)),
       body: postAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline,
-                  size: 48, color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () => ref.invalidate(
-                    communityPostDetailProvider(widget.postId)),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed:
+                        () => ref.invalidate(
+                          communityPostDetailProvider(widget.postId),
+                        ),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (post) {
           return Column(
             children: [
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    ref.invalidate(
-                        communityPostDetailProvider(widget.postId));
-                    ref.invalidate(
-                        communityRepliesProvider(widget.postId));
+                    ref.invalidate(communityPostDetailProvider(widget.postId));
+                    ref.invalidate(communityRepliesProvider(widget.postId));
                   },
                   child: ListView(
                     padding: const EdgeInsets.all(16),
@@ -82,10 +83,7 @@ class _CommunityDetailScreenState
                       const SizedBox(height: 16),
 
                       // Post content
-                      Text(
-                        post.content,
-                        style: theme.textTheme.bodyLarge,
-                      ),
+                      Text(post.content, style: theme.textTheme.bodyLarge),
                       const SizedBox(height: 16),
 
                       // Vote bar
@@ -102,15 +100,15 @@ class _CommunityDetailScreenState
 
                       // Replies list
                       repliesAsync.when(
-                        loading: () => const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                        error: (_, __) => Center(
-                          child: Text(l10n.genericError),
-                        ),
+                        loading:
+                            () => const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(16),
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                        error:
+                            (_, __) => Center(child: Text(l10n.genericError)),
                         data: (replies) {
                           if (replies.isEmpty) {
                             return Center(
@@ -118,24 +116,22 @@ class _CommunityDetailScreenState
                                 padding: const EdgeInsets.all(32),
                                 child: Text(
                                   l10n.communityNoReplies,
-                                  style: theme.textTheme.bodyMedium
-                                      ?.copyWith(
-                                    color: theme
-                                        .colorScheme.onSurfaceVariant,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ),
                             );
                           }
                           return Column(
-                            children: replies.map((reply) {
-                              return _ReplyCard(
-                                reply: reply,
-                                isPostAuthor:
-                                    post.userId == reply.userId,
-                                postUserId: post.userId,
-                              );
-                            }).toList(),
+                            children:
+                                replies.map((reply) {
+                                  return _ReplyCard(
+                                    reply: reply,
+                                    isPostAuthor: post.userId == reply.userId,
+                                    postUserId: post.userId,
+                                  );
+                                }).toList(),
                           );
                         },
                       ),
@@ -154,9 +150,7 @@ class _CommunityDetailScreenState
               else
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: UpgradeBanner(
-                    message: l10n.communityReplyPremiumOnly,
-                  ),
+                  child: UpgradeBanner(message: l10n.communityReplyPremiumOnly),
                 ),
             ],
           );
@@ -190,9 +184,7 @@ class _CommunityDetailScreenState
       ref.invalidate(communityPostDetailProvider(widget.postId));
     } catch (_) {
       if (!mounted) return;
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.genericError)),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(l10n.genericError)));
     } finally {
       if (mounted) {
         setState(() => _isSubmitting = false);
@@ -222,9 +214,10 @@ class _PostHeader extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: post.moderationStatus == ModerationStatus.pending
-                  ? theme.colorScheme.tertiaryContainer
-                  : theme.colorScheme.errorContainer,
+              color:
+                  post.moderationStatus == ModerationStatus.pending
+                      ? theme.colorScheme.tertiaryContainer
+                      : theme.colorScheme.errorContainer,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -232,9 +225,10 @@ class _PostHeader extends StatelessWidget {
                   ? l10n.communityModerationPending
                   : l10n.communityModerationFlagged,
               style: theme.textTheme.labelSmall?.copyWith(
-                color: post.moderationStatus == ModerationStatus.pending
-                    ? theme.colorScheme.onTertiaryContainer
-                    : theme.colorScheme.onErrorContainer,
+                color:
+                    post.moderationStatus == ModerationStatus.pending
+                        ? theme.colorScheme.onTertiaryContainer
+                        : theme.colorScheme.onErrorContainer,
               ),
             ),
           ),
@@ -243,8 +237,7 @@ class _PostHeader extends StatelessWidget {
         Row(
           children: [
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),
@@ -259,8 +252,7 @@ class _PostHeader extends StatelessWidget {
             const SizedBox(width: 8),
             if (post.isAnswered)
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.tertiaryContainer,
                   borderRadius: BorderRadius.circular(12),
@@ -268,9 +260,11 @@ class _PostHeader extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.check_circle,
-                        size: 14,
-                        color: theme.colorScheme.onTertiaryContainer),
+                    Icon(
+                      Icons.check_circle,
+                      size: 14,
+                      color: theme.colorScheme.onTertiaryContainer,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       l10n.communityAnswered,
@@ -286,17 +280,17 @@ class _PostHeader extends StatelessWidget {
         const SizedBox(height: 12),
 
         // Title
-        Text(
-          post.title,
-          style: theme.textTheme.headlineSmall,
-        ),
+        Text(post.title, style: theme.textTheme.headlineSmall),
         const SizedBox(height: 8),
 
         // Meta
         Row(
           children: [
-            Icon(Icons.visibility_outlined,
-                size: 14, color: theme.colorScheme.onSurfaceVariant),
+            Icon(
+              Icons.visibility_outlined,
+              size: 14,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
             const SizedBox(width: 4),
             Text(
               '${post.viewCount}',
@@ -359,8 +353,11 @@ class _VoteBar extends ConsumerWidget {
         ),
         if (!isPremium) ...[
           const SizedBox(width: 8),
-          Icon(Icons.lock_outline,
-              size: 14, color: theme.colorScheme.onSurfaceVariant),
+          Icon(
+            Icons.lock_outline,
+            size: 14,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ],
       ],
     );
@@ -398,9 +395,10 @@ class _ReplyCard extends ConsumerWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      color: reply.isBestAnswer
-          ? theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3)
-          : null,
+      color:
+          reply.isBestAnswer
+              ? theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3)
+              : null,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -410,8 +408,7 @@ class _ReplyCard extends ConsumerWidget {
             if (reply.isBestAnswer)
               Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.tertiary,
                   borderRadius: BorderRadius.circular(12),
@@ -419,8 +416,11 @@ class _ReplyCard extends ConsumerWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.check_circle,
-                        size: 14, color: theme.colorScheme.onTertiary),
+                    Icon(
+                      Icons.check_circle,
+                      size: 14,
+                      color: theme.colorScheme.onTertiary,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       l10n.communityBestAnswer,
@@ -437,12 +437,12 @@ class _ReplyCard extends ConsumerWidget {
             if (reply.moderationStatus != ModerationStatus.approved)
               Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: reply.moderationStatus == ModerationStatus.pending
-                      ? theme.colorScheme.tertiaryContainer
-                      : theme.colorScheme.errorContainer,
+                  color:
+                      reply.moderationStatus == ModerationStatus.pending
+                          ? theme.colorScheme.tertiaryContainer
+                          : theme.colorScheme.errorContainer,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -454,10 +454,7 @@ class _ReplyCard extends ConsumerWidget {
               ),
 
             // Content
-            Text(
-              reply.content,
-              style: theme.textTheme.bodyMedium,
-            ),
+            Text(reply.content, style: theme.textTheme.bodyMedium),
             const SizedBox(height: 8),
 
             // Actions row
@@ -483,9 +480,10 @@ class _ReplyCard extends ConsumerWidget {
                               ? Icons.thumb_up
                               : Icons.thumb_up_outlined,
                           size: 16,
-                          color: reply.userVoted
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.onSurfaceVariant,
+                          color:
+                              reply.userVoted
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.onSurfaceVariant,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -568,7 +566,9 @@ class _ReplyInput extends StatelessWidget {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   isDense: true,
                 ),
                 maxLines: 3,
@@ -578,13 +578,14 @@ class _ReplyInput extends StatelessWidget {
             const SizedBox(width: 8),
             IconButton.filled(
               onPressed: isSubmitting ? null : onSubmit,
-              icon: isSubmitting
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.send),
+              icon:
+                  isSubmitting
+                      ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                      : const Icon(Icons.send),
             ),
           ],
         ),

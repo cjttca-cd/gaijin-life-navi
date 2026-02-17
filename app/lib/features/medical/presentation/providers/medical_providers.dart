@@ -25,9 +25,7 @@ final emergencyGuideProvider = FutureProvider<EmergencyGuide>((ref) async {
 /// Provider for medical phrases.
 /// Family parameter is optional category filter.
 final medicalPhrasesProvider =
-    FutureProvider.family<List<MedicalPhrase>, String?>(
-  (ref, category) async {
-    final repo = ref.watch(medicalRepositoryProvider);
-    return repo.getPhrases(category: category);
-  },
-);
+    FutureProvider.family<List<MedicalPhrase>, String?>((ref, category) async {
+      final repo = ref.watch(medicalRepositoryProvider);
+      return repo.getPhrases(category: category);
+    });

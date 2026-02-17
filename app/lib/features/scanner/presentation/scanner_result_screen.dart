@@ -18,28 +18,29 @@ class ScannerResultScreen extends ConsumerWidget {
     final scanAsync = ref.watch(scanResultProvider(scanId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.scannerResultTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.scannerResultTitle)),
       body: scanAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error_outline, size: 48,
-                  color: theme.colorScheme.error),
-              const SizedBox(height: 16),
-              Text(l10n.genericError),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: () =>
-                    ref.invalidate(scanResultProvider(scanId)),
-                child: Text(l10n.chatRetry),
+        error:
+            (error, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(l10n.genericError),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(scanResultProvider(scanId)),
+                    child: Text(l10n.chatRetry),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (scan) {
           if (scan.status == ScanStatus.processing ||
               scan.status == ScanStatus.uploading) {
@@ -49,12 +50,13 @@ class ScannerResultScreen extends ConsumerWidget {
                 children: [
                   const CircularProgressIndicator(),
                   const SizedBox(height: 16),
-                  Text(l10n.scannerProcessing,
-                      style: theme.textTheme.bodyLarge),
+                  Text(
+                    l10n.scannerProcessing,
+                    style: theme.textTheme.bodyLarge,
+                  ),
                   const SizedBox(height: 8),
                   FilledButton(
-                    onPressed: () =>
-                        ref.invalidate(scanResultProvider(scanId)),
+                    onPressed: () => ref.invalidate(scanResultProvider(scanId)),
                     child: Text(l10n.scannerRefresh),
                   ),
                 ],
@@ -67,11 +69,13 @@ class ScannerResultScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 48,
-                      color: theme.colorScheme.error),
+                  Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: theme.colorScheme.error,
+                  ),
                   const SizedBox(height: 16),
-                  Text(l10n.scannerFailed,
-                      style: theme.textTheme.bodyLarge),
+                  Text(l10n.scannerFailed, style: theme.textTheme.bodyLarge),
                 ],
               ),
             );
@@ -93,8 +97,10 @@ class ScannerResultScreen extends ConsumerWidget {
 
                 // Original OCR text
                 if (scan.ocrText != null && scan.ocrText!.isNotEmpty) ...[
-                  Text(l10n.scannerOriginalText,
-                      style: theme.textTheme.titleMedium),
+                  Text(
+                    l10n.scannerOriginalText,
+                    style: theme.textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 8),
                   Card(
                     child: Padding(
@@ -111,12 +117,15 @@ class ScannerResultScreen extends ConsumerWidget {
                 // Translation
                 if (scan.translation != null &&
                     scan.translation!.isNotEmpty) ...[
-                  Text(l10n.scannerTranslation,
-                      style: theme.textTheme.titleMedium),
+                  Text(
+                    l10n.scannerTranslation,
+                    style: theme.textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 8),
                   Card(
-                    color: theme.colorScheme.primaryContainer
-                        .withValues(alpha: 0.3),
+                    color: theme.colorScheme.primaryContainer.withValues(
+                      alpha: 0.3,
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: SelectableText(
@@ -131,12 +140,15 @@ class ScannerResultScreen extends ConsumerWidget {
                 // Explanation
                 if (scan.explanation != null &&
                     scan.explanation!.isNotEmpty) ...[
-                  Text(l10n.scannerExplanation,
-                      style: theme.textTheme.titleMedium),
+                  Text(
+                    l10n.scannerExplanation,
+                    style: theme.textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 8),
                   Card(
-                    color: theme.colorScheme.tertiaryContainer
-                        .withValues(alpha: 0.3),
+                    color: theme.colorScheme.tertiaryContainer.withValues(
+                      alpha: 0.3,
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: SelectableText(

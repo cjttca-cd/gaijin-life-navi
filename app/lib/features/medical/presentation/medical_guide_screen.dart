@@ -10,8 +10,7 @@ class MedicalGuideScreen extends ConsumerStatefulWidget {
   const MedicalGuideScreen({super.key});
 
   @override
-  ConsumerState<MedicalGuideScreen> createState() =>
-      _MedicalGuideScreenState();
+  ConsumerState<MedicalGuideScreen> createState() => _MedicalGuideScreenState();
 }
 
 class _MedicalGuideScreenState extends ConsumerState<MedicalGuideScreen>
@@ -47,10 +46,7 @@ class _MedicalGuideScreenState extends ConsumerState<MedicalGuideScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _EmergencyGuideTab(),
-          _PhrasesTab(),
-        ],
+        children: [_EmergencyGuideTab(), _PhrasesTab()],
       ),
     );
   }
@@ -65,19 +61,20 @@ class _EmergencyGuideTab extends ConsumerWidget {
 
     return guideAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(l10n.genericError),
-            const SizedBox(height: 8),
-            FilledButton(
-              onPressed: () => ref.invalidate(emergencyGuideProvider),
-              child: Text(l10n.chatRetry),
+      error:
+          (error, _) => Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(l10n.genericError),
+                const SizedBox(height: 8),
+                FilledButton(
+                  onPressed: () => ref.invalidate(emergencyGuideProvider),
+                  child: Text(l10n.chatRetry),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
       data: (guide) {
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -115,8 +112,7 @@ class _EmergencyGuideTab extends ConsumerWidget {
                             ),
                             Text(
                               guide.emergencyNumber,
-                              style:
-                                  theme.textTheme.headlineLarge?.copyWith(
+                              style: theme.textTheme.headlineLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: theme.colorScheme.onErrorContainer,
                               ),
@@ -131,42 +127,47 @@ class _EmergencyGuideTab extends ConsumerWidget {
               const SizedBox(height: 24),
 
               // How to call
-              Text(l10n.medicalHowToCall,
-                  style: theme.textTheme.titleMedium),
+              Text(l10n.medicalHowToCall, style: theme.textTheme.titleMedium),
               const SizedBox(height: 8),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: guide.howToCall
-                        .map((step) => Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 4),
-                              child: Text('• $step'),
-                            ))
-                        .toList(),
+                    children:
+                        guide.howToCall
+                            .map(
+                              (step) => Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Text('• $step'),
+                              ),
+                            )
+                            .toList(),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
 
               // What to prepare
-              Text(l10n.medicalWhatToPrepare,
-                  style: theme.textTheme.titleMedium),
+              Text(
+                l10n.medicalWhatToPrepare,
+                style: theme.textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: guide.whatToPrepare
-                        .map((item) => Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 4),
-                              child: Text('• $item'),
-                            ))
-                        .toList(),
+                    children:
+                        guide.whatToPrepare
+                            .map(
+                              (item) => Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Text('• $item'),
+                              ),
+                            )
+                            .toList(),
                   ),
                 ),
               ),
@@ -174,8 +175,10 @@ class _EmergencyGuideTab extends ConsumerWidget {
 
               // Useful phrases
               if (guide.usefulPhrases.isNotEmpty) ...[
-                Text(l10n.medicalUsefulPhrases,
-                    style: theme.textTheme.titleMedium),
+                Text(
+                  l10n.medicalUsefulPhrases,
+                  style: theme.textTheme.titleMedium,
+                ),
                 const SizedBox(height: 8),
                 ...guide.usefulPhrases.map(
                   (phrase) => Card(
@@ -185,11 +188,12 @@ class _EmergencyGuideTab extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(phrase.ja,
-                              style: theme.textTheme.titleSmall),
+                          Text(phrase.ja, style: theme.textTheme.titleSmall),
                           if (phrase.reading.isNotEmpty)
-                            Text(phrase.reading,
-                                style: theme.textTheme.bodySmall),
+                            Text(
+                              phrase.reading,
+                              style: theme.textTheme.bodySmall,
+                            ),
                           Text(phrase.translation),
                         ],
                       ),
@@ -217,8 +221,7 @@ class _PhrasesTabState extends ConsumerState<_PhrasesTab> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final phrasesAsync =
-        ref.watch(medicalPhrasesProvider(_selectedCategory));
+    final phrasesAsync = ref.watch(medicalPhrasesProvider(_selectedCategory));
 
     return Column(
       children: [
@@ -263,14 +266,11 @@ class _PhrasesTabState extends ConsumerState<_PhrasesTab> {
         // Phrases list
         Expanded(
           child: phrasesAsync.when(
-            loading: () =>
-                const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
             error: (_, __) => Center(child: Text(l10n.genericError)),
             data: (phrases) {
               if (phrases.isEmpty) {
-                return Center(
-                  child: Text(l10n.medicalNoPhrases),
-                );
+                return Center(child: Text(l10n.medicalNoPhrases));
               }
               return ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -293,10 +293,8 @@ class _PhrasesTabState extends ConsumerState<_PhrasesTab> {
                           if (phrase.phraseReading != null)
                             Text(
                               phrase.phraseReading!,
-                              style:
-                                  theme.textTheme.bodySmall?.copyWith(
-                                color: theme
-                                    .colorScheme.onSurfaceVariant,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
                               ),
                             ),
                           const Divider(height: 12),
@@ -311,11 +309,9 @@ class _PhrasesTabState extends ConsumerState<_PhrasesTab> {
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 phrase.context!,
-                                style: theme.textTheme.bodySmall
-                                    ?.copyWith(
+                                style: theme.textTheme.bodySmall?.copyWith(
                                   fontStyle: FontStyle.italic,
-                                  color: theme
-                                      .colorScheme.onSurfaceVariant,
+                                  color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ),
