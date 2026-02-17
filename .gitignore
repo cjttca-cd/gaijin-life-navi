@@ -52,5 +52,8 @@ firebase-credentials.json
 # Logs
 *.log
 
+# Test artifacts (screenshots, reports)
+artifacts/
+
 # Docker
 docker-compose.override.yml
