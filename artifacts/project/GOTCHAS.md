@@ -37,3 +37,11 @@
 
 - **Dev server と Worker の同時実行禁止**: webpack/ビルドキャッシュ損坏の原因（過去 3 回発生）
 - **Dev server 起動前**: 必ず `rm -rf .next` 等のキャッシュクリア実行（本プロジェクトは Flutter なので `.dart_tool/` 等に注意）
+
+## Flutter Web 截图（E2E テスト）
+
+- **CanvasKit 非同期ロード**: Flutter Web は CanvasKit エンジンを非同期でロードする。`page.goto()` + `networkidle` だけでは不十分。**必ず `time.sleep(8)` 以上**を入れること
+- **`--disable-gpu` 禁止**: Playwright の `chromium.launch()` に `--disable-gpu` を渡すと Canvas 渲染が壊れる
+- **截图サイズチェック**: 正常な截图は 10KB 以上。< 5KB は白屏 → 即やり直し
+- **截图保存先**: 必ずプロジェクト内 `artifacts/epics/<epic>/features/<feature>/screenshots/`。agent workspace への保存禁止
+- **推奨手順**: `flutter build web --release` → `python3 -m http.server 3200` → Playwright sync API + sleep(8)

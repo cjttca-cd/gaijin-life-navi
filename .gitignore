@@ -52,8 +52,8 @@ firebase-credentials.json
 # Logs
 *.log
 
-# Test artifacts (screenshots, reports)
-artifacts/
+# Test screenshots (large binary files, not needed in git)
+artifacts/epics/*/features/*/screenshots/
 
 # Docker
 docker-compose.override.yml
