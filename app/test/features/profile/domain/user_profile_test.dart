@@ -55,17 +55,14 @@ void main() {
     });
 
     test('tierLabel returns correct labels', () {
+      expect(UserProfile.fromJson(_minJson(tier: 'free')).tierLabel, 'Free');
       expect(
-        UserProfile.fromJson(_minJson(tier: 'free')).tierLabel,
-        'Free',
+        UserProfile.fromJson(_minJson(tier: 'standard')).tierLabel,
+        'Standard',
       );
       expect(
         UserProfile.fromJson(_minJson(tier: 'premium')).tierLabel,
         'Premium',
-      );
-      expect(
-        UserProfile.fromJson(_minJson(tier: 'premium_plus')).tierLabel,
-        'Premium+',
       );
     });
 

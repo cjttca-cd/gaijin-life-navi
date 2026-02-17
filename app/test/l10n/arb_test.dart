@@ -11,8 +11,7 @@ void main() {
     test('all 5 language ARB files exist', () {
       for (final lang in requiredLanguages) {
         final file = File('${arbDir.path}/app_$lang.arb');
-        expect(file.existsSync(), isTrue,
-            reason: 'app_$lang.arb should exist');
+        expect(file.existsSync(), isTrue, reason: 'app_$lang.arb should exist');
       }
     });
 
@@ -31,9 +30,13 @@ void main() {
     test('all ARB files have @@locale matching filename', () {
       for (final lang in requiredLanguages) {
         final file = File('${arbDir.path}/app_$lang.arb');
-        final content = json.decode(file.readAsStringSync()) as Map<String, dynamic>;
-        expect(content['@@locale'], lang,
-            reason: 'app_$lang.arb @@locale should be $lang');
+        final content =
+            json.decode(file.readAsStringSync()) as Map<String, dynamic>;
+        expect(
+          content['@@locale'],
+          lang,
+          reason: 'app_$lang.arb @@locale should be $lang',
+        );
       }
     });
 
@@ -41,22 +44,21 @@ void main() {
       final enFile = File('${arbDir.path}/app_en.arb');
       final enContent =
           json.decode(enFile.readAsStringSync()) as Map<String, dynamic>;
-      final enKeys = enContent.keys
-          .where((k) => !k.startsWith('@'))
-          .toSet();
+      final enKeys = enContent.keys.where((k) => !k.startsWith('@')).toSet();
 
       for (final lang in requiredLanguages.where((l) => l != 'en')) {
         final file = File('${arbDir.path}/app_$lang.arb');
         final content =
             json.decode(file.readAsStringSync()) as Map<String, dynamic>;
-        final keys = content.keys
-            .where((k) => !k.startsWith('@'))
-            .toSet();
+        final keys = content.keys.where((k) => !k.startsWith('@')).toSet();
 
         // All English keys should be present in each language file.
         for (final key in enKeys) {
-          expect(keys.contains(key), isTrue,
-              reason: 'app_$lang.arb missing key: $key');
+          expect(
+            keys.contains(key),
+            isTrue,
+            reason: 'app_$lang.arb missing key: $key',
+          );
         }
       }
     });

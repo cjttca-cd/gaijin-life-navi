@@ -3,7 +3,7 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_spacing.dart';
-import '../../domain/chat_message.dart';
+import '../../domain/chat_response.dart';
 
 /// Source citation section — handoff-chat.md §3 Source Citation Section.
 ///
@@ -11,7 +11,7 @@ import '../../domain/chat_message.dart';
 class SourceCitationWidget extends StatelessWidget {
   const SourceCitationWidget({super.key, required this.sources});
 
-  final List<SourceCitation> sources;
+  final List<ChatSource> sources;
 
   @override
   Widget build(BuildContext context) {

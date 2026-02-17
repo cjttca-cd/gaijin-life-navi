@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
-import '../domain/subscription_plan.dart';
 import 'providers/subscription_providers.dart';
 
 /// S16: Subscription — plan comparison + charge packs + FAQ.
 ///
-/// Per handoff-subscription.md: horizontal plan cards, charge packs,
-/// expandable FAQ, footer.
+/// Phase 0: Plans display only (IAP purchase is a separate task).
 class SubscriptionScreen extends ConsumerWidget {
   const SubscriptionScreen({super.key});
 
@@ -20,7 +17,6 @@ class SubscriptionScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final plansAsync = ref.watch(subscriptionPlansProvider);
-    final mySubAsync = ref.watch(mySubscriptionProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.subTitle)),
@@ -28,25 +24,10 @@ class SubscriptionScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, __) => _buildError(context, ref),
         data: (plans) {
-          final mySub = mySubAsync.valueOrNull;
-          final currentTier = mySub?.tier ?? 'free';
-
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Current Plan section
-                _SectionHeader(title: l10n.subSectionCurrent),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenPadding,
-                  ),
-                  child: _CurrentPlanCard(
-                    tier: currentTier,
-                    subscription: mySub,
-                  ),
-                ),
-
                 const SizedBox(height: AppSpacing.space2xl),
 
                 // Choose a Plan section
@@ -70,10 +51,9 @@ class SubscriptionScreen extends ConsumerWidget {
                           _FeatureItem(l10n.subFeatureAdsYes, false),
                           _FeatureItem(l10n.subFeatureImageNo, false),
                         ],
-                        isCurrentPlan: currentTier == 'free',
+                        isCurrentPlan: false,
                         isRecommended: false,
                         onChoose: null,
-                        currentTier: currentTier,
                       ),
                       _PlanCard(
                         planId: 'standard',
@@ -86,10 +66,11 @@ class SubscriptionScreen extends ConsumerWidget {
                           _FeatureItem(l10n.subFeatureAdsNo, true),
                           _FeatureItem(l10n.subFeatureImageNo, false),
                         ],
-                        isCurrentPlan: currentTier == 'standard',
+                        isCurrentPlan: false,
                         isRecommended: true,
-                        onChoose: () => _checkout(context, ref, 'standard'),
-                        currentTier: currentTier,
+                        onChoose: () {
+                          // IAP purchase placeholder — separate task.
+                        },
                       ),
                       _PlanCard(
                         planId: 'premium',
@@ -102,10 +83,11 @@ class SubscriptionScreen extends ConsumerWidget {
                           _FeatureItem(l10n.subFeatureAdsNo, true),
                           _FeatureItem(l10n.subFeatureImageYes, true),
                         ],
-                        isCurrentPlan: currentTier == 'premium',
+                        isCurrentPlan: false,
                         isRecommended: false,
-                        onChoose: () => _checkout(context, ref, 'premium'),
-                        currentTier: currentTier,
+                        onChoose: () {
+                          // IAP purchase placeholder — separate task.
+                        },
                       ),
                     ],
                   ),
@@ -226,28 +208,6 @@ class SubscriptionScreen extends ConsumerWidget {
       ),
     );
   }
-
-  Future<void> _checkout(
-    BuildContext context,
-    WidgetRef ref,
-    String planId,
-  ) async {
-    try {
-      final repo = ref.read(subscriptionRepositoryProvider);
-      final checkoutUrl = await repo.createCheckout(planId: planId);
-      final uri = Uri.parse(checkoutUrl);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      }
-    } catch (_) {
-      if (context.mounted) {
-        final l10n = AppLocalizations.of(context);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.subPurchaseError)));
-      }
-    }
-  }
 }
 
 class _SectionHeader extends StatelessWidget {
@@ -275,59 +235,6 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _CurrentPlanCard extends StatelessWidget {
-  const _CurrentPlanCard({required this.tier, this.subscription});
-
-  final String tier;
-  final UserSubscription? subscription;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-
-    final planName =
-        tier == 'premium'
-            ? l10n.subCurrentPremium
-            : tier == 'standard'
-            ? l10n.subCurrentStandard
-            : l10n.subCurrentFree;
-
-    final icon =
-        tier == 'premium'
-            ? '💎'
-            : tier == 'standard'
-            ? '⭐'
-            : '🆓';
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.spaceLg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(icon, style: const TextStyle(fontSize: 24)),
-                const SizedBox(width: AppSpacing.spaceSm),
-                Text(planName, style: theme.textTheme.titleMedium),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.spaceSm),
-            if (tier == 'free')
-              ElevatedButton(
-                onPressed: () {
-                  // Scroll to plans section
-                },
-                child: Text(l10n.subUpgradeNow),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _FeatureItem {
   const _FeatureItem(this.text, this.included);
   final String text;
@@ -344,7 +251,6 @@ class _PlanCard extends StatelessWidget {
     required this.isCurrentPlan,
     required this.isRecommended,
     required this.onChoose,
-    required this.currentTier,
   });
 
   final String planId;
@@ -355,7 +261,6 @@ class _PlanCard extends StatelessWidget {
   final bool isCurrentPlan;
   final bool isRecommended;
   final VoidCallback? onChoose;
-  final String currentTier;
 
   @override
   Widget build(BuildContext context) {

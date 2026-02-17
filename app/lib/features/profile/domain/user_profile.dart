@@ -33,8 +33,8 @@ class UserProfile {
     switch (subscriptionTier) {
       case 'premium':
         return 'Premium';
-      case 'premium_plus':
-        return 'Premium+';
+      case 'standard':
+        return 'Standard';
       default:
         return 'Free';
     }

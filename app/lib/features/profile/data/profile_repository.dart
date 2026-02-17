@@ -3,6 +3,9 @@ import 'package:dio/dio.dart';
 import '../domain/user_profile.dart';
 
 /// Repository for User Profile API operations.
+///
+/// Phase 0: Uses /users/me endpoints (GET, PATCH) as the primary interface.
+/// Also supports /profile (GET, PUT) as alias endpoints.
 class ProfileRepository {
   ProfileRepository({required Dio apiClient}) : _client = apiClient;
 
@@ -25,8 +28,8 @@ class ProfileRepository {
     return UserProfile.fromJson(data);
   }
 
-  /// DELETE /api/v1/users/me — soft-delete account.
+  /// POST /api/v1/auth/delete-account — delete account.
   Future<void> deleteAccount() async {
-    await _client.delete<Map<String, dynamic>>('/users/me');
+    await _client.post<Map<String, dynamic>>('/auth/delete-account');
   }
 }

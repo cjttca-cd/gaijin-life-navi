@@ -7,17 +7,10 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/reset_password_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
-import '../../features/banking/presentation/banking_guide_screen.dart';
-import '../../features/banking/presentation/banking_list_screen.dart';
-import '../../features/banking/presentation/banking_recommend_screen.dart';
 import '../../features/chat/presentation/chat_conversation_screen.dart';
 import '../../features/chat/presentation/chat_list_screen.dart';
-import '../../features/community/presentation/community_create_screen.dart';
-import '../../features/community/presentation/community_detail_screen.dart';
-import '../../features/community/presentation/community_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
-import '../../features/medical/presentation/emergency_screen.dart';
-import '../../features/medical/presentation/medical_guide_screen.dart';
+import '../../features/navigate/presentation/emergency_screen.dart';
 import '../../features/navigate/presentation/guide_detail_screen.dart';
 import '../../features/navigate/presentation/guide_list_screen.dart';
 import '../../features/navigate/presentation/navigate_screen.dart';
@@ -25,14 +18,7 @@ import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/profile/presentation/profile_edit_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/profile/presentation/settings_screen.dart';
-import '../../features/scanner/presentation/scanner_history_screen.dart';
-import '../../features/scanner/presentation/scanner_home_screen.dart';
-import '../../features/scanner/presentation/scanner_result_screen.dart';
 import '../../features/subscription/presentation/subscription_screen.dart';
-import '../../features/tracker/presentation/tracker_add_screen.dart';
-import '../../features/tracker/presentation/tracker_detail_screen.dart';
-import '../../features/visa/presentation/visa_detail_screen.dart';
-import '../../features/visa/presentation/visa_list_screen.dart';
 import '../navigation/main_shell.dart';
 import 'auth_provider.dart';
 import 'locale_provider.dart';
@@ -51,35 +37,10 @@ class AppRoutes {
   static const String home = '/home';
   static const String chat = '/chat';
   static const String chatConversation = '/chat/:id';
-  static const String tracker = '/tracker';
-  static const String trackerDetail = '/tracker/:id';
-  static const String trackerAdd = '/tracker/add';
   static const String navigate = '/navigate';
   static const String profile = '/profile';
   static const String profileEdit = '/profile/edit';
   static const String settings = '/settings';
-
-  // Banking Navigator
-  static const String banking = '/banking';
-  static const String bankingRecommend = '/banking/recommend';
-  static const String bankingGuide = '/banking/:bankId';
-
-  // Visa Navigator
-  static const String visa = '/visa';
-  static const String visaDetail = '/visa/:procedureId';
-
-  // Document Scanner
-  static const String scanner = '/scanner';
-  static const String scannerHistory = '/scanner/history';
-  static const String scannerResult = '/scanner/:id';
-
-  // Medical Guide
-  static const String medical = '/medical';
-
-  // Community Q&A
-  static const String community = '/community';
-  static const String communityNew = '/community/new';
-  static const String communityDetail = '/community/:id';
 
   // Subscription
   static const String subscription = '/subscription';
@@ -175,78 +136,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Banking Navigator (full-screen).
-      GoRoute(
-        path: AppRoutes.banking,
-        builder: (context, state) => const BankingListScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.bankingRecommend,
-        builder: (context, state) => const BankingRecommendScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.bankingGuide,
-        builder: (context, state) {
-          final bankId = state.pathParameters['bankId']!;
-          return BankingGuideScreen(bankId: bankId);
-        },
-      ),
-
-      // Visa Navigator (full-screen).
-      GoRoute(
-        path: AppRoutes.visa,
-        builder: (context, state) => const VisaListScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.visaDetail,
-        builder: (context, state) {
-          final procedureId = state.pathParameters['procedureId']!;
-          return VisaDetailScreen(procedureId: procedureId);
-        },
-      ),
-
-      // Tracker (full-screen).
-      GoRoute(
-        path: AppRoutes.trackerAdd,
-        builder: (context, state) => const TrackerAddScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.trackerDetail,
-        builder: (context, state) {
-          final id = state.pathParameters['id']!;
-          return TrackerDetailScreen(procedureId: id);
-        },
-      ),
-
-      // Scanner (full-screen).
-      GoRoute(
-        path: AppRoutes.scanner,
-        builder: (context, state) => const ScannerHomeScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.scannerHistory,
-        builder: (context, state) => const ScannerHistoryScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.scannerResult,
-        builder: (context, state) {
-          final id = state.pathParameters['id']!;
-          return ScannerResultScreen(scanId: id);
-        },
-      ),
-
-      // Medical Guide (full-screen).
-      GoRoute(
-        path: AppRoutes.medical,
-        builder: (context, state) => const MedicalGuideScreen(),
-      ),
-
-      // Emergency (SOS) — full-screen, no auth required.
-      GoRoute(
-        path: AppRoutes.emergency,
-        builder: (context, state) => const EmergencyScreen(),
-      ),
-
       // Navigator Guide List — domain guides.
       GoRoute(
         path: AppRoutes.guideList,
@@ -263,23 +152,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           final domain = state.pathParameters['domain']!;
           final slug = state.pathParameters['slug']!;
           return GuideDetailScreen(domain: domain, slug: slug);
-        },
-      ),
-
-      // Community (full-screen).
-      GoRoute(
-        path: AppRoutes.community,
-        builder: (context, state) => const CommunityListScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.communityNew,
-        builder: (context, state) => const CommunityCreateScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.communityDetail,
-        builder: (context, state) {
-          final postId = state.pathParameters['id']!;
-          return CommunityDetailScreen(postId: postId);
         },
       ),
 

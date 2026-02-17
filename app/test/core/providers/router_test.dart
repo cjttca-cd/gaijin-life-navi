@@ -13,7 +13,6 @@ void main() {
       expect(AppRoutes.home, '/home');
       expect(AppRoutes.chat, '/chat');
       expect(AppRoutes.chatConversation, '/chat/:id');
-      expect(AppRoutes.tracker, '/tracker');
       expect(AppRoutes.navigate, '/navigate');
       expect(AppRoutes.profile, '/profile');
     });
@@ -22,22 +21,22 @@ void main() {
       final protectedRoutes = [
         AppRoutes.home,
         AppRoutes.chat,
-        AppRoutes.tracker,
         AppRoutes.navigate,
         AppRoutes.profile,
       ];
-      expect(protectedRoutes.length, 5);
+      expect(protectedRoutes.length, 4);
     });
 
-    test('public routes include auth-related paths', () {
+    test('public routes include auth-related paths and emergency', () {
       final publicRoutes = [
         AppRoutes.root,
         AppRoutes.language,
         AppRoutes.login,
         AppRoutes.register,
         AppRoutes.resetPassword,
+        AppRoutes.emergency,
       ];
-      expect(publicRoutes.length, 5);
+      expect(publicRoutes.length, 6);
       expect(publicRoutes.contains(AppRoutes.home), isFalse);
     });
 
@@ -49,63 +48,17 @@ void main() {
       expect(AppRoutes.chatConversation, contains(':id'));
     });
 
-    // M2 routes
-    test('Banking Navigator routes are defined', () {
-      expect(AppRoutes.banking, '/banking');
-      expect(AppRoutes.bankingRecommend, '/banking/recommend');
-      expect(AppRoutes.bankingGuide, '/banking/:bankId');
-    });
-
-    test('Visa Navigator routes are defined', () {
-      expect(AppRoutes.visa, '/visa');
-      expect(AppRoutes.visaDetail, '/visa/:procedureId');
-    });
-
-    test('Admin Tracker routes are defined', () {
-      expect(AppRoutes.tracker, '/tracker');
-      expect(AppRoutes.trackerDetail, '/tracker/:id');
-      expect(AppRoutes.trackerAdd, '/tracker/add');
-    });
-
-    test('Document Scanner routes are defined', () {
-      expect(AppRoutes.scanner, '/scanner');
-      expect(AppRoutes.scannerHistory, '/scanner/history');
-      expect(AppRoutes.scannerResult, '/scanner/:id');
-    });
-
-    test('Medical Guide route is defined', () {
-      expect(AppRoutes.medical, '/medical');
-    });
-
-    test('banking guide route has :bankId parameter', () {
-      expect(AppRoutes.bankingGuide, contains(':bankId'));
-    });
-
-    test('visa detail route has :procedureId parameter', () {
-      expect(AppRoutes.visaDetail, contains(':procedureId'));
-    });
-
-    test('tracker detail route has :id parameter', () {
-      expect(AppRoutes.trackerDetail, contains(':id'));
-    });
-
-    test('scanner result route has :id parameter', () {
-      expect(AppRoutes.scannerResult, contains(':id'));
-    });
-
-    // M3 routes
-    test('Community Q&A routes are defined', () {
-      expect(AppRoutes.community, '/community');
-      expect(AppRoutes.communityNew, '/community/new');
-      expect(AppRoutes.communityDetail, '/community/:id');
-    });
-
-    test('community detail route has :id parameter', () {
-      expect(AppRoutes.communityDetail, contains(':id'));
-    });
-
     test('Subscription route is defined', () {
       expect(AppRoutes.subscription, '/subscription');
+    });
+
+    test('Emergency route is defined', () {
+      expect(AppRoutes.emergency, '/emergency');
+    });
+
+    test('Navigator guide routes are defined', () {
+      expect(AppRoutes.guideList, '/navigate/:domain');
+      expect(AppRoutes.guideDetail, '/navigate/:domain/:slug');
     });
   });
 }

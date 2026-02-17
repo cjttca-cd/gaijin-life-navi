@@ -11,7 +11,9 @@ import 'widgets/message_bubble.dart';
 import 'widgets/typing_indicator.dart';
 import 'widgets/usage_counter.dart';
 
-/// Chat conversation screen (S08) — handoff-chat.md spec.
+/// Chat conversation screen (S08) — Phase 0 synchronous pattern.
+///
+/// Send → Typing Indicator → Response display.
 class ChatConversationScreen extends ConsumerStatefulWidget {
   const ChatConversationScreen({super.key, required this.sessionId});
 
@@ -53,7 +55,7 @@ class _ChatConversationScreenState
     if (text.isEmpty) return;
 
     final usage = ref.read(chatUsageProvider);
-    if (usage != null && usage.chatRemaining <= 0 && usage.chatLimit > 0) {
+    if (usage != null && !usage.isUnlimited && usage.remaining <= 0) {
       _showLimitReachedSnackbar();
       return;
     }
@@ -61,10 +63,16 @@ class _ChatConversationScreenState
     _textController.clear();
     setState(() {}); // Update send button state.
 
-    final controller = ref.read(chatStreamControllerProvider);
-    await controller.sendMessage(widget.sessionId, text);
-
-    ref.read(chatSessionsProvider.notifier).refresh();
+    try {
+      final controller = ref.read(chatSendControllerProvider);
+      await controller.sendMessage(text);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context).genericError)),
+        );
+      }
+    }
   }
 
   void _showLimitReachedSnackbar() {
@@ -82,13 +90,13 @@ class _ChatConversationScreenState
 
   @override
   Widget build(BuildContext context) {
-    final messagesAsync = ref.watch(chatMessagesProvider(widget.sessionId));
-    final isStreaming = ref.watch(isChatStreamingProvider);
+    final messages = ref.watch(chatMessagesProvider);
+    final isLoading = ref.watch(isChatLoadingProvider);
     final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
-    ref.listen(chatMessagesProvider(widget.sessionId), (_, __) {
+    ref.listen(chatMessagesProvider, (_, __) {
       _scrollToBottom();
     });
 
@@ -103,51 +111,32 @@ class _ChatConversationScreenState
         children: [
           // Messages list.
           Expanded(
-            child: messagesAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (_, __) => Center(child: Text(l10n.genericError)),
-              data: (messages) {
-                if (messages.isEmpty && !isStreaming) {
-                  return _buildEmptyState(l10n, cs, tt);
-                }
+            child:
+                messages.isEmpty && !isLoading
+                    ? _buildEmptyState(l10n, cs, tt)
+                    : ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      itemCount: messages.length + (isLoading ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == messages.length && isLoading) {
+                          return const TypingIndicator();
+                        }
 
-                return ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  itemCount: messages.length + (isStreaming ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == messages.length && isStreaming) {
-                      // Show typing indicator if streaming and last message is user or content is empty.
-                      final lastMsg =
-                          messages.isNotEmpty ? messages.last : null;
-                      if (lastMsg == null ||
-                          lastMsg.isUser ||
-                          lastMsg.content.isEmpty) {
-                        return const TypingIndicator();
-                      }
-                      return const SizedBox.shrink();
-                    }
+                        final message = messages[index];
 
-                    final message = messages[index];
-                    final isLastAssistant =
-                        message.isAssistant &&
-                        index == messages.length - 1 &&
-                        isStreaming;
+                        // Determine if we should show avatar (first in group).
+                        final showAvatar =
+                            index == 0 ||
+                            messages[index - 1].isUser != message.isUser;
 
-                    // Determine if we should show avatar (first in group).
-                    final showAvatar =
-                        index == 0 ||
-                        messages[index - 1].isUser != message.isUser;
-
-                    return MessageBubble(
-                      message: message,
-                      isStreaming: isLastAssistant,
-                      showAvatar: showAvatar && message.isAssistant,
-                    );
-                  },
-                );
-              },
-            ),
+                        return MessageBubble(
+                          message: message,
+                          isStreaming: false,
+                          showAvatar: showAvatar && message.isAssistant,
+                        );
+                      },
+                    ),
           ),
 
           // Input bar — §6.3.4.
@@ -205,14 +194,13 @@ class _ChatConversationScreenState
                         borderSide: BorderSide.none,
                       ),
                     ),
-                    enabled: !isStreaming,
+                    enabled: !isLoading,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.spaceSm),
                 // Send button.
                 _SendButton(
-                  enabled:
-                      !isStreaming && _textController.text.trim().isNotEmpty,
+                  enabled: !isLoading && _textController.text.trim().isNotEmpty,
                   onPressed: _sendMessage,
                 ),
               ],

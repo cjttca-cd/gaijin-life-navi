@@ -1,231 +1,120 @@
-import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/network/ai_api_client.dart';
+import '../../../../core/network/api_client.dart';
 import '../../data/chat_repository.dart';
 import '../../domain/chat_message.dart';
-import '../../domain/chat_session.dart';
-import '../../domain/sse_event.dart';
+import '../../domain/chat_response.dart';
 
 // ─── DI ──────────────────────────────────────────────────────
 
-/// Dio instance for the AI Service.
-final aiClientProvider = Provider<Dio>((ref) {
-  return createAiApiClient();
+/// Dio instance for the API Gateway (port 8000).
+final apiClientProvider = Provider<Dio>((ref) {
+  return createApiClient();
 });
 
 /// Chat repository provider.
 final chatRepositoryProvider = Provider<ChatRepository>((ref) {
-  return ChatRepository(aiClient: ref.watch(aiClientProvider));
+  return ChatRepository(apiClient: ref.watch(apiClientProvider));
 });
 
-// ─── Session list ────────────────────────────────────────────
+// ─── Messages (local state) ──────────────────────────────────
 
-/// Provider for chat session list.
-final chatSessionsProvider =
-    AsyncNotifierProvider<ChatSessionsNotifier, List<ChatSession>>(
-      ChatSessionsNotifier.new,
+/// Provider for the conversation messages (local UI state).
+final chatMessagesProvider =
+    NotifierProvider<ChatMessagesNotifier, List<ChatMessage>>(
+      ChatMessagesNotifier.new,
     );
 
-class ChatSessionsNotifier extends AsyncNotifier<List<ChatSession>> {
+class ChatMessagesNotifier extends Notifier<List<ChatMessage>> {
   @override
-  Future<List<ChatSession>> build() async {
-    final repo = ref.read(chatRepositoryProvider);
-    return repo.listSessions();
-  }
+  List<ChatMessage> build() => [];
 
-  Future<ChatSession> createSession() async {
-    final repo = ref.read(chatRepositoryProvider);
-    final session = await repo.createSession();
-    // Prepend new session to the list.
-    final current = state.valueOrNull ?? [];
-    state = AsyncData([session, ...current]);
-    return session;
-  }
-
-  Future<void> deleteSession(String sessionId) async {
-    final repo = ref.read(chatRepositoryProvider);
-    await repo.deleteSession(sessionId);
-    final current = state.valueOrNull ?? [];
-    state = AsyncData(current.where((s) => s.id != sessionId).toList());
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final repo = ref.read(chatRepositoryProvider);
-      return repo.listSessions();
-    });
-  }
-
-  /// Update a session in the list (e.g., when title changes).
-  void updateSession(ChatSession updated) {
-    final current = state.valueOrNull ?? [];
-    state = AsyncData(
-      current.map((s) => s.id == updated.id ? updated : s).toList(),
-    );
-  }
-}
-
-// ─── Messages for a session ──────────────────────────────────
-
-/// Provider for messages within a specific session.
-final chatMessagesProvider = AsyncNotifierProvider.family<
-  ChatMessagesNotifier,
-  List<ChatMessage>,
-  String
->(ChatMessagesNotifier.new);
-
-class ChatMessagesNotifier
-    extends FamilyAsyncNotifier<List<ChatMessage>, String> {
-  @override
-  Future<List<ChatMessage>> build(String arg) async {
-    final repo = ref.read(chatRepositoryProvider);
-    return repo.getMessages(arg);
-  }
-
-  /// Add a user message locally (optimistic).
+  /// Add a user message.
   void addUserMessage(ChatMessage message) {
-    final current = state.valueOrNull ?? [];
-    state = AsyncData([...current, message]);
+    state = [...state, message];
   }
 
-  /// Add or update an assistant message.
-  void upsertAssistantMessage(ChatMessage message) {
-    final current = state.valueOrNull ?? [];
-    final index = current.indexWhere((m) => m.id == message.id);
-    if (index >= 0) {
-      final updated = List<ChatMessage>.from(current);
-      updated[index] = message;
-      state = AsyncData(updated);
-    } else {
-      state = AsyncData([...current, message]);
-    }
+  /// Add an assistant message.
+  void addAssistantMessage(ChatMessage message) {
+    state = [...state, message];
+  }
+
+  /// Clear all messages (new conversation).
+  void clear() {
+    state = [];
   }
 }
 
-// ─── Chat usage (remaining daily count) ──────────────────────
+// ─── Chat usage (remaining count) ────────────────────────────
 
 /// Holds the current chat usage info.
-final chatUsageProvider = StateProvider<ChatUsage?>((ref) => null);
+final chatUsageProvider = StateProvider<ChatUsageInfo?>((ref) => null);
 
-// ─── Streaming state ─────────────────────────────────────────
+// ─── Loading state ───────────────────────────────────────────
 
-/// Whether the chat is currently streaming a response.
-final isChatStreamingProvider = StateProvider<bool>((ref) => false);
+/// Whether the chat is currently waiting for a response.
+final isChatLoadingProvider = StateProvider<bool>((ref) => false);
 
-/// Controller that handles sending a message and processing SSE events.
-class ChatStreamController {
-  ChatStreamController(this._ref);
+// ─── Send message controller ─────────────────────────────────
+
+/// Controller that handles sending a message and processing the response.
+class ChatSendController {
+  ChatSendController(this._ref);
 
   final Ref _ref;
-  StreamSubscription<SseEvent>? _subscription;
 
-  /// Send a message and process the SSE stream.
-  Future<void> sendMessage(String sessionId, String content) async {
+  /// Send a message and process the synchronous response.
+  Future<void> sendMessage(String content, {String? domain}) async {
     final repo = _ref.read(chatRepositoryProvider);
-    final messagesNotifier = _ref.read(
-      chatMessagesProvider(sessionId).notifier,
-    );
+    final messagesNotifier = _ref.read(chatMessagesProvider.notifier);
 
     // Add user message optimistically.
     final userMessage = ChatMessage(
-      id: 'temp_${DateTime.now().millisecondsSinceEpoch}',
-      sessionId: sessionId,
+      id: 'user_${DateTime.now().millisecondsSinceEpoch}',
       role: 'user',
       content: content,
       createdAt: DateTime.now(),
     );
     messagesNotifier.addUserMessage(userMessage);
 
-    // Start streaming.
-    _ref.read(isChatStreamingProvider.notifier).state = true;
+    // Start loading.
+    _ref.read(isChatLoadingProvider.notifier).state = true;
 
-    String assistantId = '';
-    String assistantContent = '';
+    try {
+      final response = await repo.sendMessage(message: content, domain: domain);
 
-    final stream = repo.sendMessage(sessionId, content);
+      // Add assistant message.
+      final assistantMessage = ChatMessage(
+        id: 'assistant_${DateTime.now().millisecondsSinceEpoch}',
+        role: 'assistant',
+        content: response.reply,
+        sources: response.sources,
+        domain: response.domain,
+        usage: response.usage,
+        createdAt: DateTime.now(),
+      );
+      messagesNotifier.addAssistantMessage(assistantMessage);
 
-    _subscription = stream.listen(
-      (event) {
-        switch (event) {
-          case MessageStartEvent(:final messageId):
-            assistantId = messageId;
-            assistantContent = '';
-            final msg = ChatMessage(
-              id: assistantId,
-              sessionId: sessionId,
-              role: 'assistant',
-              content: '',
-              createdAt: DateTime.now(),
-            );
-            messagesNotifier.upsertAssistantMessage(msg);
-
-          case ContentDeltaEvent(:final delta):
-            assistantContent += delta;
-            final msg = ChatMessage(
-              id: assistantId,
-              sessionId: sessionId,
-              role: 'assistant',
-              content: assistantContent,
-              createdAt: DateTime.now(),
-            );
-            messagesNotifier.upsertAssistantMessage(msg);
-
-          case MessageEndEvent(
-            :final sources,
-            :final disclaimer,
-            :final tokensUsed,
-            :final usage,
-          ):
-            // Finalize the message.
-            final sourceCitations =
-                sources?.map((s) => SourceCitation.fromJson(s)).toList();
-            final msg = ChatMessage(
-              id: assistantId,
-              sessionId: sessionId,
-              role: 'assistant',
-              content: assistantContent,
-              sources: sourceCitations,
-              disclaimer: disclaimer,
-              tokensUsed: tokensUsed,
-              createdAt: DateTime.now(),
-            );
-            messagesNotifier.upsertAssistantMessage(msg);
-
-            // Update usage.
-            if (usage != null) {
-              _ref.read(chatUsageProvider.notifier).state = ChatUsage.fromJson(
-                usage,
-              );
-            }
-
-            _ref.read(isChatStreamingProvider.notifier).state = false;
-
-          case SseErrorEvent():
-            _ref.read(isChatStreamingProvider.notifier).state = false;
-        }
-      },
-      onError: (_) {
-        _ref.read(isChatStreamingProvider.notifier).state = false;
-      },
-      onDone: () {
-        _ref.read(isChatStreamingProvider.notifier).state = false;
-      },
-    );
-  }
-
-  void cancel() {
-    _subscription?.cancel();
-    _ref.read(isChatStreamingProvider.notifier).state = false;
+      // Update usage.
+      _ref.read(chatUsageProvider.notifier).state = response.usage;
+    } catch (error) {
+      // On error, add a failure message so user sees something.
+      final errorMessage = ChatMessage(
+        id: 'error_${DateTime.now().millisecondsSinceEpoch}',
+        role: 'assistant',
+        content: '', // Empty content signals error in UI.
+        createdAt: DateTime.now(),
+      );
+      messagesNotifier.addAssistantMessage(errorMessage);
+      rethrow;
+    } finally {
+      _ref.read(isChatLoadingProvider.notifier).state = false;
+    }
   }
 }
 
-/// Provider for the stream controller.
-final chatStreamControllerProvider = Provider<ChatStreamController>((ref) {
-  final controller = ChatStreamController(ref);
-  ref.onDispose(() => controller.cancel());
-  return controller;
+/// Provider for the send controller.
+final chatSendControllerProvider = Provider<ChatSendController>((ref) {
+  return ChatSendController(ref);
 });

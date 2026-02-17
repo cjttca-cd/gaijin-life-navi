@@ -7,11 +7,6 @@ void main() {
       expect(AppConfig.apiBaseUrl, isNotEmpty);
     });
 
-    test('has AI service base URL', () {
-      expect(AppConfig.aiServiceBaseUrl, isNotEmpty);
-      expect(AppConfig.aiServiceBaseUrl, contains('8001'));
-    });
-
     test('has API version prefix', () {
       expect(AppConfig.apiVersion, '/api/v1');
     });

@@ -80,7 +80,8 @@ class HomeScreen extends ConsumerWidget {
                       iconColor: AppColors.bankingIcon,
                       title: l10n.homeQaBankingTitle,
                       subtitle: l10n.homeQaBankingSubtitle,
-                      onTap: () => context.push(AppRoutes.banking),
+                      onTap:
+                          () => context.push('${AppRoutes.navigate}/banking'),
                     ),
                     _QuickActionCard(
                       icon: Icons.badge,
@@ -88,7 +89,7 @@ class HomeScreen extends ConsumerWidget {
                       iconColor: AppColors.visaIcon,
                       title: l10n.homeQaVisaTitle,
                       subtitle: l10n.homeQaVisaSubtitle,
-                      onTap: () => context.push(AppRoutes.visa),
+                      onTap: () => context.push('${AppRoutes.navigate}/visa'),
                     ),
                     _QuickActionCard(
                       icon: Icons.local_hospital,
@@ -96,7 +97,7 @@ class HomeScreen extends ConsumerWidget {
                       iconColor: AppColors.medicalIcon,
                       title: l10n.homeQaMedicalTitle,
                       subtitle: l10n.homeQaMedicalSubtitle,
-                      onTap: () => context.push(AppRoutes.medical),
+                      onTap: () => context.push(AppRoutes.emergency),
                     ),
                   ],
                 ),
@@ -119,7 +120,7 @@ class HomeScreen extends ConsumerWidget {
                   icon: Icons.emergency_outlined,
                   label: l10n.homeExploreEmergency,
                   iconColor: AppColors.error,
-                  onTap: () => context.push(AppRoutes.medical),
+                  onTap: () => context.push(AppRoutes.emergency),
                 ),
 
                 const SizedBox(height: AppSpacing.space2xl),
@@ -148,20 +149,10 @@ class HomeScreen extends ConsumerWidget {
     return l10n.homeGreetingDefault(name);
   }
 
-  Future<void> _startNewChat(BuildContext context, WidgetRef ref) async {
-    try {
-      final session =
-          await ref.read(chatSessionsProvider.notifier).createSession();
-      if (context.mounted) {
-        context.push('${AppRoutes.chat}/${session.id}');
-      }
-    } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).genericError)),
-        );
-      }
-    }
+  void _startNewChat(BuildContext context, WidgetRef ref) {
+    // Clear messages and navigate to conversation.
+    ref.read(chatMessagesProvider.notifier).clear();
+    context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
   }
 }
 

@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_spacing.dart';
-import 'providers/medical_providers.dart';
+import 'providers/navigator_providers.dart';
 
 /// S12: Emergency Guide — accessible without authentication.
 ///
@@ -19,7 +19,7 @@ class EmergencyScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final guideAsync = ref.watch(emergencyGuideProvider);
+    final emergencyAsync = ref.watch(emergencyDataProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -242,7 +242,7 @@ class EmergencyScreen extends ConsumerWidget {
             ),
 
             // API-loaded additional content (if available)
-            guideAsync.when(
+            emergencyAsync.when(
               loading: () => const SizedBox.shrink(),
               error:
                   (_, __) => Padding(

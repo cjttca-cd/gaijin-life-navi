@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_client.dart';
+import '../../data/emergency_repository.dart';
 import '../../data/navigator_repository.dart';
+import '../../domain/emergency_data.dart';
 import '../../domain/navigator_domain.dart';
 
 // ─── DI ──────────────────────────────────────────────────────
@@ -13,6 +15,10 @@ final _navigatorDioProvider = Provider<Dio>((ref) {
 
 final navigatorRepositoryProvider = Provider<NavigatorRepository>((ref) {
   return NavigatorRepository(apiClient: ref.watch(_navigatorDioProvider));
+});
+
+final emergencyRepositoryProvider = Provider<EmergencyRepository>((ref) {
+  return EmergencyRepository(apiClient: ref.watch(_navigatorDioProvider));
 });
 
 // ─── Data Providers ──────────────────────────────────────────
@@ -40,3 +46,9 @@ final guideDetailProvider =
         return repo.getGuideDetail(params.domain, params.slug);
       },
     );
+
+/// Emergency data from GET /api/v1/emergency.
+final emergencyDataProvider = FutureProvider<EmergencyData>((ref) async {
+  final repo = ref.watch(emergencyRepositoryProvider);
+  return repo.getEmergency();
+});

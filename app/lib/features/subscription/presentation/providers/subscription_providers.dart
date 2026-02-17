@@ -19,24 +19,16 @@ final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) {
 
 // ─── Plans ───────────────────────────────────────────────────
 
-/// Available subscription plans.
-final subscriptionPlansProvider = FutureProvider<List<SubscriptionPlan>>((
-  ref,
-) async {
+/// Available plans data (plans + charge packs).
+final plansDataProvider = FutureProvider<PlansData>((ref) async {
   final repo = ref.watch(subscriptionRepositoryProvider);
   return repo.getPlans();
 });
 
-// ─── My Subscription ─────────────────────────────────────────
-
-/// Current user's subscription status.
-final mySubscriptionProvider = FutureProvider<UserSubscription>((ref) async {
-  final repo = ref.watch(subscriptionRepositoryProvider);
-  return repo.getMySubscription();
-});
-
-/// Convenience: whether the user is on a paid plan.
-final isPremiumProvider = Provider<bool>((ref) {
-  final sub = ref.watch(mySubscriptionProvider).valueOrNull;
-  return sub != null && sub.isPremium;
+/// Available subscription plans (convenience accessor).
+final subscriptionPlansProvider = FutureProvider<List<SubscriptionPlan>>((
+  ref,
+) async {
+  final data = await ref.watch(plansDataProvider.future);
+  return data.plans;
 });

@@ -170,23 +170,8 @@ class _AiBubble extends StatelessWidget {
                     else if (isStreaming)
                       Text('...', style: tt.bodyLarge),
 
-                    // Streaming indicator.
-                    if (isStreaming && message.content.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: cs.primary,
-                          ),
-                        ),
-                      ),
-
                     // Sources section.
-                    if (!isStreaming &&
-                        message.sources != null &&
+                    if (message.sources != null &&
                         message.sources!.isNotEmpty) ...[
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 8),
@@ -196,16 +181,15 @@ class _AiBubble extends StatelessWidget {
                     ],
 
                     // Timestamp.
-                    if (!isStreaming)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          _formatTime(message.createdAt),
-                          style: tt.labelSmall?.copyWith(
-                            color: cs.onSurfaceVariant,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        _formatTime(message.createdAt),
+                        style: tt.labelSmall?.copyWith(
+                          color: cs.onSurfaceVariant,
                         ),
                       ),
+                    ),
                   ],
                 ),
               ),
@@ -213,7 +197,7 @@ class _AiBubble extends StatelessWidget {
           ),
 
           // Disclaimer — outside bubble.
-          if (!isStreaming && message.disclaimer != null)
+          if (message.disclaimer != null)
             Padding(
               padding: const EdgeInsets.only(
                 top: AppSpacing.spaceXs,
@@ -221,7 +205,7 @@ class _AiBubble extends StatelessWidget {
               ),
               child: DisclaimerBanner(text: message.disclaimer!),
             )
-          else if (!isStreaming && message.isAssistant)
+          else if (message.isAssistant && message.content.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(
                 top: AppSpacing.spaceXs,

@@ -5,126 +5,114 @@ void main() {
   group('SubscriptionPlan', () {
     test('fromJson creates valid instance', () {
       final json = {
-        'id': 'premium_monthly',
-        'name': 'Premium',
-        'price': 500,
-        'currency': 'jpy',
+        'id': 'standard',
+        'name': 'Standard',
+        'price': 720,
+        'currency': 'JPY',
         'interval': 'month',
-        'features': [
-          'Unlimited AI chat',
-          '30 document scans/month',
-          'Community Q&A posting',
-        ],
+        'features': {
+          'chat_limit': '300/month',
+          'tracker_limit': null,
+          'ads': false,
+        },
       };
 
       final plan = SubscriptionPlan.fromJson(json);
 
-      expect(plan.id, 'premium_monthly');
-      expect(plan.name, 'Premium');
-      expect(plan.price, 500);
-      expect(plan.currency, 'jpy');
+      expect(plan.id, 'standard');
+      expect(plan.name, 'Standard');
+      expect(plan.price, 720);
+      expect(plan.currency, 'JPY');
       expect(plan.interval, 'month');
-      expect(plan.features, hasLength(3));
-      expect(plan.features.first, 'Unlimited AI chat');
+      expect(plan.features, isNotEmpty);
+      expect(plan.isFree, isFalse);
+    });
+
+    test('fromJson handles free plan (null interval)', () {
+      final json = {
+        'id': 'free',
+        'name': 'Free',
+        'price': 0,
+        'currency': 'JPY',
+        'interval': null,
+        'features': {'chat_limit': '5/day', 'tracker_limit': 3, 'ads': true},
+      };
+
+      final plan = SubscriptionPlan.fromJson(json);
+
+      expect(plan.id, 'free');
+      expect(plan.price, 0);
+      expect(plan.interval, isNull);
+      expect(plan.isFree, isTrue);
     });
 
     test('fromJson handles missing optional fields', () {
-      final json = {
-        'id': 'basic',
-      };
+      final json = {'id': 'basic'};
 
       final plan = SubscriptionPlan.fromJson(json);
 
       expect(plan.id, 'basic');
       expect(plan.name, '');
       expect(plan.price, 0);
-      expect(plan.currency, 'jpy');
+      expect(plan.currency, 'JPY');
       expect(plan.features, isEmpty);
     });
   });
 
-  group('UserSubscription', () {
-    test('fromJson creates free user', () {
+  group('ChargePack', () {
+    test('fromJson creates valid instance', () {
+      final json = {'chats': 100, 'price': 360, 'unit_price': 3.6};
+
+      final pack = ChargePack.fromJson(json);
+
+      expect(pack.chats, 100);
+      expect(pack.price, 360);
+      expect(pack.unitPrice, 3.6);
+    });
+  });
+
+  group('PlansData', () {
+    test('fromJson creates valid instance', () {
       final json = {
-        'tier': 'free',
-        'status': null,
-        'current_period_end': null,
-        'cancel_at_period_end': false,
+        'plans': [
+          {
+            'id': 'free',
+            'name': 'Free',
+            'price': 0,
+            'currency': 'JPY',
+            'interval': null,
+            'features': {'chat_limit': '5/day'},
+          },
+          {
+            'id': 'standard',
+            'name': 'Standard',
+            'price': 720,
+            'currency': 'JPY',
+            'interval': 'month',
+            'features': {'chat_limit': '300/month'},
+          },
+        ],
+        'charge_packs': [
+          {'chats': 100, 'price': 360, 'unit_price': 3.6},
+          {'chats': 50, 'price': 180, 'unit_price': 3.6},
+        ],
       };
 
-      final sub = UserSubscription.fromJson(json);
+      final data = PlansData.fromJson(json);
 
-      expect(sub.tier, 'free');
-      expect(sub.isFree, isTrue);
-      expect(sub.isPremium, isFalse);
-      expect(sub.isPremiumPlus, isFalse);
-      expect(sub.cancelAtPeriodEnd, isFalse);
+      expect(data.plans.length, 2);
+      expect(data.chargePacks.length, 2);
+      expect(data.plans.first.id, 'free');
+      expect(data.chargePacks.first.chats, 100);
     });
 
-    test('fromJson creates premium user', () {
-      final json = {
-        'id': 'sub-1',
-        'tier': 'premium',
-        'status': 'active',
-        'stripe_customer_id': 'cus_123',
-        'stripe_subscription_id': 'sub_123',
-        'current_period_end': '2026-03-16T10:00:00Z',
-        'cancel_at_period_end': false,
-        'created_at': '2026-02-16T10:00:00Z',
-      };
-
-      final sub = UserSubscription.fromJson(json);
-
-      expect(sub.id, 'sub-1');
-      expect(sub.tier, 'premium');
-      expect(sub.isFree, isFalse);
-      expect(sub.isPremium, isTrue);
-      expect(sub.isPremiumPlus, isFalse);
-      expect(sub.isActive, isTrue);
-      expect(sub.isCancelling, isFalse);
-      expect(sub.currentPeriodEnd, isNotNull);
-      expect(sub.currentPeriodEnd!.month, 3);
-    });
-
-    test('fromJson creates premium_plus user', () {
-      final json = {
-        'id': 'sub-2',
-        'tier': 'premium_plus',
-        'status': 'active',
-        'cancel_at_period_end': false,
-      };
-
-      final sub = UserSubscription.fromJson(json);
-
-      expect(sub.isPremium, isTrue);
-      expect(sub.isPremiumPlus, isTrue);
-    });
-
-    test('isCancelling is true when cancel_at_period_end and active', () {
-      final json = {
-        'tier': 'premium',
-        'status': 'active',
-        'cancel_at_period_end': true,
-        'cancelled_at': '2026-02-20T10:00:00Z',
-        'current_period_end': '2026-03-16T10:00:00Z',
-      };
-
-      final sub = UserSubscription.fromJson(json);
-
-      expect(sub.isActive, isTrue);
-      expect(sub.isCancelling, isTrue);
-      expect(sub.cancelledAt, isNotNull);
-    });
-
-    test('fromJson handles missing fields gracefully', () {
+    test('fromJson handles empty data', () {
       final json = <String, dynamic>{};
 
-      final sub = UserSubscription.fromJson(json);
+      final data = PlansData.fromJson(json);
 
-      expect(sub.tier, 'free');
-      expect(sub.isFree, isTrue);
-      expect(sub.status, isNull);
-      expect(sub.cancelAtPeriodEnd, isFalse);
+      expect(data.plans, isEmpty);
+      expect(data.chargePacks, isEmpty);
     });
   });
 }

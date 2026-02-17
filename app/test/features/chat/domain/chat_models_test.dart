@@ -1,132 +1,136 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gaijin_life_navi/features/chat/domain/chat_message.dart';
-import 'package:gaijin_life_navi/features/chat/domain/chat_session.dart';
+import 'package:gaijin_life_navi/features/chat/domain/chat_response.dart';
 
 void main() {
-  group('ChatSession', () {
+  group('ChatResponse', () {
+    test('fromJson creates valid instance with all fields', () {
+      final json = {
+        'reply': 'Here is how to open a bank account...',
+        'domain': 'banking',
+        'sources': [
+          {'title': 'Bank Guide', 'url': 'https://example.com/bank'},
+        ],
+        'actions': [
+          {'type': 'checklist', 'items': 'passport, residence card'},
+        ],
+        'tracker_items': [
+          {
+            'type': 'deadline',
+            'title': 'Bank appointment',
+            'date': '2026-03-01',
+          },
+        ],
+        'usage': {'used': 3, 'limit': 5, 'tier': 'free'},
+      };
+
+      final response = ChatResponse.fromJson(json);
+
+      expect(response.reply, contains('bank account'));
+      expect(response.domain, 'banking');
+      expect(response.sources.length, 1);
+      expect(response.sources.first.title, 'Bank Guide');
+      expect(response.actions.length, 1);
+      expect(response.actions.first.type, 'checklist');
+      expect(response.trackerItems.length, 1);
+      expect(response.trackerItems.first.title, 'Bank appointment');
+      expect(response.usage.used, 3);
+      expect(response.usage.limit, 5);
+      expect(response.usage.tier, 'free');
+    });
+
+    test('fromJson handles missing optional fields', () {
+      final json = {
+        'reply': 'Hello',
+        'domain': 'concierge',
+        'usage': {'used': 1, 'limit': 5, 'tier': 'free'},
+      };
+
+      final response = ChatResponse.fromJson(json);
+
+      expect(response.reply, 'Hello');
+      expect(response.domain, 'concierge');
+      expect(response.sources, isEmpty);
+      expect(response.actions, isEmpty);
+      expect(response.trackerItems, isEmpty);
+    });
+
+    test('fromJson handles completely empty json', () {
+      final json = <String, dynamic>{};
+
+      final response = ChatResponse.fromJson(json);
+
+      expect(response.reply, '');
+      expect(response.domain, 'concierge');
+      expect(response.sources, isEmpty);
+      expect(response.usage.used, 0);
+    });
+  });
+
+  group('ChatSource', () {
     test('fromJson creates valid instance', () {
-      final json = {
-        'id': 'session-1',
-        'user_id': 'user-1',
-        'title': 'Banking question',
-        'category': 'banking',
-        'language': 'en',
-        'message_count': 5,
-        'created_at': '2026-01-01T00:00:00Z',
-        'updated_at': '2026-01-01T01:00:00Z',
-      };
+      final json = {'title': 'Immigration Guide', 'url': 'https://example.com'};
 
-      final session = ChatSession.fromJson(json);
+      final source = ChatSource.fromJson(json);
+      expect(source.title, 'Immigration Guide');
+      expect(source.url, 'https://example.com');
+    });
+  });
 
-      expect(session.id, 'session-1');
-      expect(session.userId, 'user-1');
-      expect(session.title, 'Banking question');
-      expect(session.category, 'banking');
-      expect(session.language, 'en');
-      expect(session.messageCount, 5);
+  group('ChatUsageInfo', () {
+    test('fromJson creates valid instance', () {
+      final json = {'used': 3, 'limit': 5, 'tier': 'free'};
+
+      final usage = ChatUsageInfo.fromJson(json);
+      expect(usage.used, 3);
+      expect(usage.limit, 5);
+      expect(usage.tier, 'free');
+      expect(usage.remaining, 2);
+      expect(usage.isUnlimited, isFalse);
     });
 
-    test('fromJson handles null title', () {
-      final json = {
-        'id': 'session-1',
-        'user_id': 'user-1',
-        'title': null,
-        'category': 'general',
-        'language': 'en',
-        'message_count': 0,
-        'created_at': '2026-01-01T00:00:00Z',
-        'updated_at': '2026-01-01T00:00:00Z',
-      };
+    test('isUnlimited when limit is 0', () {
+      final json = {'used': 100, 'limit': 0, 'tier': 'premium'};
 
-      final session = ChatSession.fromJson(json);
-      expect(session.title, isNull);
-    });
-
-    test('fromJson uses defaults for missing fields', () {
-      final json = {
-        'id': 'session-1',
-        'user_id': 'user-1',
-        'created_at': '2026-01-01T00:00:00Z',
-        'updated_at': '2026-01-01T00:00:00Z',
-      };
-
-      final session = ChatSession.fromJson(json);
-      expect(session.category, 'general');
-      expect(session.language, 'en');
-      expect(session.messageCount, 0);
-    });
-
-    test('copyWith creates modified copy', () {
-      final session = ChatSession(
-        id: 's1',
-        userId: 'u1',
-        title: 'Old title',
-        category: 'general',
-        language: 'en',
-        messageCount: 0,
-        createdAt: DateTime(2026),
-        updatedAt: DateTime(2026),
-      );
-
-      final updated = session.copyWith(title: 'New title', messageCount: 3);
-      expect(updated.title, 'New title');
-      expect(updated.messageCount, 3);
-      expect(updated.id, 's1'); // unchanged
+      final usage = ChatUsageInfo.fromJson(json);
+      expect(usage.isUnlimited, isTrue);
+      expect(usage.remaining, -1);
     });
   });
 
   group('ChatMessage', () {
-    test('fromJson creates valid instance', () {
-      final json = {
-        'id': 'msg-1',
-        'session_id': 'session-1',
-        'role': 'user',
-        'content': 'How do I open a bank account?',
-        'created_at': '2026-01-01T00:00:00Z',
-      };
+    test('creates user message', () {
+      final msg = ChatMessage(
+        id: 'user_1',
+        role: 'user',
+        content: 'How do I open a bank account?',
+        createdAt: DateTime(2026),
+      );
 
-      final message = ChatMessage.fromJson(json);
-
-      expect(message.id, 'msg-1');
-      expect(message.sessionId, 'session-1');
-      expect(message.role, 'user');
-      expect(message.content, 'How do I open a bank account?');
-      expect(message.isUser, isTrue);
-      expect(message.isAssistant, isFalse);
-      expect(message.sources, isNull);
-      expect(message.disclaimer, isNull);
+      expect(msg.isUser, isTrue);
+      expect(msg.isAssistant, isFalse);
+      expect(msg.content, 'How do I open a bank account?');
     });
 
-    test('fromJson with sources and disclaimer', () {
-      final json = {
-        'id': 'msg-2',
-        'session_id': 'session-1',
-        'role': 'assistant',
-        'content': 'Here is how to open a bank account...',
-        'sources': [
-          {'title': 'Bank Guide', 'url': 'https://example.com/bank', 'snippet': 'Info...'},
-        ],
-        'disclaimer': 'This is general guidance only.',
-        'tokens_used': 150,
-        'created_at': '2026-01-01T00:01:00Z',
-      };
+    test('creates assistant message with sources', () {
+      final msg = ChatMessage(
+        id: 'assistant_1',
+        role: 'assistant',
+        content: 'Here is how...',
+        sources: [const ChatSource(title: 'Guide', url: 'https://example.com')],
+        domain: 'banking',
+        createdAt: DateTime(2026),
+      );
 
-      final message = ChatMessage.fromJson(json);
-
-      expect(message.isAssistant, isTrue);
-      expect(message.sources, isNotNull);
-      expect(message.sources!.length, 1);
-      expect(message.sources!.first.title, 'Bank Guide');
-      expect(message.sources!.first.url, 'https://example.com/bank');
-      expect(message.sources!.first.snippet, 'Info...');
-      expect(message.disclaimer, 'This is general guidance only.');
-      expect(message.tokensUsed, 150);
+      expect(msg.isAssistant, isTrue);
+      expect(msg.sources, isNotNull);
+      expect(msg.sources!.length, 1);
+      expect(msg.domain, 'banking');
     });
 
     test('copyWith creates modified copy', () {
       final msg = ChatMessage(
         id: 'msg-1',
-        sessionId: 's1',
         role: 'assistant',
         content: 'Hello',
         createdAt: DateTime(2026),
@@ -135,36 +139,6 @@ void main() {
       final updated = msg.copyWith(content: 'Hello world');
       expect(updated.content, 'Hello world');
       expect(updated.id, 'msg-1'); // unchanged
-    });
-  });
-
-  group('SourceCitation', () {
-    test('fromJson creates valid instance', () {
-      final json = {
-        'title': 'Immigration Guide',
-        'url': 'https://example.com',
-        'snippet': 'Relevant info...',
-      };
-
-      final source = SourceCitation.fromJson(json);
-      expect(source.title, 'Immigration Guide');
-      expect(source.url, 'https://example.com');
-      expect(source.snippet, 'Relevant info...');
-    });
-  });
-
-  group('ChatUsage', () {
-    test('fromJson creates valid instance', () {
-      final json = {
-        'chat_count': 3,
-        'chat_limit': 5,
-        'chat_remaining': 2,
-      };
-
-      final usage = ChatUsage.fromJson(json);
-      expect(usage.chatCount, 3);
-      expect(usage.chatLimit, 5);
-      expect(usage.chatRemaining, 2);
     });
   });
 }

@@ -1,7 +1,8 @@
 // E2E test fixture — dummy Firebase options for web testing.
 // This file should be replaced with real config from `flutterfire configure`.
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
-import 'package:flutter/foundation.dart' show kIsWeb, TargetPlatform, defaultTargetPlatform;
+import 'package:flutter/foundation.dart'
+    show kIsWeb, TargetPlatform, defaultTargetPlatform;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {

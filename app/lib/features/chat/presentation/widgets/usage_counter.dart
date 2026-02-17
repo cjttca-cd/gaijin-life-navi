@@ -17,11 +17,11 @@ class UsageCounter extends ConsumerWidget {
     if (usage == null) return const SizedBox.shrink();
 
     final tt = Theme.of(context).textTheme;
-    final remaining = usage.chatRemaining;
-    final limit = usage.chatLimit;
+    final remaining = usage.remaining;
+    final limit = usage.limit;
 
     // Don't show for unlimited (premium) users.
-    if (limit <= 0) return const SizedBox.shrink();
+    if (usage.isUnlimited) return const SizedBox.shrink();
 
     final isExhausted = remaining <= 0;
     final l10n = AppLocalizations.of(context);
