@@ -1598,4 +1598,37 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get settingsErrorDelete =>
       'Não foi possível excluir a conta. Tente novamente.';
+
+  @override
+  String get chatGuestTitle => 'Pergunte ao AI sobre a vida no Japão';
+
+  @override
+  String get chatGuestFeature1 => 'Como abrir uma conta bancária';
+
+  @override
+  String get chatGuestFeature2 => 'Procedimentos de renovação de visto';
+
+  @override
+  String get chatGuestFeature3 => 'Como ir ao hospital';
+
+  @override
+  String get chatGuestFeature4 => 'E qualquer outra coisa';
+
+  @override
+  String get chatGuestFreeOffer => 'Cadastro gratuito — 5 chats por dia';
+
+  @override
+  String get chatGuestSignUp => 'Comece grátis';
+
+  @override
+  String get chatGuestLogin => 'Já tem conta? Entrar';
+
+  @override
+  String get guestRegisterCta => 'Cadastre-se grátis para usar o AI Chat';
+
+  @override
+  String get guideReadMore => 'Cadastre-se para ler o guia completo';
+
+  @override
+  String get guideAskAI => 'Pergunte detalhes ao AI';
 }

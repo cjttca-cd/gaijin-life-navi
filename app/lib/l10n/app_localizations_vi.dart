@@ -1582,4 +1582,37 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get settingsErrorDelete =>
       'Không thể xóa tài khoản. Vui lòng thử lại.';
+
+  @override
+  String get chatGuestTitle => 'Hỏi AI bất cứ điều gì về cuộc sống tại Nhật';
+
+  @override
+  String get chatGuestFeature1 => 'Cách mở tài khoản ngân hàng';
+
+  @override
+  String get chatGuestFeature2 => 'Thủ tục gia hạn visa';
+
+  @override
+  String get chatGuestFeature3 => 'Cách đi khám bệnh';
+
+  @override
+  String get chatGuestFeature4 => 'Và bất cứ điều gì khác';
+
+  @override
+  String get chatGuestFreeOffer => 'Đăng ký miễn phí — 5 lần chat/ngày';
+
+  @override
+  String get chatGuestSignUp => 'Bắt đầu miễn phí';
+
+  @override
+  String get chatGuestLogin => 'Đã có tài khoản? Đăng nhập';
+
+  @override
+  String get guestRegisterCta => 'Đăng ký miễn phí để dùng AI Chat';
+
+  @override
+  String get guideReadMore => 'Đăng ký để đọc toàn bộ';
+
+  @override
+  String get guideAskAI => 'Hỏi AI chi tiết';
 }

@@ -496,5 +496,17 @@
   "settingsDeleteSuccess": "你的账号已删除。",
   "settingsLanguageTitle": "选择语言",
   "settingsErrorLogout": "无法退出登录，请重试。",
-  "settingsErrorDelete": "无法删除账号，请重试。"
+  "settingsErrorDelete": "无法删除账号，请重试。",
+
+  "chatGuestTitle": "AI に日本での生活について何でも聞けます",
+  "chatGuestFeature1": "銀行口座の開設方法",
+  "chatGuestFeature2": "ビザの更新手続き",
+  "chatGuestFeature3": "病院の受診方法",
+  "chatGuestFeature4": "その他なんでも",
+  "chatGuestFreeOffer": "無料登録で1日5回まで無料",
+  "chatGuestSignUp": "無料で始める",
+  "chatGuestLogin": "アカウントをお持ちの方はログイン",
+  "guestRegisterCta": "無料登録で AI Chat が使えます",
+  "guideReadMore": "登録して全文を読む",
+  "guideAskAI": "AI に詳しく聞く"
 }

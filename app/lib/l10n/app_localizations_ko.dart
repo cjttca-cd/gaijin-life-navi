@@ -1547,4 +1547,37 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsErrorDelete => '계정을 삭제할 수 없습니다. 다시 시도해주세요.';
+
+  @override
+  String get chatGuestTitle => 'AI에게 일본 생활에 대해 무엇이든 물어보세요';
+
+  @override
+  String get chatGuestFeature1 => '은행 계좌 개설 방법';
+
+  @override
+  String get chatGuestFeature2 => '비자 갱신 절차';
+
+  @override
+  String get chatGuestFeature3 => '병원 방문 방법';
+
+  @override
+  String get chatGuestFeature4 => '그 외 무엇이든';
+
+  @override
+  String get chatGuestFreeOffer => '무료 가입 — 하루 5회 채팅';
+
+  @override
+  String get chatGuestSignUp => '무료로 시작하기';
+
+  @override
+  String get chatGuestLogin => '계정이 있으신가요? 로그인';
+
+  @override
+  String get guestRegisterCta => '무료 가입하고 AI Chat 이용하기';
+
+  @override
+  String get guideReadMore => '가입하고 전체 가이드 읽기';
+
+  @override
+  String get guideAskAI => 'AI에게 자세히 물어보기';
 }

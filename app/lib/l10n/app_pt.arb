@@ -496,5 +496,17 @@
   "settingsDeleteSuccess": "Sua conta foi excluída.",
   "settingsLanguageTitle": "Escolher idioma",
   "settingsErrorLogout": "Não foi possível sair. Tente novamente.",
-  "settingsErrorDelete": "Não foi possível excluir a conta. Tente novamente."
+  "settingsErrorDelete": "Não foi possível excluir a conta. Tente novamente.",
+
+  "chatGuestTitle": "Pergunte ao AI sobre a vida no Japão",
+  "chatGuestFeature1": "Como abrir uma conta bancária",
+  "chatGuestFeature2": "Procedimentos de renovação de visto",
+  "chatGuestFeature3": "Como ir ao hospital",
+  "chatGuestFeature4": "E qualquer outra coisa",
+  "chatGuestFreeOffer": "Cadastro gratuito — 5 chats por dia",
+  "chatGuestSignUp": "Comece grátis",
+  "chatGuestLogin": "Já tem conta? Entrar",
+  "guestRegisterCta": "Cadastre-se grátis para usar o AI Chat",
+  "guideReadMore": "Cadastre-se para ler o guia completo",
+  "guideAskAI": "Pergunte detalhes ao AI"
 }

@@ -19,6 +19,7 @@ class HomeScreen extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
     final user = ref.watch(authStateProvider).valueOrNull;
+    final isGuest = user == null;
 
     // Determine greeting based on time.
     final hour = DateTime.now().hour;
@@ -44,11 +45,22 @@ class HomeScreen extends ConsumerWidget {
                 // ── Greeting ─────────────────────────────────
                 Text(greeting, style: tt.displayMedium),
                 const SizedBox(height: AppSpacing.spaceXs),
-                // Usage line.
-                Text(
-                  l10n.homeUsageFree(5, 5), // placeholder values
-                  style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
-                ),
+                // Usage line (hidden for guests).
+                if (!isGuest)
+                  Text(
+                    l10n.homeUsageFree(5, 5), // placeholder values
+                    style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+                  ),
+
+                // ── Guest Registration CTA Banner ─────────────
+                if (isGuest) ...[
+                  const SizedBox(height: AppSpacing.spaceLg),
+                  _GuestCtaBanner(
+                    text: l10n.guestRegisterCta,
+                    cta: l10n.chatGuestSignUp,
+                    onTap: () => context.push(AppRoutes.register),
+                  ),
+                ],
 
                 const SizedBox(height: AppSpacing.space2xl),
 
@@ -66,14 +78,17 @@ class HomeScreen extends ConsumerWidget {
                   crossAxisSpacing: AppSpacing.spaceMd,
                   childAspectRatio: 1.3,
                   children: [
-                    _QuickActionCard(
-                      icon: Icons.chat_bubble_outline,
-                      iconBgColor: AppColors.primaryContainer,
-                      iconColor: AppColors.primaryDark,
-                      title: l10n.homeQaChatTitle,
-                      subtitle: l10n.homeQaChatSubtitle,
-                      onTap: () => _startNewChat(context, ref),
-                    ),
+                    // Guests: Navigator + Emergency only.
+                    // Logged-in: AI Chat + Banking + Visa + Medical.
+                    if (!isGuest)
+                      _QuickActionCard(
+                        icon: Icons.chat_bubble_outline,
+                        iconBgColor: AppColors.primaryContainer,
+                        iconColor: AppColors.primaryDark,
+                        title: l10n.homeQaChatTitle,
+                        subtitle: l10n.homeQaChatSubtitle,
+                        onTap: () => _startNewChat(context, ref),
+                      ),
                     _QuickActionCard(
                       icon: Icons.account_balance,
                       iconBgColor: AppColors.bankingContainer,
@@ -83,14 +98,15 @@ class HomeScreen extends ConsumerWidget {
                       onTap:
                           () => context.push('${AppRoutes.navigate}/banking'),
                     ),
-                    _QuickActionCard(
-                      icon: Icons.badge,
-                      iconBgColor: AppColors.visaContainer,
-                      iconColor: AppColors.visaIcon,
-                      title: l10n.homeQaVisaTitle,
-                      subtitle: l10n.homeQaVisaSubtitle,
-                      onTap: () => context.push('${AppRoutes.navigate}/visa'),
-                    ),
+                    if (!isGuest)
+                      _QuickActionCard(
+                        icon: Icons.badge,
+                        iconBgColor: AppColors.visaContainer,
+                        iconColor: AppColors.visaIcon,
+                        title: l10n.homeQaVisaTitle,
+                        subtitle: l10n.homeQaVisaSubtitle,
+                        onTap: () => context.push('${AppRoutes.navigate}/visa'),
+                      ),
                     _QuickActionCard(
                       icon: Icons.local_hospital,
                       iconBgColor: AppColors.medicalContainer,
@@ -125,11 +141,14 @@ class HomeScreen extends ConsumerWidget {
 
                 const SizedBox(height: AppSpacing.space2xl),
 
-                // ── Upgrade Banner (Free only) ────────────────
+                // ── Upgrade Banner (Free/Guest) ───────────────
                 _UpgradeBanner(
                   title: l10n.homeUpgradeTitle,
-                  cta: l10n.homeUpgradeCta,
-                  onTap: () => context.push(AppRoutes.subscription),
+                  cta: isGuest ? l10n.chatGuestSignUp : l10n.homeUpgradeCta,
+                  onTap:
+                      () => context.push(
+                        isGuest ? AppRoutes.register : AppRoutes.subscription,
+                      ),
                 ),
 
                 const SizedBox(height: AppSpacing.space3xl),
@@ -259,6 +278,56 @@ class _ExploreItem extends StatelessWidget {
               const SizedBox(width: AppSpacing.spaceMd),
               Expanded(child: Text(label, style: tt.titleSmall)),
               Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Guest registration CTA banner — shown at the top of the guest Home screen.
+/// Per task spec: 「無料登録で AI Chat が使えます」
+class _GuestCtaBanner extends StatelessWidget {
+  const _GuestCtaBanner({
+    required this.text,
+    required this.cta,
+    required this.onTap,
+  });
+
+  final String text;
+  final String cta;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+
+    return Material(
+      color: AppColors.primaryContainer,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.spaceLg),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.chat_bubble_outline,
+                color: AppColors.primaryDark,
+                size: 24,
+              ),
+              const SizedBox(width: AppSpacing.spaceMd),
+              Expanded(
+                child: Text(
+                  text,
+                  style: tt.titleSmall?.copyWith(
+                    color: AppColors.onPrimaryContainer,
+                  ),
+                ),
+              ),
+              TextButton(onPressed: onTap, child: Text(cta)),
             ],
           ),
         ),

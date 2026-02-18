@@ -8,6 +8,7 @@ import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/reset_password_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/chat/presentation/chat_conversation_screen.dart';
+import '../../features/chat/presentation/chat_guest_screen.dart';
 import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/navigate/presentation/emergency_screen.dart';
@@ -73,6 +74,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       if (isLoading) return null;
 
+      // Routes accessible without authentication (guest access).
+      // Per BUSINESS_RULES.md §2 Access Boundary Matrix:
+      //   - Home (limited), Navigator, Emergency, Subscription are public
+      //   - Chat tab shows guest promotion screen (handled in widget)
+      //   - Profile redirects to login
       final publicRoutes = [
         AppRoutes.splash,
         AppRoutes.language,
@@ -80,9 +86,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         AppRoutes.register,
         AppRoutes.resetPassword,
         AppRoutes.emergency,
+        // Guest-accessible routes
+        AppRoutes.home,
+        AppRoutes.navigate,
+        AppRoutes.chat, // Shows ChatGuestScreen for unauthenticated users
+        AppRoutes.subscription,
       ];
 
-      if (!isLoggedIn && !publicRoutes.contains(currentPath)) {
+      // Check exact match or path-prefix match for dynamic routes.
+      final isPublicRoute =
+          publicRoutes.contains(currentPath) ||
+          currentPath.startsWith('/navigate/') ||
+          currentPath.startsWith('/emergency');
+
+      if (!isLoggedIn && !isPublicRoute) {
         return AppRoutes.login;
       }
 
@@ -187,7 +204,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.chat,
             pageBuilder:
                 (context, state) =>
-                    const NoTransitionPage(child: ChatListScreen()),
+                    const NoTransitionPage(child: _ChatTabRouter()),
           ),
           GoRoute(
             path: AppRoutes.navigate,
@@ -212,3 +229,16 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+/// Routes the Chat tab to either [ChatListScreen] (authenticated) or
+/// [ChatGuestScreen] (guest). Per USER_STORIES.md Tab Access Rules:
+///   Guest → 登録促進画面 (registration promotion).
+class _ChatTabRouter extends ConsumerWidget {
+  const _ChatTabRouter();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoggedIn = ref.watch(authStateProvider).valueOrNull != null;
+    return isLoggedIn ? const ChatListScreen() : const ChatGuestScreen();
+  }
+}

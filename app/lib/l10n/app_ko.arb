@@ -496,5 +496,17 @@
   "settingsDeleteSuccess": "계정이 삭제되었습니다.",
   "settingsLanguageTitle": "언어 선택",
   "settingsErrorLogout": "로그아웃할 수 없습니다. 다시 시도해주세요.",
-  "settingsErrorDelete": "계정을 삭제할 수 없습니다. 다시 시도해주세요."
+  "settingsErrorDelete": "계정을 삭제할 수 없습니다. 다시 시도해주세요.",
+
+  "chatGuestTitle": "AI에게 일본 생활에 대해 무엇이든 물어보세요",
+  "chatGuestFeature1": "은행 계좌 개설 방법",
+  "chatGuestFeature2": "비자 갱신 절차",
+  "chatGuestFeature3": "병원 방문 방법",
+  "chatGuestFeature4": "그 외 무엇이든",
+  "chatGuestFreeOffer": "무료 가입 — 하루 5회 채팅",
+  "chatGuestSignUp": "무료로 시작하기",
+  "chatGuestLogin": "계정이 있으신가요? 로그인",
+  "guestRegisterCta": "무료 가입하고 AI Chat 이용하기",
+  "guideReadMore": "가입하고 전체 가이드 읽기",
+  "guideAskAI": "AI에게 자세히 물어보기"
 }

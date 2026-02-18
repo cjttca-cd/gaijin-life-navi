@@ -1538,4 +1538,37 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsErrorDelete => '无法删除账号，请重试。';
+
+  @override
+  String get chatGuestTitle => 'AI に日本での生活について何でも聞けます';
+
+  @override
+  String get chatGuestFeature1 => '銀行口座の開設方法';
+
+  @override
+  String get chatGuestFeature2 => 'ビザの更新手続き';
+
+  @override
+  String get chatGuestFeature3 => '病院の受診方法';
+
+  @override
+  String get chatGuestFeature4 => 'その他なんでも';
+
+  @override
+  String get chatGuestFreeOffer => '無料登録で1日5回まで無料';
+
+  @override
+  String get chatGuestSignUp => '無料で始める';
+
+  @override
+  String get chatGuestLogin => 'アカウントをお持ちの方はログイン';
+
+  @override
+  String get guestRegisterCta => '無料登録で AI Chat が使えます';
+
+  @override
+  String get guideReadMore => '登録して全文を読む';
+
+  @override
+  String get guideAskAI => 'AI に詳しく聞く';
 }

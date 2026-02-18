@@ -3079,6 +3079,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to delete account. Please try again.'**
   String get settingsErrorDelete;
+
+  /// No description provided for @chatGuestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI anything about life in Japan'**
+  String get chatGuestTitle;
+
+  /// No description provided for @chatGuestFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'How to open a bank account'**
+  String get chatGuestFeature1;
+
+  /// No description provided for @chatGuestFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa renewal procedures'**
+  String get chatGuestFeature2;
+
+  /// No description provided for @chatGuestFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'How to visit a hospital'**
+  String get chatGuestFeature3;
+
+  /// No description provided for @chatGuestFeature4.
+  ///
+  /// In en, this message translates to:
+  /// **'And anything else'**
+  String get chatGuestFeature4;
+
+  /// No description provided for @chatGuestFreeOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Free signup — 5 chats per day'**
+  String get chatGuestFreeOffer;
+
+  /// No description provided for @chatGuestSignUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started free'**
+  String get chatGuestSignUp;
+
+  /// No description provided for @chatGuestLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Log in'**
+  String get chatGuestLogin;
+
+  /// No description provided for @guestRegisterCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up free to use AI Chat'**
+  String get guestRegisterCta;
+
+  /// No description provided for @guideReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up to read the full guide'**
+  String get guideReadMore;
+
+  /// No description provided for @guideAskAI.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask AI for details'**
+  String get guideAskAI;
 }
 
 class _AppLocalizationsDelegate

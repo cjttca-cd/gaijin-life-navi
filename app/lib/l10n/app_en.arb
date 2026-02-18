@@ -549,5 +549,17 @@
   "settingsDeleteSuccess": "Your account has been deleted.",
   "settingsLanguageTitle": "Choose Language",
   "settingsErrorLogout": "Unable to log out. Please try again.",
-  "settingsErrorDelete": "Unable to delete account. Please try again."
+  "settingsErrorDelete": "Unable to delete account. Please try again.",
+
+  "chatGuestTitle": "Ask AI anything about life in Japan",
+  "chatGuestFeature1": "How to open a bank account",
+  "chatGuestFeature2": "Visa renewal procedures",
+  "chatGuestFeature3": "How to visit a hospital",
+  "chatGuestFeature4": "And anything else",
+  "chatGuestFreeOffer": "Free signup — 5 chats per day",
+  "chatGuestSignUp": "Get started free",
+  "chatGuestLogin": "Already have an account? Log in",
+  "guestRegisterCta": "Sign up free to use AI Chat",
+  "guideReadMore": "Sign up to read the full guide",
+  "guideAskAI": "Ask AI for details"
 }

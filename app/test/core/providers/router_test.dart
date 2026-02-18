@@ -17,17 +17,20 @@ void main() {
       expect(AppRoutes.profile, '/profile');
     });
 
-    test('protected routes include all main tabs', () {
+    test('protected routes include auth-only tabs', () {
+      // Profile and chat conversation require authentication.
       final protectedRoutes = [
-        AppRoutes.home,
-        AppRoutes.chat,
-        AppRoutes.navigate,
         AppRoutes.profile,
+        AppRoutes.chatConversation,
+        AppRoutes.onboarding,
       ];
-      expect(protectedRoutes.length, 4);
+      expect(protectedRoutes.length, 3);
     });
 
-    test('public routes include auth-related paths and emergency', () {
+    test('public routes include auth + guest-accessible paths', () {
+      // Per BUSINESS_RULES.md §2 Access Boundary Matrix:
+      //   splash, language, login, register, resetPassword, emergency,
+      //   home, navigate, chat (guest screen), subscription
       final publicRoutes = [
         AppRoutes.root,
         AppRoutes.language,
@@ -35,9 +38,16 @@ void main() {
         AppRoutes.register,
         AppRoutes.resetPassword,
         AppRoutes.emergency,
+        AppRoutes.home,
+        AppRoutes.navigate,
+        AppRoutes.chat,
+        AppRoutes.subscription,
       ];
-      expect(publicRoutes.length, 6);
-      expect(publicRoutes.contains(AppRoutes.home), isFalse);
+      expect(publicRoutes.length, 10);
+      expect(publicRoutes.contains(AppRoutes.home), isTrue);
+      expect(publicRoutes.contains(AppRoutes.navigate), isTrue);
+      expect(publicRoutes.contains(AppRoutes.chat), isTrue);
+      expect(publicRoutes.contains(AppRoutes.profile), isFalse);
     });
 
     test('onboarding route is defined', () {

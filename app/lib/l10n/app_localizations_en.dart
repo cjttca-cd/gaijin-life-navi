@@ -1586,4 +1586,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsErrorDelete =>
       'Unable to delete account. Please try again.';
+
+  @override
+  String get chatGuestTitle => 'Ask AI anything about life in Japan';
+
+  @override
+  String get chatGuestFeature1 => 'How to open a bank account';
+
+  @override
+  String get chatGuestFeature2 => 'Visa renewal procedures';
+
+  @override
+  String get chatGuestFeature3 => 'How to visit a hospital';
+
+  @override
+  String get chatGuestFeature4 => 'And anything else';
+
+  @override
+  String get chatGuestFreeOffer => 'Free signup — 5 chats per day';
+
+  @override
+  String get chatGuestSignUp => 'Get started free';
+
+  @override
+  String get chatGuestLogin => 'Already have an account? Log in';
+
+  @override
+  String get guestRegisterCta => 'Sign up free to use AI Chat';
+
+  @override
+  String get guideReadMore => 'Sign up to read the full guide';
+
+  @override
+  String get guideAskAI => 'Ask AI for details';
 }

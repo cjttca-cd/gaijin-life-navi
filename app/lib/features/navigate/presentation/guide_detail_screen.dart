@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -47,6 +48,19 @@ class GuideDetailScreen extends ConsumerWidget {
         loading: () => _buildSkeleton(context),
         error: (error, _) => _buildError(context, ref, error),
         data: (detail) {
+          // Per BUSINESS_RULES.md §2 Access Boundary Matrix:
+          //   - Banking guides: full content for all (including guests)
+          //   - Other domains: guests see first 200 chars + registration CTA
+          final isGuest = ref.watch(authStateProvider).valueOrNull == null;
+          final isBanking = domain == 'banking';
+          final showFullContent = !isGuest || isBanking;
+
+          // Truncate content for guests on non-banking domains.
+          final displayContent =
+              showFullContent
+                  ? detail.content
+                  : _truncateContent(detail.content, 200);
+
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.screenPadding,
@@ -63,9 +77,9 @@ class GuideDetailScreen extends ConsumerWidget {
                 Divider(color: theme.colorScheme.outlineVariant, height: 1),
                 const SizedBox(height: AppSpacing.spaceLg),
 
-                // Markdown content
+                // Markdown content (full or truncated)
                 MarkdownBody(
-                  data: detail.content,
+                  data: displayContent,
                   selectable: true,
                   styleSheet: _markdownStyleSheet(theme),
                   onTapLink: (text, href, title) {
@@ -77,6 +91,12 @@ class GuideDetailScreen extends ConsumerWidget {
                     }
                   },
                 ),
+
+                // Guest content gate CTA (non-banking only)
+                if (!showFullContent) ...[
+                  const SizedBox(height: AppSpacing.spaceLg),
+                  _GuestContentGate(l10n: l10n, theme: theme),
+                ],
 
                 const SizedBox(height: AppSpacing.space2xl),
 
@@ -265,6 +285,15 @@ class GuideDetailScreen extends ConsumerWidget {
     );
   }
 
+  /// Truncate markdown content to approximately [maxChars] characters,
+  /// breaking at the nearest word boundary.
+  String _truncateContent(String content, int maxChars) {
+    if (content.length <= maxChars) return content;
+    final truncated = content.substring(0, maxChars);
+    final lastSpace = truncated.lastIndexOf(' ');
+    return '${lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated}…';
+  }
+
   String _getDomainLabel(String domainId, AppLocalizations l10n) {
     switch (domainId) {
       case 'banking':
@@ -286,5 +315,54 @@ class GuideDetailScreen extends ConsumerWidget {
       default:
         return domainId;
     }
+  }
+}
+
+/// CTA card shown to guests on non-banking guide detail pages.
+/// Encourages registration to view the full guide content.
+class _GuestContentGate extends StatelessWidget {
+  const _GuestContentGate({required this.l10n, required this.theme});
+
+  final AppLocalizations l10n;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSpacing.spaceLg),
+      decoration: BoxDecoration(
+        color: AppColors.primaryFixed,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.primaryContainer),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.lock_outline, size: 32, color: theme.colorScheme.primary),
+          const SizedBox(height: AppSpacing.spaceMd),
+          Text(
+            l10n.guideReadMore,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.spaceLg),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: FilledButton(
+              onPressed: () => context.push(AppRoutes.register),
+              child: Text(l10n.chatGuestSignUp),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.spaceSm),
+          TextButton(
+            onPressed: () => context.push(AppRoutes.chat),
+            child: Text(l10n.guideAskAI),
+          ),
+        ],
+      ),
+    );
   }
 }

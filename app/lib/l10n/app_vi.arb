@@ -496,5 +496,17 @@
   "settingsDeleteSuccess": "Tài khoản của bạn đã bị xóa.",
   "settingsLanguageTitle": "Chọn ngôn ngữ",
   "settingsErrorLogout": "Không thể đăng xuất. Vui lòng thử lại.",
-  "settingsErrorDelete": "Không thể xóa tài khoản. Vui lòng thử lại."
+  "settingsErrorDelete": "Không thể xóa tài khoản. Vui lòng thử lại.",
+
+  "chatGuestTitle": "Hỏi AI bất cứ điều gì về cuộc sống tại Nhật",
+  "chatGuestFeature1": "Cách mở tài khoản ngân hàng",
+  "chatGuestFeature2": "Thủ tục gia hạn visa",
+  "chatGuestFeature3": "Cách đi khám bệnh",
+  "chatGuestFeature4": "Và bất cứ điều gì khác",
+  "chatGuestFreeOffer": "Đăng ký miễn phí — 5 lần chat/ngày",
+  "chatGuestSignUp": "Bắt đầu miễn phí",
+  "chatGuestLogin": "Đã có tài khoản? Đăng nhập",
+  "guestRegisterCta": "Đăng ký miễn phí để dùng AI Chat",
+  "guideReadMore": "Đăng ký để đọc toàn bộ",
+  "guideAskAI": "Hỏi AI chi tiết"
 }
