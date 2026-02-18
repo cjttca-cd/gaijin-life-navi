@@ -2,7 +2,7 @@
 
 > テスター: Z (手動)
 > 環境: iPhone 16e Simulator, iOS, Backend 192.168.18.185:8000
-> 最新 commit: `41d9ca2`
+> 最新 commit: `c5d8aaa`
 > 開始時刻: 14:20 JST
 
 ## 発見した問題一覧
@@ -14,7 +14,7 @@
 | 3 | Navigator/Guide | 🔴 Critical | ガイド記事が全て日本語→多言語版が必要 | 📋 Z が指南を選定後対応 |
 | 4 | LoginScreen | 🟢 Minor | 副題「登録以使用全部功能」不要→削除 | ✅ Fixed `e753548` |
 | 5 | ProfileScreen | 🔴 Critical | ログイン後「我的」→ 加載失敗 | ✅ Fixed `d6786f9` (auto-create + JWT decode) |
-| 6 | ChatListScreen | 🔴 Critical | 空の対話リスト表示+新規ボタン→Phase 0は直接対話に | ✅ Fixed `d6786f9` (直接ChatConversation) |
+| 6 | ChatListScreen | 🔴 Critical | 空の対話リスト表示+新規ボタン→マルチ対話サポート | ✅ Fixed `6e5b897` (対話リスト+新規作成+削除) |
 | 7 | Usage 不整合 | 🟡 Major | 対話4/5 vs Home 5/5 → 共有provider+API取得 | ✅ Fixed `d6786f9` (fetchUsageProvider) |
 | 8 | 全体 UI | 🟡 改善 | iOS 26 glassmorphism 不足 | 📋 今後のpipeline時にDesigner指示 |
 | 17 | TrackerScreen | 🔴 Critical | 「行政追踪」表示、「+添加」ボタン不在、機能全壊 | ✅ Fixed `30e6711` |
@@ -48,11 +48,18 @@
 - 静的コンテンツとしてフロントエンドに配信
 - Z が指南を選定後に実施
 
-### #6 対話機制 (Phase 0)
-- **シングル対話**: Flutter側は本地メモリ、バックエンド側はOpenClaw session持続
-- session_id = `app_{uid}_{domain}` で固定（同一ユーザー・同一ドメインは同一会話）
-- 写真添付: Phase 0 未実装（UIボタンはdisabled表示）
-- マルチ対話: Phase 1以降
+### #6 対話機制（更新：マルチ対話サポート）
+- **マルチ対話**: ユーザーは自由に新しい対話を作成可能。対話リスト表示+FAB新規作成+スワイプ削除
+- **Backend**: Stateless `/reset` モード — 毎回新セッション、frontend が context[] で会話履歴送信
+- **写真添付**: AI Chat 内で画像添付+分析可能（commit `d0375a4`）
+- **Token limit**: 90K context（frontend 側管理）
+- ~~旧: シングル対話 + Phase 1 でマルチ対話~~ → **撤回**: `/reset` stateless 化でマルチ対話が可能になったため Phase 0 で実装
+
+### #23 対話リスト復活 + マルチ対話
+- **Z のフィードバック**: 「対話リストを表示すべき、新規対話を自由に作れるべき」
+- **実装**: Conversation モデル + ConversationsNotifier + AllMessagesNotifier（per-conversation メッセージ管理）
+- **UI**: ChatListScreen に対話一覧、FAB で新規作成、スワイプ削除、自動タイトル生成（最初のユーザーメッセージから）
+- **経緯**: OC_ZG が旧 "Phase 0 = 単一対話" 決定に固執し、逆方向の実装（リスト削除）を行った。Z のフィードバックを QA 文書に記録していなかったことが根因
 
 ### #8 iOS デザイン
 - 今は Material 3 ベースのまま
