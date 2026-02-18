@@ -57,3 +57,4 @@ artifacts/epics/*/features/*/screenshots/
 
 # Docker
 docker-compose.override.yml
+secrets/
