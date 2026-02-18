@@ -5,14 +5,16 @@ import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../chat/presentation/providers/chat_providers.dart';
 import 'providers/navigator_providers.dart';
 
 /// S11: Navigator Guide Detail — full guide with markdown content.
-class GuideDetailScreen extends ConsumerWidget {
+class GuideDetailScreen extends ConsumerStatefulWidget {
   const GuideDetailScreen({
     super.key,
     required this.domain,
@@ -23,7 +25,17 @@ class GuideDetailScreen extends ConsumerWidget {
   final String slug;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GuideDetailScreen> createState() => _GuideDetailScreenState();
+}
+
+class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
+  bool _guideViewedLogged = false;
+
+  String get domain => widget.domain;
+  String get slug => widget.slug;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final detailAsync = ref.watch(
@@ -48,6 +60,14 @@ class GuideDetailScreen extends ConsumerWidget {
         loading: () => _buildSkeleton(context),
         error: (error, _) => _buildError(context, ref, error),
         data: (detail) {
+          // Log guide_viewed analytics event (once per screen visit).
+          if (!_guideViewedLogged) {
+            _guideViewedLogged = true;
+            ref
+                .read(analyticsServiceProvider)
+                .logGuideViewed(domain: domain, slug: slug);
+          }
+
           // Per BUSINESS_RULES.md §2 Access Boundary Matrix:
           //   - Banking guides: full content for all (including guests)
           //   - Other domains: guests see first 200 chars + registration CTA
@@ -390,14 +410,35 @@ class _GuestContentGate extends StatelessWidget {
 
 /// CTA card shown when backend returns 403 TIER_LIMIT_EXCEEDED.
 /// Encourages free users to upgrade to Premium.
-class _PremiumContentGate extends StatelessWidget {
+/// Logs upgrade_cta_shown on display and upgrade_cta_tapped on button press.
+class _PremiumContentGate extends ConsumerStatefulWidget {
   const _PremiumContentGate({required this.l10n, required this.theme});
 
   final AppLocalizations l10n;
   final ThemeData theme;
 
   @override
+  ConsumerState<_PremiumContentGate> createState() =>
+      _PremiumContentGateState();
+}
+
+class _PremiumContentGateState extends ConsumerState<_PremiumContentGate> {
+  bool _ctaShownLogged = false;
+
+  @override
   Widget build(BuildContext context) {
+    final l10n = widget.l10n;
+    final theme = widget.theme;
+
+    // Log upgrade_cta_shown once.
+    if (!_ctaShownLogged) {
+      _ctaShownLogged = true;
+      final tier = ref.read(userTierProvider);
+      ref
+          .read(analyticsServiceProvider)
+          .logUpgradeCTAShown(tier: tier, source: 'navigator');
+    }
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.spaceLg),
@@ -425,7 +466,13 @@ class _PremiumContentGate extends StatelessWidget {
             width: double.infinity,
             height: 48,
             child: FilledButton(
-              onPressed: () => context.push(AppRoutes.subscription),
+              onPressed: () {
+                final tier = ref.read(userTierProvider);
+                ref
+                    .read(analyticsServiceProvider)
+                    .logUpgradeCTATapped(tier: tier, source: 'navigator');
+                context.push(AppRoutes.subscription);
+              },
               child: Text(l10n.guidePremiumCtaButton),
             ),
           ),

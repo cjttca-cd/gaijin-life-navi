@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
@@ -151,13 +152,10 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.space2xl),
 
                 // ── Upgrade Banner (Free/Guest) ───────────────
-                _UpgradeBanner(
+                _UpgradeBannerWithAnalytics(
                   title: l10n.homeUpgradeTitle,
                   cta: isGuest ? l10n.chatGuestSignUp : l10n.homeUpgradeCta,
-                  onTap:
-                      () => context.push(
-                        isGuest ? AppRoutes.register : AppRoutes.subscription,
-                      ),
+                  isGuest: isGuest,
                 ),
 
                 const SizedBox(height: AppSpacing.space3xl),
@@ -357,27 +355,59 @@ class _GuestCtaBanner extends StatelessWidget {
   }
 }
 
-class _UpgradeBanner extends StatelessWidget {
-  const _UpgradeBanner({
+/// Upgrade banner with analytics tracking for upgrade_cta_shown / upgrade_cta_tapped.
+class _UpgradeBannerWithAnalytics extends ConsumerStatefulWidget {
+  const _UpgradeBannerWithAnalytics({
     required this.title,
     required this.cta,
-    required this.onTap,
+    required this.isGuest,
   });
 
   final String title;
   final String cta;
-  final VoidCallback onTap;
+  final bool isGuest;
+
+  @override
+  ConsumerState<_UpgradeBannerWithAnalytics> createState() =>
+      _UpgradeBannerWithAnalyticsState();
+}
+
+class _UpgradeBannerWithAnalyticsState
+    extends ConsumerState<_UpgradeBannerWithAnalytics> {
+  bool _ctaShownLogged = false;
 
   @override
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
+    final tier = ref.watch(userTierProvider);
+
+    // Log upgrade_cta_shown once.
+    if (!_ctaShownLogged) {
+      _ctaShownLogged = true;
+      ref
+          .read(analyticsServiceProvider)
+          .logUpgradeCTAShown(
+            tier: widget.isGuest ? 'guest' : tier,
+            source: 'home',
+          );
+    }
 
     return Material(
       color: AppColors.tertiaryContainer,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
+        onTap: () {
+          ref
+              .read(analyticsServiceProvider)
+              .logUpgradeCTATapped(
+                tier: widget.isGuest ? 'guest' : tier,
+                source: 'home',
+              );
+          context.push(
+            widget.isGuest ? AppRoutes.register : AppRoutes.subscription,
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.spaceLg),
           child: Row(
@@ -389,7 +419,7 @@ class _UpgradeBanner extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      widget.title,
                       style: tt.titleSmall?.copyWith(
                         color: AppColors.onTertiaryContainer,
                       ),
@@ -397,7 +427,22 @@ class _UpgradeBanner extends StatelessWidget {
                   ],
                 ),
               ),
-              TextButton(onPressed: onTap, child: Text(cta)),
+              TextButton(
+                onPressed: () {
+                  ref
+                      .read(analyticsServiceProvider)
+                      .logUpgradeCTATapped(
+                        tier: widget.isGuest ? 'guest' : tier,
+                        source: 'home',
+                      );
+                  context.push(
+                    widget.isGuest
+                        ? AppRoutes.register
+                        : AppRoutes.subscription,
+                  );
+                },
+                child: Text(widget.cta),
+              ),
             ],
           ),
         ),

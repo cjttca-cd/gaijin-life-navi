@@ -74,7 +74,13 @@ class SubscriptionScreen extends ConsumerWidget {
                             currentTier == 'standard'
                                 ? null
                                 : () {
-                                  // IAP purchase placeholder — separate task.
+                                  // TODO(analytics): subscription_started — IAP 未実装。
+                                  // 購入成功後に以下を呼ぶ:
+                                  //   ref.read(analyticsServiceProvider).logSubscriptionStarted(
+                                  //     tier: 'standard',
+                                  //     platform: Platform.isIOS ? 'ios' : 'android',
+                                  //     price: 720.0,
+                                  //   );
                                 },
                       ),
                       _PlanCard(
@@ -94,7 +100,13 @@ class SubscriptionScreen extends ConsumerWidget {
                             currentTier == 'premium'
                                 ? null
                                 : () {
-                                  // IAP purchase placeholder — separate task.
+                                  // TODO(analytics): subscription_started — IAP 未実装。
+                                  // 購入成功後に以下を呼ぶ:
+                                  //   ref.read(analyticsServiceProvider).logSubscriptionStarted(
+                                  //     tier: 'premium',
+                                  //     platform: Platform.isIOS ? 'ios' : 'android',
+                                  //     price: 1360.0,
+                                  //   );
                                 },
                       ),
                     ],

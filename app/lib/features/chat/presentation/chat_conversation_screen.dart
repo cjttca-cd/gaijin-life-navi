@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -56,6 +57,14 @@ class _ChatConversationScreenState
 
     final usage = ref.read(chatUsageProvider);
     if (usage != null && !usage.isUnlimited && usage.remaining <= 0) {
+      // Log usage_limit_reached analytics event.
+      ref
+          .read(analyticsServiceProvider)
+          .logUsageLimitReached(
+            tier: usage.tier,
+            used: usage.used,
+            limit: usage.limit,
+          );
       _showLimitReachedSnackbar();
       return;
     }
@@ -63,9 +72,24 @@ class _ChatConversationScreenState
     _textController.clear();
     setState(() {}); // Update send button state.
 
+    // Capture locale before async gap.
+    final locale = Localizations.localeOf(context).languageCode;
+
     try {
       final controller = ref.read(chatSendControllerProvider);
       await controller.sendMessage(text);
+
+      // Log chat_message_sent on success.
+      final latestUsage = ref.read(chatUsageProvider);
+      final messages = ref.read(chatMessagesProvider);
+      final lastAssistant = messages.lastOrNull;
+      ref
+          .read(analyticsServiceProvider)
+          .logChatMessageSent(
+            domain: lastAssistant?.domain ?? 'concierge',
+            tier: latestUsage?.tier ?? 'free',
+            locale: locale,
+          );
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -322,12 +346,27 @@ class _SendButton extends StatelessWidget {
 ///   - colorWarningContainer background
 ///   - "Upgrade to Premium for unlimited chat"
 ///   - Tap → /subscription
-class _ChatUpgradeBanner extends ConsumerWidget {
+class _ChatUpgradeBanner extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_ChatUpgradeBanner> createState() => _ChatUpgradeBannerState();
+}
+
+class _ChatUpgradeBannerState extends ConsumerState<_ChatUpgradeBanner> {
+  bool _ctaShownLogged = false;
+
+  @override
+  Widget build(BuildContext context) {
     final usage = ref.watch(chatUsageProvider);
     if (usage == null || usage.isUnlimited) return const SizedBox.shrink();
     if (usage.remaining > 1) return const SizedBox.shrink();
+
+    // Log upgrade_cta_shown once per banner appearance.
+    if (!_ctaShownLogged) {
+      _ctaShownLogged = true;
+      ref
+          .read(analyticsServiceProvider)
+          .logUpgradeCTAShown(tier: usage.tier, source: 'chat');
+    }
 
     final l10n = AppLocalizations.of(context);
     final tt = Theme.of(context).textTheme;
@@ -352,7 +391,12 @@ class _ChatUpgradeBanner extends ConsumerWidget {
             ),
           ),
           TextButton(
-            onPressed: () => context.push(AppRoutes.subscription),
+            onPressed: () {
+              ref
+                  .read(analyticsServiceProvider)
+                  .logUpgradeCTATapped(tier: usage.tier, source: 'chat');
+              context.push(AppRoutes.subscription);
+            },
             child: Text(l10n.chatUpgradeButton),
           ),
         ],

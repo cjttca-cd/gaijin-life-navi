@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/analytics/analytics_service.dart';
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_spacing.dart';
 import 'providers/navigator_providers.dart';
@@ -12,14 +14,30 @@ import 'providers/navigator_providers.dart';
 ///
 /// Shows emergency numbers (always hardcoded 110/119 for offline),
 /// how to call, useful Japanese phrases, and helplines.
-class EmergencyScreen extends ConsumerWidget {
+class EmergencyScreen extends ConsumerStatefulWidget {
   const EmergencyScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EmergencyScreen> createState() => _EmergencyScreenState();
+}
+
+class _EmergencyScreenState extends ConsumerState<EmergencyScreen> {
+  bool _accessLogged = false;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final emergencyAsync = ref.watch(emergencyDataProvider);
+
+    // Log emergency_accessed once per screen visit.
+    if (!_accessLogged) {
+      _accessLogged = true;
+      final isAuthenticated = ref.read(isAuthenticatedProvider);
+      ref
+          .read(analyticsServiceProvider)
+          .logEmergencyAccessed(authenticated: isAuthenticated);
+    }
 
     return Scaffold(
       appBar: AppBar(

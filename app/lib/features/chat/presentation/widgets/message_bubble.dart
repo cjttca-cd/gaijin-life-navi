@@ -202,6 +202,14 @@ class _AiBubble extends StatelessWidget {
             ),
           ),
 
+          // TODO(analytics): chat_feedback — フィードバックボタン未実装。
+          // ここに thumbs-up/down ボタンを配置し、押下時に以下を呼ぶ:
+          //   ref.read(analyticsServiceProvider).logChatFeedback(
+          //     domain: message.domain ?? 'concierge',
+          //     rating: 'good' or 'bad',
+          //     sessionId: <current_session_id>,
+          //   );
+
           // Disclaimer — outside bubble.
           if (message.disclaimer != null)
             Padding(

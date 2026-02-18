@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../core/analytics/analytics_service.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -79,6 +80,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         residenceRegion: _residenceRegion,
         arrivalDate: _arrivalDate?.toIso8601String().split('T').first,
       );
+
+      // Log onboarding_completed analytics event.
+      ref
+          .read(analyticsServiceProvider)
+          .logOnboardingCompleted(
+            nationality: _nationality ?? 'unknown',
+            residenceStatus: _residenceStatus ?? 'unknown',
+          );
+
       if (mounted) context.go(AppRoutes.home);
     } catch (_) {
       if (mounted) {
