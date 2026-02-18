@@ -41,16 +41,28 @@ router = APIRouter(prefix="/api/v1", tags=["chat"])
 # ── Request / Response schemas ─────────────────────────────────────────
 
 
+class ContextMessage(BaseModel):
+    """A single prior conversation turn sent by the frontend."""
+
+    role: str = Field(..., pattern="^(user|assistant)$")
+    text: str = Field(..., max_length=8000)
+
+
 class ChatRequest(BaseModel):
     """POST /api/v1/chat request body."""
 
     message: str = Field(..., min_length=1, max_length=4000)
-    image: str | None = Field(default=None, description="Base64 image (Phase 1)")
+    image: str | None = Field(default=None, description="Base64 image")
     domain: str | None = Field(
         default=None,
         description="Domain hint: banking, visa, medical, concierge",
     )
     locale: str = Field(default="en", max_length=10)
+    context: list[ContextMessage] | None = Field(
+        default=None,
+        description="Prior conversation history from frontend (max 100 messages)",
+        max_length=100,
+    )
 
 
 class UsageInfo(BaseModel):
@@ -252,7 +264,7 @@ async def chat(
     """
     # Late imports — agent service may not exist yet during early dev
     try:
-        from services.agent import build_session_id, call_agent, route_to_agent
+        from services.agent import call_agent, route_to_agent
     except ImportError:
         logger.warning("services.agent not available — returning stub response")
         raise HTTPException(
@@ -292,28 +304,31 @@ async def chat(
 
     # 3. Route to agent domain (LLM-based classification)
     domain = await route_to_agent(body.message, current_domain=body.domain)
-
-    # 4. Build session ID & call agent
     agent_id = domain  # route_to_agent already returns "svc-xxx" format
-    domain_short = domain.removeprefix("svc-")  # for session ID and response
-    session_id = build_session_id(uid, domain_short)
+    domain_short = domain.removeprefix("svc-")
 
-    # Prepend locale hint if not English
+    # 4. Build message with locale hint
     agent_message = body.message
     if body.locale and body.locale != "en":
         agent_message = f"[User language: {body.locale}] {body.message}"
 
-    # Handle image upload — decode, save, pass path to agent.
+    # 5. Handle image upload — decode, save, pass path to agent.
     image_path: str | None = None
     if body.image:
         image_path = _save_image_to_workspace(agent_id, body.image)
         # Clean up old uploads in the background (best-effort).
         _cleanup_old_uploads(agent_id)
 
+    # 6. Convert context to list of dicts for agent service
+    context_dicts = None
+    if body.context:
+        context_dicts = [{"role": m.role, "text": m.text} for m in body.context]
+
+    # 7. Call agent (stateless with /reset)
     agent_resp = await call_agent(
         agent_id=agent_id,
-        session_id=session_id,
         message=agent_message,
+        context=context_dicts,
         image_path=image_path,
     )
 

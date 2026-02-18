@@ -1,15 +1,18 @@
 """OpenClaw agent calling service.
 
-Provides async functions to invoke OpenClaw CLI agents, route messages
-to the appropriate domain agent, and manage session identifiers.
+Provides async functions to invoke OpenClaw CLI agents and route messages
+to the appropriate domain agent.
+
+Every call is stateless: the /reset prefix forces OpenClaw to create a fresh
+session. The frontend manages conversation history and sends prior context
+with each request.
 
 Usage::
 
-    from services.agent import call_agent, route_to_agent, build_session_id
+    from services.agent import call_agent, route_to_agent
 
     domain = route_to_agent(user_message)
-    session = build_session_id(user_id, domain)
-    response = await call_agent(agent_id=domain, session_id=session, message=user_message)
+    response = await call_agent(agent_id=domain, message=user_message, context=ctx)
 
     if response.status == "ok":
         print(response.text)
@@ -53,7 +56,6 @@ class AgentResponse:
         input_tokens: Prompt tokens consumed.
         output_tokens: Completion tokens generated.
         cache_read_tokens: Tokens served from cache.
-        session_id: OpenClaw session identifier used for this turn.
         status: ``"ok"`` on success, ``"error"`` on failure.
         error: Human-readable error description when *status* is ``"error"``.
     """
@@ -64,7 +66,6 @@ class AgentResponse:
     input_tokens: int
     output_tokens: int
     cache_read_tokens: int
-    session_id: str
     status: str  # "ok" | "error"
     error: str | None = field(default=None)
 
@@ -76,22 +77,25 @@ class AgentResponse:
 
 async def call_agent(
     agent_id: str,
-    session_id: str,
     message: str,
-    timeout: int = 60,
+    context: list[dict] | None = None,
     image_path: str | None = None,
+    timeout: int = 60,
 ) -> AgentResponse:
-    """Invoke an OpenClaw agent and return a structured response.
+    """Invoke an OpenClaw agent statelessly and return a structured response.
+
+    Every call is prefixed with ``/reset`` so OpenClaw creates a fresh
+    session, ensuring complete isolation between users/requests.
+    Conversation history is passed explicitly via *context*.
 
     Parameters:
         agent_id: The agent identifier to route to (e.g. ``"svc-concierge"``).
-        session_id: Explicit session id (must not contain colons).
         message: The user's message text.
+        context: Optional list of prior conversation turns, each a dict
+            with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
+        image_path: Optional filesystem path to an uploaded image.
         timeout: Maximum seconds to wait for the agent (passed to both
             OpenClaw ``--timeout`` and ``asyncio`` subprocess timeout).
-        image_path: Optional filesystem path to an uploaded image.
-            When provided, the agent message is augmented with an
-            instruction to analyze the image via the ``image`` tool.
 
     Returns:
         An :class:`AgentResponse` — always returned, never raises.
@@ -99,39 +103,45 @@ async def call_agent(
     """
     start = time.monotonic()
 
-    # If an image was uploaded, prepend analysis instruction.
+    # Build the full message with /reset prefix for stateless isolation.
+    full_message = "/reset "
+
+    # Append conversation history if provided.
+    if context:
+        full_message += "以下は過去の会話履歴です。この文脈を踏まえて回答してください。\n\n"
+        for msg in context:
+            role_label = "User" if msg["role"] == "user" else "Assistant"
+            # Truncate very long messages in context.
+            text = msg["text"][:2000]
+            full_message += f"{role_label}: {text}\n\n"
+        full_message += "---\n\n"
+
+    # Append image instruction if present.
     if image_path:
-        message = (
+        full_message += (
             f"[The user attached an image. Analyze it using the image "
-            f"tool with path: {image_path}]\n\n{message}"
+            f"tool with path: {image_path}]\n\n"
         )
 
-    # Defensive: strip colons — OpenClaw rejects them in session IDs.
-    safe_session = session_id.replace(":", "_")
-    if safe_session != session_id:
-        logger.warning(
-            "Session id contained colons; sanitised %r → %r",
-            session_id,
-            safe_session,
-        )
+    # Append the actual new message.
+    full_message += message
 
     cmd = [
         _OPENCLAW_BIN,
         "agent",
         "--agent", agent_id,
-        "--session-id", safe_session,
-        "--message", message,
+        "--message", full_message,
         "--json",
         "--thinking", "low",
         "--timeout", str(timeout),
     ]
 
     logger.info(
-        "Calling agent=%s session=%s timeout=%ds message_len=%d",
+        "Calling agent=%s timeout=%ds message_len=%d context_len=%d",
         agent_id,
-        safe_session,
         timeout,
-        len(message),
+        len(full_message),
+        len(context) if context else 0,
     )
 
     try:
@@ -168,7 +178,6 @@ async def call_agent(
                 input_tokens=0,
                 output_tokens=0,
                 cache_read_tokens=0,
-                session_id=safe_session,
                 status="error",
                 error=f"Agent timed out after {subprocess_timeout}s",
             )
@@ -183,10 +192,9 @@ async def call_agent(
         # Non-zero exit code — treat as error.
         if proc.returncode != 0:
             logger.error(
-                "Agent exited with code %d (agent=%s session=%s): %s",
+                "Agent exited with code %d (agent=%s): %s",
                 proc.returncode,
                 agent_id,
-                safe_session,
                 stderr[:300] or stdout[:300],
             )
             # Try to extract a useful error message.
@@ -198,13 +206,12 @@ async def call_agent(
                 input_tokens=0,
                 output_tokens=0,
                 cache_read_tokens=0,
-                session_id=safe_session,
                 status="error",
                 error=error_detail[:1000],
             )
 
         # Parse JSON output.
-        return _parse_json_response(stdout, safe_session, elapsed_ms)
+        return _parse_json_response(stdout, elapsed_ms)
 
     except FileNotFoundError:
         elapsed_ms = int((time.monotonic() - start) * 1000)
@@ -216,7 +223,6 @@ async def call_agent(
             input_tokens=0,
             output_tokens=0,
             cache_read_tokens=0,
-            session_id=safe_session,
             status="error",
             error="openclaw binary not found",
         )
@@ -230,7 +236,6 @@ async def call_agent(
             input_tokens=0,
             output_tokens=0,
             cache_read_tokens=0,
-            session_id=safe_session,
             status="error",
             error=f"Subprocess OS error: {exc}",
         )
@@ -243,7 +248,6 @@ async def call_agent(
 
 def _parse_json_response(
     raw: str,
-    session_id: str,
     elapsed_ms: int,
 ) -> AgentResponse:
     """Parse OpenClaw ``--json`` output into an :class:`AgentResponse`.
@@ -261,7 +265,6 @@ def _parse_json_response(
             input_tokens=0,
             output_tokens=0,
             cache_read_tokens=0,
-            session_id=session_id,
             status="error",
             error="Empty response from agent",
         )
@@ -291,7 +294,6 @@ def _parse_json_response(
                 input_tokens=0,
                 output_tokens=0,
                 cache_read_tokens=0,
-                session_id=session_id,
                 status="error",
                 error=f"Invalid JSON from agent: {raw[:200]}",
             )
@@ -341,16 +343,14 @@ def _parse_json_response(
         cache_read = 0
 
     model = agent_meta.get("model") or result.get("model") or result.get("modelId") or ""
-    resp_session = agent_meta.get("sessionId") or result.get("sessionId") or session_id
 
     logger.info(
-        "Agent response: model=%s tokens_in=%d tokens_out=%d cache=%d duration=%dms session=%s",
+        "Agent response: model=%s tokens_in=%d tokens_out=%d cache=%d duration=%dms",
         model,
         input_tokens,
         output_tokens,
         cache_read,
         elapsed_ms,
-        resp_session,
     )
 
     return AgentResponse(
@@ -360,7 +360,6 @@ def _parse_json_response(
         input_tokens=int(input_tokens),
         output_tokens=int(output_tokens),
         cache_read_tokens=int(cache_read),
-        session_id=str(resp_session),
         status="ok",
     )
 
@@ -423,7 +422,6 @@ async def route_to_agent(
         classify_msg = _CLASSIFY_PROMPT.format(message=message[:500])
         resp = await call_agent(
             agent_id="svc-concierge",
-            session_id="system_classify",
             message=classify_msg,
             timeout=15,
         )
@@ -454,38 +452,5 @@ async def route_to_agent(
     return "svc-concierge"
 
 
-# ---------------------------------------------------------------------------
-# Session ID helper
-# ---------------------------------------------------------------------------
 
-
-def build_session_id(user_id: str, domain: str) -> str:
-    """Build a deterministic OpenClaw session identifier.
-
-    OpenClaw session IDs must **not** contain colons. This function
-    produces a stable ``app_{user_id}_{domain}`` identifier, replacing
-    any forbidden characters.
-
-    Parameters:
-        user_id: Application-level user identifier.
-        domain: Agent/domain identifier (e.g. ``"svc-concierge"``).
-
-    Returns:
-        Sanitised session id string.
-
-    Examples::
-
-        >>> build_session_id("usr_abc123", "svc-banking")
-        'app_usr_abc123_svc-banking'
-        >>> build_session_id("firebase:uid:xyz", "svc-visa")
-        'app_firebase_uid_xyz_svc-visa'
-    """
-    # Replace colons and whitespace — keep alphanumerics, hyphens, underscores.
-    safe_user = re.sub(r"[^a-zA-Z0-9_-]", "_", user_id)
-    safe_domain = re.sub(r"[^a-zA-Z0-9_-]", "_", domain)
-    session_id = f"app_{safe_user}_{safe_domain}"
-
-    # Collapse consecutive underscores for tidiness.
-    session_id = re.sub(r"_{2,}", "_", session_id)
-
-    return session_id
+# (build_session_id removed — stateless /reset mode eliminates session management)
