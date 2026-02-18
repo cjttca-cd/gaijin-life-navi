@@ -508,5 +508,14 @@
   "chatGuestLogin": "Já tem conta? Entrar",
   "guestRegisterCta": "Cadastre-se grátis para usar o AI Chat",
   "guideReadMore": "Cadastre-se para ler o guia completo",
-  "guideAskAI": "Pergunte detalhes ao AI"
+  "guideAskAI": "Pergunte detalhes ao AI",
+
+  "guideGuestCtaButton": "Criar conta gratuita",
+  "homeGuestCtaText": "Crie sua conta gratuita para acessar chat IA e guias personalizados",
+  "homeGuestCtaButton": "Começar",
+  "chatUpgradeBanner": "Faça upgrade para Premium para chat ilimitado",
+  "chatUpgradeButton": "Ver planos",
+  "guidePremiumCta": "Este conteúdo requer assinatura Premium",
+  "guidePremiumCtaButton": "Ver planos",
+  "guideTierLimitError": "Faça upgrade para acessar o conteúdo completo"
 }

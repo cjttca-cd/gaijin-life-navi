@@ -246,8 +246,26 @@ class GuideDetailScreen extends ConsumerWidget {
   Widget _buildError(BuildContext context, WidgetRef ref, Object error) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final errorStr = error.toString();
+
+    // Check if 403 TIER_LIMIT_EXCEEDED — show upgrade CTA.
+    final isTierLimit =
+        errorStr.contains('403') || errorStr.contains('TIER_LIMIT_EXCEEDED');
+    if (isTierLimit) {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.all(AppSpacing.screenPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: AppSpacing.space4xl),
+            _PremiumContentGate(l10n: l10n, theme: theme),
+          ],
+        ),
+      );
+    }
+
     // Check if 404
-    final is404 = error.toString().contains('404');
+    final is404 = errorStr.contains('404');
 
     return Center(
       child: Column(
@@ -320,6 +338,11 @@ class GuideDetailScreen extends ConsumerWidget {
 
 /// CTA card shown to guests on non-banking guide detail pages.
 /// Encourages registration to view the full guide content.
+///
+/// Per task-041 spec:
+///   - colorTertiaryContainer (#FEF3C7) background
+///   - Icon + "Sign up to read the full guide" text
+///   - "Create Free Account" button → /register
 class _GuestContentGate extends StatelessWidget {
   const _GuestContentGate({required this.l10n, required this.theme});
 
@@ -332,18 +355,21 @@ class _GuestContentGate extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.spaceLg),
       decoration: BoxDecoration(
-        color: AppColors.primaryFixed,
+        color: theme.colorScheme.tertiaryContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primaryContainer),
       ),
       child: Column(
         children: [
-          Icon(Icons.lock_outline, size: 32, color: theme.colorScheme.primary),
+          Icon(
+            Icons.lock_outline,
+            size: 32,
+            color: theme.colorScheme.onTertiaryContainer,
+          ),
           const SizedBox(height: AppSpacing.spaceMd),
           Text(
             l10n.guideReadMore,
             style: theme.textTheme.titleSmall?.copyWith(
-              color: theme.colorScheme.onSurface,
+              color: theme.colorScheme.onTertiaryContainer,
             ),
             textAlign: TextAlign.center,
           ),
@@ -353,13 +379,55 @@ class _GuestContentGate extends StatelessWidget {
             height: 48,
             child: FilledButton(
               onPressed: () => context.push(AppRoutes.register),
-              child: Text(l10n.chatGuestSignUp),
+              child: Text(l10n.guideGuestCtaButton),
             ),
           ),
-          const SizedBox(height: AppSpacing.spaceSm),
-          TextButton(
-            onPressed: () => context.push(AppRoutes.chat),
-            child: Text(l10n.guideAskAI),
+        ],
+      ),
+    );
+  }
+}
+
+/// CTA card shown when backend returns 403 TIER_LIMIT_EXCEEDED.
+/// Encourages free users to upgrade to Premium.
+class _PremiumContentGate extends StatelessWidget {
+  const _PremiumContentGate({required this.l10n, required this.theme});
+
+  final AppLocalizations l10n;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSpacing.spaceLg),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.tertiaryContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.star,
+            size: 32,
+            color: theme.colorScheme.onTertiaryContainer,
+          ),
+          const SizedBox(height: AppSpacing.spaceMd),
+          Text(
+            l10n.guidePremiumCta,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.onTertiaryContainer,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.spaceLg),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: FilledButton(
+              onPressed: () => context.push(AppRoutes.subscription),
+              child: Text(l10n.guidePremiumCtaButton),
+            ),
           ),
         ],
       ),

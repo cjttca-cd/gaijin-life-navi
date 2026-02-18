@@ -51,6 +51,11 @@ class ChatMessagesNotifier extends Notifier<List<ChatMessage>> {
 /// Holds the current chat usage info.
 final chatUsageProvider = StateProvider<ChatUsageInfo?>((ref) => null);
 
+/// Current user tier derived from chat usage (defaults to 'free').
+final userTierProvider = Provider<String>((ref) {
+  return ref.watch(chatUsageProvider)?.tier ?? 'free';
+});
+
 // ─── Loading state ───────────────────────────────────────────
 
 /// Whether the chat is currently waiting for a response.

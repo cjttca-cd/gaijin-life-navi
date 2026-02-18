@@ -508,5 +508,14 @@
   "chatGuestLogin": "Đã có tài khoản? Đăng nhập",
   "guestRegisterCta": "Đăng ký miễn phí để dùng AI Chat",
   "guideReadMore": "Đăng ký để đọc toàn bộ",
-  "guideAskAI": "Hỏi AI chi tiết"
+  "guideAskAI": "Hỏi AI chi tiết",
+
+  "guideGuestCtaButton": "Tạo tài khoản miễn phí",
+  "homeGuestCtaText": "Tạo tài khoản miễn phí để mở khóa AI chat và hướng dẫn cá nhân",
+  "homeGuestCtaButton": "Bắt đầu",
+  "chatUpgradeBanner": "Nâng cấp lên Premium để chat không giới hạn",
+  "chatUpgradeButton": "Xem gói",
+  "guidePremiumCta": "Nội dung này yêu cầu đăng ký Premium",
+  "guidePremiumCtaButton": "Xem gói",
+  "guideTierLimitError": "Nâng cấp để truy cập toàn bộ nội dung"
 }

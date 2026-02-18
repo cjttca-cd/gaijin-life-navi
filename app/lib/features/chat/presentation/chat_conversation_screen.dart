@@ -109,6 +109,9 @@ class _ChatConversationScreenState
       ),
       body: Column(
         children: [
+          // Upgrade CTA banner — shown when remaining chats ≤ 1.
+          _ChatUpgradeBanner(),
+
           // Messages list.
           Expanded(
             child:
@@ -308,6 +311,51 @@ class _SendButton extends StatelessWidget {
             color: enabled ? cs.onPrimary : AppColors.onSurfaceVariant,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Upgrade banner shown when usage remaining ≤ 1 (excluding unlimited users).
+///
+/// Per task-041 spec:
+///   - colorWarningContainer background
+///   - "Upgrade to Premium for unlimited chat"
+///   - Tap → /subscription
+class _ChatUpgradeBanner extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final usage = ref.watch(chatUsageProvider);
+    if (usage == null || usage.isUnlimited) return const SizedBox.shrink();
+    if (usage.remaining > 1) return const SizedBox.shrink();
+
+    final l10n = AppLocalizations.of(context);
+    final tt = Theme.of(context).textTheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.spaceLg,
+        vertical: AppSpacing.spaceMd,
+      ),
+      decoration: BoxDecoration(color: AppColors.warningContainer),
+      child: Row(
+        children: [
+          const Icon(Icons.star, size: 20, color: AppColors.onWarningContainer),
+          const SizedBox(width: AppSpacing.spaceSm),
+          Expanded(
+            child: Text(
+              l10n.chatUpgradeBanner,
+              style: tt.bodySmall?.copyWith(
+                color: AppColors.onWarningContainer,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => context.push(AppRoutes.subscription),
+            child: Text(l10n.chatUpgradeButton),
+          ),
+        ],
       ),
     );
   }

@@ -508,5 +508,14 @@
   "chatGuestLogin": "アカウントをお持ちの方はログイン",
   "guestRegisterCta": "無料登録で AI Chat が使えます",
   "guideReadMore": "登録して全文を読む",
-  "guideAskAI": "AI に詳しく聞く"
+  "guideAskAI": "AI に詳しく聞く",
+
+  "guideGuestCtaButton": "免费创建账号",
+  "homeGuestCtaText": "免费注册，解锁 AI 对话和个性化指南",
+  "homeGuestCtaButton": "开始使用",
+  "chatUpgradeBanner": "升级到高级版，享受无限对话",
+  "chatUpgradeButton": "查看方案",
+  "guidePremiumCta": "此内容需要高级订阅",
+  "guidePremiumCtaButton": "查看方案",
+  "guideTierLimitError": "升级以查看完整指南内容"
 }

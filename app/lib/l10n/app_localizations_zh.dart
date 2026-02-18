@@ -1571,4 +1571,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get guideAskAI => 'AI に詳しく聞く';
+
+  @override
+  String get guideGuestCtaButton => '免费创建账号';
+
+  @override
+  String get homeGuestCtaText => '免费注册，解锁 AI 对话和个性化指南';
+
+  @override
+  String get homeGuestCtaButton => '开始使用';
+
+  @override
+  String get chatUpgradeBanner => '升级到高级版，享受无限对话';
+
+  @override
+  String get chatUpgradeButton => '查看方案';
+
+  @override
+  String get guidePremiumCta => '此内容需要高级订阅';
+
+  @override
+  String get guidePremiumCtaButton => '查看方案';
+
+  @override
+  String get guideTierLimitError => '升级以查看完整指南内容';
 }

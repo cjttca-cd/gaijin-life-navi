@@ -1631,4 +1631,31 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get guideAskAI => 'Pergunte detalhes ao AI';
+
+  @override
+  String get guideGuestCtaButton => 'Criar conta gratuita';
+
+  @override
+  String get homeGuestCtaText =>
+      'Crie sua conta gratuita para acessar chat IA e guias personalizados';
+
+  @override
+  String get homeGuestCtaButton => 'Começar';
+
+  @override
+  String get chatUpgradeBanner =>
+      'Faça upgrade para Premium para chat ilimitado';
+
+  @override
+  String get chatUpgradeButton => 'Ver planos';
+
+  @override
+  String get guidePremiumCta => 'Este conteúdo requer assinatura Premium';
+
+  @override
+  String get guidePremiumCtaButton => 'Ver planos';
+
+  @override
+  String get guideTierLimitError =>
+      'Faça upgrade para acessar o conteúdo completo';
 }

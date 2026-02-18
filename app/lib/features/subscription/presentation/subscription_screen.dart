@@ -4,6 +4,7 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../chat/presentation/providers/chat_providers.dart';
 import 'providers/subscription_providers.dart';
 
 /// S16: Subscription — plan comparison + charge packs + FAQ.
@@ -17,6 +18,7 @@ class SubscriptionScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final plansAsync = ref.watch(subscriptionPlansProvider);
+    final currentTier = ref.watch(userTierProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.subTitle)),
@@ -51,7 +53,7 @@ class SubscriptionScreen extends ConsumerWidget {
                           _FeatureItem(l10n.subFeatureAdsYes, false),
                           _FeatureItem(l10n.subFeatureImageNo, false),
                         ],
-                        isCurrentPlan: false,
+                        isCurrentPlan: currentTier == 'free',
                         isRecommended: false,
                         onChoose: null,
                       ),
@@ -66,11 +68,14 @@ class SubscriptionScreen extends ConsumerWidget {
                           _FeatureItem(l10n.subFeatureAdsNo, true),
                           _FeatureItem(l10n.subFeatureImageNo, false),
                         ],
-                        isCurrentPlan: false,
-                        isRecommended: true,
-                        onChoose: () {
-                          // IAP purchase placeholder — separate task.
-                        },
+                        isCurrentPlan: currentTier == 'standard',
+                        isRecommended: currentTier != 'standard',
+                        onChoose:
+                            currentTier == 'standard'
+                                ? null
+                                : () {
+                                  // IAP purchase placeholder — separate task.
+                                },
                       ),
                       _PlanCard(
                         planId: 'premium',
@@ -83,11 +88,14 @@ class SubscriptionScreen extends ConsumerWidget {
                           _FeatureItem(l10n.subFeatureAdsNo, true),
                           _FeatureItem(l10n.subFeatureImageYes, true),
                         ],
-                        isCurrentPlan: false,
+                        isCurrentPlan: currentTier == 'premium',
                         isRecommended: false,
-                        onChoose: () {
-                          // IAP purchase placeholder — separate task.
-                        },
+                        onChoose:
+                            currentTier == 'premium'
+                                ? null
+                                : () {
+                                  // IAP purchase placeholder — separate task.
+                                },
                       ),
                     ],
                   ),
@@ -287,8 +295,25 @@ class _PlanCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Recommended badge
-              if (isRecommended)
+              // Current Plan / Recommended badge
+              if (isCurrentPlan)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.spaceMd,
+                    vertical: AppSpacing.spaceXs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    l10n.subButtonCurrent,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSecondary,
+                    ),
+                  ),
+                )
+              else if (isRecommended)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.spaceMd,

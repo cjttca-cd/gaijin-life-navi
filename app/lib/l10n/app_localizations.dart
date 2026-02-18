@@ -3145,6 +3145,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ask AI for details'**
   String get guideAskAI;
+
+  /// No description provided for @guideGuestCtaButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Free Account'**
+  String get guideGuestCtaButton;
+
+  /// No description provided for @homeGuestCtaText.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your free account to unlock AI chat and personalized guides'**
+  String get homeGuestCtaText;
+
+  /// No description provided for @homeGuestCtaButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get homeGuestCtaButton;
+
+  /// No description provided for @chatUpgradeBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium for unlimited chat'**
+  String get chatUpgradeBanner;
+
+  /// No description provided for @chatUpgradeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'View Plans'**
+  String get chatUpgradeButton;
+
+  /// No description provided for @guidePremiumCta.
+  ///
+  /// In en, this message translates to:
+  /// **'This content is available with a Premium subscription'**
+  String get guidePremiumCta;
+
+  /// No description provided for @guidePremiumCtaButton.
+  ///
+  /// In en, this message translates to:
+  /// **'View Plans'**
+  String get guidePremiumCtaButton;
+
+  /// No description provided for @guideTierLimitError.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to access the full guide content'**
+  String get guideTierLimitError;
 }
 
 class _AppLocalizationsDelegate

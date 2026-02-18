@@ -1580,4 +1580,28 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get guideAskAI => 'AI에게 자세히 물어보기';
+
+  @override
+  String get guideGuestCtaButton => '무료 계정 만들기';
+
+  @override
+  String get homeGuestCtaText => '무료 계정을 만들어 AI 채팅과 맞춤 가이드를 이용하세요';
+
+  @override
+  String get homeGuestCtaButton => '시작하기';
+
+  @override
+  String get chatUpgradeBanner => '프리미엄으로 업그레이드하여 무제한 채팅 이용';
+
+  @override
+  String get chatUpgradeButton => '플랜 보기';
+
+  @override
+  String get guidePremiumCta => '이 콘텐츠는 프리미엄 구독이 필요합니다';
+
+  @override
+  String get guidePremiumCtaButton => '플랜 보기';
+
+  @override
+  String get guideTierLimitError => '전체 가이드를 보려면 업그레이드하세요';
 }

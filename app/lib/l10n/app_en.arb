@@ -561,5 +561,14 @@
   "chatGuestLogin": "Already have an account? Log in",
   "guestRegisterCta": "Sign up free to use AI Chat",
   "guideReadMore": "Sign up to read the full guide",
-  "guideAskAI": "Ask AI for details"
+  "guideAskAI": "Ask AI for details",
+
+  "guideGuestCtaButton": "Create Free Account",
+  "homeGuestCtaText": "Create your free account to unlock AI chat and personalized guides",
+  "homeGuestCtaButton": "Get Started",
+  "chatUpgradeBanner": "Upgrade to Premium for unlimited chat",
+  "chatUpgradeButton": "View Plans",
+  "guidePremiumCta": "This content is available with a Premium subscription",
+  "guidePremiumCtaButton": "View Plans",
+  "guideTierLimitError": "Upgrade to access the full guide content"
 }

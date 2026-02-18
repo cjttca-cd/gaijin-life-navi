@@ -1615,4 +1615,29 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get guideAskAI => 'Hỏi AI chi tiết';
+
+  @override
+  String get guideGuestCtaButton => 'Tạo tài khoản miễn phí';
+
+  @override
+  String get homeGuestCtaText =>
+      'Tạo tài khoản miễn phí để mở khóa AI chat và hướng dẫn cá nhân';
+
+  @override
+  String get homeGuestCtaButton => 'Bắt đầu';
+
+  @override
+  String get chatUpgradeBanner => 'Nâng cấp lên Premium để chat không giới hạn';
+
+  @override
+  String get chatUpgradeButton => 'Xem gói';
+
+  @override
+  String get guidePremiumCta => 'Nội dung này yêu cầu đăng ký Premium';
+
+  @override
+  String get guidePremiumCtaButton => 'Xem gói';
+
+  @override
+  String get guideTierLimitError => 'Nâng cấp để truy cập toàn bộ nội dung';
 }

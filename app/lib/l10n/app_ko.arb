@@ -508,5 +508,14 @@
   "chatGuestLogin": "계정이 있으신가요? 로그인",
   "guestRegisterCta": "무료 가입하고 AI Chat 이용하기",
   "guideReadMore": "가입하고 전체 가이드 읽기",
-  "guideAskAI": "AI에게 자세히 물어보기"
+  "guideAskAI": "AI에게 자세히 물어보기",
+
+  "guideGuestCtaButton": "무료 계정 만들기",
+  "homeGuestCtaText": "무료 계정을 만들어 AI 채팅과 맞춤 가이드를 이용하세요",
+  "homeGuestCtaButton": "시작하기",
+  "chatUpgradeBanner": "프리미엄으로 업그레이드하여 무제한 채팅 이용",
+  "chatUpgradeButton": "플랜 보기",
+  "guidePremiumCta": "이 콘텐츠는 프리미엄 구독이 필요합니다",
+  "guidePremiumCtaButton": "플랜 보기",
+  "guideTierLimitError": "전체 가이드를 보려면 업그레이드하세요"
 }

@@ -56,8 +56,8 @@ class HomeScreen extends ConsumerWidget {
                 if (isGuest) ...[
                   const SizedBox(height: AppSpacing.spaceLg),
                   _GuestCtaBanner(
-                    text: l10n.guestRegisterCta,
-                    cta: l10n.chatGuestSignUp,
+                    text: l10n.homeGuestCtaText,
+                    cta: l10n.homeGuestCtaButton,
                     onTap: () => context.push(AppRoutes.register),
                   ),
                 ],
@@ -286,8 +286,12 @@ class _ExploreItem extends StatelessWidget {
   }
 }
 
-/// Guest registration CTA banner — shown at the top of the guest Home screen.
-/// Per task spec: 「無料登録で AI Chat が使えます」
+/// Guest registration CTA card — shown at the top of the guest Home screen.
+///
+/// Per task-041 spec:
+///   - Card format with colorPrimaryContainer background
+///   - "Create your free account to unlock AI chat and personalized guides"
+///   - "Get Started" button → /register
 class _GuestCtaBanner extends StatelessWidget {
   const _GuestCtaBanner({
     required this.text,
@@ -301,35 +305,43 @@ class _GuestCtaBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
-    return Material(
-      color: AppColors.primaryContainer,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.spaceLg),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.chat_bubble_outline,
-                color: AppColors.primaryDark,
-                size: 24,
-              ),
-              const SizedBox(width: AppSpacing.spaceMd),
-              Expanded(
-                child: Text(
-                  text,
-                  style: tt.titleSmall?.copyWith(
-                    color: AppColors.onPrimaryContainer,
+    return Card(
+      color: cs.primaryContainer,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.spaceLg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.auto_awesome,
+                  color: cs.onPrimaryContainer,
+                  size: 24,
+                ),
+                const SizedBox(width: AppSpacing.spaceSm),
+                Expanded(
+                  child: Text(
+                    text,
+                    style: tt.titleSmall?.copyWith(
+                      color: cs.onPrimaryContainer,
+                    ),
                   ),
                 ),
-              ),
-              TextButton(onPressed: onTap, child: Text(cta)),
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.spaceLg),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: FilledButton(onPressed: onTap, child: Text(cta)),
+            ),
+          ],
         ),
       ),
     );
