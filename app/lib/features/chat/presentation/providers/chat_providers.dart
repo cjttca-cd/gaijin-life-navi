@@ -91,10 +91,48 @@ class ChatSendController {
 
   final Ref _ref;
 
+  /// Estimate token count for a text string.
+  /// CJK chars ≈ 2 tokens each, Latin ≈ 0.75 tokens per char.
+  static int _estimateTokens(String text) {
+    final cjkPattern = RegExp(r'[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]');
+    int cjk = cjkPattern.allMatches(text).length;
+    int nonCjk = text.length - cjk;
+    return (cjk * 2 + nonCjk * 0.75).ceil();
+  }
+
+  /// Maximum tokens for conversation context sent to backend.
+  static const int _maxContextTokens = 90000;
+
+  /// Build context list from existing messages, respecting token budget.
+  /// Returns most recent messages that fit within [_maxContextTokens].
+  List<Map<String, String>> _buildContext(List<ChatMessage> messages) {
+    if (messages.isEmpty) return [];
+
+    // Walk backwards to collect as many recent messages as fit.
+    final result = <Map<String, String>>[];
+    int tokenBudget = _maxContextTokens;
+
+    for (int i = messages.length - 1; i >= 0; i--) {
+      final msg = messages[i];
+      // Skip error messages (empty content).
+      if (msg.content.isEmpty) continue;
+      final tokens = _estimateTokens(msg.content);
+      if (tokenBudget - tokens < 0) break;
+      tokenBudget -= tokens;
+      result.add({'role': msg.role, 'text': msg.content});
+    }
+
+    // Reverse to chronological order.
+    return result.reversed.toList();
+  }
+
   /// Send a message and process the synchronous response.
   ///
   /// When [imageBase64] is provided, it is sent alongside the text
   /// message for server-side image analysis.
+  ///
+  /// Existing conversation messages are automatically collected as
+  /// context and sent to the backend for stateless agent continuity.
   Future<void> sendMessage(
     String content, {
     String? domain,
@@ -102,6 +140,10 @@ class ChatSendController {
   }) async {
     final repo = _ref.read(chatRepositoryProvider);
     final messagesNotifier = _ref.read(chatMessagesProvider.notifier);
+
+    // Collect context from existing messages BEFORE adding the new one.
+    final currentMessages = _ref.read(chatMessagesProvider);
+    final context = _buildContext(currentMessages);
 
     // Add user message optimistically.
     final userMessage = ChatMessage(
@@ -121,6 +163,7 @@ class ChatSendController {
         message: content,
         domain: domain,
         imageBase64: imageBase64,
+        context: context.isNotEmpty ? context : null,
       );
 
       // Add assistant message (including tracker_items and actions).

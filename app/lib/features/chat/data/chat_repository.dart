@@ -12,6 +12,10 @@ class ChatRepository {
 
   /// Send a chat message and get AI response (synchronous).
   ///
+  /// [context] is a list of prior conversation turns (user/assistant)
+  /// that the backend injects into the agent prompt for continuity.
+  /// Each entry must have `role` ("user"|"assistant") and `text`.
+  ///
   /// When [imageBase64] is provided, it is included in the request body
   /// as a raw base64 string for server-side image analysis.
   Future<ChatResponse> sendMessage({
@@ -19,6 +23,7 @@ class ChatRepository {
     String? domain,
     String? locale,
     String? imageBase64,
+    List<Map<String, String>>? context,
   }) async {
     final response = await _client.post<Map<String, dynamic>>(
       '/chat',
@@ -27,6 +32,7 @@ class ChatRepository {
         if (domain != null) 'domain': domain,
         'locale': locale ?? 'en',
         if (imageBase64 != null) 'image': imageBase64,
+        if (context != null && context.isNotEmpty) 'context': context,
       },
     );
     return ChatResponse.fromJson(
