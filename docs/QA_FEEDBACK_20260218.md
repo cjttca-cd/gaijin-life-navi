@@ -23,6 +23,7 @@
 | 20 | Subscription | 🟡 改善 | l10n 修正: 「AI図片分析」→「AI図片分析（向导对话中）」、「热门类别指南」→「部分指南」、「所有类别指南」→「所有指南」 | ✅ Fixed `41d9ca2` |
 | 21 | HomeScreen | 🟡 改善 | 「查看热门指南」カードグリッド→左アクセントバーのリスト形式に変更 | ✅ Fixed `41d9ca2` |
 | 22 | NavigateScreen | 🟡 改善 | 指南ページにクロスドメイン検索機能追加 | ✅ Fixed `41d9ca2` |
+| 23 | ChatListScreen | 🔴 Critical | 対話リスト非表示→リスト復活+新規対話ボタン必須 | ✅ Fixed `6e5b897` |
 | 9 | ChatGuestScreen | 🟡 Major | 中文選択なのに日本語表示(l10n混在) | ✅ Fixed `6dffdd3` |
 | 10 | LoginScreen | 🔴 Critical | Bottom Nav消失→デッドエンド+「欢迎回来」 | ✅ Fixed `6dffdd3` |
 | 11 | SplashScreen | 🔴 Critical | ゲストがLoginに強制遷移 | ✅ Fixed `357fe33` |
