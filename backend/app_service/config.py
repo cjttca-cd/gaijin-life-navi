@@ -23,10 +23,10 @@ class Settings(BaseSettings):
 
     # Firebase
     FIREBASE_PROJECT_ID: str = "gaijin-life-navi"
-    FIREBASE_CREDENTIALS: str = ""  # Path to service account JSON; empty = mock mode
+    FIREBASE_CREDENTIALS: str = str(_PROJECT_ROOT / "secrets" / "firebase-service-account.json")
 
     # Stripe
-    STRIPE_SECRET_KEY: str = ""  # Empty = mock mode
+    STRIPE_SECRET_KEY: str = ""  # Empty = stub mode (MVP, no real Stripe)
     STRIPE_WEBHOOK_SECRET: str = ""
     STRIPE_PREMIUM_PRICE_ID: str = "price_premium_monthly"
     STRIPE_PREMIUM_PLUS_PRICE_ID: str = "price_premium_plus_monthly"

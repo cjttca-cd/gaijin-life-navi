@@ -114,7 +114,7 @@ async def delete_me(
     Processing:
     1. Set profiles.deleted_at
     2. If active subscription → set cancel_at_period_end=true
-    3. Delete Firebase Auth account (skip in mock mode)
+    3. Delete Firebase Auth account (best-effort)
     """
     profile = await db.get(Profile, current_user.uid)
     if profile is None or profile.deleted_at is not None:
