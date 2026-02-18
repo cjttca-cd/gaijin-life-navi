@@ -128,13 +128,7 @@ class _ChatConversationScreenState
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go(AppRoutes.home);
-            }
-          },
+          onPressed: () => context.go(AppRoutes.home),
         ),
         title: Text(l10n.chatTitle),
         actions: const [
