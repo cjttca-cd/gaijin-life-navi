@@ -32,17 +32,36 @@ class NavigatorDomain {
 
 /// A guide entry in a domain's guide list.
 class NavigatorGuide {
-  const NavigatorGuide({required this.slug, required this.title, this.summary});
+  const NavigatorGuide({
+    required this.slug,
+    required this.title,
+    this.summary,
+    this.domain,
+  });
 
   final String slug;
   final String title;
   final String? summary;
+
+  /// Domain ID this guide belongs to (set when aggregating cross-domain).
+  final String? domain;
+
+  /// Create a copy with a domain assigned.
+  NavigatorGuide withDomain(String domainId) {
+    return NavigatorGuide(
+      slug: slug,
+      title: title,
+      summary: summary,
+      domain: domainId,
+    );
+  }
 
   factory NavigatorGuide.fromJson(Map<String, dynamic> json) {
     return NavigatorGuide(
       slug: json['slug'] as String? ?? '',
       title: json['title'] as String? ?? '',
       summary: json['summary'] as String?,
+      domain: json['domain'] as String?,
     );
   }
 }

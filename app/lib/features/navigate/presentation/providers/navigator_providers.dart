@@ -47,6 +47,20 @@ final guideDetailProvider =
       },
     );
 
+/// All guides across all active domains (for cross-domain search).
+final allGuidesProvider = FutureProvider<List<NavigatorGuide>>((ref) async {
+  final repo = ref.watch(navigatorRepositoryProvider);
+  final domains = await ref.watch(navigatorDomainsProvider.future);
+  final activeDomains = domains.where((d) => d.isActive).toList();
+
+  final allGuides = <NavigatorGuide>[];
+  for (final domain in activeDomains) {
+    final guides = await repo.getGuides(domain.id);
+    allGuides.addAll(guides.map((g) => g.withDomain(domain.id)));
+  }
+  return allGuides;
+});
+
 /// Emergency data from GET /api/v1/emergency.
 final emergencyDataProvider = FutureProvider<EmergencyData>((ref) async {
   final repo = ref.watch(emergencyRepositoryProvider);

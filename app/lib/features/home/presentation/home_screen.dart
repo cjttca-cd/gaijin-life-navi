@@ -9,6 +9,7 @@ import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/domain_colors.dart';
 import '../../chat/presentation/providers/chat_providers.dart';
 import '../../tracker/domain/tracker_item.dart';
 import '../../tracker/presentation/providers/tracker_providers.dart';
@@ -138,46 +139,31 @@ class HomeScreen extends ConsumerWidget {
 
                 const SizedBox(height: AppSpacing.space2xl),
 
-                // ── Popular Guides ────────────────────────────
+                // ── Popular Guides (list format) ─────────────
                 Text(
                   l10n.homePopularGuides.toUpperCase(),
                   style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
                 ),
                 const SizedBox(height: AppSpacing.spaceMd),
-                GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: AppSpacing.spaceMd,
-                  crossAxisSpacing: AppSpacing.spaceMd,
-                  childAspectRatio: 1.3,
-                  children: [
-                    _QuickActionCard(
-                      icon: Icons.account_balance,
-                      iconBgColor: AppColors.bankingContainer,
-                      iconColor: AppColors.bankingIcon,
-                      title: l10n.homeQaBankingTitle,
-                      subtitle: l10n.homeQaBankingSubtitle,
-                      onTap:
-                          () => context.push('${AppRoutes.navigate}/banking'),
-                    ),
-                    _QuickActionCard(
-                      icon: Icons.badge,
-                      iconBgColor: AppColors.visaContainer,
-                      iconColor: AppColors.visaIcon,
-                      title: l10n.homeQaVisaTitle,
-                      subtitle: l10n.homeQaVisaSubtitle,
-                      onTap: () => context.push('${AppRoutes.navigate}/visa'),
-                    ),
-                    _QuickActionCard(
-                      icon: Icons.local_hospital,
-                      iconBgColor: AppColors.medicalContainer,
-                      iconColor: AppColors.medicalIcon,
-                      title: l10n.homeQaMedicalTitle,
-                      subtitle: l10n.homeQaMedicalSubtitle,
-                      onTap: () => context.push(AppRoutes.emergency),
-                    ),
-                  ],
+                _HomeGuideListItem(
+                  title: l10n.homeQaBankingTitle,
+                  subtitle: l10n.homeQaBankingSubtitle,
+                  accentColor: DomainColors.banking.accent,
+                  onTap: () => context.push('${AppRoutes.navigate}/banking'),
+                ),
+                const SizedBox(height: AppSpacing.spaceSm),
+                _HomeGuideListItem(
+                  title: l10n.homeQaVisaTitle,
+                  subtitle: l10n.homeQaVisaSubtitle,
+                  accentColor: DomainColors.visa.accent,
+                  onTap: () => context.push('${AppRoutes.navigate}/visa'),
+                ),
+                const SizedBox(height: AppSpacing.spaceSm),
+                _HomeGuideListItem(
+                  title: l10n.homeQaMedicalTitle,
+                  subtitle: l10n.homeQaMedicalSubtitle,
+                  accentColor: DomainColors.medical.accent,
+                  onTap: () => context.push(AppRoutes.emergency),
                 ),
 
                 const SizedBox(height: AppSpacing.space2xl),
@@ -539,6 +525,68 @@ class _UpgradeBannerWithAnalyticsState
                   );
                 },
                 child: Text(widget.cta),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Guide list item with left accent bar — matches guide_list_screen _GuideCard style.
+class _HomeGuideListItem extends StatelessWidget {
+  const _HomeGuideListItem({
+    required this.title,
+    required this.subtitle,
+    required this.accentColor,
+    required this.onTap,
+  });
+
+  final String title;
+  final String subtitle;
+  final Color accentColor;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              // Left accent bar
+              Container(width: 4, color: accentColor),
+              // Content
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: tt.titleSmall,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceXs),
+                      Text(
+                        subtitle,
+                        style: tt.bodySmall?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
