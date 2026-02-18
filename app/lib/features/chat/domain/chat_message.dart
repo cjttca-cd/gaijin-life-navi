@@ -15,6 +15,7 @@ class ChatMessage {
     this.disclaimer,
     this.domain,
     this.usage,
+    this.imageBase64,
     required this.createdAt,
   });
 
@@ -34,6 +35,10 @@ class ChatMessage {
   final String? disclaimer;
   final String? domain;
   final ChatUsageInfo? usage;
+
+  /// Base64-encoded image attached by the user (for display in bubble).
+  final String? imageBase64;
+
   final DateTime createdAt;
 
   bool get isUser => role == 'user';
@@ -49,6 +54,7 @@ class ChatMessage {
     String? disclaimer,
     String? domain,
     ChatUsageInfo? usage,
+    String? imageBase64,
     DateTime? createdAt,
   }) {
     return ChatMessage(
@@ -61,6 +67,7 @@ class ChatMessage {
       disclaimer: disclaimer ?? this.disclaimer,
       domain: domain ?? this.domain,
       usage: usage ?? this.usage,
+      imageBase64: imageBase64 ?? this.imageBase64,
       createdAt: createdAt ?? this.createdAt,
     );
   }

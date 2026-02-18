@@ -11,10 +11,14 @@ class ChatRepository {
   final Dio _client;
 
   /// Send a chat message and get AI response (synchronous).
+  ///
+  /// When [imageBase64] is provided, it is included in the request body
+  /// as a raw base64 string for server-side image analysis.
   Future<ChatResponse> sendMessage({
     required String message,
     String? domain,
     String? locale,
+    String? imageBase64,
   }) async {
     final response = await _client.post<Map<String, dynamic>>(
       '/chat',
@@ -22,6 +26,7 @@ class ChatRepository {
         'message': message,
         if (domain != null) 'domain': domain,
         'locale': locale ?? 'en',
+        if (imageBase64 != null) 'image': imageBase64,
       },
     );
     return ChatResponse.fromJson(

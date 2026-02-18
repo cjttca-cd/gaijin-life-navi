@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -76,10 +78,29 @@ class _UserBubble extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    message.content,
-                    style: tt.bodyLarge?.copyWith(color: cs.onPrimary),
-                  ),
+                  // Show image thumbnail if the user attached one.
+                  if (message.imageBase64 != null) ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Image.memory(
+                        base64Decode(message.imageBase64!),
+                        width: 180,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const Icon(
+                          Icons.broken_image,
+                          size: 48,
+                          color: Colors.white54,
+                        ),
+                      ),
+                    ),
+                    if (message.content.isNotEmpty)
+                      const SizedBox(height: 6),
+                  ],
+                  if (message.content.isNotEmpty)
+                    Text(
+                      message.content,
+                      style: tt.bodyLarge?.copyWith(color: cs.onPrimary),
+                    ),
                   const SizedBox(height: 2),
                   Text(
                     _formatTime(message.createdAt),

@@ -155,7 +155,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginWelcome.
   ///
   /// In en, this message translates to:
-  /// **'Welcome back'**
+  /// **'Sign in to your account'**
   String get loginWelcome;
 
   /// No description provided for @loginSubtitle.
@@ -575,7 +575,7 @@ abstract class AppLocalizations {
   /// No description provided for @tabChat.
   ///
   /// In en, this message translates to:
-  /// **'Chat'**
+  /// **'AI Guide'**
   String get tabChat;
 
   /// No description provided for @tabGuide.
@@ -629,7 +629,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeUsageFree.
   ///
   /// In en, this message translates to:
-  /// **'Free • {remaining}/{limit} chats remaining today'**
+  /// **'Free • {remaining}/{limit} chats remaining'**
   String homeUsageFree(int remaining, int limit);
 
   /// No description provided for @homeSectionQuickActions.
@@ -647,7 +647,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeQaChatTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI Chat'**
+  /// **'Talk to AI Guide'**
   String get homeQaChatTitle;
 
   /// No description provided for @homeQaChatSubtitle.
@@ -719,7 +719,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatTitle.
   ///
   /// In en, this message translates to:
-  /// **'AI Chat'**
+  /// **'AI Guide'**
   String get chatTitle;
 
   /// No description provided for @chatInputPlaceholder.
@@ -779,7 +779,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatLimitRemaining.
   ///
   /// In en, this message translates to:
-  /// **'{remaining}/{limit} free chats remaining today.'**
+  /// **'{remaining}/{limit} free chats remaining.'**
   String chatLimitRemaining(int remaining, int limit);
 
   /// No description provided for @chatLimitUpgrade.
@@ -1949,7 +1949,7 @@ abstract class AppLocalizations {
   /// No description provided for @subscriptionFeatureFreeChat.
   ///
   /// In en, this message translates to:
-  /// **'5 AI chats per day'**
+  /// **'20 free AI chats on signup'**
   String get subscriptionFeatureFreeChat;
 
   /// No description provided for @subscriptionFeatureFreeScans.
@@ -2639,7 +2639,7 @@ abstract class AppLocalizations {
   /// No description provided for @subFeatureChatFree.
   ///
   /// In en, this message translates to:
-  /// **'5 chats per day'**
+  /// **'20 free chats on signup'**
   String get subFeatureChatFree;
 
   /// No description provided for @subFeatureChatStandard.
@@ -3113,7 +3113,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatGuestFreeOffer.
   ///
   /// In en, this message translates to:
-  /// **'Free signup — 5 chats per day'**
+  /// **'Free signup — 20 chats included'**
   String get chatGuestFreeOffer;
 
   /// No description provided for @chatGuestSignUp.
@@ -3223,6 +3223,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Track your tasks & deadlines'**
   String get homeQaTrackerSubtitle;
+
+  /// No description provided for @chatAttachPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get chatAttachPhoto;
+
+  /// No description provided for @chatAttachGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get chatAttachGallery;
+
+  /// No description provided for @chatAttachCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get chatAttachCancel;
+
+  /// No description provided for @chatImageTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Image is too large (max 5MB)'**
+  String get chatImageTooLarge;
 }
 
 class _AppLocalizationsDelegate

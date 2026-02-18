@@ -523,5 +523,10 @@
   "trackerSaved": "Salvo",
   "trackerItemSaved": "Salvo no rastreador",
   "homeQaTrackerTitle": "Rastreador",
-  "homeQaTrackerSubtitle": "Acompanhe tarefas e prazos"
+  "homeQaTrackerSubtitle": "Acompanhe tarefas e prazos",
+
+  "chatAttachPhoto": "Tirar Foto",
+  "chatAttachGallery": "Escolher da Galeria",
+  "chatAttachCancel": "Cancelar",
+  "chatImageTooLarge": "Imagem muito grande (máx. 5MB)"
 }

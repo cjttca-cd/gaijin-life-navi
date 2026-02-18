@@ -576,5 +576,10 @@
   "trackerSaved": "Saved",
   "trackerItemSaved": "Saved to tracker",
   "homeQaTrackerTitle": "Tracker",
-  "homeQaTrackerSubtitle": "Track your tasks & deadlines"
+  "homeQaTrackerSubtitle": "Track your tasks & deadlines",
+
+  "chatAttachPhoto": "Take Photo",
+  "chatAttachGallery": "Choose from Gallery",
+  "chatAttachCancel": "Cancel",
+  "chatImageTooLarge": "Image is too large (max 5MB)"
 }

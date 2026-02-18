@@ -523,5 +523,10 @@
   "trackerSaved": "저장됨",
   "trackerItemSaved": "추적기에 저장됨",
   "homeQaTrackerTitle": "추적기",
-  "homeQaTrackerSubtitle": "작업 및 마감일 추적"
+  "homeQaTrackerSubtitle": "작업 및 마감일 추적",
+
+  "chatAttachPhoto": "사진 촬영",
+  "chatAttachGallery": "갤러리에서 선택",
+  "chatAttachCancel": "취소",
+  "chatImageTooLarge": "이미지가 너무 큽니다 (최대 5MB)"
 }

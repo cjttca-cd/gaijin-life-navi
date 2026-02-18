@@ -33,7 +33,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get langPt => 'Português';
 
   @override
-  String get loginWelcome => 'Welcome back';
+  String get loginWelcome => 'Sign in to your account';
 
   @override
   String get loginSubtitle => 'Sign in to continue';
@@ -258,7 +258,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabHome => 'Home';
 
   @override
-  String get tabChat => 'Chat';
+  String get tabChat => 'AI Guide';
 
   @override
   String get tabGuide => 'Guide';
@@ -294,7 +294,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeUsageFree(int remaining, int limit) {
-    return 'Free • $remaining/$limit chats remaining today';
+    return 'Free • $remaining/$limit chats remaining';
   }
 
   @override
@@ -304,7 +304,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSectionExplore => 'Explore Guides';
 
   @override
-  String get homeQaChatTitle => 'AI Chat';
+  String get homeQaChatTitle => 'Talk to AI Guide';
 
   @override
   String get homeQaChatSubtitle => 'Ask anything about life in Japan';
@@ -340,7 +340,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeUpgradeCta => 'Upgrade now';
 
   @override
-  String get chatTitle => 'AI Chat';
+  String get chatTitle => 'AI Guide';
 
   @override
   String get chatInputPlaceholder => 'Type your message...';
@@ -373,7 +373,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String chatLimitRemaining(int remaining, int limit) {
-    return '$remaining/$limit free chats remaining today.';
+    return '$remaining/$limit free chats remaining.';
   }
 
   @override
@@ -989,7 +989,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '5 AI chats per day';
+  String get subscriptionFeatureFreeChat => '20 free AI chats on signup';
 
   @override
   String get subscriptionFeatureFreeScans => '3 document scans per month';
@@ -1354,7 +1354,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subRecommended => 'RECOMMENDED';
 
   @override
-  String get subFeatureChatFree => '5 chats per day';
+  String get subFeatureChatFree => '20 free chats on signup';
 
   @override
   String get subFeatureChatStandard => '300 chats per month';
@@ -1603,7 +1603,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatGuestFeature4 => 'And anything else';
 
   @override
-  String get chatGuestFreeOffer => 'Free signup — 5 chats per day';
+  String get chatGuestFreeOffer => 'Free signup — 20 chats included';
 
   @override
   String get chatGuestSignUp => 'Get started free';
@@ -1660,4 +1660,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeQaTrackerSubtitle => 'Track your tasks & deadlines';
+
+  @override
+  String get chatAttachPhoto => 'Take Photo';
+
+  @override
+  String get chatAttachGallery => 'Choose from Gallery';
+
+  @override
+  String get chatAttachCancel => 'Cancel';
+
+  @override
+  String get chatImageTooLarge => 'Image is too large (max 5MB)';
 }

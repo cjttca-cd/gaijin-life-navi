@@ -33,7 +33,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get langPt => 'Português';
 
   @override
-  String get loginWelcome => 'Chào mừng trở lại';
+  String get loginWelcome => 'Đăng nhập tài khoản';
 
   @override
   String get loginSubtitle => 'Đăng nhập để tiếp tục';
@@ -257,7 +257,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get tabHome => 'Trang chủ';
 
   @override
-  String get tabChat => 'Chat';
+  String get tabChat => 'AI Hướng dẫn';
 
   @override
   String get tabGuide => 'Hướng dẫn';
@@ -339,7 +339,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get homeUpgradeCta => 'Nâng cấp ngay';
 
   @override
-  String get chatTitle => 'AI Chat';
+  String get chatTitle => 'AI Hướng dẫn';
 
   @override
   String get chatInputPlaceholder => 'Nhập tin nhắn...';
@@ -1655,4 +1655,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get homeQaTrackerSubtitle => 'Theo dõi công việc & hạn chót';
+
+  @override
+  String get chatAttachPhoto => 'Chụp ảnh';
+
+  @override
+  String get chatAttachGallery => 'Chọn từ Thư viện';
+
+  @override
+  String get chatAttachCancel => 'Hủy';
+
+  @override
+  String get chatImageTooLarge => 'Ảnh quá lớn (tối đa 5MB)';
 }

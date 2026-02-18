@@ -14,8 +14,13 @@ Flow:
 
 from __future__ import annotations
 
+import base64
 import logging
+import os
 import re
+import time
+import uuid
+from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -135,6 +140,87 @@ def _extract_blocks(text: str) -> tuple[str, list[dict], list[dict], list[dict]]
     return clean, sources, actions, tracker_items
 
 
+# ── Image upload helpers ────────────────────────────────────────────────
+
+_MAX_IMAGE_BYTES = 5 * 1024 * 1024  # 5 MB
+_UPLOAD_MAX_AGE_SECS = 3600  # 1 hour
+
+
+def _detect_image_ext(data: bytes) -> str:
+    """Detect image format from magic bytes. Returns file extension."""
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        return "png"
+    if data[:2] == b"\xff\xd8":
+        return "jpg"
+    if data[:4] == b"GIF8":
+        return "gif"
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "webp"
+    # Default to jpg for unrecognised formats.
+    return "jpg"
+
+
+def _save_image_to_workspace(
+    agent_id: str, image_b64: str,
+) -> str:
+    """Decode base64 image, validate size, save to agent workspace.
+
+    Returns the absolute filesystem path of the saved file.
+    Raises ``HTTPException`` on validation failure.
+    """
+    try:
+        image_data = base64.b64decode(image_b64, validate=True)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "error": {
+                    "code": "INVALID_IMAGE",
+                    "message": "Image data is not valid base64.",
+                    "details": {},
+                }
+            },
+        )
+
+    if len(image_data) > _MAX_IMAGE_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail={
+                "error": {
+                    "code": "IMAGE_TOO_LARGE",
+                    "message": f"Image exceeds maximum size of {_MAX_IMAGE_BYTES // (1024 * 1024)}MB.",
+                    "details": {"max_bytes": _MAX_IMAGE_BYTES, "actual_bytes": len(image_data)},
+                }
+            },
+        )
+
+    ext = _detect_image_ext(image_data)
+    filename = f"{uuid.uuid4().hex}_{int(time.time())}.{ext}"
+    uploads_dir = Path(f"/root/.openclaw/agents/{agent_id}/workspace/uploads")
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+
+    file_path = uploads_dir / filename
+    file_path.write_bytes(image_data)
+    logger.info("Saved uploaded image: %s (%d bytes)", file_path, len(image_data))
+
+    return str(file_path)
+
+
+def _cleanup_old_uploads(agent_id: str) -> None:
+    """Delete upload files older than _UPLOAD_MAX_AGE_SECS."""
+    uploads_dir = Path(f"/root/.openclaw/agents/{agent_id}/workspace/uploads")
+    if not uploads_dir.exists():
+        return
+    cutoff = time.time() - _UPLOAD_MAX_AGE_SECS
+    for f in uploads_dir.iterdir():
+        if f.is_file() and f.stat().st_mtime < cutoff:
+            try:
+                f.unlink()
+                logger.debug("Cleaned up old upload: %s", f)
+            except OSError:
+                pass
+
+
 # ── Helpers ────────────────────────────────────────────────────────────
 
 
@@ -217,10 +303,18 @@ async def chat(
     if body.locale and body.locale != "en":
         agent_message = f"[User language: {body.locale}] {body.message}"
 
+    # Handle image upload — decode, save, pass path to agent.
+    image_path: str | None = None
+    if body.image:
+        image_path = _save_image_to_workspace(agent_id, body.image)
+        # Clean up old uploads in the background (best-effort).
+        _cleanup_old_uploads(agent_id)
+
     agent_resp = await call_agent(
         agent_id=agent_id,
         session_id=session_id,
         message=agent_message,
+        image_path=image_path,
     )
 
     if agent_resp.status != "ok":

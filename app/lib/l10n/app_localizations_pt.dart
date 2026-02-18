@@ -33,7 +33,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get langPt => 'Português';
 
   @override
-  String get loginWelcome => 'Bem-vindo de volta';
+  String get loginWelcome => 'Entre na sua conta';
 
   @override
   String get loginSubtitle => 'Faça login para continuar';
@@ -261,7 +261,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get tabHome => 'Início';
 
   @override
-  String get tabChat => 'Chat';
+  String get tabChat => 'AI Guia';
 
   @override
   String get tabGuide => 'Guia';
@@ -346,7 +346,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeUpgradeCta => 'Upgrade agora';
 
   @override
-  String get chatTitle => 'Chat IA';
+  String get chatTitle => 'AI Guia';
 
   @override
   String get chatInputPlaceholder => 'Digite sua mensagem...';
@@ -1673,4 +1673,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get homeQaTrackerSubtitle => 'Acompanhe tarefas e prazos';
+
+  @override
+  String get chatAttachPhoto => 'Tirar Foto';
+
+  @override
+  String get chatAttachGallery => 'Escolher da Galeria';
+
+  @override
+  String get chatAttachCancel => 'Cancelar';
+
+  @override
+  String get chatImageTooLarge => 'Imagem muito grande (máx. 5MB)';
 }

@@ -92,7 +92,14 @@ class ChatSendController {
   final Ref _ref;
 
   /// Send a message and process the synchronous response.
-  Future<void> sendMessage(String content, {String? domain}) async {
+  ///
+  /// When [imageBase64] is provided, it is sent alongside the text
+  /// message for server-side image analysis.
+  Future<void> sendMessage(
+    String content, {
+    String? domain,
+    String? imageBase64,
+  }) async {
     final repo = _ref.read(chatRepositoryProvider);
     final messagesNotifier = _ref.read(chatMessagesProvider.notifier);
 
@@ -101,6 +108,7 @@ class ChatSendController {
       id: 'user_${DateTime.now().millisecondsSinceEpoch}',
       role: 'user',
       content: content,
+      imageBase64: imageBase64,
       createdAt: DateTime.now(),
     );
     messagesNotifier.addUserMessage(userMessage);
@@ -109,7 +117,11 @@ class ChatSendController {
     _ref.read(isChatLoadingProvider.notifier).state = true;
 
     try {
-      final response = await repo.sendMessage(message: content, domain: domain);
+      final response = await repo.sendMessage(
+        message: content,
+        domain: domain,
+        imageBase64: imageBase64,
+      );
 
       // Add assistant message (including tracker_items and actions).
       final assistantMessage = ChatMessage(

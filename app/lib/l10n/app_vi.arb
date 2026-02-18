@@ -523,5 +523,10 @@
   "trackerSaved": "Đã lưu",
   "trackerItemSaved": "Đã lưu vào danh sách",
   "homeQaTrackerTitle": "Theo dõi",
-  "homeQaTrackerSubtitle": "Theo dõi công việc & hạn chót"
+  "homeQaTrackerSubtitle": "Theo dõi công việc & hạn chót",
+
+  "chatAttachPhoto": "Chụp ảnh",
+  "chatAttachGallery": "Chọn từ Thư viện",
+  "chatAttachCancel": "Hủy",
+  "chatImageTooLarge": "Ảnh quá lớn (tối đa 5MB)"
 }

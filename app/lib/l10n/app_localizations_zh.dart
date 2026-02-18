@@ -33,10 +33,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get langPt => 'Português';
 
   @override
-  String get loginWelcome => '欢迎回来';
+  String get loginWelcome => '登录你的账号';
 
   @override
-  String get loginSubtitle => '登录以继续';
+  String get loginSubtitle => '';
 
   @override
   String get loginEmailLabel => '邮箱';
@@ -247,7 +247,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tabHome => '首页';
 
   @override
-  String get tabChat => '对话';
+  String get tabChat => 'AI 向导';
 
   @override
   String get tabGuide => '指南';
@@ -283,7 +283,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String homeUsageFree(int remaining, int limit) {
-    return '免费版 • 今日剩余 $remaining/$limit 次对话';
+    return '免费版 • 剩余 $remaining/$limit 次对话';
   }
 
   @override
@@ -293,7 +293,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeSectionExplore => '浏览指南';
 
   @override
-  String get homeQaChatTitle => 'AI 对话';
+  String get homeQaChatTitle => '与 AI 向导对话';
 
   @override
   String get homeQaChatSubtitle => '关于日本生活的任何问题';
@@ -329,7 +329,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeUpgradeCta => '立即升级';
 
   @override
-  String get chatTitle => 'AI 对话';
+  String get chatTitle => 'AI 向导';
 
   @override
   String get chatInputPlaceholder => '输入你的消息...';
@@ -360,7 +360,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String chatLimitRemaining(int remaining, int limit) {
-    return '今日剩余 $remaining/$limit 次免费对话。';
+    return '剩余 $remaining/$limit 次免费对话。';
   }
 
   @override
@@ -960,7 +960,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '每天5次AI对话';
+  String get subscriptionFeatureFreeChat => '注册赠送20次AI对话';
 
   @override
   String get subscriptionFeatureFreeScans => '每月3次文件扫描';
@@ -1313,7 +1313,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subRecommended => '推荐';
 
   @override
-  String get subFeatureChatFree => '每日 5 次对话';
+  String get subFeatureChatFree => '注册赠送 20 次对话';
 
   @override
   String get subFeatureChatStandard => '每月 300 次对话';
@@ -1540,37 +1540,37 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsErrorDelete => '无法删除账号，请重试。';
 
   @override
-  String get chatGuestTitle => 'AI に日本での生活について何でも聞けます';
+  String get chatGuestTitle => 'AI 帮你解答日本生活的一切问题';
 
   @override
-  String get chatGuestFeature1 => '銀行口座の開設方法';
+  String get chatGuestFeature1 => '如何开设银行账户';
 
   @override
-  String get chatGuestFeature2 => 'ビザの更新手続き';
+  String get chatGuestFeature2 => '签证续签手续';
 
   @override
-  String get chatGuestFeature3 => '病院の受診方法';
+  String get chatGuestFeature3 => '如何去医院看病';
 
   @override
-  String get chatGuestFeature4 => 'その他なんでも';
+  String get chatGuestFeature4 => '其他任何问题';
 
   @override
-  String get chatGuestFreeOffer => '無料登録で1日5回まで無料';
+  String get chatGuestFreeOffer => '免费注册，赠送 20 次对话';
 
   @override
-  String get chatGuestSignUp => '無料で始める';
+  String get chatGuestSignUp => '免费开始';
 
   @override
-  String get chatGuestLogin => 'アカウントをお持ちの方はログイン';
+  String get chatGuestLogin => '已有账号？登录';
 
   @override
-  String get guestRegisterCta => '無料登録で AI Chat が使えます';
+  String get guestRegisterCta => '免费注册即可使用 AI 对话';
 
   @override
-  String get guideReadMore => '登録して全文を読む';
+  String get guideReadMore => '注册查看全文';
 
   @override
-  String get guideAskAI => 'AI に詳しく聞く';
+  String get guideAskAI => '向 AI 详细咨询';
 
   @override
   String get guideGuestCtaButton => '免费创建账号';
@@ -1610,4 +1610,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeQaTrackerSubtitle => '追踪任务和截止日期';
+
+  @override
+  String get chatAttachPhoto => '拍照';
+
+  @override
+  String get chatAttachGallery => '从相册选择';
+
+  @override
+  String get chatAttachCancel => '取消';
+
+  @override
+  String get chatImageTooLarge => '图片太大（最大 5MB）';
 }

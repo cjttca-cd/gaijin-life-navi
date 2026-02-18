@@ -523,5 +523,10 @@
   "trackerSaved": "已保存",
   "trackerItemSaved": "已保存到追踪器",
   "homeQaTrackerTitle": "追踪器",
-  "homeQaTrackerSubtitle": "追踪任务和截止日期"
+  "homeQaTrackerSubtitle": "追踪任务和截止日期",
+
+  "chatAttachPhoto": "拍照",
+  "chatAttachGallery": "从相册选择",
+  "chatAttachCancel": "取消",
+  "chatImageTooLarge": "图片太大（最大 5MB）"
 }

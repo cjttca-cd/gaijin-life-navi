@@ -33,7 +33,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get langPt => 'Português';
 
   @override
-  String get loginWelcome => '다시 오신 것을 환영합니다';
+  String get loginWelcome => '계정에 로그인';
 
   @override
   String get loginSubtitle => '로그인하여 계속하기';
@@ -248,7 +248,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tabHome => '홈';
 
   @override
-  String get tabChat => '채팅';
+  String get tabChat => 'AI 가이드';
 
   @override
   String get tabGuide => '가이드';
@@ -330,7 +330,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get homeUpgradeCta => '지금 업그레이드';
 
   @override
-  String get chatTitle => 'AI 채팅';
+  String get chatTitle => 'AI 가이드';
 
   @override
   String get chatInputPlaceholder => '메시지를 입력하세요...';
@@ -1619,4 +1619,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get homeQaTrackerSubtitle => '작업 및 마감일 추적';
+
+  @override
+  String get chatAttachPhoto => '사진 촬영';
+
+  @override
+  String get chatAttachGallery => '갤러리에서 선택';
+
+  @override
+  String get chatAttachCancel => '취소';
+
+  @override
+  String get chatImageTooLarge => '이미지가 너무 큽니다 (최대 5MB)';
 }

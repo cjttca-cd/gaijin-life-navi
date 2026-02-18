@@ -79,6 +79,7 @@ async def call_agent(
     session_id: str,
     message: str,
     timeout: int = 60,
+    image_path: str | None = None,
 ) -> AgentResponse:
     """Invoke an OpenClaw agent and return a structured response.
 
@@ -88,12 +89,22 @@ async def call_agent(
         message: The user's message text.
         timeout: Maximum seconds to wait for the agent (passed to both
             OpenClaw ``--timeout`` and ``asyncio`` subprocess timeout).
+        image_path: Optional filesystem path to an uploaded image.
+            When provided, the agent message is augmented with an
+            instruction to analyze the image via the ``image`` tool.
 
     Returns:
         An :class:`AgentResponse` — always returned, never raises.
         Check ``response.status`` for success/failure.
     """
     start = time.monotonic()
+
+    # If an image was uploaded, prepend analysis instruction.
+    if image_path:
+        message = (
+            f"[The user attached an image. Analyze it using the image "
+            f"tool with path: {image_path}]\n\n{message}"
+        )
 
     # Defensive: strip colons — OpenClaw rejects them in session IDs.
     safe_session = session_id.replace(":", "_")
