@@ -126,6 +126,16 @@ class _ChatConversationScreenState
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(AppRoutes.home);
+            }
+          },
+        ),
         title: Text(l10n.chatTitle),
         actions: const [
           Padding(padding: EdgeInsets.only(right: 8), child: UsageCounter()),

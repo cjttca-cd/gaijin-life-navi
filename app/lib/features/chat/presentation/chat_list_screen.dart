@@ -24,7 +24,7 @@ class ChatListScreen extends ConsumerWidget {
       // Navigate to conversation screen.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context.mounted) {
-          context.go(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
+          context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
         }
       });
     }
@@ -90,6 +90,6 @@ class ChatListScreen extends ConsumerWidget {
   void _startNewChat(BuildContext context, WidgetRef ref) {
     // Clear any previous messages and go to conversation.
     ref.read(chatMessagesProvider.notifier).clear();
-    context.go(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
+    context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
   }
 }
