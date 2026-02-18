@@ -30,11 +30,11 @@ router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
 
 async def _get_active_profile(
-    user_id: str, db: AsyncSession
+    user_id: str, db: AsyncSession, *, user: FirebaseUser | None = None
 ) -> Profile:
-    """Fetch profile or raise 404. Excludes soft-deleted records."""
+    """Fetch profile or auto-create on first access. Excludes soft-deleted records."""
     profile = await db.get(Profile, user_id)
-    if profile is None or profile.deleted_at is not None:
+    if profile is not None and profile.deleted_at is not None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={
@@ -45,6 +45,17 @@ async def _get_active_profile(
                 }
             },
         )
+    if profile is None:
+        # Auto-create profile on first access (consistent with /profile endpoint)
+        profile = Profile(
+            id=user_id,
+            email=user.email if user else "",
+            display_name=user.name if user else "",
+            preferred_language="en",
+        )
+        db.add(profile)
+        await db.flush()
+        logger.info("Auto-created profile for user %s", user_id)
     return profile
 
 
@@ -58,7 +69,7 @@ async def get_me(
     db: AsyncSession = Depends(get_db),
 ) -> dict:
     """Return the authenticated user's profile."""
-    profile = await _get_active_profile(current_user.uid, db)
+    profile = await _get_active_profile(current_user.uid, db, user=current_user)
     return SuccessResponse(
         data=ProfileResponse.model_validate(profile).model_dump()
     ).model_dump()
@@ -75,7 +86,7 @@ async def update_me(
     db: AsyncSession = Depends(get_db),
 ) -> dict:
     """Update the authenticated user's profile (partial update)."""
-    profile = await _get_active_profile(current_user.uid, db)
+    profile = await _get_active_profile(current_user.uid, db, user=current_user)
 
     update_data = body.model_dump(exclude_unset=True)
     for field, value in update_data.items():
@@ -178,7 +189,7 @@ async def complete_onboarding(
     2. Set onboarding_completed = True
     3. (Future) Auto-add 5 essential admin procedures to user_procedures
     """
-    profile = await _get_active_profile(current_user.uid, db)
+    profile = await _get_active_profile(current_user.uid, db, user=current_user)
 
     # Update profile fields
     if body.nationality is not None:

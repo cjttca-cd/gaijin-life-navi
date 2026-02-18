@@ -4,7 +4,7 @@
   "langTitle": "选择你的语言",
   "langContinue": "继续",
   "loginWelcome": "登录你的账号",
-  "loginSubtitle": "登录以使用全部功能",
+  "loginSubtitle": "",
   "loginEmailLabel": "邮箱",
   "loginEmailHint": "your@email.com",
   "loginPasswordLabel": "密码",

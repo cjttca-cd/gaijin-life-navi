@@ -136,14 +136,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       style: tt.displayMedium,
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: AppSpacing.spaceSm),
-                    Text(
-                      l10n.loginSubtitle,
-                      style: tt.bodyMedium?.copyWith(
-                        color: cs.onSurfaceVariant,
+                    if (l10n.loginSubtitle.isNotEmpty) ...[
+                      const SizedBox(height: AppSpacing.spaceSm),
+                      Text(
+                        l10n.loginSubtitle,
+                        style: tt.bodyMedium?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                    ],
                     const SizedBox(height: AppSpacing.space3xl),
                     // Email field.
                     TextFormField(
