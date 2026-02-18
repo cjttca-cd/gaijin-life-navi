@@ -105,7 +105,7 @@
   "@homeUsageFree": { "placeholders": { "remaining": { "type": "int" }, "limit": { "type": "int" } } },
   "homeSectionQuickActions": "Quick Actions",
   "homeSectionExplore": "Explore Guides",
-  "homeQaChatTitle": "AI Chat",
+  "homeQaChatTitle": "Talk to AI Guide",
   "homeQaChatSubtitle": "Ask anything about life in Japan",
   "homeQaBankingTitle": "Banking",
   "homeQaBankingSubtitle": "Account opening, transfers & more",

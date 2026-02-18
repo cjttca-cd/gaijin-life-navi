@@ -185,13 +185,23 @@ class _ChatConversationScreenState
             ),
             child: Row(
               children: [
-                // Attach button (disabled Phase 0).
-                Opacity(
-                  opacity: 0.4,
-                  child: Icon(
-                    Icons.attach_file,
-                    color: cs.onSurfaceVariant,
-                    size: 24,
+                // Attach button (disabled Phase 0 — tap shows coming soon).
+                GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('📷 Coming soon'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  child: Opacity(
+                    opacity: 0.4,
+                    child: Icon(
+                      Icons.attach_file,
+                      color: cs.onSurfaceVariant,
+                      size: 24,
+                    ),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.spaceSm),

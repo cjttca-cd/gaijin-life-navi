@@ -101,7 +101,7 @@ class HomeScreen extends ConsumerWidget {
                         iconColor: AppColors.primaryDark,
                         title: l10n.homeQaChatTitle,
                         subtitle: l10n.homeQaChatSubtitle,
-                        onTap: () => _startNewChat(context, ref),
+                        onTap: () => _openChat(context),
                       ),
                     _QuickActionCard(
                       icon: Icons.account_balance,
@@ -188,9 +188,8 @@ class HomeScreen extends ConsumerWidget {
     return l10n.homeGreetingDefault(name);
   }
 
-  void _startNewChat(BuildContext context, WidgetRef ref) {
-    // Clear messages and navigate to conversation.
-    ref.read(chatMessagesProvider.notifier).clear();
+  void _openChat(BuildContext context) {
+    // Phase 0: single conversation — continue existing chat, don't clear.
     context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
   }
 }
