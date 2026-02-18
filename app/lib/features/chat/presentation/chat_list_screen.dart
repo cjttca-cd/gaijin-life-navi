@@ -2,26 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_spacing.dart';
 import 'providers/chat_providers.dart';
 
-/// Chat tab screen — shows conversation list + new chat FAB.
+/// Chat tab — conversation list with new chat FAB.
 ///
 /// Each conversation is a separate stateless /reset session.
-/// Conversation history is stored locally via chatMessagesProvider.
+/// Conversation history is stored locally.
 class ChatListScreen extends ConsumerWidget {
   const ChatListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final messages = ref.watch(chatMessagesProvider);
-
-    // If there are existing messages, show a single "current" conversation.
-    // Future: support multiple conversations.
-    final hasConversation = messages.isNotEmpty;
+    final conversations = ref.watch(sortedConversationsProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.chatTitle)),
@@ -29,9 +26,9 @@ class ChatListScreen extends ConsumerWidget {
         onPressed: () => _startNewChat(context, ref),
         child: const Icon(Icons.add),
       ),
-      body: hasConversation
-          ? _buildConversationList(context, ref, l10n, theme, messages)
-          : _buildEmptyState(context, l10n, theme, ref),
+      body: conversations.isEmpty
+          ? _buildEmptyState(context, l10n, ref)
+          : _buildConversationList(context, ref, l10n, conversations),
     );
   }
 
@@ -39,55 +36,90 @@ class ChatListScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     AppLocalizations l10n,
-    ThemeData theme,
-    List<dynamic> messages,
+    List<dynamic> conversations,
   ) {
-    // Get the last user message as preview.
-    final lastUserMsgIndex = messages.lastIndexWhere((m) => m.role == 'user');
-    final lastUserMsg = lastUserMsgIndex >= 0 ? messages[lastUserMsgIndex] : null;
-    final preview = lastUserMsg?.text ?? l10n.chatEmptySubtitle;
-    final truncated =
-        preview.length > 60 ? '${preview.substring(0, 60)}...' : preview;
+    final theme = Theme.of(context);
 
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      children: [
-        Card(
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: theme.colorScheme.primaryContainer,
-              child: Icon(
-                Icons.chat_bubble_outline,
-                color: theme.colorScheme.onPrimaryContainer,
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenPadding,
+        vertical: AppSpacing.spaceSm,
+      ),
+      itemCount: conversations.length,
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.spaceXs),
+      itemBuilder: (context, index) {
+        final conv = conversations[index];
+        final title = conv.title ?? l10n.chatNewSession;
+        final preview = conv.lastMessage ?? '';
+        final time = conv.lastMessageAt ?? conv.createdAt;
+        final timeStr = _formatTime(time);
+
+        return Dismissible(
+          key: Key(conv.id),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: AppSpacing.spaceLg),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(Icons.delete, color: theme.colorScheme.onErrorContainer),
+          ),
+          onDismissed: (_) {
+            ref.read(conversationsProvider.notifier).deleteConversation(conv.id);
+            ref.read(allMessagesProvider.notifier).clearConversation(conv.id);
+          },
+          child: Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: theme.colorScheme.primaryContainer,
+                child: Icon(
+                  Icons.chat_bubble_outline,
+                  color: theme.colorScheme.onPrimaryContainer,
+                  size: 20,
+                ),
               ),
-            ),
-            title: Text(l10n.chatTitle),
-            subtitle: Text(
-              truncated,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            trailing: Text(
-              '${messages.length}',
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+              title: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            onTap: () => context.push(
-              AppRoutes.chatConversation.replaceFirst(':id', 'current'),
+              subtitle: preview.isNotEmpty
+                  ? Text(
+                      preview,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    )
+                  : null,
+              trailing: Text(
+                timeStr,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              onTap: () {
+                ref.read(activeConversationIdProvider.notifier).state = conv.id;
+                context.push(
+                  AppRoutes.chatConversation.replaceFirst(':id', conv.id),
+                );
+              },
             ),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 
   Widget _buildEmptyState(
     BuildContext context,
     AppLocalizations l10n,
-    ThemeData theme,
     WidgetRef ref,
   ) {
+    final theme = Theme.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -126,8 +158,18 @@ class ChatListScreen extends ConsumerWidget {
   }
 
   void _startNewChat(BuildContext context, WidgetRef ref) {
-    // Clear previous messages to start a fresh conversation.
-    ref.read(chatMessagesProvider.notifier).clear();
-    context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
+    final convId = ref.read(conversationsProvider.notifier).createConversation();
+    ref.read(activeConversationIdProvider.notifier).state = convId;
+    context.push(AppRoutes.chatConversation.replaceFirst(':id', convId));
+  }
+
+  String _formatTime(DateTime time) {
+    final now = DateTime.now();
+    final diff = now.difference(time);
+    if (diff.inMinutes < 1) return 'now';
+    if (diff.inHours < 1) return '${diff.inMinutes}m';
+    if (diff.inDays < 1) return DateFormat.Hm().format(time);
+    if (diff.inDays < 7) return DateFormat.E().format(time);
+    return DateFormat.MMMd().format(time);
   }
 }

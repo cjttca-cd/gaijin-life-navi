@@ -5,6 +5,7 @@ import '../../../../core/network/api_client.dart';
 import '../../data/chat_repository.dart';
 import '../../domain/chat_message.dart';
 import '../../domain/chat_response.dart';
+import '../../domain/conversation.dart';
 
 // ─── DI ──────────────────────────────────────────────────────
 
@@ -18,33 +19,105 @@ final chatRepositoryProvider = Provider<ChatRepository>((ref) {
   return ChatRepository(apiClient: ref.watch(apiClientProvider));
 });
 
-// ─── Messages (local state) ──────────────────────────────────
+// ─── Active conversation ID ──────────────────────────────────
 
-/// Provider for the conversation messages (local UI state).
-final chatMessagesProvider =
-    NotifierProvider<ChatMessagesNotifier, List<ChatMessage>>(
-      ChatMessagesNotifier.new,
+/// The currently selected conversation ID.
+final activeConversationIdProvider = StateProvider<String?>((ref) => null);
+
+// ─── Multi-conversation state ────────────────────────────────
+
+/// Manages all conversations and their messages.
+final conversationsProvider =
+    NotifierProvider<ConversationsNotifier, Map<String, Conversation>>(
+      ConversationsNotifier.new,
     );
 
-class ChatMessagesNotifier extends Notifier<List<ChatMessage>> {
+class ConversationsNotifier extends Notifier<Map<String, Conversation>> {
   @override
-  List<ChatMessage> build() => [];
+  Map<String, Conversation> build() => {};
 
-  /// Add a user message.
-  void addUserMessage(ChatMessage message) {
-    state = [...state, message];
+  /// Create a new conversation and return its ID.
+  String createConversation() {
+    final id = 'conv_${DateTime.now().millisecondsSinceEpoch}';
+    final conv = Conversation(id: id, createdAt: DateTime.now());
+    state = {...state, id: conv};
+    return id;
   }
 
-  /// Add an assistant message.
-  void addAssistantMessage(ChatMessage message) {
-    state = [...state, message];
+  /// Update conversation metadata after a message is sent/received.
+  void updateConversation(
+    String id, {
+    String? title,
+    String? lastMessage,
+    int? messageCount,
+  }) {
+    final conv = state[id];
+    if (conv == null) return;
+    conv.title = title ?? conv.title;
+    conv.lastMessage = lastMessage ?? conv.lastMessage;
+    conv.lastMessageAt = DateTime.now();
+    conv.messageCount = messageCount ?? conv.messageCount;
+    state = {...state, id: conv};
   }
 
-  /// Clear all messages (new conversation).
-  void clear() {
-    state = [];
+  /// Delete a conversation.
+  void deleteConversation(String id) {
+    final newState = Map<String, Conversation>.from(state);
+    newState.remove(id);
+    state = newState;
   }
 }
+
+/// Conversations sorted by last activity (newest first).
+final sortedConversationsProvider = Provider<List<Conversation>>((ref) {
+  final convs = ref.watch(conversationsProvider);
+  final sorted = convs.values.toList()
+    ..sort((a, b) =>
+        (b.lastMessageAt ?? b.createdAt).compareTo(a.lastMessageAt ?? a.createdAt));
+  return sorted;
+});
+
+// ─── Per-conversation messages ───────────────────────────────
+
+/// All messages keyed by conversation ID.
+final allMessagesProvider =
+    NotifierProvider<AllMessagesNotifier, Map<String, List<ChatMessage>>>(
+      AllMessagesNotifier.new,
+    );
+
+class AllMessagesNotifier extends Notifier<Map<String, List<ChatMessage>>> {
+  @override
+  Map<String, List<ChatMessage>> build() => {};
+
+  /// Add a message to a conversation.
+  void addMessage(String conversationId, ChatMessage message) {
+    final current = state[conversationId] ?? [];
+    state = {
+      ...state,
+      conversationId: [...current, message],
+    };
+  }
+
+  /// Get messages for a conversation.
+  List<ChatMessage> getMessages(String conversationId) {
+    return state[conversationId] ?? [];
+  }
+
+  /// Clear messages for a conversation.
+  void clearConversation(String conversationId) {
+    final newState = Map<String, List<ChatMessage>>.from(state);
+    newState.remove(conversationId);
+    state = newState;
+  }
+}
+
+/// Messages for the active conversation.
+final chatMessagesProvider = Provider<List<ChatMessage>>((ref) {
+  final activeId = ref.watch(activeConversationIdProvider);
+  if (activeId == null) return [];
+  final allMessages = ref.watch(allMessagesProvider);
+  return allMessages[activeId] ?? [];
+});
 
 // ─── Chat usage (remaining count) ────────────────────────────
 
@@ -52,7 +125,6 @@ class ChatMessagesNotifier extends Notifier<List<ChatMessage>> {
 final chatUsageProvider = StateProvider<ChatUsageInfo?>((ref) => null);
 
 /// Fetch usage from backend and update chatUsageProvider.
-/// Call this on app start (after login) and when entering chat.
 final fetchUsageProvider = FutureProvider<void>((ref) async {
   try {
     final client = ref.read(apiClientProvider);
@@ -92,9 +164,10 @@ class ChatSendController {
   final Ref _ref;
 
   /// Estimate token count for a text string.
-  /// CJK chars ≈ 2 tokens each, Latin ≈ 0.75 tokens per char.
   static int _estimateTokens(String text) {
-    final cjkPattern = RegExp(r'[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]');
+    final cjkPattern = RegExp(
+      r'[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]',
+    );
     int cjk = cjkPattern.allMatches(text).length;
     int nonCjk = text.length - cjk;
     return (cjk * 2 + nonCjk * 0.75).ceil();
@@ -104,17 +177,14 @@ class ChatSendController {
   static const int _maxContextTokens = 90000;
 
   /// Build context list from existing messages, respecting token budget.
-  /// Returns most recent messages that fit within [_maxContextTokens].
   List<Map<String, String>> _buildContext(List<ChatMessage> messages) {
     if (messages.isEmpty) return [];
 
-    // Walk backwards to collect as many recent messages as fit.
     final result = <Map<String, String>>[];
     int tokenBudget = _maxContextTokens;
 
     for (int i = messages.length - 1; i >= 0; i--) {
       final msg = messages[i];
-      // Skip error messages (empty content).
       if (msg.content.isEmpty) continue;
       final tokens = _estimateTokens(msg.content);
       if (tokenBudget - tokens < 0) break;
@@ -122,27 +192,24 @@ class ChatSendController {
       result.add({'role': msg.role, 'text': msg.content});
     }
 
-    // Reverse to chronological order.
     return result.reversed.toList();
   }
 
-  /// Send a message and process the synchronous response.
-  ///
-  /// When [imageBase64] is provided, it is sent alongside the text
-  /// message for server-side image analysis.
-  ///
-  /// Existing conversation messages are automatically collected as
-  /// context and sent to the backend for stateless agent continuity.
+  /// Send a message in the active conversation.
   Future<void> sendMessage(
     String content, {
     String? domain,
     String? imageBase64,
   }) async {
+    final activeId = _ref.read(activeConversationIdProvider);
+    if (activeId == null) return;
+
     final repo = _ref.read(chatRepositoryProvider);
-    final messagesNotifier = _ref.read(chatMessagesProvider.notifier);
+    final allMsgs = _ref.read(allMessagesProvider.notifier);
+    final convs = _ref.read(conversationsProvider.notifier);
 
     // Collect context from existing messages BEFORE adding the new one.
-    final currentMessages = _ref.read(chatMessagesProvider);
+    final currentMessages = _ref.read(allMessagesProvider)[activeId] ?? [];
     final context = _buildContext(currentMessages);
 
     // Add user message optimistically.
@@ -153,7 +220,19 @@ class ChatSendController {
       imageBase64: imageBase64,
       createdAt: DateTime.now(),
     );
-    messagesNotifier.addUserMessage(userMessage);
+    allMsgs.addMessage(activeId, userMessage);
+
+    // Update conversation metadata.
+    final msgCount = (_ref.read(allMessagesProvider)[activeId] ?? []).length;
+    convs.updateConversation(
+      activeId,
+      lastMessage: content,
+      messageCount: msgCount,
+      // Set title from first user message.
+      title: msgCount <= 1
+          ? (content.length > 30 ? '${content.substring(0, 30)}...' : content)
+          : null,
+    );
 
     // Start loading.
     _ref.read(isChatLoadingProvider.notifier).state = true;
@@ -166,7 +245,6 @@ class ChatSendController {
         context: context.isNotEmpty ? context : null,
       );
 
-      // Add assistant message (including tracker_items and actions).
       final assistantMessage = ChatMessage(
         id: 'assistant_${DateTime.now().millisecondsSinceEpoch}',
         role: 'assistant',
@@ -179,19 +257,28 @@ class ChatSendController {
         usage: response.usage,
         createdAt: DateTime.now(),
       );
-      messagesNotifier.addAssistantMessage(assistantMessage);
+      allMsgs.addMessage(activeId, assistantMessage);
+
+      // Update conversation with assistant reply preview.
+      final newCount = (_ref.read(allMessagesProvider)[activeId] ?? []).length;
+      convs.updateConversation(
+        activeId,
+        lastMessage: response.reply.length > 60
+            ? '${response.reply.substring(0, 60)}...'
+            : response.reply,
+        messageCount: newCount,
+      );
 
       // Update usage.
       _ref.read(chatUsageProvider.notifier).state = response.usage;
     } catch (error) {
-      // On error, add a failure message so user sees something.
       final errorMessage = ChatMessage(
         id: 'error_${DateTime.now().millisecondsSinceEpoch}',
         role: 'assistant',
-        content: '', // Empty content signals error in UI.
+        content: '',
         createdAt: DateTime.now(),
       );
-      messagesNotifier.addAssistantMessage(errorMessage);
+      allMsgs.addMessage(activeId, errorMessage);
       rethrow;
     } finally {
       _ref.read(isChatLoadingProvider.notifier).state = false;

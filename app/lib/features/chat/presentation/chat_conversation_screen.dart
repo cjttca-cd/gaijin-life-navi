@@ -43,6 +43,15 @@ class _ChatConversationScreenState
   String? _pendingImageName;
 
   @override
+  void initState() {
+    super.initState();
+    // Set active conversation so chatMessagesProvider reads from the right conversation.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(activeConversationIdProvider.notifier).state = widget.sessionId;
+    });
+  }
+
+  @override
   void dispose() {
     _textController.dispose();
     _scrollController.dispose();

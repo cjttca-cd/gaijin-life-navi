@@ -193,8 +193,8 @@ class HomeScreen extends ConsumerWidget {
   }
 
   void _openChat(BuildContext context) {
-    // Phase 0: single conversation — continue existing chat, don't clear.
-    context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
+    // Navigate to chat tab (conversation list).
+    context.go(AppRoutes.chat);
   }
 }
 
