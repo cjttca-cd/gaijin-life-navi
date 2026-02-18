@@ -30,9 +30,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     await Future<void>.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
-    final authState = ref.read(authStateProvider);
+    ref.read(authStateProvider);
     final hasLanguage = ref.read(localeProvider.notifier).hasSelectedLanguage;
-    final isLoggedIn = authState.valueOrNull != null;
 
     if (!mounted) return;
 

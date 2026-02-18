@@ -641,8 +641,20 @@ abstract class AppLocalizations {
   /// No description provided for @homeSectionExplore.
   ///
   /// In en, this message translates to:
-  /// **'Explore Guides'**
+  /// **'Explore'**
   String get homeSectionExplore;
+
+  /// No description provided for @homeTrackerSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'My To-Dos'**
+  String get homeTrackerSummary;
+
+  /// No description provided for @homeTrackerNoItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No to-dos yet. Tap to add one.'**
+  String get homeTrackerNoItems;
 
   /// No description provided for @homeQaChatTitle.
   ///
@@ -1235,152 +1247,86 @@ abstract class AppLocalizations {
   /// No description provided for @trackerTitle.
   ///
   /// In en, this message translates to:
-  /// **'Admin Tracker'**
+  /// **'To-Do'**
   String get trackerTitle;
 
-  /// No description provided for @trackerEmpty.
+  /// No description provided for @trackerAddItem.
   ///
   /// In en, this message translates to:
-  /// **'No procedures tracked'**
-  String get trackerEmpty;
+  /// **'New To-Do'**
+  String get trackerAddItem;
 
-  /// No description provided for @trackerEmptyHint.
+  /// No description provided for @trackerNoItems.
   ///
   /// In en, this message translates to:
-  /// **'Tap + to add procedures to track'**
-  String get trackerEmptyHint;
+  /// **'No to-dos yet'**
+  String get trackerNoItems;
 
-  /// No description provided for @trackerAddProcedure.
+  /// No description provided for @trackerNoItemsHint.
   ///
   /// In en, this message translates to:
-  /// **'Add Procedure'**
-  String get trackerAddProcedure;
+  /// **'Tap + to add your first to-do'**
+  String get trackerNoItemsHint;
 
-  /// No description provided for @trackerStatusNotStarted.
+  /// No description provided for @trackerAddTitle.
   ///
   /// In en, this message translates to:
-  /// **'Not Started'**
-  String get trackerStatusNotStarted;
+  /// **'Title'**
+  String get trackerAddTitle;
 
-  /// No description provided for @trackerStatusInProgress.
+  /// No description provided for @trackerAddMemo.
   ///
   /// In en, this message translates to:
-  /// **'In Progress'**
-  String get trackerStatusInProgress;
+  /// **'Memo (optional)'**
+  String get trackerAddMemo;
 
-  /// No description provided for @trackerStatusCompleted.
+  /// No description provided for @trackerAddDueDate.
   ///
   /// In en, this message translates to:
-  /// **'Completed'**
-  String get trackerStatusCompleted;
+  /// **'Due date (optional)'**
+  String get trackerAddDueDate;
 
-  /// No description provided for @trackerDueDate.
+  /// No description provided for @trackerDueToday.
   ///
   /// In en, this message translates to:
-  /// **'Due Date'**
-  String get trackerDueDate;
+  /// **'Due today'**
+  String get trackerDueToday;
 
-  /// No description provided for @trackerFreeLimitInfo.
+  /// No description provided for @trackerOverdue.
   ///
   /// In en, this message translates to:
-  /// **'Free plan: up to 3 procedures. Upgrade for unlimited.'**
-  String get trackerFreeLimitInfo;
+  /// **'Overdue'**
+  String get trackerOverdue;
 
-  /// No description provided for @trackerDetailTitle.
+  /// No description provided for @trackerViewAll.
   ///
   /// In en, this message translates to:
-  /// **'Procedure Details'**
-  String get trackerDetailTitle;
-
-  /// No description provided for @trackerCurrentStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Current Status'**
-  String get trackerCurrentStatus;
-
-  /// No description provided for @trackerNotes.
-  ///
-  /// In en, this message translates to:
-  /// **'Notes'**
-  String get trackerNotes;
-
-  /// No description provided for @trackerChangeStatus.
-  ///
-  /// In en, this message translates to:
-  /// **'Change Status'**
-  String get trackerChangeStatus;
-
-  /// No description provided for @trackerMarkInProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as In Progress'**
-  String get trackerMarkInProgress;
-
-  /// No description provided for @trackerMarkCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as Completed'**
-  String get trackerMarkCompleted;
-
-  /// No description provided for @trackerMarkIncomplete.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as Incomplete'**
-  String get trackerMarkIncomplete;
-
-  /// No description provided for @trackerStatusUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Status updated'**
-  String get trackerStatusUpdated;
+  /// **'View all →'**
+  String get trackerViewAll;
 
   /// No description provided for @trackerDeleteTitle.
   ///
   /// In en, this message translates to:
-  /// **'Delete Procedure'**
+  /// **'Delete To-Do'**
   String get trackerDeleteTitle;
 
   /// No description provided for @trackerDeleteConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to remove this procedure from your tracker?'**
+  /// **'Are you sure you want to delete this to-do?'**
   String get trackerDeleteConfirm;
-
-  /// No description provided for @trackerProcedureAdded.
-  ///
-  /// In en, this message translates to:
-  /// **'Procedure added to tracker'**
-  String get trackerProcedureAdded;
 
   /// No description provided for @trackerLimitReached.
   ///
   /// In en, this message translates to:
-  /// **'Free plan limit reached (3 procedures). Upgrade to Premium for unlimited.'**
+  /// **'Limit reached.'**
   String get trackerLimitReached;
 
   /// No description provided for @trackerAlreadyTracking.
   ///
   /// In en, this message translates to:
-  /// **'You are already tracking this procedure'**
+  /// **'This item is already in your to-do list'**
   String get trackerAlreadyTracking;
-
-  /// No description provided for @trackerEssentialProcedures.
-  ///
-  /// In en, this message translates to:
-  /// **'Essential (After Arrival)'**
-  String get trackerEssentialProcedures;
-
-  /// No description provided for @trackerOtherProcedures.
-  ///
-  /// In en, this message translates to:
-  /// **'Other Procedures'**
-  String get trackerOtherProcedures;
-
-  /// No description provided for @trackerNoTemplates.
-  ///
-  /// In en, this message translates to:
-  /// **'No procedure templates available'**
-  String get trackerNoTemplates;
 
   /// No description provided for @scannerTitle.
   ///
@@ -3209,19 +3155,19 @@ abstract class AppLocalizations {
   /// No description provided for @trackerItemSaved.
   ///
   /// In en, this message translates to:
-  /// **'Saved to tracker'**
+  /// **'Added to to-do list'**
   String get trackerItemSaved;
 
   /// No description provided for @homeQaTrackerTitle.
   ///
   /// In en, this message translates to:
-  /// **'Tracker'**
+  /// **'To-Do'**
   String get homeQaTrackerTitle;
 
   /// No description provided for @homeQaTrackerSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Track your tasks & deadlines'**
+  /// **'Manage your to-do list'**
   String get homeQaTrackerSubtitle;
 
   /// No description provided for @chatAttachPhoto.

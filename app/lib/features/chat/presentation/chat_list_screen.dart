@@ -5,7 +5,6 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/providers/router_provider.dart';
 import 'providers/chat_providers.dart';
-import 'widgets/usage_counter.dart';
 
 /// Chat tab screen (S08) — Phase 0: single conversation, no session list.
 ///
@@ -33,6 +32,8 @@ class ChatListScreen extends ConsumerWidget {
     );
   }
 
+  // TODO(cleanup): Remove or use _buildEmptyState when session list is implemented.
+  // ignore: unused_element
   Widget _buildEmptyState(
     BuildContext context,
     AppLocalizations l10n,

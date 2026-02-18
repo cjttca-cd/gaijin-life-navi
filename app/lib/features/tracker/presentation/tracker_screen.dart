@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
-import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
-import '../../chat/presentation/providers/chat_providers.dart';
 import '../domain/tracker_item.dart';
 import 'providers/tracker_providers.dart';
 
-/// Tracker list screen — displays all saved tracker items.
+/// To-do list screen — displays all saved tracker items.
 ///
-/// - Status cycling via tap on status chip.
-/// - Delete via swipe (Dismissible).
-/// - Free tier limit banner when applicable.
+/// - FAB to add new to-do.
+/// - Checkbox to toggle complete.
+/// - Swipe to delete (Dismissible).
+/// - Completed items shown with strikethrough + grey.
 class TrackerScreen extends ConsumerWidget {
   const TrackerScreen({super.key});
 
@@ -22,11 +21,13 @@ class TrackerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final trackerAsync = ref.watch(trackerItemsProvider);
-    final limitReached = ref.watch(trackerLimitReachedProvider);
-    final tier = ref.watch(userTierProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.trackerTitle)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddDialog(context, ref),
+        child: const Icon(Icons.add),
+      ),
       body: trackerAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text(l10n.genericError)),
@@ -34,36 +35,33 @@ class TrackerScreen extends ConsumerWidget {
           if (items.isEmpty) {
             return _EmptyState();
           }
-          return Column(
-            children: [
-              // Free tier limit banner.
-              if (limitReached && tier == 'free')
-                _LimitBanner(
-                  text: l10n.trackerFreeLimitInfo,
-                  onUpgrade: () => context.push(AppRoutes.subscription),
-                ),
-
-              // Items list.
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenPadding,
-                    vertical: AppSpacing.spaceSm,
-                  ),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return _TrackerListItem(item: item);
-                  },
-                ),
-              ),
-            ],
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+              vertical: AppSpacing.spaceSm,
+            ),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return _TrackerListItem(item: item);
+            },
           );
         },
       ),
     );
   }
+
+  void _showAddDialog(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => _AddItemSheet(ref: ref),
+    );
+  }
 }
+
+// ─── Empty State ──────────────────────────────────────────────
 
 class _EmptyState extends StatelessWidget {
   @override
@@ -85,13 +83,13 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.spaceLg),
             Text(
-              l10n.trackerEmpty,
-              style: tt.headlineMedium,
+              l10n.trackerNoItems,
+              style: tt.headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.spaceSm),
             Text(
-              l10n.trackerEmptyHint,
+              l10n.trackerNoItemsHint,
               style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
               textAlign: TextAlign.center,
             ),
@@ -102,48 +100,7 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-class _LimitBanner extends StatelessWidget {
-  const _LimitBanner({required this.text, required this.onUpgrade});
-
-  final String text;
-  final VoidCallback onUpgrade;
-
-  @override
-  Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.spaceLg,
-        vertical: AppSpacing.spaceMd,
-      ),
-      decoration: const BoxDecoration(color: AppColors.warningContainer),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.info_outline,
-            size: 20,
-            color: AppColors.onWarningContainer,
-          ),
-          const SizedBox(width: AppSpacing.spaceSm),
-          Expanded(
-            child: Text(
-              text,
-              style: tt.bodySmall?.copyWith(
-                color: AppColors.onWarningContainer,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: onUpgrade,
-            child: Text(AppLocalizations.of(context).chatLimitUpgrade),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// ─── List Item ────────────────────────────────────────────────
 
 class _TrackerListItem extends ConsumerWidget {
   const _TrackerListItem({required this.item});
@@ -155,6 +112,9 @@ class _TrackerListItem extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+
+    // Due date display.
+    final dueDateInfo = _dueDateInfo(context, item);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.spaceSm),
@@ -180,13 +140,9 @@ class _TrackerListItem extends ConsumerWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
             onTap: () {
-              ref.read(trackerItemsProvider.notifier).cycleStatus(item.id);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.trackerStatusUpdated),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
+              ref
+                  .read(trackerItemsProvider.notifier)
+                  .toggleComplete(item.id);
             },
             child: Container(
               padding: const EdgeInsets.all(AppSpacing.spaceLg),
@@ -195,11 +151,29 @@ class _TrackerListItem extends ConsumerWidget {
                 border: Border.all(color: cs.outlineVariant),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Status checkbox.
-                  _StatusIcon(status: item.status),
+                  // Checkbox.
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Checkbox(
+                        value: item.completed,
+                        onChanged: (_) {
+                          ref
+                              .read(trackerItemsProvider.notifier)
+                              .toggleComplete(item.id);
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(width: AppSpacing.spaceMd),
-                  // Title + date.
+                  // Title + due date + memo.
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,39 +181,50 @@ class _TrackerListItem extends ConsumerWidget {
                         Text(
                           item.title,
                           style: tt.titleSmall?.copyWith(
-                            decoration:
-                                item.status == TrackerStatus.completed
-                                    ? TextDecoration.lineThrough
-                                    : null,
+                            decoration: item.completed
+                                ? TextDecoration.lineThrough
+                                : null,
+                            color: item.completed
+                                ? cs.onSurfaceVariant
+                                : cs.onSurface,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (item.date != null && item.date!.isNotEmpty) ...[
-                          const SizedBox(height: 2),
+                        if (dueDateInfo != null) ...[
+                          const SizedBox(height: 4),
                           Row(
                             children: [
                               Icon(
                                 Icons.event,
-                                size: 12,
-                                color: AppColors.warning,
+                                size: 14,
+                                color: dueDateInfo.color,
                               ),
                               const SizedBox(width: AppSpacing.spaceXs),
                               Text(
-                                item.date!,
+                                dueDateInfo.label,
                                 style: tt.labelSmall?.copyWith(
-                                  color: AppColors.warning,
+                                  color: dueDateInfo.color,
                                 ),
                               ),
                             ],
                           ),
                         ],
+                        if (item.memo != null &&
+                            item.memo!.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            item.memo!,
+                            style: tt.bodySmall?.copyWith(
+                              color: cs.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ],
                     ),
                   ),
-                  const SizedBox(width: AppSpacing.spaceSm),
-                  // Status badge.
-                  _StatusBadge(status: item.status, l10n: l10n),
                 ],
               ),
             ),
@@ -252,110 +237,226 @@ class _TrackerListItem extends ConsumerWidget {
   Future<bool?> _confirmDelete(BuildContext context, AppLocalizations l10n) {
     return showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(l10n.trackerDeleteTitle),
-            content: Text(l10n.trackerDeleteConfirm),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(l10n.chatDeleteCancel),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                style: TextButton.styleFrom(foregroundColor: AppColors.error),
-                child: Text(l10n.chatDeleteAction),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(l10n.trackerDeleteTitle),
+        content: Text(l10n.trackerDeleteConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.chatDeleteCancel),
           ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
+            child: Text(l10n.chatDeleteAction),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _StatusIcon extends StatelessWidget {
-  const _StatusIcon({required this.status});
+// ─── Due Date Helper ──────────────────────────────────────────
 
-  final TrackerStatus status;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (status) {
-      case TrackerStatus.notStarted:
-        return Container(
-          width: 24,
-          height: 24,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.onSurfaceVariant, width: 2),
-          ),
-        );
-      case TrackerStatus.inProgress:
-        return Container(
-          width: 24,
-          height: 24,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.warning, width: 2),
-          ),
-          child: const Icon(
-            Icons.more_horiz,
-            size: 14,
-            color: AppColors.warning,
-          ),
-        );
-      case TrackerStatus.completed:
-        return Container(
-          width: 24,
-          height: 24,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.success,
-          ),
-          child: const Icon(Icons.check, size: 16, color: AppColors.onPrimary),
-        );
-    }
-  }
+class _DueDateInfo {
+  const _DueDateInfo({required this.label, required this.color});
+  final String label;
+  final Color color;
 }
 
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.status, required this.l10n});
+_DueDateInfo? _dueDateInfo(BuildContext context, TrackerItem item) {
+  if (item.dueDate == null) return null;
+  final l10n = AppLocalizations.of(context);
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final due = DateTime(
+    item.dueDate!.year,
+    item.dueDate!.month,
+    item.dueDate!.day,
+  );
 
-  final TrackerStatus status;
-  final AppLocalizations l10n;
+  if (item.completed) {
+    return _DueDateInfo(
+      label: DateFormat.yMMMd().format(item.dueDate!),
+      color: AppColors.onSurfaceVariant,
+    );
+  }
+
+  if (due.isBefore(today)) {
+    return _DueDateInfo(
+      label: '${l10n.trackerOverdue} • ${DateFormat.yMMMd().format(item.dueDate!)}',
+      color: AppColors.error,
+    );
+  }
+
+  if (due.isAtSameMomentAs(today)) {
+    return _DueDateInfo(
+      label: l10n.trackerDueToday,
+      color: AppColors.warning,
+    );
+  }
+
+  return _DueDateInfo(
+    label: DateFormat.yMMMd().format(item.dueDate!),
+    color: AppColors.onSurfaceVariant,
+  );
+}
+
+// ─── Add Item Bottom Sheet ─────────────────────────────────────
+
+class _AddItemSheet extends ConsumerStatefulWidget {
+  const _AddItemSheet({required this.ref});
+
+  final WidgetRef ref;
+
+  @override
+  ConsumerState<_AddItemSheet> createState() => _AddItemSheetState();
+}
+
+class _AddItemSheetState extends ConsumerState<_AddItemSheet> {
+  final _titleController = TextEditingController();
+  final _memoController = TextEditingController();
+  DateTime? _dueDate;
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _memoController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
-    Color bgColor;
-    Color textColor;
-    String label;
-
-    switch (status) {
-      case TrackerStatus.notStarted:
-        bgColor = AppColors.surfaceVariant;
-        textColor = AppColors.onSurfaceVariant;
-        label = l10n.trackerStatusNotStarted;
-      case TrackerStatus.inProgress:
-        bgColor = AppColors.warningContainer;
-        textColor = AppColors.onWarningContainer;
-        label = l10n.trackerStatusInProgress;
-      case TrackerStatus.completed:
-        bgColor = AppColors.successContainer;
-        textColor = AppColors.onSuccessContainer;
-        label = l10n.trackerStatusCompleted;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.spaceSm,
-        vertical: AppSpacing.spaceXs,
+    return Padding(
+      padding: EdgeInsets.only(
+        left: AppSpacing.screenPadding,
+        right: AppSpacing.screenPadding,
+        top: AppSpacing.spaceLg,
+        bottom: MediaQuery.of(context).viewInsets.bottom + AppSpacing.spaceLg,
       ),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(999),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header.
+          Text(l10n.trackerAddItem, style: tt.titleLarge),
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Title field.
+          TextField(
+            controller: _titleController,
+            autofocus: true,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText: l10n.trackerAddTitle,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.spaceMd),
+
+          // Memo field.
+          TextField(
+            controller: _memoController,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText: l10n.trackerAddMemo,
+              border: const OutlineInputBorder(),
+            ),
+            maxLines: 2,
+          ),
+          const SizedBox(height: AppSpacing.spaceMd),
+
+          // Due date picker.
+          InkWell(
+            onTap: _pickDueDate,
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.spaceMd,
+                vertical: AppSpacing.spaceMd,
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(color: cs.outline),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.event, color: cs.onSurfaceVariant),
+                  const SizedBox(width: AppSpacing.spaceMd),
+                  Expanded(
+                    child: Text(
+                      _dueDate != null
+                          ? DateFormat.yMMMd().format(_dueDate!)
+                          : l10n.trackerAddDueDate,
+                      style: tt.bodyMedium?.copyWith(
+                        color: _dueDate != null
+                            ? cs.onSurface
+                            : cs.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  if (_dueDate != null)
+                    GestureDetector(
+                      onTap: () => setState(() => _dueDate = null),
+                      child: Icon(
+                        Icons.close,
+                        size: 18,
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Save button.
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: FilledButton(
+              onPressed: _save,
+              child: Text(l10n.trackerSave),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.spaceSm),
+        ],
       ),
-      child: Text(label, style: tt.labelSmall?.copyWith(color: textColor)),
     );
+  }
+
+  Future<void> _pickDueDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _dueDate ?? now,
+      firstDate: DateTime(now.year - 1),
+      lastDate: DateTime(now.year + 5),
+    );
+    if (picked != null) {
+      setState(() => _dueDate = picked);
+    }
+  }
+
+  void _save() {
+    final title = _titleController.text.trim();
+    if (title.isEmpty) return;
+
+    final memo = _memoController.text.trim();
+    final item = TrackerItem(
+      id: TrackerItem.generateId(),
+      title: title,
+      memo: memo.isNotEmpty ? memo : null,
+      dueDate: _dueDate,
+      completed: false,
+      createdAt: DateTime.now(),
+    );
+
+    widget.ref.read(trackerItemsProvider.notifier).add(item);
+    Navigator.of(context).pop();
   }
 }

@@ -300,7 +300,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get homeSectionQuickActions => 'Thao tác nhanh';
 
   @override
-  String get homeSectionExplore => 'Khám phá hướng dẫn';
+  String get homeSectionExplore => 'Khám phá';
+
+  @override
+  String get homeTrackerSummary => 'Việc cần làm';
+
+  @override
+  String get homeTrackerNoItems => 'Chưa có việc cần làm. Nhấn để thêm.';
 
   @override
   String get homeQaChatTitle => 'AI Chat';
@@ -603,81 +609,46 @@ class AppLocalizationsVi extends AppLocalizations {
       'QUAN TRỌNG: Đây là thông tin chung về thủ tục visa, không phải tư vấn nhập cư.';
 
   @override
-  String get trackerTitle => 'Theo dõi hành chính';
+  String get trackerTitle => 'Việc cần làm';
 
   @override
-  String get trackerEmpty => 'Chưa có thủ tục nào';
+  String get trackerAddItem => 'Thêm việc mới';
 
   @override
-  String get trackerEmptyHint => 'Nhấn + để thêm thủ tục';
+  String get trackerNoItems => 'Chưa có việc cần làm';
 
   @override
-  String get trackerAddProcedure => 'Thêm thủ tục';
+  String get trackerNoItemsHint => 'Nhấn + để thêm việc cần làm đầu tiên';
 
   @override
-  String get trackerStatusNotStarted => 'Chưa bắt đầu';
+  String get trackerAddTitle => 'Tiêu đề';
 
   @override
-  String get trackerStatusInProgress => 'Đang tiến hành';
+  String get trackerAddMemo => 'Ghi chú (tùy chọn)';
 
   @override
-  String get trackerStatusCompleted => 'Hoàn thành';
+  String get trackerAddDueDate => 'Hạn chót (tùy chọn)';
 
   @override
-  String get trackerDueDate => 'Hạn chót';
+  String get trackerDueToday => 'Hôm nay hết hạn';
 
   @override
-  String get trackerFreeLimitInfo =>
-      'Miễn phí: tối đa 3 thủ tục. Nâng cấp để không giới hạn.';
+  String get trackerOverdue => 'Quá hạn';
 
   @override
-  String get trackerDetailTitle => 'Chi tiết thủ tục';
+  String get trackerViewAll => 'Xem tất cả →';
 
   @override
-  String get trackerCurrentStatus => 'Trạng thái hiện tại';
+  String get trackerDeleteTitle => 'Xóa việc cần làm';
 
   @override
-  String get trackerNotes => 'Ghi chú';
+  String get trackerDeleteConfirm => 'Bạn có chắc muốn xóa việc này?';
 
   @override
-  String get trackerChangeStatus => 'Thay đổi trạng thái';
+  String get trackerLimitReached => 'Đã đạt giới hạn.';
 
   @override
-  String get trackerMarkInProgress => 'Đánh dấu đang tiến hành';
-
-  @override
-  String get trackerMarkCompleted => 'Đánh dấu hoàn thành';
-
-  @override
-  String get trackerMarkIncomplete => 'Đánh dấu chưa hoàn thành';
-
-  @override
-  String get trackerStatusUpdated => 'Trạng thái đã cập nhật';
-
-  @override
-  String get trackerDeleteTitle => 'Xóa thủ tục';
-
-  @override
-  String get trackerDeleteConfirm => 'Bạn có chắc muốn xóa thủ tục này?';
-
-  @override
-  String get trackerProcedureAdded => 'Đã thêm vào danh sách theo dõi';
-
-  @override
-  String get trackerLimitReached =>
-      'Đã đạt giới hạn miễn phí (3 thủ tục). Nâng cấp để không giới hạn.';
-
-  @override
-  String get trackerAlreadyTracking => 'Bạn đã theo dõi thủ tục này';
-
-  @override
-  String get trackerEssentialProcedures => 'Thiết yếu (Sau khi đến)';
-
-  @override
-  String get trackerOtherProcedures => 'Thủ tục khác';
-
-  @override
-  String get trackerNoTemplates => 'Chưa có mẫu thủ tục';
+  String get trackerAlreadyTracking => 'Việc này đã có trong danh sách';
 
   @override
   String get scannerTitle => 'Quét tài liệu';
@@ -1648,13 +1619,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get trackerSaved => 'Đã lưu';
 
   @override
-  String get trackerItemSaved => 'Đã lưu vào danh sách';
+  String get trackerItemSaved => 'Đã thêm vào danh sách việc cần làm';
 
   @override
-  String get homeQaTrackerTitle => 'Theo dõi';
+  String get homeQaTrackerTitle => 'Việc cần làm';
 
   @override
-  String get homeQaTrackerSubtitle => 'Theo dõi công việc & hạn chót';
+  String get homeQaTrackerSubtitle => 'Quản lý việc cần làm';
 
   @override
   String get chatAttachPhoto => 'Chụp ảnh';

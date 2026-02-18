@@ -14,18 +14,18 @@ void main() {
 
   TrackerItem makeItem({
     String id = 'id_1',
-    String type = 'deadline',
     String title = 'Open bank account',
-    String? date = '2026-04-01',
-    TrackerStatus status = TrackerStatus.notStarted,
+    String? memo,
+    DateTime? dueDate,
+    bool completed = false,
   }) {
     return TrackerItem(
       id: id,
-      type: type,
       title: title,
-      date: date,
-      status: status,
-      savedAt: DateTime(2026, 2, 18),
+      memo: memo,
+      dueDate: dueDate,
+      completed: completed,
+      createdAt: DateTime(2026, 2, 18),
     );
   }
 
@@ -34,9 +34,9 @@ void main() {
       expect(repo.getAll(), isEmpty);
     });
 
-    test('save adds item and getAll retrieves it', () async {
+    test('add item and getAll retrieves it', () async {
       final item = makeItem();
-      final success = await repo.save(item);
+      final success = await repo.add(item);
 
       expect(success, isTrue);
       final items = repo.getAll();
@@ -44,47 +44,46 @@ void main() {
       expect(items.first.title, 'Open bank account');
     });
 
-    test('save multiple items and getAll returns all', () async {
-      await repo.save(makeItem(id: '1', title: 'Task A'));
-      await repo.save(makeItem(id: '2', title: 'Task B'));
-      await repo.save(makeItem(id: '3', title: 'Task C'));
+    test('add multiple items and getAll returns all', () async {
+      await repo.add(makeItem(id: '1', title: 'Task A'));
+      await repo.add(makeItem(id: '2', title: 'Task B'));
+      await repo.add(makeItem(id: '3', title: 'Task C'));
 
       expect(repo.getAll().length, 3);
     });
 
-    test('save rejects duplicate (same type + title)', () async {
-      await repo.save(makeItem(id: '1', title: 'Bank Account'));
-      final success = await repo.save(makeItem(id: '2', title: 'Bank Account'));
+    test('update changes item fields', () async {
+      await repo.add(makeItem(id: 'x', title: 'Original'));
 
-      expect(success, isFalse);
-      expect(repo.getAll().length, 1);
+      final updated = makeItem(id: 'x', title: 'Updated');
+      await repo.update(updated);
+
+      expect(repo.getAll().first.title, 'Updated');
     });
 
-    test('duplicate check is case-insensitive', () async {
-      await repo.save(makeItem(id: '1', title: 'Bank Account'));
-      final success = await repo.save(makeItem(id: '2', title: 'bank account'));
-
-      expect(success, isFalse);
+    test('update returns false for non-existent id', () async {
+      final result = await repo.update(makeItem(id: 'ghost'));
+      expect(result, isFalse);
     });
 
-    test('updateStatus changes status', () async {
-      await repo.save(makeItem(id: 'x'));
+    test('toggleComplete toggles completed state', () async {
+      await repo.add(makeItem(id: 'x'));
 
-      await repo.updateStatus('x', TrackerStatus.inProgress);
-      expect(repo.getAll().first.status, TrackerStatus.inProgress);
+      await repo.toggleComplete('x');
+      expect(repo.getAll().first.completed, true);
 
-      await repo.updateStatus('x', TrackerStatus.completed);
-      expect(repo.getAll().first.status, TrackerStatus.completed);
+      await repo.toggleComplete('x');
+      expect(repo.getAll().first.completed, false);
     });
 
-    test('updateStatus returns false for non-existent id', () async {
-      final result = await repo.updateStatus('ghost', TrackerStatus.completed);
+    test('toggleComplete returns false for non-existent id', () async {
+      final result = await repo.toggleComplete('ghost');
       expect(result, isFalse);
     });
 
     test('delete removes item', () async {
-      await repo.save(makeItem(id: 'a', title: 'A'));
-      await repo.save(makeItem(id: 'b', title: 'B'));
+      await repo.add(makeItem(id: 'a', title: 'A'));
+      await repo.add(makeItem(id: 'b', title: 'B'));
 
       await repo.delete('a');
       final items = repo.getAll();
@@ -93,71 +92,57 @@ void main() {
     });
 
     test('delete non-existent id does not throw', () async {
-      await repo.save(makeItem(id: 'a'));
+      await repo.add(makeItem(id: 'a'));
       await repo.delete('nonexistent');
       expect(repo.getAll().length, 1);
     });
 
     test('count returns correct number', () async {
       expect(repo.count, 0);
-      await repo.save(makeItem(id: '1', title: 'A'));
+      await repo.add(makeItem(id: '1', title: 'A'));
       expect(repo.count, 1);
-      await repo.save(makeItem(id: '2', title: 'B'));
+      await repo.add(makeItem(id: '2', title: 'B'));
       expect(repo.count, 2);
     });
 
-    test('isLimitReached returns true for free tier at 3 items', () async {
-      await repo.save(makeItem(id: '1', title: 'A'));
-      await repo.save(makeItem(id: '2', title: 'B'));
-      await repo.save(makeItem(id: '3', title: 'C'));
-
-      expect(repo.isLimitReached('free'), isTrue);
-      expect(repo.isLimitReached('standard'), isFalse);
-      expect(repo.isLimitReached('premium'), isFalse);
-    });
-
-    test('isLimitReached returns false for free tier under 3 items', () async {
-      await repo.save(makeItem(id: '1', title: 'A'));
-      await repo.save(makeItem(id: '2', title: 'B'));
-
-      expect(repo.isLimitReached('free'), isFalse);
-    });
-
-    test('free tier limit is exactly 3 per BUSINESS_RULES.md §2', () {
-      expect(TrackerRepository.freeTierLimit, 3);
-    });
-
-    test('isDuplicate checks type and title', () async {
-      await repo.save(makeItem(type: 'deadline', title: 'Bank'));
-
-      expect(repo.isDuplicate('deadline', 'Bank'), isTrue);
-      expect(repo.isDuplicate('deadline', 'bank'), isTrue);
-      expect(repo.isDuplicate('task', 'Bank'), isFalse);
-      expect(repo.isDuplicate('deadline', 'Visa'), isFalse);
-    });
-
-    test('items are sorted by savedAt descending (newest first)', () async {
-      final item1 = TrackerItem(
-        id: '1',
-        type: 'task',
-        title: 'First',
-        status: TrackerStatus.notStarted,
-        savedAt: DateTime(2026, 1, 1),
-      );
-      final item2 = TrackerItem(
-        id: '2',
-        type: 'task',
-        title: 'Second',
-        status: TrackerStatus.notStarted,
-        savedAt: DateTime(2026, 3, 1),
-      );
-
-      await repo.save(item1);
-      await repo.save(item2);
+    test('incomplete items sorted before completed', () async {
+      await repo.add(makeItem(id: '1', title: 'Done', completed: true));
+      await repo.add(makeItem(id: '2', title: 'Not done', completed: false));
 
       final items = repo.getAll();
-      expect(items.first.title, 'Second');
-      expect(items.last.title, 'First');
+      expect(items.first.title, 'Not done');
+      expect(items.last.title, 'Done');
+    });
+
+    test('incomplete items with dueDate sorted ascending', () async {
+      await repo.add(makeItem(
+        id: '1',
+        title: 'Later',
+        dueDate: DateTime(2026, 6, 1),
+      ));
+      await repo.add(makeItem(
+        id: '2',
+        title: 'Sooner',
+        dueDate: DateTime(2026, 3, 1),
+      ));
+
+      final items = repo.getAll();
+      expect(items.first.title, 'Sooner');
+      expect(items.last.title, 'Later');
+    });
+
+    test('incomplete items without dueDate sorted after those with dueDate',
+        () async {
+      await repo.add(makeItem(id: '1', title: 'No date'));
+      await repo.add(makeItem(
+        id: '2',
+        title: 'Has date',
+        dueDate: DateTime(2026, 3, 1),
+      ));
+
+      final items = repo.getAll();
+      expect(items.first.title, 'Has date');
+      expect(items.last.title, 'No date');
     });
   });
 }

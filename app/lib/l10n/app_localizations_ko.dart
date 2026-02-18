@@ -291,7 +291,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get homeSectionQuickActions => '빠른 실행';
 
   @override
-  String get homeSectionExplore => '가이드 둘러보기';
+  String get homeSectionExplore => '탐색';
+
+  @override
+  String get homeTrackerSummary => '나의 할 일';
+
+  @override
+  String get homeTrackerNoItems => '할 일이 없습니다. 탭하여 추가하세요.';
 
   @override
   String get homeQaChatTitle => 'AI 채팅';
@@ -590,79 +596,46 @@ class AppLocalizationsKo extends AppLocalizations {
   String get visaDisclaimer => '중요: 비자 절차에 대한 일반적인 정보이며 이민 조언이 아닙니다.';
 
   @override
-  String get trackerTitle => '행정 추적';
+  String get trackerTitle => '할 일';
 
   @override
-  String get trackerEmpty => '추적 중인 절차 없음';
+  String get trackerAddItem => '새 할 일';
 
   @override
-  String get trackerEmptyHint => '+를 눌러 절차를 추가하세요';
+  String get trackerNoItems => '할 일이 없습니다';
 
   @override
-  String get trackerAddProcedure => '절차 추가';
+  String get trackerNoItemsHint => '+를 눌러 첫 번째 할 일을 추가하세요';
 
   @override
-  String get trackerStatusNotStarted => '미시작';
+  String get trackerAddTitle => '제목';
 
   @override
-  String get trackerStatusInProgress => '진행 중';
+  String get trackerAddMemo => '메모 (선택사항)';
 
   @override
-  String get trackerStatusCompleted => '완료';
+  String get trackerAddDueDate => '마감일 (선택사항)';
 
   @override
-  String get trackerDueDate => '마감일';
+  String get trackerDueToday => '오늘 마감';
 
   @override
-  String get trackerFreeLimitInfo => '무료: 최대 3개 절차. 업그레이드하면 무제한.';
+  String get trackerOverdue => '기한 초과';
 
   @override
-  String get trackerDetailTitle => '절차 상세';
+  String get trackerViewAll => '모두 보기 →';
 
   @override
-  String get trackerCurrentStatus => '현재 상태';
+  String get trackerDeleteTitle => '할 일 삭제';
 
   @override
-  String get trackerNotes => '메모';
+  String get trackerDeleteConfirm => '이 할 일을 삭제하시겠습니까?';
 
   @override
-  String get trackerChangeStatus => '상태 변경';
+  String get trackerLimitReached => '한도에 도달했습니다.';
 
   @override
-  String get trackerMarkInProgress => '진행 중으로 표시';
-
-  @override
-  String get trackerMarkCompleted => '완료로 표시';
-
-  @override
-  String get trackerMarkIncomplete => '미완료로 표시';
-
-  @override
-  String get trackerStatusUpdated => '상태 업데이트됨';
-
-  @override
-  String get trackerDeleteTitle => '절차 삭제';
-
-  @override
-  String get trackerDeleteConfirm => '이 절차를 삭제하시겠습니까?';
-
-  @override
-  String get trackerProcedureAdded => '추적에 추가됨';
-
-  @override
-  String get trackerLimitReached => '무료 한도 도달 (3개). 업그레이드하면 무제한.';
-
-  @override
-  String get trackerAlreadyTracking => '이미 추적 중인 절차입니다';
-
-  @override
-  String get trackerEssentialProcedures => '필수 (도착 후)';
-
-  @override
-  String get trackerOtherProcedures => '기타 절차';
-
-  @override
-  String get trackerNoTemplates => '절차 템플릿 없음';
+  String get trackerAlreadyTracking => '이미 할 일 목록에 있습니다';
 
   @override
   String get scannerTitle => '문서 스캔';
@@ -1612,13 +1585,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trackerSaved => '저장됨';
 
   @override
-  String get trackerItemSaved => '추적기에 저장됨';
+  String get trackerItemSaved => '할 일 목록에 추가됨';
 
   @override
-  String get homeQaTrackerTitle => '추적기';
+  String get homeQaTrackerTitle => '할 일';
 
   @override
-  String get homeQaTrackerSubtitle => '작업 및 마감일 추적';
+  String get homeQaTrackerSubtitle => '할 일 관리';
 
   @override
   String get chatAttachPhoto => '사진 촬영';

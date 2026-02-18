@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/providers/auth_provider.dart';
@@ -9,6 +10,8 @@ import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../chat/presentation/providers/chat_providers.dart';
+import '../../tracker/domain/tracker_item.dart';
+import '../../tracker/presentation/providers/tracker_providers.dart';
 
 /// Home / Dashboard screen (S07) — handoff-home.md spec.
 class HomeScreen extends ConsumerWidget {
@@ -143,18 +146,15 @@ class HomeScreen extends ConsumerWidget {
 
                 const SizedBox(height: AppSpacing.space2xl),
 
-                // ── Explore Guides ─────────────────────────────
+                // ── Tracker Summary ─────────────────────────────
                 Text(
-                  l10n.homeSectionExplore.toUpperCase(),
+                  l10n.homeTrackerSummary.toUpperCase(),
                   style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
                 ),
                 const SizedBox(height: AppSpacing.spaceMd),
-                _ExploreItem(
-                  icon: Icons.explore_outlined,
-                  label: l10n.homeExploreGuides,
-                  onTap: () => context.go(AppRoutes.navigate),
-                ),
-                const SizedBox(height: AppSpacing.spaceSm),
+                const _TrackerSummaryCard(),
+
+                const SizedBox(height: AppSpacing.spaceMd),
                 _ExploreItem(
                   icon: Icons.emergency_outlined,
                   label: l10n.homeExploreEmergency,
@@ -191,6 +191,120 @@ class HomeScreen extends ConsumerWidget {
   void _openChat(BuildContext context) {
     // Phase 0: single conversation — continue existing chat, don't clear.
     context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
+  }
+}
+
+/// Tracker summary card on the Home screen.
+///
+/// Shows up to 3 incomplete to-do items, or an empty prompt.
+class _TrackerSummaryCard extends ConsumerWidget {
+  const _TrackerSummaryCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+    final incomplete = ref.watch(trackerIncompleteProvider);
+    final preview = incomplete.take(3).toList();
+
+    return Material(
+      color: cs.surface,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => context.push(AppRoutes.tracker),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.spaceLg),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: cs.outlineVariant),
+          ),
+          child: preview.isEmpty
+              ? _buildEmpty(context, l10n, cs, tt)
+              : _buildList(context, l10n, cs, tt, preview),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmpty(
+    BuildContext context,
+    AppLocalizations l10n,
+    ColorScheme cs,
+    TextTheme tt,
+  ) {
+    return Row(
+      children: [
+        Icon(
+          Icons.add_task,
+          color: cs.onSurfaceVariant.withValues(alpha: 0.5),
+        ),
+        const SizedBox(width: AppSpacing.spaceMd),
+        Expanded(
+          child: Text(
+            l10n.homeTrackerNoItems,
+            style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+          ),
+        ),
+        Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+      ],
+    );
+  }
+
+  Widget _buildList(
+    BuildContext context,
+    AppLocalizations l10n,
+    ColorScheme cs,
+    TextTheme tt,
+    List<TrackerItem> items,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.spaceSm),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.radio_button_unchecked,
+                  size: 18,
+                  color: cs.primary,
+                ),
+                const SizedBox(width: AppSpacing.spaceSm),
+                Expanded(
+                  child: Text(
+                    item.title,
+                    style: tt.bodyMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (item.dueDate != null) ...[
+                  const SizedBox(width: AppSpacing.spaceSm),
+                  Text(
+                    DateFormat.MMMd().format(item.dueDate!),
+                    style: tt.labelSmall?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+        const Divider(height: 1),
+        const SizedBox(height: AppSpacing.spaceSm),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Text(
+            l10n.trackerViewAll,
+            style: tt.labelMedium?.copyWith(color: cs.primary),
+          ),
+        ),
+      ],
+    );
   }
 }
 

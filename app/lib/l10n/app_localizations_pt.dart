@@ -304,7 +304,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeSectionQuickActions => 'Ações rápidas';
 
   @override
-  String get homeSectionExplore => 'Explorar guias';
+  String get homeSectionExplore => 'Explorar';
+
+  @override
+  String get homeTrackerSummary => 'Minhas Tarefas';
+
+  @override
+  String get homeTrackerNoItems =>
+      'Nenhuma tarefa ainda. Toque para adicionar.';
 
   @override
   String get homeQaChatTitle => 'Chat IA';
@@ -614,83 +621,48 @@ class AppLocalizationsPt extends AppLocalizations {
       'IMPORTANTE: Informações gerais sobre procedimentos de visto. Não constitui aconselhamento de imigração.';
 
   @override
-  String get trackerTitle => 'Rastreador Administrativo';
+  String get trackerTitle => 'Tarefas';
 
   @override
-  String get trackerEmpty => 'Nenhum procedimento rastreado';
+  String get trackerAddItem => 'Nova Tarefa';
 
   @override
-  String get trackerEmptyHint => 'Toque em + para adicionar procedimentos';
+  String get trackerNoItems => 'Nenhuma tarefa ainda';
 
   @override
-  String get trackerAddProcedure => 'Adicionar Procedimento';
+  String get trackerNoItemsHint =>
+      'Toque em + para adicionar sua primeira tarefa';
 
   @override
-  String get trackerStatusNotStarted => 'Não Iniciado';
+  String get trackerAddTitle => 'Título';
 
   @override
-  String get trackerStatusInProgress => 'Em Andamento';
+  String get trackerAddMemo => 'Notas (opcional)';
 
   @override
-  String get trackerStatusCompleted => 'Concluído';
+  String get trackerAddDueDate => 'Data limite (opcional)';
 
   @override
-  String get trackerDueDate => 'Data Limite';
+  String get trackerDueToday => 'Vence hoje';
 
   @override
-  String get trackerFreeLimitInfo =>
-      'Grátis: até 3 procedimentos. Faça upgrade para ilimitado.';
+  String get trackerOverdue => 'Atrasada';
 
   @override
-  String get trackerDetailTitle => 'Detalhes do Procedimento';
+  String get trackerViewAll => 'Ver todas →';
 
   @override
-  String get trackerCurrentStatus => 'Status Atual';
-
-  @override
-  String get trackerNotes => 'Notas';
-
-  @override
-  String get trackerChangeStatus => 'Alterar Status';
-
-  @override
-  String get trackerMarkInProgress => 'Marcar como Em Andamento';
-
-  @override
-  String get trackerMarkCompleted => 'Marcar como Concluído';
-
-  @override
-  String get trackerMarkIncomplete => 'Marcar como Incompleto';
-
-  @override
-  String get trackerStatusUpdated => 'Status atualizado';
-
-  @override
-  String get trackerDeleteTitle => 'Excluir Procedimento';
+  String get trackerDeleteTitle => 'Excluir Tarefa';
 
   @override
   String get trackerDeleteConfirm =>
-      'Tem certeza de que deseja remover este procedimento?';
+      'Tem certeza de que deseja excluir esta tarefa?';
 
   @override
-  String get trackerProcedureAdded => 'Procedimento adicionado ao rastreador';
+  String get trackerLimitReached => 'Limite atingido.';
 
   @override
-  String get trackerLimitReached =>
-      'Limite gratuito atingido (3 procedimentos). Faça upgrade para ilimitado.';
-
-  @override
-  String get trackerAlreadyTracking =>
-      'Você já está rastreando este procedimento';
-
-  @override
-  String get trackerEssentialProcedures => 'Essenciais (Após Chegada)';
-
-  @override
-  String get trackerOtherProcedures => 'Outros Procedimentos';
-
-  @override
-  String get trackerNoTemplates => 'Nenhum modelo de procedimento disponível';
+  String get trackerAlreadyTracking => 'Esta tarefa já está na sua lista';
 
   @override
   String get scannerTitle => 'Scanner de Documentos';
@@ -1666,13 +1638,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get trackerSaved => 'Salvo';
 
   @override
-  String get trackerItemSaved => 'Salvo no rastreador';
+  String get trackerItemSaved => 'Adicionado à lista de tarefas';
 
   @override
-  String get homeQaTrackerTitle => 'Rastreador';
+  String get homeQaTrackerTitle => 'Tarefas';
 
   @override
-  String get homeQaTrackerSubtitle => 'Acompanhe tarefas e prazos';
+  String get homeQaTrackerSubtitle => 'Gerenciar suas tarefas';
 
   @override
   String get chatAttachPhoto => 'Tirar Foto';

@@ -8,7 +8,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../tracker/presentation/providers/tracker_providers.dart';
 import '../../domain/chat_response.dart';
-import '../providers/chat_providers.dart';
 
 /// Displays AI-suggested tracker items inside the AI chat bubble.
 ///
@@ -190,7 +189,6 @@ class _SaveButton extends ConsumerWidget {
 
   Future<void> _onSave(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context);
-    final tier = ref.read(userTierProvider);
     final limitReached = ref.read(trackerLimitReachedProvider);
 
     if (limitReached) {
@@ -210,7 +208,10 @@ class _SaveButton extends ConsumerWidget {
     }
 
     final notifier = ref.read(trackerItemsProvider.notifier);
-    final success = await notifier.saveFromChat(item, tier);
+    final success = await notifier.saveFromChat(
+      title: item.title,
+      dateString: item.date,
+    );
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

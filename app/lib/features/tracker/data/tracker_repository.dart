@@ -2,83 +2,93 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/tracker_item.dart';
 
-/// SharedPreferences-based CRUD for tracker items.
+/// SharedPreferences-based CRUD for to-do items.
 ///
-/// Phase 0: local-only storage. Phase 1+ will sync to server-side
-/// `user_procedures` table (SSOT).
+/// Pure local storage — no backend required.
 class TrackerRepository {
   TrackerRepository({required SharedPreferences prefs}) : _prefs = prefs;
 
   final SharedPreferences _prefs;
 
-  /// SharedPreferences key for tracker items.
-  static const _storageKey = 'tracker_items_v1';
+  /// SharedPreferences key for tracker items (v2 = todo rewrite).
+  static const _storageKey = 'tracker_items_v2';
 
-  /// Free tier limit per BUSINESS_RULES.md §2.
-  static const int freeTierLimit = 3;
-
-  /// Get all saved tracker items, ordered by savedAt descending (newest first).
+  /// Get all saved items.
+  ///
+  /// Sort order:
+  /// 1. Incomplete items first, completed items last.
+  /// 2. Within incomplete: items with dueDate sorted ascending, no-date last.
+  /// 3. Within completed: most recently created first.
   List<TrackerItem> getAll() {
     final raw = _prefs.getString(_storageKey);
     if (raw == null || raw.isEmpty) return [];
     try {
       final items = TrackerItem.decodeList(raw);
-      items.sort((a, b) => b.savedAt.compareTo(a.savedAt));
+      items.sort(_compare);
       return items;
     } catch (_) {
       return [];
     }
   }
 
-  /// Save a new tracker item. Returns `true` on success, `false` on failure.
-  ///
-  /// Checks for duplicates (same type + title) and tier limits.
-  Future<bool> save(TrackerItem item) async {
+  /// Add a new item.
+  Future<bool> add(TrackerItem item) async {
     final items = getAll();
-
-    // Check duplicate.
-    if (isDuplicate(item.type, item.title, items)) {
-      return false;
-    }
-
-    items.insert(0, item);
+    items.add(item);
     return _persist(items);
   }
 
-  /// Update the status of a tracker item by ID.
-  Future<bool> updateStatus(String id, TrackerStatus status) async {
+  /// Update an existing item.
+  Future<bool> update(TrackerItem item) async {
     final items = getAll();
-    final index = items.indexWhere((e) => e.id == id);
+    final index = items.indexWhere((e) => e.id == item.id);
     if (index == -1) return false;
-
-    items[index] = items[index].copyWith(status: status);
+    items[index] = item;
     return _persist(items);
   }
 
-  /// Delete a tracker item by ID.
+  /// Delete an item by ID.
   Future<bool> delete(String id) async {
     final items = getAll();
     items.removeWhere((e) => e.id == id);
     return _persist(items);
   }
 
-  /// Check if an item with the same type and title already exists.
-  bool isDuplicate(String type, String title, [List<TrackerItem>? existing]) {
-    final items = existing ?? getAll();
-    return items.any(
-      (e) =>
-          e.type.toLowerCase() == type.toLowerCase() &&
-          e.title.toLowerCase() == title.toLowerCase(),
-    );
+  /// Toggle the completed state of an item.
+  Future<bool> toggleComplete(String id) async {
+    final items = getAll();
+    final index = items.indexWhere((e) => e.id == id);
+    if (index == -1) return false;
+    items[index] = items[index].copyWith(completed: !items[index].completed);
+    return _persist(items);
   }
 
   /// Current saved count.
   int get count => getAll().length;
 
-  /// Whether free tier limit is reached.
-  bool isLimitReached(String tier) {
-    if (tier == 'standard' || tier == 'premium') return false;
-    return count >= freeTierLimit;
+  /// Sort comparator:
+  /// - Incomplete before completed.
+  /// - Within incomplete: by dueDate ascending (null last).
+  /// - Within completed: by createdAt descending.
+  int _compare(TrackerItem a, TrackerItem b) {
+    // Completed items go last.
+    if (a.completed != b.completed) {
+      return a.completed ? 1 : -1;
+    }
+
+    if (!a.completed) {
+      // Both incomplete — sort by dueDate ascending, null last.
+      if (a.dueDate != null && b.dueDate != null) {
+        return a.dueDate!.compareTo(b.dueDate!);
+      }
+      if (a.dueDate != null) return -1;
+      if (b.dueDate != null) return 1;
+      // Both null dueDate — sort by createdAt descending (newest first).
+      return b.createdAt.compareTo(a.createdAt);
+    }
+
+    // Both completed — most recently created first.
+    return b.createdAt.compareTo(a.createdAt);
   }
 
   /// Persist items to SharedPreferences.

@@ -301,7 +301,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSectionQuickActions => 'Quick Actions';
 
   @override
-  String get homeSectionExplore => 'Explore Guides';
+  String get homeSectionExplore => 'Explore';
+
+  @override
+  String get homeTrackerSummary => 'My To-Dos';
+
+  @override
+  String get homeTrackerNoItems => 'No to-dos yet. Tap to add one.';
 
   @override
   String get homeQaChatTitle => 'Talk to AI Guide';
@@ -605,83 +611,48 @@ class AppLocalizationsEn extends AppLocalizations {
       'IMPORTANT: This is general information about visa procedures and does not constitute immigration advice.';
 
   @override
-  String get trackerTitle => 'Admin Tracker';
+  String get trackerTitle => 'To-Do';
 
   @override
-  String get trackerEmpty => 'No procedures tracked';
+  String get trackerAddItem => 'New To-Do';
 
   @override
-  String get trackerEmptyHint => 'Tap + to add procedures to track';
+  String get trackerNoItems => 'No to-dos yet';
 
   @override
-  String get trackerAddProcedure => 'Add Procedure';
+  String get trackerNoItemsHint => 'Tap + to add your first to-do';
 
   @override
-  String get trackerStatusNotStarted => 'Not Started';
+  String get trackerAddTitle => 'Title';
 
   @override
-  String get trackerStatusInProgress => 'In Progress';
+  String get trackerAddMemo => 'Memo (optional)';
 
   @override
-  String get trackerStatusCompleted => 'Completed';
+  String get trackerAddDueDate => 'Due date (optional)';
 
   @override
-  String get trackerDueDate => 'Due Date';
+  String get trackerDueToday => 'Due today';
 
   @override
-  String get trackerFreeLimitInfo =>
-      'Free plan: up to 3 procedures. Upgrade for unlimited.';
+  String get trackerOverdue => 'Overdue';
 
   @override
-  String get trackerDetailTitle => 'Procedure Details';
+  String get trackerViewAll => 'View all →';
 
   @override
-  String get trackerCurrentStatus => 'Current Status';
-
-  @override
-  String get trackerNotes => 'Notes';
-
-  @override
-  String get trackerChangeStatus => 'Change Status';
-
-  @override
-  String get trackerMarkInProgress => 'Mark as In Progress';
-
-  @override
-  String get trackerMarkCompleted => 'Mark as Completed';
-
-  @override
-  String get trackerMarkIncomplete => 'Mark as Incomplete';
-
-  @override
-  String get trackerStatusUpdated => 'Status updated';
-
-  @override
-  String get trackerDeleteTitle => 'Delete Procedure';
+  String get trackerDeleteTitle => 'Delete To-Do';
 
   @override
   String get trackerDeleteConfirm =>
-      'Are you sure you want to remove this procedure from your tracker?';
+      'Are you sure you want to delete this to-do?';
 
   @override
-  String get trackerProcedureAdded => 'Procedure added to tracker';
-
-  @override
-  String get trackerLimitReached =>
-      'Free plan limit reached (3 procedures). Upgrade to Premium for unlimited.';
+  String get trackerLimitReached => 'Limit reached.';
 
   @override
   String get trackerAlreadyTracking =>
-      'You are already tracking this procedure';
-
-  @override
-  String get trackerEssentialProcedures => 'Essential (After Arrival)';
-
-  @override
-  String get trackerOtherProcedures => 'Other Procedures';
-
-  @override
-  String get trackerNoTemplates => 'No procedure templates available';
+      'This item is already in your to-do list';
 
   @override
   String get scannerTitle => 'Document Scanner';
@@ -1653,13 +1624,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trackerSaved => 'Saved';
 
   @override
-  String get trackerItemSaved => 'Saved to tracker';
+  String get trackerItemSaved => 'Added to to-do list';
 
   @override
-  String get homeQaTrackerTitle => 'Tracker';
+  String get homeQaTrackerTitle => 'To-Do';
 
   @override
-  String get homeQaTrackerSubtitle => 'Track your tasks & deadlines';
+  String get homeQaTrackerSubtitle => 'Manage your to-do list';
 
   @override
   String get chatAttachPhoto => 'Take Photo';

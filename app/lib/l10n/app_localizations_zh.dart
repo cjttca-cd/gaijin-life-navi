@@ -290,7 +290,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeSectionQuickActions => '快捷操作';
 
   @override
-  String get homeSectionExplore => '浏览指南';
+  String get homeSectionExplore => '探索';
+
+  @override
+  String get homeTrackerSummary => '我的待办';
+
+  @override
+  String get homeTrackerNoItems => '暂无待办事项，点击添加';
 
   @override
   String get homeQaChatTitle => '与 AI 向导对话';
@@ -589,79 +595,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String get visaDisclaimer => '重要：以上是签证手续的一般信息，不构成移民建议。';
 
   @override
-  String get trackerTitle => '行政跟踪';
+  String get trackerTitle => '待办事项';
 
   @override
-  String get trackerEmpty => '暂无跟踪手续';
+  String get trackerAddItem => '新建待办';
 
   @override
-  String get trackerEmptyHint => '点击 + 添加手续';
+  String get trackerNoItems => '暂无待办事项';
 
   @override
-  String get trackerAddProcedure => '添加手续';
+  String get trackerNoItemsHint => '点击 + 添加你的第一个待办';
 
   @override
-  String get trackerStatusNotStarted => '未开始';
+  String get trackerAddTitle => '标题';
 
   @override
-  String get trackerStatusInProgress => '进行中';
+  String get trackerAddMemo => '备注（可选）';
 
   @override
-  String get trackerStatusCompleted => '已完成';
+  String get trackerAddDueDate => '截止日期（可选）';
 
   @override
-  String get trackerDueDate => '截止日期';
+  String get trackerDueToday => '今天到期';
 
   @override
-  String get trackerFreeLimitInfo => '免费版：最多3个手续。升级解锁更多。';
+  String get trackerOverdue => '已逾期';
 
   @override
-  String get trackerDetailTitle => '手续详情';
+  String get trackerViewAll => '查看全部 →';
 
   @override
-  String get trackerCurrentStatus => '当前状态';
+  String get trackerDeleteTitle => '删除待办';
 
   @override
-  String get trackerNotes => '备注';
+  String get trackerDeleteConfirm => '确定要删除此待办事项吗？';
 
   @override
-  String get trackerChangeStatus => '更改状态';
+  String get trackerLimitReached => '已达上限。';
 
   @override
-  String get trackerMarkInProgress => '标记为进行中';
-
-  @override
-  String get trackerMarkCompleted => '标记为已完成';
-
-  @override
-  String get trackerMarkIncomplete => '标记为未完成';
-
-  @override
-  String get trackerStatusUpdated => '状态已更新';
-
-  @override
-  String get trackerDeleteTitle => '删除手续';
-
-  @override
-  String get trackerDeleteConfirm => '确定要从跟踪器中删除此手续吗？';
-
-  @override
-  String get trackerProcedureAdded => '手续已添加到跟踪器';
-
-  @override
-  String get trackerLimitReached => '免费版限制已达（3个手续）。升级解锁更多。';
-
-  @override
-  String get trackerAlreadyTracking => '你已在跟踪此手续';
-
-  @override
-  String get trackerEssentialProcedures => '必要手续（到达后）';
-
-  @override
-  String get trackerOtherProcedures => '其他手续';
-
-  @override
-  String get trackerNoTemplates => '暂无手续模板';
+  String get trackerAlreadyTracking => '此事项已在待办列表中';
 
   @override
   String get scannerTitle => '文件扫描';
@@ -1603,13 +1576,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trackerSaved => '已保存';
 
   @override
-  String get trackerItemSaved => '已保存到追踪器';
+  String get trackerItemSaved => '已添加到待办列表';
 
   @override
-  String get homeQaTrackerTitle => '追踪器';
+  String get homeQaTrackerTitle => '待办';
 
   @override
-  String get homeQaTrackerSubtitle => '追踪任务和截止日期';
+  String get homeQaTrackerSubtitle => '管理待办事项';
 
   @override
   String get chatAttachPhoto => '拍照';
