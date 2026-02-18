@@ -17,9 +17,9 @@
 | 6 | ChatListScreen | 🔴 Critical | 空の対話リスト表示+新規ボタン→Phase 0は直接対話に | ✅ Fixed `d6786f9` (直接ChatConversation) |
 | 7 | Usage 不整合 | 🟡 Major | 対話4/5 vs Home 5/5 → 共有provider+API取得 | ✅ Fixed `d6786f9` (fetchUsageProvider) |
 | 8 | 全体 UI | 🟡 改善 | iOS 26 glassmorphism 不足 | 📋 今後のpipeline時にDesigner指示 |
-| 17 | TrackerScreen | 🔴 Critical | 「行政追踪」表示、「+添加」ボタン不在、機能全壊 | 🔧 実装中 |
-| 18 | HomeScreen | 🟡 Major | 「浏览指南」セクション不要→Tracker摘要に差替え | 🔧 実装中 |
-| 19 | Tracker 設計 | 🔴 仕様変更 | Tracker→本地Todo List（日付設定可、AI建議から一键追加） | 🔧 実装中 |
+| 17 | TrackerScreen | 🔴 Critical | 「行政追踪」表示、「+添加」ボタン不在、機能全壊 | ✅ Fixed `30e6711` |
+| 18 | HomeScreen | 🟡 Major | 「浏览指南」セクション不要→Tracker摘要に差替え | ✅ Fixed `30e6711` |
+| 19 | Tracker 設計 | 🔴 仕様変更 | Tracker→本地Todo List（日付設定可、AI建議から一键追加） | ✅ Fixed `30e6711` |
 | 9 | ChatGuestScreen | 🟡 Major | 中文選択なのに日本語表示(l10n混在) | ✅ Fixed `6dffdd3` |
 | 10 | LoginScreen | 🔴 Critical | Bottom Nav消失→デッドエンド+「欢迎回来」 | ✅ Fixed `6dffdd3` |
 | 11 | SplashScreen | 🔴 Critical | ゲストがLoginに強制遷移 | ✅ Fixed `357fe33` |

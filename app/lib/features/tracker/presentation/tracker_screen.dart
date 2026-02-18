@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../domain/tracker_item.dart';
@@ -25,7 +27,22 @@ class TrackerScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.trackerTitle)),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddDialog(context, ref),
+        onPressed: () {
+          final limitReached = ref.read(trackerLimitReachedProvider);
+          if (limitReached) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.trackerLimitReached),
+                action: SnackBarAction(
+                  label: l10n.homeUpgradeCta,
+                  onPressed: () => context.push(AppRoutes.subscription),
+                ),
+              ),
+            );
+            return;
+          }
+          _showAddDialog(context, ref);
+        },
         child: const Icon(Icons.add),
       ),
       body: trackerAsync.when(

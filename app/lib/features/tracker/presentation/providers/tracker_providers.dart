@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../chat/presentation/providers/chat_providers.dart';
 import '../../data/tracker_repository.dart';
 import '../../domain/tracker_item.dart';
+
+/// Free tier limit for tracker items.
+const kFreeTrackerLimit = 3;
 
 // ─── Repository ──────────────────────────────────────────────
 
@@ -116,12 +120,15 @@ final trackerIncompleteProvider = Provider<List<TrackerItem>>((ref) {
   return items.where((e) => !e.completed).toList();
 });
 
-/// Whether the free tier limit is reached.
+/// Whether the free tier limit (3 items) is reached.
 ///
-/// In the new to-do design there is no tier limit — always returns false.
-/// Kept for backward compatibility with chat tracker_item_card.
+/// Returns true if user is on free tier AND has >= 3 items.
+/// Standard/Premium users have no limit.
 final trackerLimitReachedProvider = Provider<bool>((ref) {
-  return false;
+  final tier = ref.watch(userTierProvider);
+  if (tier != 'free') return false;
+  final count = ref.watch(trackerCountProvider);
+  return count >= kFreeTrackerLimit;
 });
 
 /// Check if a specific item title is already saved.

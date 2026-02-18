@@ -81,6 +81,17 @@ class HomeScreen extends ConsumerWidget {
 
                 const SizedBox(height: AppSpacing.space2xl),
 
+                // ── Tracker Summary (above quick actions) ─────
+                if (!isGuest) ...[
+                  Text(
+                    l10n.homeTrackerSummary.toUpperCase(),
+                    style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: AppSpacing.spaceMd),
+                  const _TrackerSummaryCard(),
+                  const SizedBox(height: AppSpacing.space2xl),
+                ],
+
                 // ── Quick Actions ─────────────────────────────
                 Text(
                   l10n.homeSectionQuickActions.toUpperCase(),
@@ -142,24 +153,6 @@ class HomeScreen extends ConsumerWidget {
                       onTap: () => context.push(AppRoutes.emergency),
                     ),
                   ],
-                ),
-
-                const SizedBox(height: AppSpacing.space2xl),
-
-                // ── Tracker Summary ─────────────────────────────
-                Text(
-                  l10n.homeTrackerSummary.toUpperCase(),
-                  style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
-                ),
-                const SizedBox(height: AppSpacing.spaceMd),
-                const _TrackerSummaryCard(),
-
-                const SizedBox(height: AppSpacing.spaceMd),
-                _ExploreItem(
-                  icon: Icons.emergency_outlined,
-                  label: l10n.homeExploreEmergency,
-                  iconColor: AppColors.error,
-                  onTap: () => context.push(AppRoutes.emergency),
                 ),
 
                 const SizedBox(height: AppSpacing.space2xl),
@@ -364,53 +357,6 @@ class _QuickActionCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ExploreItem extends StatelessWidget {
-  const _ExploreItem({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.iconColor,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final Color? iconColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
-
-    return Material(
-      color: cs.surface,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.spaceLg,
-            vertical: AppSpacing.spaceMd,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: cs.outlineVariant),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: iconColor ?? cs.onSurfaceVariant),
-              const SizedBox(width: AppSpacing.spaceMd),
-              Expanded(child: Text(label, style: tt.titleSmall)),
-              Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
             ],
           ),
         ),
