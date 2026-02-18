@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-🎉 MVP 開発 + Phase 0 品質強化完了。API 修正 → Flutter 全面リニューアル → API 結合 → アーキテクチャ準拠（ゲスト導線/CTA/Tracker/Analytics）全パイプライン完了。
+🎉 全 11 Epic 完了。M0〜M4 全マイルストーン受入検証済み ✅。MVP 開発完了。
 
 ## Status
 
@@ -64,31 +64,8 @@ M0 (骨格+認証) → M1 (AI Chat) → M2 (ナビゲーター群) → M3 (Commu
 | M3 | ✅ PASS (6/6 + MVP§8,§10) | 2026-02-16 16:35 |
 | M4 | ✅ PASS (6/6 + E2E 6/6 + MVP全項目) | 2026-02-16 17:25 |
 
-### Post-MVP Pipelines
-| Pipeline | Epic | Status | Steps |
-|----------|------|--------|-------|
-| pipeline-009 (hotfix) | API alignment | ✅ 完了 | task-029: 5 module 15 mismatch 修正 |
-| pipeline-010 | E3: Flutter Renovation | ✅ 完了 | Designer → Coder Phase1 → Coder Phase2 → Tester 視覚検証 |
-| pipeline-011 | E4: API Integration | ✅ 完了 | API rewire → 結合テスト → 6 bug fix → 再テスト PASS |
-| pipeline-012 | E5: Arch Conformance | ✅ 完了 | Access Boundary → CTA UI → Tracker → Analytics |
-
-### Key Post-MVP Commits
-| Commit | Task | Content |
-|--------|------|---------|
-| `6d1746e` | task-029 | API response structure alignment (5 modules) |
-| `bd7ccbe` | task-030 | Design Foundation (DESIGN_SYSTEM.md + BRAND_GUIDELINES.md) |
-| `ba45353` | task-031 | Visual Design (7 handoff files, 16 screens) |
-| `ff32d33` | task-032 | Flutter Phase 1 (Core Shell + Auth + Home + Chat) |
-| `8934399` | task-033 | Flutter Phase 2 (Navigator + Emergency + Subscription + Profile) |
-| `317c20c` | task-040 | Guest access boundary + ChatGuestScreen |
-| `dea7c5e` | task-041 | Guest→Register + Free→Premium CTA (Closed Loop E) |
-| `9ec7d67` | task-042 | Phase 0 Tracker (AI suggestion → local save → management) |
-| `10d267e` | task-043 | Firebase Analytics SDK + KPI event instrumentation |
-
 ## Next
 本番デプロイ準備（Firebase 実設定、API キー設定、Fly.io デプロイ、Cloudflare Pages、App Store/Play Store 提出）。
-- MVP_ACCEPTANCE.md 最終受入チェック（データ就緒 + Observability 含む）
-- Launch Pipeline（LP1〜LP6: Localization → Production → Monitoring → App Store → Beta → Submit）
 
 ## Decisions
 | Date | Decision | Rationale |
