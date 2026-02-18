@@ -51,6 +51,28 @@ class ChatMessagesNotifier extends Notifier<List<ChatMessage>> {
 /// Holds the current chat usage info.
 final chatUsageProvider = StateProvider<ChatUsageInfo?>((ref) => null);
 
+/// Fetch usage from backend and update chatUsageProvider.
+/// Call this on app start (after login) and when entering chat.
+final fetchUsageProvider = FutureProvider<void>((ref) async {
+  try {
+    final client = ref.read(apiClientProvider);
+    final response = await client.get<Map<String, dynamic>>('/usage');
+    final data = response.data?['data'] as Map<String, dynamic>?;
+    if (data != null) {
+      final used = data['used'] as int? ?? 0;
+      final limit = data['limit'] as int? ?? 0;
+      final tier = data['tier'] as String? ?? 'free';
+      ref.read(chatUsageProvider.notifier).state = ChatUsageInfo(
+        used: used,
+        limit: limit,
+        tier: tier,
+      );
+    }
+  } catch (_) {
+    // Silently fail — usage display will just be hidden
+  }
+});
+
 /// Current user tier derived from chat usage (defaults to 'free').
 final userTierProvider = Provider<String>((ref) {
   return ref.watch(chatUsageProvider)?.tier ?? 'free';

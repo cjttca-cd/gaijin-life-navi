@@ -77,7 +77,23 @@ def _verify_token(token: str) -> FirebaseUser:
     """Verify a Firebase ID token and return a FirebaseUser."""
     if _mock_mode:
         # In mock mode accept any Bearer token.
-        # Format: "test_uid:test@example.com" or just use defaults.
+        # If it looks like a Firebase JWT, decode the payload (no verification)
+        # to extract uid/email. Otherwise use "uid:email" format.
+        if token.count(".") == 2:
+            # JWT format: header.payload.signature
+            import base64, json as _json
+            try:
+                payload_b64 = token.split(".")[1]
+                # Add padding
+                payload_b64 += "=" * (4 - len(payload_b64) % 4)
+                payload = _json.loads(base64.urlsafe_b64decode(payload_b64))
+                uid = payload.get("user_id") or payload.get("sub") or "mock_user_id"
+                email = payload.get("email", "mock@example.com")
+                name = payload.get("name", "")
+                return FirebaseUser(uid=uid, email=email, email_verified=True, name=name)
+            except Exception:
+                pass  # Fall through to simple format
+        # Simple format: "test_uid:test@example.com"
         parts = token.split(":", 1)
         uid = parts[0] if parts[0] else "mock_user_id"
         email = parts[1] if len(parts) > 1 else "mock@example.com"

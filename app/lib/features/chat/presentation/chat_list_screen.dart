@@ -15,31 +15,20 @@ class ChatListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final messages = ref.watch(chatMessagesProvider);
+    // Phase 0: single conversation — always go directly to conversation.
+    // No session list, no "new chat" button.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.mounted) {
+        context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
+      }
+    });
 
-    // If we have messages, show conversation inline.
-    if (messages.isNotEmpty) {
-      // Navigate to conversation screen.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted) {
-          context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
-        }
-      });
-    }
-
+    // Show a brief loading state while navigating.
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.chatTitle),
-        actions: const [
-          Padding(padding: EdgeInsets.only(right: 8), child: UsageCounter()),
-        ],
-      ),
-      body: _buildEmptyState(context, l10n, theme, ref),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _startNewChat(context, ref),
-        child: const Icon(Icons.add),
+      body: Center(
+        child: CircularProgressIndicator(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

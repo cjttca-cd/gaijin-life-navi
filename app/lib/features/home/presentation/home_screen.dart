@@ -22,6 +22,11 @@ class HomeScreen extends ConsumerWidget {
     final user = ref.watch(authStateProvider).valueOrNull;
     final isGuest = user == null;
 
+    // Fetch usage data for logged-in users.
+    if (!isGuest) {
+      ref.watch(fetchUsageProvider);
+    }
+
     // Determine greeting based on time.
     final hour = DateTime.now().hour;
     final name = user?.displayName ?? user?.email?.split('@').first ?? '';
@@ -46,11 +51,19 @@ class HomeScreen extends ConsumerWidget {
                 // ── Greeting ─────────────────────────────────
                 Text(greeting, style: tt.displayMedium),
                 const SizedBox(height: AppSpacing.spaceXs),
-                // Usage line (hidden for guests).
+                // Usage line (hidden for guests) — reads from shared chatUsageProvider.
                 if (!isGuest)
-                  Text(
-                    l10n.homeUsageFree(5, 5), // placeholder values
-                    style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final usage = ref.watch(chatUsageProvider);
+                      if (usage == null || usage.isUnlimited) {
+                        return const SizedBox.shrink();
+                      }
+                      return Text(
+                        l10n.homeUsageFree(usage.remaining, usage.limit),
+                        style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+                      );
+                    },
                   ),
 
                 // ── Guest Registration CTA Banner ─────────────
