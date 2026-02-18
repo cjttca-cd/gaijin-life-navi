@@ -293,7 +293,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeSectionExplore => '探索';
 
   @override
-  String get homeTrackerSummary => '我的待办';
+  String get homeTrackerSummary => '我的待办事项';
+
+  @override
+  String get homePopularGuides => '查看热门指南';
 
   @override
   String get homeTrackerNoItems => '暂无待办事项，点击添加';
@@ -631,7 +634,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trackerDeleteConfirm => '确定要删除此待办事项吗？';
 
   @override
-  String get trackerLimitReached => '已达上限。';
+  String get trackerLimitReached => '免费版最多3条待办，升级解锁无限';
 
   @override
   String get trackerAlreadyTracking => '此事项已在待办列表中';
@@ -1286,13 +1289,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subRecommended => '推荐';
 
   @override
-  String get subFeatureChatFree => '注册赠送 20 次对话';
+  String get subFeatureChatFree => '注册赠送 20 次 AI 向导对话';
 
   @override
-  String get subFeatureChatStandard => '每月 300 次对话';
+  String get subFeatureChatStandard => '每月 300 次 AI 向导对话';
 
   @override
-  String get subFeatureChatPremium => '无限对话';
+  String get subFeatureChatPremium => '无限 AI 向导对话';
 
   @override
   String get subFeatureTrackerFree => '最多 3 个待办事项';
@@ -1307,10 +1310,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subFeatureAdsNo => '无广告';
 
   @override
-  String get subFeatureImageNo => '图片分析（即将推出）';
+  String get subFeatureGuideFree => '参阅热门类别指南';
 
   @override
-  String get subFeatureImageYes => '图片分析（即将推出）';
+  String get subFeatureGuidePaid => '参阅所有类别指南';
+
+  @override
+  String get subFeatureImageNo => 'AI 图片分析';
+
+  @override
+  String get subFeatureImageYes => 'AI 图片分析';
 
   @override
   String get subButtonCurrent => '当前方案';

@@ -297,6 +297,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get homeTrackerSummary => '나의 할 일';
 
   @override
+  String get homePopularGuides => '인기 가이드';
+
+  @override
   String get homeTrackerNoItems => '할 일이 없습니다. 탭하여 추가하세요.';
 
   @override
@@ -632,7 +635,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get trackerDeleteConfirm => '이 할 일을 삭제하시겠습니까?';
 
   @override
-  String get trackerLimitReached => '한도에 도달했습니다.';
+  String get trackerLimitReached => '무료 플랜은 최대 3개. 업그레이드하면 무제한.';
 
   @override
   String get trackerAlreadyTracking => '이미 할 일 목록에 있습니다';
@@ -1293,13 +1296,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get subRecommended => '추천';
 
   @override
-  String get subFeatureChatFree => '하루 5회 채팅';
+  String get subFeatureChatFree => '가입 시 AI 가이드 대화 20회';
 
   @override
-  String get subFeatureChatStandard => '월 300회 채팅';
+  String get subFeatureChatStandard => '월 300회 AI 가이드 대화';
 
   @override
-  String get subFeatureChatPremium => '무제한 채팅';
+  String get subFeatureChatPremium => '무제한 AI 가이드 대화';
 
   @override
   String get subFeatureTrackerFree => '최대 3개 트래커 항목';
@@ -1314,10 +1317,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get subFeatureAdsNo => '광고 없음';
 
   @override
-  String get subFeatureImageNo => '이미지 분석 (출시 예정)';
+  String get subFeatureGuideFree => '인기 가이드 열람';
 
   @override
-  String get subFeatureImageYes => '이미지 분석 (출시 예정)';
+  String get subFeatureGuidePaid => '전체 가이드 열람';
+
+  @override
+  String get subFeatureImageNo => 'AI 이미지 분석';
+
+  @override
+  String get subFeatureImageYes => 'AI 이미지 분석';
 
   @override
   String get subButtonCurrent => '현재 플랜';

@@ -650,6 +650,12 @@ abstract class AppLocalizations {
   /// **'My To-Dos'**
   String get homeTrackerSummary;
 
+  /// No description provided for @homePopularGuides.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Guides'**
+  String get homePopularGuides;
+
   /// No description provided for @homeTrackerNoItems.
   ///
   /// In en, this message translates to:
@@ -1319,7 +1325,7 @@ abstract class AppLocalizations {
   /// No description provided for @trackerLimitReached.
   ///
   /// In en, this message translates to:
-  /// **'Limit reached.'**
+  /// **'Free plan allows up to 3 to-dos. Upgrade for unlimited.'**
   String get trackerLimitReached;
 
   /// No description provided for @trackerAlreadyTracking.
@@ -2585,19 +2591,19 @@ abstract class AppLocalizations {
   /// No description provided for @subFeatureChatFree.
   ///
   /// In en, this message translates to:
-  /// **'20 free chats on signup'**
+  /// **'20 AI Guide chats on signup'**
   String get subFeatureChatFree;
 
   /// No description provided for @subFeatureChatStandard.
   ///
   /// In en, this message translates to:
-  /// **'300 chats per month'**
+  /// **'300 AI Guide chats/month'**
   String get subFeatureChatStandard;
 
   /// No description provided for @subFeatureChatPremium.
   ///
   /// In en, this message translates to:
-  /// **'Unlimited chats'**
+  /// **'Unlimited AI Guide chats'**
   String get subFeatureChatPremium;
 
   /// No description provided for @subFeatureTrackerFree.
@@ -2624,16 +2630,28 @@ abstract class AppLocalizations {
   /// **'No ads'**
   String get subFeatureAdsNo;
 
+  /// No description provided for @subFeatureGuideFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse popular guides'**
+  String get subFeatureGuideFree;
+
+  /// No description provided for @subFeatureGuidePaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse all guides'**
+  String get subFeatureGuidePaid;
+
   /// No description provided for @subFeatureImageNo.
   ///
   /// In en, this message translates to:
-  /// **'Image analysis (coming soon)'**
+  /// **'AI image analysis'**
   String get subFeatureImageNo;
 
   /// No description provided for @subFeatureImageYes.
   ///
   /// In en, this message translates to:
-  /// **'Image analysis (coming soon)'**
+  /// **'AI image analysis'**
   String get subFeatureImageYes;
 
   /// No description provided for @subButtonCurrent.

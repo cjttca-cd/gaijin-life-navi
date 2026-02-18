@@ -92,7 +92,7 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.space2xl),
                 ],
 
-                // ── Quick Actions ─────────────────────────────
+                // ── Quick Actions (AI Chat + Tracker only) ───
                 Text(
                   l10n.homeSectionQuickActions.toUpperCase(),
                   style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
@@ -106,8 +106,6 @@ class HomeScreen extends ConsumerWidget {
                   crossAxisSpacing: AppSpacing.spaceMd,
                   childAspectRatio: 1.3,
                   children: [
-                    // Guests: Navigator + Emergency only.
-                    // Logged-in: AI Chat + Banking + Visa + Medical.
                     if (!isGuest)
                       _QuickActionCard(
                         icon: Icons.chat_bubble_outline,
@@ -116,24 +114,6 @@ class HomeScreen extends ConsumerWidget {
                         title: l10n.homeQaChatTitle,
                         subtitle: l10n.homeQaChatSubtitle,
                         onTap: () => _openChat(context),
-                      ),
-                    _QuickActionCard(
-                      icon: Icons.account_balance,
-                      iconBgColor: AppColors.bankingContainer,
-                      iconColor: AppColors.bankingIcon,
-                      title: l10n.homeQaBankingTitle,
-                      subtitle: l10n.homeQaBankingSubtitle,
-                      onTap:
-                          () => context.push('${AppRoutes.navigate}/banking'),
-                    ),
-                    if (!isGuest)
-                      _QuickActionCard(
-                        icon: Icons.badge,
-                        iconBgColor: AppColors.visaContainer,
-                        iconColor: AppColors.visaIcon,
-                        title: l10n.homeQaVisaTitle,
-                        subtitle: l10n.homeQaVisaSubtitle,
-                        onTap: () => context.push('${AppRoutes.navigate}/visa'),
                       ),
                     if (!isGuest)
                       _QuickActionCard(
@@ -144,6 +124,51 @@ class HomeScreen extends ConsumerWidget {
                         subtitle: l10n.homeQaTrackerSubtitle,
                         onTap: () => context.push(AppRoutes.tracker),
                       ),
+                    if (isGuest)
+                      _QuickActionCard(
+                        icon: Icons.local_hospital,
+                        iconBgColor: AppColors.medicalContainer,
+                        iconColor: AppColors.medicalIcon,
+                        title: l10n.homeQaMedicalTitle,
+                        subtitle: l10n.homeQaMedicalSubtitle,
+                        onTap: () => context.push(AppRoutes.emergency),
+                      ),
+                  ],
+                ),
+
+                const SizedBox(height: AppSpacing.space2xl),
+
+                // ── Popular Guides ────────────────────────────
+                Text(
+                  l10n.homePopularGuides.toUpperCase(),
+                  style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
+                ),
+                const SizedBox(height: AppSpacing.spaceMd),
+                GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: AppSpacing.spaceMd,
+                  crossAxisSpacing: AppSpacing.spaceMd,
+                  childAspectRatio: 1.3,
+                  children: [
+                    _QuickActionCard(
+                      icon: Icons.account_balance,
+                      iconBgColor: AppColors.bankingContainer,
+                      iconColor: AppColors.bankingIcon,
+                      title: l10n.homeQaBankingTitle,
+                      subtitle: l10n.homeQaBankingSubtitle,
+                      onTap:
+                          () => context.push('${AppRoutes.navigate}/banking'),
+                    ),
+                    _QuickActionCard(
+                      icon: Icons.badge,
+                      iconBgColor: AppColors.visaContainer,
+                      iconColor: AppColors.visaIcon,
+                      title: l10n.homeQaVisaTitle,
+                      subtitle: l10n.homeQaVisaSubtitle,
+                      onTap: () => context.push('${AppRoutes.navigate}/visa'),
+                    ),
                     _QuickActionCard(
                       icon: Icons.local_hospital,
                       iconBgColor: AppColors.medicalContainer,

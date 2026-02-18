@@ -38,7 +38,7 @@ class SubscriptionScreen extends ConsumerWidget {
 
                 // Horizontal plan cards
                 SizedBox(
-                  height: 420,
+                  height: 460,
                   child: PageView(
                     controller: PageController(viewportFraction: 0.85),
                     children: [
@@ -49,9 +49,10 @@ class SubscriptionScreen extends ConsumerWidget {
                         interval: l10n.subPriceInterval,
                         features: [
                           _FeatureItem(l10n.subFeatureChatFree, true),
+                          _FeatureItem(l10n.subFeatureImageYes, true),
+                          _FeatureItem(l10n.subFeatureGuideFree, true),
                           _FeatureItem(l10n.subFeatureTrackerFree, true),
                           _FeatureItem(l10n.subFeatureAdsYes, false),
-                          _FeatureItem(l10n.subFeatureImageYes, true),
                         ],
                         isCurrentPlan: currentTier == 'free',
                         isRecommended: false,
@@ -64,9 +65,10 @@ class SubscriptionScreen extends ConsumerWidget {
                         interval: l10n.subPriceInterval,
                         features: [
                           _FeatureItem(l10n.subFeatureChatStandard, true),
+                          _FeatureItem(l10n.subFeatureImageYes, true),
+                          _FeatureItem(l10n.subFeatureGuidePaid, true),
                           _FeatureItem(l10n.subFeatureTrackerPaid, true),
                           _FeatureItem(l10n.subFeatureAdsNo, true),
-                          _FeatureItem(l10n.subFeatureImageYes, true),
                         ],
                         isCurrentPlan: currentTier == 'standard',
                         isRecommended: currentTier != 'standard',
@@ -90,9 +92,10 @@ class SubscriptionScreen extends ConsumerWidget {
                         interval: l10n.subPriceInterval,
                         features: [
                           _FeatureItem(l10n.subFeatureChatPremium, true),
+                          _FeatureItem(l10n.subFeatureImageYes, true),
+                          _FeatureItem(l10n.subFeatureGuidePaid, true),
                           _FeatureItem(l10n.subFeatureTrackerPaid, true),
                           _FeatureItem(l10n.subFeatureAdsNo, true),
-                          _FeatureItem(l10n.subFeatureImageYes, true),
                         ],
                         isCurrentPlan: currentTier == 'premium',
                         isRecommended: false,

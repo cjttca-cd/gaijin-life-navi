@@ -6,34 +6,84 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import '../../../core/providers/router_provider.dart';
 import 'providers/chat_providers.dart';
 
-/// Chat tab screen (S08) — Phase 0: single conversation, no session list.
+/// Chat tab screen — shows conversation list + new chat FAB.
 ///
-/// Navigates directly to the conversation screen.
+/// Each conversation is a separate stateless /reset session.
+/// Conversation history is stored locally via chatMessagesProvider.
 class ChatListScreen extends ConsumerWidget {
   const ChatListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Phase 0: single conversation — always go directly to conversation.
-    // No session list, no "new chat" button.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (context.mounted) {
-        context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
-      }
-    });
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final messages = ref.watch(chatMessagesProvider);
 
-    // Show a brief loading state while navigating.
+    // If there are existing messages, show a single "current" conversation.
+    // Future: support multiple conversations.
+    final hasConversation = messages.isNotEmpty;
+
     return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(
-          color: Theme.of(context).colorScheme.primary,
-        ),
+      appBar: AppBar(title: Text(l10n.chatTitle)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _startNewChat(context, ref),
+        child: const Icon(Icons.add),
       ),
+      body: hasConversation
+          ? _buildConversationList(context, ref, l10n, theme, messages)
+          : _buildEmptyState(context, l10n, theme, ref),
     );
   }
 
-  // TODO(cleanup): Remove or use _buildEmptyState when session list is implemented.
-  // ignore: unused_element
+  Widget _buildConversationList(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    ThemeData theme,
+    List<dynamic> messages,
+  ) {
+    // Get the last user message as preview.
+    final lastUserMsg = messages.lastWhere(
+      (m) => m.role == 'user',
+      orElse: () => null,
+    );
+    final preview = lastUserMsg?.text ?? l10n.chatEmptySubtitle;
+    final truncated =
+        preview.length > 60 ? '${preview.substring(0, 60)}...' : preview;
+
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      children: [
+        Card(
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: theme.colorScheme.primaryContainer,
+              child: Icon(
+                Icons.chat_bubble_outline,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+            title: Text(l10n.chatTitle),
+            subtitle: Text(
+              truncated,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: Text(
+              '${messages.length}',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            onTap: () => context.push(
+              AppRoutes.chatConversation.replaceFirst(':id', 'current'),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildEmptyState(
     BuildContext context,
     AppLocalizations l10n,
@@ -78,7 +128,7 @@ class ChatListScreen extends ConsumerWidget {
   }
 
   void _startNewChat(BuildContext context, WidgetRef ref) {
-    // Clear any previous messages and go to conversation.
+    // Clear previous messages to start a fresh conversation.
     ref.read(chatMessagesProvider.notifier).clear();
     context.push(AppRoutes.chatConversation.replaceFirst(':id', 'current'));
   }

@@ -310,6 +310,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeTrackerSummary => 'Minhas Tarefas';
 
   @override
+  String get homePopularGuides => 'Guias Populares';
+
+  @override
   String get homeTrackerNoItems =>
       'Nenhuma tarefa ainda. Toque para adicionar.';
 
@@ -659,7 +662,8 @@ class AppLocalizationsPt extends AppLocalizations {
       'Tem certeza de que deseja excluir esta tarefa?';
 
   @override
-  String get trackerLimitReached => 'Limite atingido.';
+  String get trackerLimitReached =>
+      'Plano grátis permite até 3. Atualize para ilimitado.';
 
   @override
   String get trackerAlreadyTracking => 'Esta tarefa já está na sua lista';
@@ -1338,13 +1342,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get subRecommended => 'RECOMENDADO';
 
   @override
-  String get subFeatureChatFree => '5 chats por dia';
+  String get subFeatureChatFree => '20 conversas AI Guide ao registrar';
 
   @override
-  String get subFeatureChatStandard => '300 chats por mês';
+  String get subFeatureChatStandard => '300 conversas AI Guide/mês';
 
   @override
-  String get subFeatureChatPremium => 'Chats ilimitados';
+  String get subFeatureChatPremium => 'Conversas AI Guide ilimitadas';
 
   @override
   String get subFeatureTrackerFree => 'Até 3 itens no rastreador';
@@ -1359,10 +1363,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get subFeatureAdsNo => 'Sem anúncios';
 
   @override
-  String get subFeatureImageNo => 'Análise de imagem (em breve)';
+  String get subFeatureGuideFree => 'Ver guias populares';
 
   @override
-  String get subFeatureImageYes => 'Análise de imagem (em breve)';
+  String get subFeatureGuidePaid => 'Ver todos os guias';
+
+  @override
+  String get subFeatureImageNo => 'Análise de imagem IA';
+
+  @override
+  String get subFeatureImageYes => 'Análise de imagem IA';
 
   @override
   String get subButtonCurrent => 'Plano atual';

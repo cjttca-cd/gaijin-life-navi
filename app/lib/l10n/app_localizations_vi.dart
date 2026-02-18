@@ -306,6 +306,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get homeTrackerSummary => 'Việc cần làm';
 
   @override
+  String get homePopularGuides => 'Hướng dẫn phổ biến';
+
+  @override
   String get homeTrackerNoItems => 'Chưa có việc cần làm. Nhấn để thêm.';
 
   @override
@@ -645,7 +648,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get trackerDeleteConfirm => 'Bạn có chắc muốn xóa việc này?';
 
   @override
-  String get trackerLimitReached => 'Đã đạt giới hạn.';
+  String get trackerLimitReached =>
+      'Gói miễn phí tối đa 3. Nâng cấp để không giới hạn.';
 
   @override
   String get trackerAlreadyTracking => 'Việc này đã có trong danh sách';
@@ -1320,13 +1324,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get subRecommended => 'ĐỀ XUẤT';
 
   @override
-  String get subFeatureChatFree => '5 lượt chat mỗi ngày';
+  String get subFeatureChatFree => '20 lượt AI Guide khi đăng ký';
 
   @override
-  String get subFeatureChatStandard => '300 lượt chat mỗi tháng';
+  String get subFeatureChatStandard => '300 lượt AI Guide/tháng';
 
   @override
-  String get subFeatureChatPremium => 'Chat không giới hạn';
+  String get subFeatureChatPremium => 'AI Guide không giới hạn';
 
   @override
   String get subFeatureTrackerFree => 'Tối đa 3 mục theo dõi';
@@ -1341,10 +1345,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get subFeatureAdsNo => 'Không quảng cáo';
 
   @override
-  String get subFeatureImageNo => 'Phân tích ảnh (sắp có)';
+  String get subFeatureGuideFree => 'Xem hướng dẫn phổ biến';
 
   @override
-  String get subFeatureImageYes => 'Phân tích ảnh (sắp có)';
+  String get subFeatureGuidePaid => 'Xem tất cả hướng dẫn';
+
+  @override
+  String get subFeatureImageNo => 'Phân tích ảnh AI';
+
+  @override
+  String get subFeatureImageYes => 'Phân tích ảnh AI';
 
   @override
   String get subButtonCurrent => 'Gói hiện tại';

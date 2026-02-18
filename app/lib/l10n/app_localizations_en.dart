@@ -307,6 +307,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTrackerSummary => 'My To-Dos';
 
   @override
+  String get homePopularGuides => 'Popular Guides';
+
+  @override
   String get homeTrackerNoItems => 'No to-dos yet. Tap to add one.';
 
   @override
@@ -648,7 +651,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to delete this to-do?';
 
   @override
-  String get trackerLimitReached => 'Limit reached.';
+  String get trackerLimitReached =>
+      'Free plan allows up to 3 to-dos. Upgrade for unlimited.';
 
   @override
   String get trackerAlreadyTracking =>
@@ -1325,13 +1329,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subRecommended => 'RECOMMENDED';
 
   @override
-  String get subFeatureChatFree => '20 free chats on signup';
+  String get subFeatureChatFree => '20 AI Guide chats on signup';
 
   @override
-  String get subFeatureChatStandard => '300 chats per month';
+  String get subFeatureChatStandard => '300 AI Guide chats/month';
 
   @override
-  String get subFeatureChatPremium => 'Unlimited chats';
+  String get subFeatureChatPremium => 'Unlimited AI Guide chats';
 
   @override
   String get subFeatureTrackerFree => 'Up to 3 tracker items';
@@ -1346,10 +1350,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subFeatureAdsNo => 'No ads';
 
   @override
-  String get subFeatureImageNo => 'Image analysis (coming soon)';
+  String get subFeatureGuideFree => 'Browse popular guides';
 
   @override
-  String get subFeatureImageYes => 'Image analysis (coming soon)';
+  String get subFeatureGuidePaid => 'Browse all guides';
+
+  @override
+  String get subFeatureImageNo => 'AI image analysis';
+
+  @override
+  String get subFeatureImageYes => 'AI image analysis';
 
   @override
   String get subButtonCurrent => 'Current Plan';
