@@ -43,10 +43,8 @@ class ChatListScreen extends ConsumerWidget {
     List<dynamic> messages,
   ) {
     // Get the last user message as preview.
-    final lastUserMsg = messages.lastWhere(
-      (m) => m.role == 'user',
-      orElse: () => null,
-    );
+    final lastUserMsgIndex = messages.lastIndexWhere((m) => m.role == 'user');
+    final lastUserMsg = lastUserMsgIndex >= 0 ? messages[lastUserMsgIndex] : null;
     final preview = lastUserMsg?.text ?? l10n.chatEmptySubtitle;
     final truncated =
         preview.length > 60 ? '${preview.substring(0, 60)}...' : preview;

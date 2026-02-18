@@ -249,6 +249,9 @@ class _ChatTabRouter extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoggedIn = ref.watch(authStateProvider).valueOrNull != null;
-    return isLoggedIn ? const ChatListScreen() : const ChatGuestScreen();
+    // Phase 0: single conversation — skip list, go directly to conversation.
+    return isLoggedIn
+        ? const ChatConversationScreen(sessionId: 'current')
+        : const ChatGuestScreen();
   }
 }
