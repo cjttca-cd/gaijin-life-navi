@@ -2,7 +2,7 @@
 
 > テスター: Z (手動)
 > 環境: iPhone 16e Simulator, iOS, Backend 192.168.18.185:8000
-> 最新 commit: `f6f5d70`
+> 最新 commit: `41d9ca2`
 > 開始時刻: 14:20 JST
 
 ## 発見した問題一覧
@@ -20,6 +20,9 @@
 | 17 | TrackerScreen | 🔴 Critical | 「行政追踪」表示、「+添加」ボタン不在、機能全壊 | ✅ Fixed `30e6711` |
 | 18 | HomeScreen | 🟡 Major | 「浏览指南」セクション不要→Tracker摘要に差替え | ✅ Fixed `30e6711` |
 | 19 | Tracker 設計 | 🔴 仕様変更 | Tracker→本地Todo List（日付設定可、AI建議から一键追加） | ✅ Fixed `30e6711` |
+| 20 | Subscription | 🟡 改善 | l10n 修正: 「AI図片分析」→「AI図片分析（向导对话中）」、「热门类别指南」→「部分指南」、「所有类别指南」→「所有指南」 | ✅ Fixed `41d9ca2` |
+| 21 | HomeScreen | 🟡 改善 | 「查看热门指南」カードグリッド→左アクセントバーのリスト形式に変更 | ✅ Fixed `41d9ca2` |
+| 22 | NavigateScreen | 🟡 改善 | 指南ページにクロスドメイン検索機能追加 | ✅ Fixed `41d9ca2` |
 | 9 | ChatGuestScreen | 🟡 Major | 中文選択なのに日本語表示(l10n混在) | ✅ Fixed `6dffdd3` |
 | 10 | LoginScreen | 🔴 Critical | Bottom Nav消失→デッドエンド+「欢迎回来」 | ✅ Fixed `6dffdd3` |
 | 11 | SplashScreen | 🔴 Critical | ゲストがLoginに強制遷移 | ✅ Fixed `357fe33` |
