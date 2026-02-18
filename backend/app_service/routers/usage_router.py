@@ -31,7 +31,7 @@ PLANS = [
         "currency": "JPY",
         "billing_period": None,
         "features": {
-            "ai_queries_limit": 5,
+            "ai_queries_limit": 20,
             "ai_queries_period": "day",
             "tracker_items": 3,
             "ads": True,
@@ -137,19 +137,32 @@ async def get_usage(
 
     queries_used_today = daily.chat_count if daily else 0
 
+    # Compute lifetime total for free tier
+    from sqlalchemy import func as sqlfunc
+    lifetime_stmt = (
+        select(sqlfunc.coalesce(sqlfunc.sum(DailyUsage.chat_count), 0))
+        .where(DailyUsage.user_id == current_user.uid)
+    )
+    lifetime_result = await db.execute(lifetime_stmt)
+    lifetime_total = lifetime_result.scalar_one()
+
     # Determine limit from tier
     tier_limits = {
-        "free": {"daily_limit": 5, "monthly_limit": None},
-        "standard": {"daily_limit": None, "monthly_limit": 300},
-        "premium": {"daily_limit": None, "monthly_limit": None},
+        "free": {"total_limit": 20, "monthly_limit": None},
+        "standard": {"total_limit": None, "monthly_limit": 300},
+        "premium": {"total_limit": None, "monthly_limit": None},
     }
     limits = tier_limits.get(tier, tier_limits["free"])
+
+    total_limit = limits["total_limit"]
 
     return SuccessResponse(
         data={
             "tier": tier,
+            "used": lifetime_total,
+            "limit": total_limit,
+            "remaining": (total_limit - lifetime_total) if total_limit else None,
             "queries_used_today": queries_used_today,
-            "daily_limit": limits["daily_limit"],
             "monthly_limit": limits["monthly_limit"],
         }
     ).model_dump()

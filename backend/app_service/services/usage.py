@@ -1,7 +1,7 @@
 """Usage tracking service — checks and enforces tier-based chat limits.
 
-Tier limits (from PHASE0_DESIGN.md / BUSINESS_RULES.md):
-  • free         → 5 chats / day
+Tier limits (from PHASE0_DESIGN.md / Z decision 2026-02-18):
+  • free         → 20 chats total (lifetime, no daily reset)
   • standard     → 300 chats / month
   • premium      → unlimited
   • premium_plus → unlimited
@@ -43,7 +43,7 @@ class UsageCheck:
 
 # Each entry: (max_count, period)  —  None max ⇒ unlimited, 0 ⇒ blocked.
 _TIER_LIMITS: dict[str, tuple[int | None, str | None]] = {
-    "free": (5, "day"),
+    "free": (20, "lifetime"),
     "standard": (300, "month"),
     "premium": (None, None),
     "premium_plus": (None, None),
@@ -79,6 +79,19 @@ async def _get_or_create_today(
         await db.flush()
 
     return record
+
+
+async def _lifetime_chat_count(
+    db: AsyncSession,
+    user_id: str,
+) -> int:
+    """Sum ``chat_count`` across ALL daily_usage rows for this user (lifetime total)."""
+    stmt = (
+        select(func.coalesce(func.sum(DailyUsage.chat_count), 0))
+        .where(DailyUsage.user_id == user_id)
+    )
+    result = await db.execute(stmt)
+    return result.scalar_one()
 
 
 async def _monthly_chat_count(
@@ -129,7 +142,21 @@ async def check_and_increment(
         monthly = await _monthly_chat_count(db, user_id)
         return UsageCheck(allowed=True, used=monthly, limit=None, tier=tier)
 
-    # ── Daily limit (free tier) ────────────────────────────────────────
+    # ── Lifetime limit (free tier — 20 total, no reset) ──────────────
+    if period == "lifetime":
+        total = await _lifetime_chat_count(db, user_id)
+        if total >= max_count:
+            return UsageCheck(
+                allowed=False, used=total, limit=max_count, tier=tier,
+            )
+        record = await _get_or_create_today(db, user_id)
+        record.chat_count += 1
+        await db.flush()
+        return UsageCheck(
+            allowed=True, used=total + 1, limit=max_count, tier=tier,
+        )
+
+    # ── Daily limit (legacy, kept for future use) ──────────────────────
     if period == "day":
         record = await _get_or_create_today(db, user_id)
         if record.chat_count >= max_count:
