@@ -1645,4 +1645,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideTierLimitError => 'Upgrade to access the full guide content';
+
+  @override
+  String get trackerSave => 'Save';
+
+  @override
+  String get trackerSaved => 'Saved';
+
+  @override
+  String get trackerItemSaved => 'Saved to tracker';
+
+  @override
+  String get homeQaTrackerTitle => 'Tracker';
+
+  @override
+  String get homeQaTrackerSubtitle => 'Track your tasks & deadlines';
 }

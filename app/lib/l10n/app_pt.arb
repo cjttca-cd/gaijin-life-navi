@@ -517,5 +517,11 @@
   "chatUpgradeButton": "Ver planos",
   "guidePremiumCta": "Este conteúdo requer assinatura Premium",
   "guidePremiumCtaButton": "Ver planos",
-  "guideTierLimitError": "Faça upgrade para acessar o conteúdo completo"
+  "guideTierLimitError": "Faça upgrade para acessar o conteúdo completo",
+
+  "trackerSave": "Salvar",
+  "trackerSaved": "Salvo",
+  "trackerItemSaved": "Salvo no rastreador",
+  "homeQaTrackerTitle": "Rastreador",
+  "homeQaTrackerSubtitle": "Acompanhe tarefas e prazos"
 }

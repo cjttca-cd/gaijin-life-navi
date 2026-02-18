@@ -89,12 +89,15 @@ class ChatSendController {
     try {
       final response = await repo.sendMessage(message: content, domain: domain);
 
-      // Add assistant message.
+      // Add assistant message (including tracker_items and actions).
       final assistantMessage = ChatMessage(
         id: 'assistant_${DateTime.now().millisecondsSinceEpoch}',
         role: 'assistant',
         content: response.reply,
         sources: response.sources,
+        actions: response.actions.isNotEmpty ? response.actions : null,
+        trackerItems:
+            response.trackerItems.isNotEmpty ? response.trackerItems : null,
         domain: response.domain,
         usage: response.usage,
         createdAt: DateTime.now(),

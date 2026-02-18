@@ -1640,4 +1640,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get guideTierLimitError => 'Nâng cấp để truy cập toàn bộ nội dung';
+
+  @override
+  String get trackerSave => 'Lưu';
+
+  @override
+  String get trackerSaved => 'Đã lưu';
+
+  @override
+  String get trackerItemSaved => 'Đã lưu vào danh sách';
+
+  @override
+  String get homeQaTrackerTitle => 'Theo dõi';
+
+  @override
+  String get homeQaTrackerSubtitle => 'Theo dõi công việc & hạn chót';
 }

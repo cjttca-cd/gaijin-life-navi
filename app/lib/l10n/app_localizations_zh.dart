@@ -1595,4 +1595,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get guideTierLimitError => '升级以查看完整指南内容';
+
+  @override
+  String get trackerSave => '保存';
+
+  @override
+  String get trackerSaved => '已保存';
+
+  @override
+  String get trackerItemSaved => '已保存到追踪器';
+
+  @override
+  String get homeQaTrackerTitle => '追踪器';
+
+  @override
+  String get homeQaTrackerSubtitle => '追踪任务和截止日期';
 }

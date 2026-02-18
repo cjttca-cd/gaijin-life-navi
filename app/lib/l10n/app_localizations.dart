@@ -3193,6 +3193,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upgrade to access the full guide content'**
   String get guideTierLimitError;
+
+  /// No description provided for @trackerSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get trackerSave;
+
+  /// No description provided for @trackerSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get trackerSaved;
+
+  /// No description provided for @trackerItemSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to tracker'**
+  String get trackerItemSaved;
+
+  /// No description provided for @homeQaTrackerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracker'**
+  String get homeQaTrackerTitle;
+
+  /// No description provided for @homeQaTrackerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your tasks & deadlines'**
+  String get homeQaTrackerSubtitle;
 }
 
 class _AppLocalizationsDelegate

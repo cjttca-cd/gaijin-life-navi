@@ -107,6 +107,15 @@ class HomeScreen extends ConsumerWidget {
                         subtitle: l10n.homeQaVisaSubtitle,
                         onTap: () => context.push('${AppRoutes.navigate}/visa'),
                       ),
+                    if (!isGuest)
+                      _QuickActionCard(
+                        icon: Icons.assignment_outlined,
+                        iconBgColor: AppColors.adminContainer,
+                        iconColor: AppColors.adminIcon,
+                        title: l10n.homeQaTrackerTitle,
+                        subtitle: l10n.homeQaTrackerSubtitle,
+                        onTap: () => context.push(AppRoutes.tracker),
+                      ),
                     _QuickActionCard(
                       icon: Icons.local_hospital,
                       iconBgColor: AppColors.medicalContainer,

@@ -10,6 +10,8 @@ class ChatMessage {
     required this.role,
     required this.content,
     this.sources,
+    this.actions,
+    this.trackerItems,
     this.disclaimer,
     this.domain,
     this.usage,
@@ -22,6 +24,13 @@ class ChatMessage {
   final String role;
   final String content;
   final List<ChatSource>? sources;
+
+  /// Suggested actions from AI response [{type, items/text}].
+  final List<ChatAction>? actions;
+
+  /// AI-suggested tracker items [{type, title, date}].
+  final List<ChatTrackerItem>? trackerItems;
+
   final String? disclaimer;
   final String? domain;
   final ChatUsageInfo? usage;
@@ -35,6 +44,8 @@ class ChatMessage {
     String? role,
     String? content,
     List<ChatSource>? sources,
+    List<ChatAction>? actions,
+    List<ChatTrackerItem>? trackerItems,
     String? disclaimer,
     String? domain,
     ChatUsageInfo? usage,
@@ -45,6 +56,8 @@ class ChatMessage {
       role: role ?? this.role,
       content: content ?? this.content,
       sources: sources ?? this.sources,
+      actions: actions ?? this.actions,
+      trackerItems: trackerItems ?? this.trackerItems,
       disclaimer: disclaimer ?? this.disclaimer,
       domain: domain ?? this.domain,
       usage: usage ?? this.usage,

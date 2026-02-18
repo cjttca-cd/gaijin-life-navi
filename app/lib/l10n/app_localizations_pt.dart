@@ -1658,4 +1658,19 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get guideTierLimitError =>
       'Faça upgrade para acessar o conteúdo completo';
+
+  @override
+  String get trackerSave => 'Salvar';
+
+  @override
+  String get trackerSaved => 'Salvo';
+
+  @override
+  String get trackerItemSaved => 'Salvo no rastreador';
+
+  @override
+  String get homeQaTrackerTitle => 'Rastreador';
+
+  @override
+  String get homeQaTrackerSubtitle => 'Acompanhe tarefas e prazos';
 }

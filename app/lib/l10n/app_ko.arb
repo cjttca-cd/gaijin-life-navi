@@ -517,5 +517,11 @@
   "chatUpgradeButton": "플랜 보기",
   "guidePremiumCta": "이 콘텐츠는 프리미엄 구독이 필요합니다",
   "guidePremiumCtaButton": "플랜 보기",
-  "guideTierLimitError": "전체 가이드를 보려면 업그레이드하세요"
+  "guideTierLimitError": "전체 가이드를 보려면 업그레이드하세요",
+
+  "trackerSave": "저장",
+  "trackerSaved": "저장됨",
+  "trackerItemSaved": "추적기에 저장됨",
+  "homeQaTrackerTitle": "추적기",
+  "homeQaTrackerSubtitle": "작업 및 마감일 추적"
 }

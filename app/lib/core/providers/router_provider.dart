@@ -20,6 +20,7 @@ import '../../features/profile/presentation/profile_edit_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/profile/presentation/settings_screen.dart';
 import '../../features/subscription/presentation/subscription_screen.dart';
+import '../../features/tracker/presentation/tracker_screen.dart';
 import '../navigation/main_shell.dart';
 import 'auth_provider.dart';
 import 'locale_provider.dart';
@@ -45,6 +46,9 @@ class AppRoutes {
 
   // Subscription
   static const String subscription = '/subscription';
+
+  // Tracker
+  static const String tracker = '/tracker';
 
   // Navigator (Guide) sub-routes
   static const String guideList = '/navigate/:domain';
@@ -176,6 +180,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.subscription,
         builder: (context, state) => const SubscriptionScreen(),
+      ),
+
+      // Tracker (full-screen).
+      GoRoute(
+        path: AppRoutes.tracker,
+        builder: (context, state) => const TrackerScreen(),
       ),
 
       // Profile Edit (full-screen).

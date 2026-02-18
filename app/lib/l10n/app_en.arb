@@ -570,5 +570,11 @@
   "chatUpgradeButton": "View Plans",
   "guidePremiumCta": "This content is available with a Premium subscription",
   "guidePremiumCtaButton": "View Plans",
-  "guideTierLimitError": "Upgrade to access the full guide content"
+  "guideTierLimitError": "Upgrade to access the full guide content",
+
+  "trackerSave": "Save",
+  "trackerSaved": "Saved",
+  "trackerItemSaved": "Saved to tracker",
+  "homeQaTrackerTitle": "Tracker",
+  "homeQaTrackerSubtitle": "Track your tasks & deadlines"
 }

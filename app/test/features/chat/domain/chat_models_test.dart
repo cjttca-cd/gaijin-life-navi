@@ -128,6 +128,36 @@ void main() {
       expect(msg.domain, 'banking');
     });
 
+    test('creates assistant message with trackerItems and actions', () {
+      final msg = ChatMessage(
+        id: 'assistant_2',
+        role: 'assistant',
+        content: 'Here is the info...',
+        trackerItems: [
+          const ChatTrackerItem(
+            type: 'deadline',
+            title: 'Bank appointment',
+            date: '2026-03-01',
+          ),
+        ],
+        actions: [
+          const ChatAction(
+            type: 'checklist',
+            items: 'passport, residence card',
+          ),
+        ],
+        domain: 'banking',
+        createdAt: DateTime(2026),
+      );
+
+      expect(msg.trackerItems, isNotNull);
+      expect(msg.trackerItems!.length, 1);
+      expect(msg.trackerItems!.first.title, 'Bank appointment');
+      expect(msg.actions, isNotNull);
+      expect(msg.actions!.length, 1);
+      expect(msg.actions!.first.type, 'checklist');
+    });
+
     test('copyWith creates modified copy', () {
       final msg = ChatMessage(
         id: 'msg-1',
@@ -139,6 +169,21 @@ void main() {
       final updated = msg.copyWith(content: 'Hello world');
       expect(updated.content, 'Hello world');
       expect(updated.id, 'msg-1'); // unchanged
+    });
+
+    test('copyWith preserves trackerItems and actions', () {
+      final msg = ChatMessage(
+        id: 'msg-2',
+        role: 'assistant',
+        content: 'Info',
+        trackerItems: [const ChatTrackerItem(type: 'task', title: 'Test')],
+        actions: [const ChatAction(type: 'next_step', text: 'Continue')],
+        createdAt: DateTime(2026),
+      );
+
+      final updated = msg.copyWith(content: 'Updated');
+      expect(updated.trackerItems!.length, 1);
+      expect(updated.actions!.length, 1);
     });
   });
 }

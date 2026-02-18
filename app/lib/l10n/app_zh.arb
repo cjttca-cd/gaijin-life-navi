@@ -517,5 +517,11 @@
   "chatUpgradeButton": "查看方案",
   "guidePremiumCta": "此内容需要高级订阅",
   "guidePremiumCtaButton": "查看方案",
-  "guideTierLimitError": "升级以查看完整指南内容"
+  "guideTierLimitError": "升级以查看完整指南内容",
+
+  "trackerSave": "保存",
+  "trackerSaved": "已保存",
+  "trackerItemSaved": "已保存到追踪器",
+  "homeQaTrackerTitle": "追踪器",
+  "homeQaTrackerSubtitle": "追踪任务和截止日期"
 }

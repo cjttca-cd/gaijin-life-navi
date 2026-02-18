@@ -1,0 +1,121 @@
+import 'dart:async';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../chat/domain/chat_response.dart';
+import '../../../chat/presentation/providers/chat_providers.dart';
+import '../../data/tracker_repository.dart';
+import '../../domain/tracker_item.dart';
+
+// ─── Repository ──────────────────────────────────────────────
+
+/// Provides the TrackerRepository (async init of SharedPreferences).
+final trackerRepositoryProvider = FutureProvider<TrackerRepository>((
+  ref,
+) async {
+  final prefs = await SharedPreferences.getInstance();
+  return TrackerRepository(prefs: prefs);
+});
+
+// ─── Items list ──────────────────────────────────────────────
+
+/// All saved tracker items.
+final trackerItemsProvider =
+    AsyncNotifierProvider<TrackerItemsNotifier, List<TrackerItem>>(
+      TrackerItemsNotifier.new,
+    );
+
+class TrackerItemsNotifier extends AsyncNotifier<List<TrackerItem>> {
+  TrackerRepository? _repo;
+
+  Future<TrackerRepository> _getRepo() async {
+    _repo ??= await ref.read(trackerRepositoryProvider.future);
+    return _repo!;
+  }
+
+  @override
+  Future<List<TrackerItem>> build() async {
+    final repo = await _getRepo();
+    return repo.getAll();
+  }
+
+  /// Save a new item from AI suggestion.
+  /// Returns `true` on success, `false` if duplicate or limit reached.
+  Future<bool> saveFromChat(ChatTrackerItem chatItem, String userTier) async {
+    final repo = await _getRepo();
+
+    // Check tier limit.
+    if (repo.isLimitReached(userTier)) {
+      return false;
+    }
+
+    // Check duplicate.
+    if (repo.isDuplicate(chatItem.type, chatItem.title)) {
+      return false;
+    }
+
+    final item = TrackerItem(
+      id: TrackerItem.generateId(),
+      type: chatItem.type,
+      title: chatItem.title,
+      date: chatItem.date,
+      status: TrackerStatus.notStarted,
+      savedAt: DateTime.now(),
+    );
+
+    final success = await repo.save(item);
+    if (success) {
+      state = AsyncData(repo.getAll());
+    }
+    return success;
+  }
+
+  /// Update the status of an item.
+  Future<void> updateStatus(String id, TrackerStatus status) async {
+    final repo = await _getRepo();
+    await repo.updateStatus(id, status);
+    state = AsyncData(repo.getAll());
+  }
+
+  /// Cycle to the next status.
+  Future<void> cycleStatus(String id) async {
+    final repo = await _getRepo();
+    final items = repo.getAll();
+    final item = items.where((e) => e.id == id).firstOrNull;
+    if (item == null) return;
+    await repo.updateStatus(id, item.status.next);
+    state = AsyncData(repo.getAll());
+  }
+
+  /// Delete an item.
+  Future<void> delete(String id) async {
+    final repo = await _getRepo();
+    await repo.delete(id);
+    state = AsyncData(repo.getAll());
+  }
+}
+
+// ─── Derived providers ───────────────────────────────────────
+
+/// Number of saved tracker items.
+final trackerCountProvider = Provider<int>((ref) {
+  return ref.watch(trackerItemsProvider).valueOrNull?.length ?? 0;
+});
+
+/// Whether the free tier limit is reached.
+final trackerLimitReachedProvider = Provider<bool>((ref) {
+  final tier = ref.watch(userTierProvider);
+  if (tier == 'standard' || tier == 'premium') return false;
+  final count = ref.watch(trackerCountProvider);
+  return count >= TrackerRepository.freeTierLimit;
+});
+
+/// Check if a specific chat tracker item is already saved.
+final isTrackerItemSavedProvider = Provider.family<bool, String>((
+  ref,
+  titleKey,
+) {
+  final items = ref.watch(trackerItemsProvider).valueOrNull ?? [];
+  return items.any((e) => e.title.toLowerCase() == titleKey.toLowerCase());
+});

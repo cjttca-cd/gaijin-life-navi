@@ -8,6 +8,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../domain/chat_message.dart';
 import 'disclaimer_banner.dart';
 import 'source_citation.dart';
+import 'tracker_item_card.dart';
 
 /// Chat bubble — handoff-chat.md §3 (User & AI bubbles).
 ///
@@ -179,6 +180,11 @@ class _AiBubble extends StatelessWidget {
                       ),
                       SourceCitationWidget(sources: message.sources!),
                     ],
+
+                    // Tracker items section.
+                    if (message.trackerItems != null &&
+                        message.trackerItems!.isNotEmpty)
+                      TrackerItemCards(items: message.trackerItems!),
 
                     // Timestamp.
                     Padding(

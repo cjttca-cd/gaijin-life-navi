@@ -1604,4 +1604,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get guideTierLimitError => '전체 가이드를 보려면 업그레이드하세요';
+
+  @override
+  String get trackerSave => '저장';
+
+  @override
+  String get trackerSaved => '저장됨';
+
+  @override
+  String get trackerItemSaved => '추적기에 저장됨';
+
+  @override
+  String get homeQaTrackerTitle => '추적기';
+
+  @override
+  String get homeQaTrackerSubtitle => '작업 및 마감일 추적';
 }

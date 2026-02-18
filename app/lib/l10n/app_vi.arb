@@ -517,5 +517,11 @@
   "chatUpgradeButton": "Xem gói",
   "guidePremiumCta": "Nội dung này yêu cầu đăng ký Premium",
   "guidePremiumCtaButton": "Xem gói",
-  "guideTierLimitError": "Nâng cấp để truy cập toàn bộ nội dung"
+  "guideTierLimitError": "Nâng cấp để truy cập toàn bộ nội dung",
+
+  "trackerSave": "Lưu",
+  "trackerSaved": "Đã lưu",
+  "trackerItemSaved": "Đã lưu vào danh sách",
+  "homeQaTrackerTitle": "Theo dõi",
+  "homeQaTrackerSubtitle": "Theo dõi công việc & hạn chót"
 }
