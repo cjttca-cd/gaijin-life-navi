@@ -111,6 +111,48 @@
 - [ ] ソフトデリートされたレコードが API レスポンスに含まれない
 - [ ] 本番環境で OpenClaw Gateway が安定稼働する
 
+## 11. データ就緒（Data Readiness）
+
+> ソフトウェアが動いてもデータが空なら MVP 未完成。
+> strategy/product-spec.md §8 の Data Readiness Definition に基づく。
+
+### ナレッジベース投入基準
+
+| Agent | 必要ファイル数 | 必要コンテンツ | 検証方法 |
+|-------|-------------|-------------|---------|
+| svc-banking | 6 files | 5大銀行比較、口座開設手順、送金方法、ATM、ネットバンキング、FAQ | knowledge/ に 6 ファイル配置確認 |
+| svc-visa | 6 files | 在留更新、資格変更、永住、再入国、資格外活動、家族滞在 | knowledge/ に 6 ファイル配置確認 |
+| svc-medical | 7 files | 診療科ガイド、保険制度、緊急対応、受診フレーズ、薬局、健診、メンタルヘルス | knowledge/ に 7 ファイル配置確認 |
+| svc-concierge | 5 files | 来日直後チェックリスト、生活基盤、FAQ、地域情報、ルーティングルール | knowledge/ に 5 ファイル配置確認 |
+| **合計** | **~24 files** | **~120KB** | |
+
+### 検索精度テスト（memory_search）
+
+- [ ] 各ドメインの代表的な質問 5 問以上に対し、`memory_search` が関連 snippet を返すこと
+- [ ] 日本語・英語・中国語の 3 言語クエリで各 agent が関連情報を取得できること（bge-m3 多言語対応の検証）
+- [ ] 検索精度テスト: 各 agent に対し「口座開設に必要な書類は？」等の実問を投げ、knowledge ファイルの内容に基づいた回答が返ること
+
+### コンテンツ品質基準
+
+- [ ] 全 knowledge ファイルの情報ソースが公式機関（金融庁、入管庁、厚労省等）に基づくこと
+- [ ] 各ファイルに最終更新日と情報ソース URL が含まれること
+- [ ] 免責事項が Visa / Medical 関連のファイルに含まれること（BUSINESS_RULES.md §5）
+- [ ] Navigator API 経由でガイドコンテンツが正しく表示されること（title + summary + content）
+
+## 12. Observability（計測基盤）
+
+> strategy/business-plan.md §7 で定義された KPI が全て計測可能になっていること。
+
+- [ ] Firebase Analytics SDK が Flutter アプリに正しく初期化されている
+- [ ] Firebase Crashlytics SDK が統合され、テストクラッシュが捕捉されている
+- [ ] SYSTEM_DESIGN.md §11.2 で定義した全カスタムイベントが Flutter コードに実装されている
+- [ ] `chat_message_sent` イベントが Chat 成功時に送信されている（Firebase DebugView で確認）
+- [ ] `guide_viewed` イベントが Navigator ガイド閲覧時に送信されている
+- [ ] `subscription_started` イベントが購入完了時に送信されている
+- [ ] `usage_limit_reached` イベントが制限到達時に送信されている
+- [ ] Firebase Console でイベントストリームが閲覧可能（最低限のダッシュボード）
+- [ ] API Gateway のログに Agent 呼出し時間・トークン消費量が記録されている
+
 ---
 
 ## 閉ループ検証
@@ -121,6 +163,17 @@
 - [ ] **閉ループ B**: ホーム → Navigator → ドメイン選択 (Banking) → ガイド一覧 → ガイド詳細 → 「AI に質問する」→ Chat 画面で詳細質問
 - [ ] **閉ループ C**: Emergency タブ → 緊急連絡先確認 → Chat で「119を呼びたい」→ svc-medical が即座に対応手順を回答
 - [ ] **閉ループ D**: AI Chat 5回目完了 → 制限メッセージ → アップグレード導線 → サブスク画面 → IAP 購入 → 即座に制限解除
+- [ ] **閉ループ E**: ゲスト導線 — アプリ起動（未ログイン）→ Navigator 一覧 → Banking ガイド全文閲覧 → Emergency 確認 → 「AI に質問する」→ 登録促進画面 → 登録 → AI Chat 利用
+
+## Launch Readiness（MVP 完了 → リリース判断。DEV_PHASES §LP 完了後に検証）
+
+- [ ] Production 環境で全閉ループ (A〜E) が跑通する
+- [ ] Crash Reporting (Firebase Crashlytics) が動作している（テストクラッシュで確認）
+- [ ] Analytics イベントが Production で送信されている（Firebase Console で確認）
+- [ ] Privacy Policy / ToS が公開 URL でアクセスできる
+- [ ] App Store メタデータが全 5 言語で入力済み
+- [ ] Beta Testing で Z が承認している
+- [ ] 全 5 言語の Localization QA が完了している（文字切れ・レイアウト崩れなし）
 
 ---
 
@@ -143,3 +196,4 @@
 
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
+- 2026-02-18: strategy/ 連携補完（Data Readiness 受入基準 / Observability 受入基準 / ゲスト導線 閉ループ E / Launch Readiness）

@@ -79,7 +79,7 @@ API Gateway (FastAPI)
     ├── Firebase JWT 認証
     ├── Rate Limiting (per user tier)
     ├── Intent Analysis → Domain Routing
-    └── Session Mapping: app:{uid}:{domain}
+    └── Session Mapping: app_{uid}_{domain}
     ↓ subprocess
 OpenClaw Gateway
     ├── svc-concierge → 意図分類 + routing
@@ -442,11 +442,11 @@ workspace/knowledge/*.md（各 agent 独立）
 | AI API (Claude Sonnet 4.5) | ¥30,000 | $3/MTok input, $15/MTok output。初期ユーザー少数 |
 | Firebase (Auth + Firestore) | ¥0〜¥5,000 | Spark→Blaze プラン |
 | VPS / Fly.io (API Gateway + OC) | ¥5,000〜¥10,000 | OpenClaw 稼働環境 |
-| PostgreSQL (ユーザーDB) | ¥3,000 | |
+| ~~PostgreSQL (ユーザーDB)~~ | ~~¥3,000~~ | 廃止（Phase 0 は SQLite、コスト¥0。Phase 1+ で PostgreSQL 検討） |
 | ~~Cloud Vision API (OCR)~~ | ~~¥10,000~~ | 廃止（AI Chat のマルチモーダルで代替） |
 | ~~Pinecone (Vector DB)~~ | ~~¥3,000~~ | 廃止（memory_search bge-m3 で代替） |
 | ~~Cloudflare Workers~~ | ~~¥3,000~~ | 廃止（FastAPI に統合） |
-| **月額合計** | **~¥43,000** | 旧 ¥51,000 から削減 |
+| **月額合計** | **~¥40,000** | 旧 ¥51,000 から削減（PostgreSQL → SQLite でさらに ¥3K 減） |
 
 ---
 
