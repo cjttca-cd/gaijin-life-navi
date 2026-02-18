@@ -110,7 +110,10 @@ class _LanguageScreenState extends ConsumerState<LanguageScreen> {
                             ref
                                 .read(localeProvider.notifier)
                                 .setLocale(_selectedCode!);
-                            context.go(AppRoutes.login);
+                            // Go straight to home as guest.
+                            // Login is NOT required for basic browsing
+                            // (Access Boundary Matrix: Guest tier).
+                            context.go(AppRoutes.home);
                           }
                           : null,
                   child: Text(l10n.langContinue),

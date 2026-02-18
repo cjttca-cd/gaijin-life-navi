@@ -38,10 +38,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (!hasLanguage) {
       context.go(AppRoutes.language);
-    } else if (!isLoggedIn) {
-      context.go(AppRoutes.login);
     } else {
-      // Logged in — go to home (onboarding redirect handled by router).
+      // Both guests and logged-in users go to home.
+      // Per Access Boundary Matrix: guests can browse Navigator, Emergency,
+      // and limited content without login. Login is only required for
+      // AI Chat, Tracker, and Profile.
       context.go(AppRoutes.home);
     }
   }
