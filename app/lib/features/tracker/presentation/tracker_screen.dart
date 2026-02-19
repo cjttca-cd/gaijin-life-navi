@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../profile/presentation/notification_settings_screen.dart';
 import '../domain/tracker_item.dart';
 import 'providers/tracker_providers.dart';
 
@@ -25,7 +26,20 @@ class TrackerScreen extends ConsumerWidget {
     final trackerAsync = ref.watch(trackerItemsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.trackerTitle)),
+      appBar: AppBar(
+        title: Text(l10n.trackerTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            tooltip: l10n.notificationSettingsTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const NotificationSettingsScreen(),
+              ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final limitReached = ref.read(trackerLimitReachedProvider);

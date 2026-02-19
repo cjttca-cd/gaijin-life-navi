@@ -36,7 +36,7 @@
 | 25 | ProfileScreen | 🟡 改善 | Profile 情報を AI prompt に注入して個性化回答 | ✅ Fixed `342d3c2` |
 | 26 | ProfileScreen | 🔴 大規模改修 | Profile 全面リデザイン（フィールド変更 + UI 変更 + Tracker 連携） | ✅ Fixed `a9db1ae` |
 | 34 | Profile/Settings | 🟡 大改修 | Tab→我的账户、3区域再構成、Settings簡素化 | ✅ Fixed `a28db3f` |
-| 35 | Settings 通知 | 🟡 改善 | 通知=Todo 期限リマインダー（本地通知）。UI は保留、実装は後日 | 📋 設計記録 |
+| 35 | Settings 通知 | 🟡 改善 | Todo ローカル通知リマインダー実装 | ✅ Fixed `753996d` |
 
 ## Z の決定事項
 
