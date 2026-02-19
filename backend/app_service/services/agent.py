@@ -80,6 +80,7 @@ async def call_agent(
     message: str,
     context: list[dict] | None = None,
     image_path: str | None = None,
+    user_profile: dict | None = None,
     timeout: int = 60,
 ) -> AgentResponse:
     """Invoke an OpenClaw agent statelessly and return a structured response.
@@ -94,6 +95,10 @@ async def call_agent(
         context: Optional list of prior conversation turns, each a dict
             with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
         image_path: Optional filesystem path to an uploaded image.
+        user_profile: Optional dict with user profile fields
+            (``display_name``, ``nationality``, ``residence_status``,
+            ``residence_region``, ``arrival_date``). Injected into the
+            prompt so the agent can personalise responses.
         timeout: Maximum seconds to wait for the agent (passed to both
             OpenClaw ``--timeout`` and ``asyncio`` subprocess timeout).
 
@@ -105,6 +110,23 @@ async def call_agent(
 
     # Build the full message with /reset prefix for stateless isolation.
     full_message = "/reset "
+
+    # Inject user profile so the agent can personalise responses.
+    if user_profile:
+        profile_lines = ["【ユーザープロフィール】"]
+        field_map = {
+            "display_name": "表示名",
+            "nationality": "国籍",
+            "residence_status": "在留資格",
+            "residence_region": "居住地域",
+            "arrival_date": "来日時期",
+        }
+        for key, label in field_map.items():
+            value = user_profile.get(key)
+            if value:
+                profile_lines.append(f"{label}: {value}")
+        if len(profile_lines) > 1:  # has at least one field
+            full_message += "\n".join(profile_lines) + "\n\n"
 
     # Append conversation history if provided.
     if context:

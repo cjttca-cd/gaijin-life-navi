@@ -324,12 +324,28 @@ async def chat(
     if body.context:
         context_dicts = [{"role": m.role, "text": m.text} for m in body.context]
 
-    # 7. Call agent (stateless with /reset)
+    # 7. Fetch user profile for agent personalisation
+    profile = await db.get(Profile, uid)
+    user_profile: dict | None = None
+    if profile and profile.deleted_at is None:
+        user_profile = {
+            "display_name": profile.display_name or None,
+            "nationality": profile.nationality,
+            "residence_status": profile.residence_status,
+            "residence_region": profile.residence_region,
+            "arrival_date": str(profile.arrival_date) if profile.arrival_date else None,
+        }
+        # Only pass if at least one field is non-empty
+        if not any(user_profile.values()):
+            user_profile = None
+
+    # 8. Call agent (stateless with /reset)
     agent_resp = await call_agent(
         agent_id=agent_id,
         message=agent_message,
         context=context_dicts,
         image_path=image_path,
+        user_profile=user_profile,
     )
 
     if agent_resp.status != "ok":
