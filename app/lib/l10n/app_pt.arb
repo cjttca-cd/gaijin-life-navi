@@ -548,5 +548,9 @@
       }
     }
   },
-  "subUsageUnlimited": "Chats ilimitados"
+  "subUsageUnlimited": "Chats ilimitados",
+  "tabAccount": "Minha Conta",
+  "accountSectionProfile": "Perfil",
+  "accountSectionManagement": "Gerenciar Conta",
+  "accountSectionDanger": "Zona de Perigo"
 }

@@ -1719,4 +1719,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get subUsageUnlimited => 'Unlimited chats';
+
+  @override
+  String get tabAccount => 'My Account';
+
+  @override
+  String get accountSectionProfile => 'Profile';
+
+  @override
+  String get accountSectionManagement => 'Account';
+
+  @override
+  String get accountSectionDanger => 'Danger Zone';
 }

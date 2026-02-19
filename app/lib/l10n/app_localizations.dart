@@ -3337,6 +3337,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unlimited chats'**
   String get subUsageUnlimited;
+
+  /// No description provided for @tabAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'My Account'**
+  String get tabAccount;
+
+  /// No description provided for @accountSectionProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get accountSectionProfile;
+
+  /// No description provided for @accountSectionManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountSectionManagement;
+
+  /// No description provided for @accountSectionDanger.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger Zone'**
+  String get accountSectionDanger;
 }
 
 class _AppLocalizationsDelegate

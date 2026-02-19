@@ -1714,4 +1714,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get subUsageUnlimited => 'Chat không giới hạn';
+
+  @override
+  String get tabAccount => 'Tài khoản';
+
+  @override
+  String get accountSectionProfile => 'Hồ sơ';
+
+  @override
+  String get accountSectionManagement => 'Quản lý tài khoản';
+
+  @override
+  String get accountSectionDanger => 'Vùng nguy hiểm';
 }

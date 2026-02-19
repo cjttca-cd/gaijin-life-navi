@@ -548,5 +548,9 @@
       }
     }
   },
-  "subUsageUnlimited": "无限次对话"
+  "subUsageUnlimited": "无限次对话",
+  "tabAccount": "我的账户",
+  "accountSectionProfile": "个人资料",
+  "accountSectionManagement": "账户管理",
+  "accountSectionDanger": "危险操作"
 }

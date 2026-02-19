@@ -704,5 +704,9 @@
       }
     }
   },
-  "subUsageUnlimited": "Unlimited chats"
+  "subUsageUnlimited": "Unlimited chats",
+  "tabAccount": "My Account",
+  "accountSectionProfile": "Profile",
+  "accountSectionManagement": "Account",
+  "accountSectionDanger": "Danger Zone"
 }

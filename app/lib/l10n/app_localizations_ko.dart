@@ -1679,4 +1679,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get subUsageUnlimited => '무제한 채팅';
+
+  @override
+  String get tabAccount => '내 계정';
+
+  @override
+  String get accountSectionProfile => '프로필';
+
+  @override
+  String get accountSectionManagement => '계정 관리';
+
+  @override
+  String get accountSectionDanger => '위험 영역';
 }

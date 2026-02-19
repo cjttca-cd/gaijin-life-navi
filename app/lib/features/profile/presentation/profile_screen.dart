@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/config/app_config.dart';
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -30,6 +31,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   // Pending edits (not yet saved to server).
   final Map<String, dynamic> _pendingEdits = {};
   bool _isSaving = false;
+  bool _isDeleting = false;
 
   bool get _hasChanges => _pendingEdits.isNotEmpty;
 
@@ -160,6 +162,86 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
+  Future<void> _logout() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.settingsLogoutTitle),
+        content: Text(l10n.settingsLogoutMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.settingsLogoutCancel),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(ctx).colorScheme.error,
+            ),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.settingsLogoutConfirm),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await ref.read(firebaseAuthProvider).signOut();
+      if (mounted) context.go(AppRoutes.login);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.settingsErrorLogout)),
+        );
+      }
+    }
+  }
+
+  Future<void> _deleteAccount() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.settingsDeleteTitle),
+        content: Text(l10n.settingsDeleteMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.settingsDeleteCancel),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(ctx).colorScheme.error,
+              foregroundColor: Theme.of(ctx).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.settingsDeleteConfirmAction),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() => _isDeleting = true);
+    try {
+      final repo = ref.read(profileRepositoryProvider);
+      await repo.deleteAccount();
+      await ref.read(firebaseAuthProvider).signOut();
+      if (mounted) context.go(AppRoutes.language);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.settingsErrorDelete)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isDeleting = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -211,11 +293,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         children: [
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // ── Section 1: Profile ──
+          _SectionLabel(label: l10n.accountSectionProfile),
+
           // Personalization hint.
           Padding(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.screenPadding,
-              AppSpacing.spaceLg,
+              0,
               AppSpacing.screenPadding,
               AppSpacing.spaceSm,
             ),
@@ -323,6 +410,90 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.space2xl),
+
+          // ── Section 2: Account Management ──
+          _SectionLabel(label: l10n.accountSectionManagement),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Text('⭐', style: TextStyle(fontSize: 20)),
+                    title: Text(
+                      l10n.settingsSubscription,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Free',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.spaceXs),
+                        Icon(
+                          Icons.chevron_right,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    onTap: () => context.push(AppRoutes.subscription),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: theme.colorScheme.outlineVariant,
+                    indent: 56,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.logout,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    title: Text(
+                      l10n.settingsLogout,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
+                    ),
+                    onTap: _logout,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.space2xl),
+
+          // ── Section 3: Danger Zone ──
+          _SectionLabel(label: l10n.accountSectionDanger),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Card(
+              child: ListTile(
+                leading: Icon(
+                  Icons.delete_outline,
+                  color: theme.colorScheme.error,
+                ),
+                title: Text(
+                  l10n.settingsDeleteAccount,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
+                ),
+                enabled: !_isDeleting,
+                onTap: _deleteAccount,
               ),
             ),
           ),

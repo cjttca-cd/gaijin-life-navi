@@ -78,7 +78,7 @@ class MainShell extends StatelessWidget {
             NavigationDestination(
               icon: const Icon(Icons.person_outline),
               selectedIcon: const Icon(Icons.person),
-              label: l10n.tabProfile,
+              label: l10n.tabAccount,
             ),
           ],
         ),

@@ -548,5 +548,9 @@
       }
     }
   },
-  "subUsageUnlimited": "무제한 채팅"
+  "subUsageUnlimited": "무제한 채팅",
+  "tabAccount": "내 계정",
+  "accountSectionProfile": "프로필",
+  "accountSectionManagement": "계정 관리",
+  "accountSectionDanger": "위험 영역"
 }

@@ -548,5 +548,9 @@
       }
     }
   },
-  "subUsageUnlimited": "Chat không giới hạn"
+  "subUsageUnlimited": "Chat không giới hạn",
+  "tabAccount": "Tài khoản",
+  "accountSectionProfile": "Hồ sơ",
+  "accountSectionManagement": "Quản lý tài khoản",
+  "accountSectionDanger": "Vùng nguy hiểm"
 }

@@ -1669,4 +1669,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get subUsageUnlimited => '无限次对话';
+
+  @override
+  String get tabAccount => '我的账户';
+
+  @override
+  String get accountSectionProfile => '个人资料';
+
+  @override
+  String get accountSectionManagement => '账户管理';
+
+  @override
+  String get accountSectionDanger => '危险操作';
 }

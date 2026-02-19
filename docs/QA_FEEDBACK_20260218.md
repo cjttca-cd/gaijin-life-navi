@@ -34,7 +34,9 @@
 | 16 | ChatConversation | 🟡 Major | 戻るボタン→ChatListScreen→再push→無限ループ | ✅ Fixed `f6f5d70` (go homeに変更) |
 | 24 | HomeScreen | 🟡 Major | 名前表示が Firebase email になる（Profile で設定した displayName が反映されない） | ✅ Fixed `91365d8` |
 | 25 | ProfileScreen | 🟡 改善 | Profile 情報を AI prompt に注入して個性化回答 | ✅ Fixed `342d3c2` |
-| 26 | ProfileScreen | 🔴 大規模改修 | Profile 全面リデザイン（フィールド変更 + UI 変更 + Tracker 連携） | 🔧 対応中 |
+| 26 | ProfileScreen | 🔴 大規模改修 | Profile 全面リデザイン（フィールド変更 + UI 変更 + Tracker 連携） | ✅ Fixed `a9db1ae` |
+| 34 | Profile/Settings | 🟡 大改修 | Tab「我的」→「我的账户」+ 页面再構成（個人資料/アカウント管理/削除）、Settings 簡素化 | 📋 実施中 |
+| 35 | Settings 通知 | 🟡 改善 | 通知=Todo 期限リマインダー（本地通知）。UI は保留、実装は後日 | 📋 設計記録 |
 
 ## Z の決定事項
 
@@ -165,6 +167,37 @@
 - 2 段階選択: 都道府県（47）→ 市区町村
 - データソース: デジタル庁 or Geolonia オープンデータ
 - 日+英 表示
+
+### #34 Tab「我的」→「我的账户」+ 页面再構成 (Z 指示 2026-02-19)
+
+**Tab 名変更**: 「我的」→「我的账户」(My Account)
+
+**「我的账户」ページ構成:**
+```
+📝 個人資料 区域
+  ├── 個性化提示文
+  ├── 表示名 / 国籍 / 在留資格 / 在留期限 / 居住地域 / 首選語言
+  └── 保存ボタン（変更時のみ表示）
+⚙️ アカウント管理 区域
+  ├── 订阅管理 → 订阅ページへ遷移
+  └── 退出登録（ログアウト）
+🔴 削除アカウント 区域
+  └── 削除アカウントボタン
+```
+
+**Settings ページ簡素化:**
+- 保留: 語言切換、通知設定（UI のみ、Coming Soon）、関於（版本/条款/隐私/連絡）
+- 削除: 订阅管理、退出登録、削除アカウント（→ 全て「我的账户」に移動済）
+
+### #35 通知機能設計 (Z 指示 2026-02-19)
+
+**用途**: Todo リストの期限リマインダー（在留期限更新等）
+**実装方式**: `flutter_local_notifications` (本地通知、後端不要)
+**Settings UI**:
+- Todo リマインダー ON/OFF（デフォルト ON）
+- リマインダー時刻選択（デフォルト 9:00 AM）
+**Calendar 連携**: 将来検討（「カレンダーに追加」ボタン、データは app 内 Todo が SSOT）
+**実装時期**: 後日（今回は Settings に UI 枠のみ残す）
 
 ## 流程改善（検討中）
 - [ ] Pipeline に「人間 QA レビュー」ステップを入れるか

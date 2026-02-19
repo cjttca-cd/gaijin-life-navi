@@ -1733,4 +1733,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get subUsageUnlimited => 'Chats ilimitados';
+
+  @override
+  String get tabAccount => 'Minha Conta';
+
+  @override
+  String get accountSectionProfile => 'Perfil';
+
+  @override
+  String get accountSectionManagement => 'Gerenciar Conta';
+
+  @override
+  String get accountSectionDanger => 'Zona de Perigo';
 }

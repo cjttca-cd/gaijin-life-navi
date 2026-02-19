@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/config/app_config.dart';
-import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/locale_provider.dart';
-import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_spacing.dart';
 import 'providers/profile_providers.dart';
 
@@ -23,8 +20,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  bool _isDeleting = false;
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -99,90 +94,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     },
                   ),
                 ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: AppSpacing.space2xl),
-
-          // ── ACCOUNT ──
-          _SectionHeader(title: l10n.settingsSectionAccount),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Text('⭐', style: TextStyle(fontSize: 20)),
-                    title: Text(
-                      l10n.settingsSubscription,
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Free',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(width: AppSpacing.spaceXs),
-                        Icon(
-                          Icons.chevron_right,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ],
-                    ),
-                    onTap: () => context.push(AppRoutes.subscription),
-                  ),
-                  Divider(
-                    height: 1,
-                    color: theme.colorScheme.outlineVariant,
-                    indent: 56,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.logout,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    title: Text(
-                      l10n.settingsLogout,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: theme.colorScheme.error,
-                      ),
-                    ),
-                    onTap: _logout,
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: AppSpacing.space2xl),
-
-          // ── DANGER ZONE ──
-          _SectionHeader(title: l10n.settingsSectionDanger),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Card(
-              child: ListTile(
-                leading: Icon(
-                  Icons.delete_outline,
-                  color: theme.colorScheme.error,
-                ),
-                title: Text(
-                  l10n.settingsDeleteAccount,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
-                ),
-                enabled: !_isDeleting,
-                onTap: _deleteAccount,
               ),
             ),
           ),
@@ -357,88 +268,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ref.invalidate(userProfileProvider);
     } catch (_) {
       // Language changed locally; server save is best-effort
-    }
-  }
-
-  Future<void> _logout() async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: Text(l10n.settingsLogoutTitle),
-            content: Text(l10n.settingsLogoutMessage),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: Text(l10n.settingsLogoutCancel),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(ctx).colorScheme.error,
-                ),
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: Text(l10n.settingsLogoutConfirm),
-              ),
-            ],
-          ),
-    );
-
-    if (confirmed != true) return;
-
-    try {
-      await ref.read(firebaseAuthProvider).signOut();
-      if (mounted) context.go(AppRoutes.login);
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.settingsErrorLogout)));
-      }
-    }
-  }
-
-  Future<void> _deleteAccount() async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: Text(l10n.settingsDeleteTitle),
-            content: Text(l10n.settingsDeleteMessage),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: Text(l10n.settingsDeleteCancel),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(ctx).colorScheme.error,
-                  foregroundColor: Theme.of(ctx).colorScheme.onError,
-                ),
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: Text(l10n.settingsDeleteConfirmAction),
-              ),
-            ],
-          ),
-    );
-
-    if (confirmed != true) return;
-
-    setState(() => _isDeleting = true);
-    try {
-      final repo = ref.read(profileRepositoryProvider);
-      await repo.deleteAccount();
-      await ref.read(firebaseAuthProvider).signOut();
-      if (mounted) context.go(AppRoutes.language);
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.settingsErrorDelete)));
-      }
-    } finally {
-      if (mounted) setState(() => _isDeleting = false);
     }
   }
 
