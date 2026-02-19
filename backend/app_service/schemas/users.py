@@ -16,8 +16,8 @@ class ProfileResponse(BaseModel):
     nationality: str | None = None
     residence_status: str | None = None
     residence_region: str | None = None
-    arrival_date: date | None = None
-    preferred_language: str
+    visa_expiry: date | None = None
+    preferred_language: str | None = None
     subscription_tier: str
     onboarding_completed: bool
     created_at: datetime
@@ -32,8 +32,8 @@ class UpdateProfileRequest(BaseModel):
     avatar_url: str | None = None
     nationality: str | None = Field(default=None, max_length=2)
     residence_status: str | None = Field(default=None, max_length=50)
-    residence_region: str | None = Field(default=None, max_length=10)
-    arrival_date: date | None = None
+    residence_region: str | None = Field(default=None, max_length=100)
+    visa_expiry: date | None = None
     preferred_language: Literal["en", "zh", "vi", "ko", "pt"] | None = None
 
 
@@ -42,6 +42,6 @@ class OnboardingRequest(BaseModel):
 
     nationality: str | None = Field(default=None, max_length=2)
     residence_status: str | None = Field(default=None, max_length=50)
-    residence_region: str | None = Field(default=None, max_length=10)
-    arrival_date: date | None = None
+    residence_region: str | None = Field(default=None, max_length=100)
+    visa_expiry: date | None = None
     preferred_language: Literal["en", "zh", "vi", "ko", "pt"]

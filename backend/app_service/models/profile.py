@@ -39,13 +39,13 @@ class Profile(Base):
         String(50), nullable=True, default=None
     )
     residence_region: Mapped[str | None] = mapped_column(
-        String(10), nullable=True, default=None
+        String(100), nullable=True, default=None
     )
-    arrival_date: Mapped[date | None] = mapped_column(
+    visa_expiry: Mapped[date | None] = mapped_column(
         Date, nullable=True, default=None
     )
-    preferred_language: Mapped[str] = mapped_column(
-        String(5), nullable=False, default="en"
+    preferred_language: Mapped[str | None] = mapped_column(
+        String(10), nullable=True, default=None
     )
     subscription_tier: Mapped[str] = mapped_column(
         String(20),

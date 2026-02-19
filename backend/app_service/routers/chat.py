@@ -332,8 +332,9 @@ async def chat(
             "display_name": profile.display_name or None,
             "nationality": profile.nationality,
             "residence_status": profile.residence_status,
+            "visa_expiry": str(profile.visa_expiry) if profile.visa_expiry else None,
             "residence_region": profile.residence_region,
-            "arrival_date": str(profile.arrival_date) if profile.arrival_date else None,
+            "preferred_language": profile.preferred_language,
         }
         # Only pass if at least one field is non-empty
         if not any(user_profile.values()):

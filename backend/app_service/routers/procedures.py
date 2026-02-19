@@ -10,7 +10,7 @@ DELETE /api/v1/procedures/my/:id      — Soft-delete
 import json
 import logging
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
@@ -119,14 +119,18 @@ async def _resolve_procedure_title(
     return ""
 
 
-def _calculate_due_date(deadline_rule: dict | None, arrival_date=None):
-    """Calculate due date from deadline_rule (BUSINESS_RULES.md §8)."""
-    if deadline_rule is None or arrival_date is None:
+def _calculate_due_date(deadline_rule: dict | None, base_date=None):
+    """Calculate due date from deadline_rule (BUSINESS_RULES.md §8).
+
+    base_date defaults to today since arrival_date is no longer tracked.
+    """
+    if deadline_rule is None:
         return None
     rule_type = deadline_rule.get("type")
     if rule_type == "within_days_of_arrival":
         days = deadline_rule.get("days", 0)
-        return arrival_date + timedelta(days=days)
+        ref = base_date or date.today()
+        return ref + timedelta(days=days)
     return None
 
 

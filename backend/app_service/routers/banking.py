@@ -46,7 +46,6 @@ class RecommendRequest(BaseModel):
 def calculate_match_score(
     bank: BankingGuide,
     preferred_language: str,
-    arrival_date: date | None,
     priorities: list[str],
 ) -> tuple[int, list[str], list[str]]:
     """Calculate bank recommendation score.
@@ -88,10 +87,8 @@ def calculate_match_score(
     # Warning checks
     requirements = bank.get_requirements()
     min_stay = requirements.get("min_stay_months", 0)
-    if min_stay > 0 and arrival_date:
-        months_in_japan = (date.today() - arrival_date).days // 30
-        if months_in_japan < min_stay:
-            warnings.append(f"May require {min_stay} months residence")
+    if min_stay > 0:
+        warnings.append(f"May require {min_stay} months residence (verify with bank)")
 
     return min(score, 100), reasons, warnings
 
@@ -162,8 +159,7 @@ async def recommend_banks(
         )
 
     # Use request body values or fall back to profile values
-    preferred_language = profile.preferred_language
-    arrival_date = profile.arrival_date
+    preferred_language = profile.preferred_language or "en"
     priorities = body.priorities
 
     # Fetch active banks
@@ -174,7 +170,7 @@ async def recommend_banks(
     recommendations = []
     for bank in banks:
         match_score, match_reasons, warnings = calculate_match_score(
-            bank, preferred_language, arrival_date, priorities
+            bank, preferred_language, priorities
         )
         recommendations.append(
             {

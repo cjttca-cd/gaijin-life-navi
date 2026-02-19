@@ -198,8 +198,8 @@ async def complete_onboarding(
         profile.residence_status = body.residence_status
     if body.residence_region is not None:
         profile.residence_region = body.residence_region
-    if body.arrival_date is not None:
-        profile.arrival_date = body.arrival_date
+    if body.visa_expiry is not None:
+        profile.visa_expiry = body.visa_expiry
     profile.preferred_language = body.preferred_language
     profile.onboarding_completed = True
     profile.updated_at = datetime.now(timezone.utc)
@@ -231,11 +231,12 @@ async def complete_onboarding(
 
         # Calculate due_date from deadline_rule
         due_date = None
-        if proc.deadline_rule and profile.arrival_date:
+        if proc.deadline_rule:
             try:
                 rule = json.loads(proc.deadline_rule) if isinstance(proc.deadline_rule, str) else proc.deadline_rule
                 if rule.get("type") == "within_days_of_arrival":
-                    due_date = profile.arrival_date + timedelta(days=rule.get("days", 0))
+                    # arrival_date no longer tracked; use today as fallback
+                    due_date = datetime.now(timezone.utc).date() + timedelta(days=rule.get("days", 0))
             except (json.JSONDecodeError, TypeError):
                 pass
 

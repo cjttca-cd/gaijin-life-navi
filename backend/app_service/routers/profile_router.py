@@ -31,7 +31,7 @@ class ProfileUpdate(BaseModel):
     preferred_language: str | None = None  # en, zh, ja, ko, vi, etc.
     nationality: str | None = None
     residence_status: str | None = None
-    arrival_date: str | None = None  # YYYY-MM-DD
+    visa_expiry: str | None = None  # YYYY-MM-DD
 
 
 class ProfileOut(BaseModel):
@@ -44,10 +44,10 @@ class ProfileOut(BaseModel):
     id: str
     display_name: str
     email: str
-    preferred_language: str
+    preferred_language: str | None
     nationality: str | None
     residence_status: str | None
-    arrival_date: str | None
+    visa_expiry: str | None
     subscription_tier: str
     onboarding_completed: bool
     created_at: str
@@ -68,10 +68,10 @@ def _profile_to_out(profile: Profile) -> dict:
         "id": profile.id,
         "display_name": profile.display_name or "",
         "email": profile.email,
-        "preferred_language": profile.preferred_language or "en",
+        "preferred_language": profile.preferred_language,
         "nationality": profile.nationality,
         "residence_status": profile.residence_status,
-        "arrival_date": profile.arrival_date.isoformat() if profile.arrival_date else None,
+        "visa_expiry": profile.visa_expiry.isoformat() if profile.visa_expiry else None,
         "subscription_tier": profile.subscription_tier or "free",
         "onboarding_completed": profile.onboarding_completed,
         "created_at": profile.created_at.isoformat() if profile.created_at else None,
@@ -134,16 +134,16 @@ async def update_profile(
         profile.nationality = body.nationality
     if body.residence_status is not None:
         profile.residence_status = body.residence_status
-    if body.arrival_date is not None:
+    if body.visa_expiry is not None:
         try:
-            profile.arrival_date = date.fromisoformat(body.arrival_date)
+            profile.visa_expiry = date.fromisoformat(body.visa_expiry)
         except ValueError:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail={
                     "error": {
                         "code": "VALIDATION_ERROR",
-                        "message": "arrival_date must be YYYY-MM-DD format.",
+                        "message": "visa_expiry must be YYYY-MM-DD format.",
                         "details": {},
                     }
                 },

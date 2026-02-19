@@ -97,8 +97,8 @@ async def call_agent(
         image_path: Optional filesystem path to an uploaded image.
         user_profile: Optional dict with user profile fields
             (``display_name``, ``nationality``, ``residence_status``,
-            ``residence_region``, ``arrival_date``). Injected into the
-            prompt so the agent can personalise responses.
+            ``visa_expiry``, ``residence_region``, ``preferred_language``).
+            Injected into the prompt so the agent can personalise responses.
         timeout: Maximum seconds to wait for the agent (passed to both
             OpenClaw ``--timeout`` and ``asyncio`` subprocess timeout).
 
@@ -118,8 +118,9 @@ async def call_agent(
             "display_name": "表示名",
             "nationality": "国籍",
             "residence_status": "在留資格",
+            "visa_expiry": "在留期限",
             "residence_region": "居住地域",
-            "arrival_date": "来日時期",
+            "preferred_language": "首選語言",
         }
         for key, label in field_map.items():
             value = user_profile.get(key)
