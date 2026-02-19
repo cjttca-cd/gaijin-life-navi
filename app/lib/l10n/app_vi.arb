@@ -552,5 +552,10 @@
   "tabAccount": "Tài khoản",
   "accountSectionProfile": "Hồ sơ",
   "accountSectionManagement": "Quản lý tài khoản",
-  "accountSectionDanger": "Vùng nguy hiểm"
+  "accountSectionDanger": "Vùng nguy hiểm",
+  "notificationSettingsTitle": "Thông báo",
+  "notificationTodoReminder": "Nhắc nhở việc cần làm",
+  "notificationReminderTime": "Thời gian nhắc nhở",
+  "notificationEnabled": "Đã bật",
+  "notificationDisabled": "Đã tắt"
 }

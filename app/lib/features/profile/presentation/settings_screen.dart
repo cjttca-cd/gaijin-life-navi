@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/config/app_config.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_spacing.dart';
+import 'notification_settings_screen.dart';
 import 'providers/profile_providers.dart';
 
 /// S15: Settings — per handoff-profile.md.
@@ -88,8 +89,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.navComingSoonSnackbar)),
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) =>
+                              const NotificationSettingsScreen(),
+                        ),
                       );
                     },
                   ),

@@ -552,5 +552,10 @@
   "tabAccount": "계정",
   "accountSectionProfile": "프로필",
   "accountSectionManagement": "계정 관리",
-  "accountSectionDanger": "위험 영역"
+  "accountSectionDanger": "위험 영역",
+  "notificationSettingsTitle": "알림",
+  "notificationTodoReminder": "할일 알림",
+  "notificationReminderTime": "알림 시간",
+  "notificationEnabled": "활성화됨",
+  "notificationDisabled": "비활성화됨"
 }

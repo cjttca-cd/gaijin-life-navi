@@ -552,5 +552,10 @@
   "tabAccount": "Conta",
   "accountSectionProfile": "Perfil",
   "accountSectionManagement": "Gerenciar Conta",
-  "accountSectionDanger": "Zona de Perigo"
+  "accountSectionDanger": "Zona de Perigo",
+  "notificationSettingsTitle": "Notificações",
+  "notificationTodoReminder": "Lembretes de Tarefas",
+  "notificationReminderTime": "Horário do Lembrete",
+  "notificationEnabled": "Ativado",
+  "notificationDisabled": "Desativado"
 }

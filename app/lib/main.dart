@@ -6,6 +6,7 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import 'core/providers/locale_provider.dart';
 import 'core/providers/router_provider.dart';
+import 'core/services/notification_service.dart';
 import 'core/theme/app_theme.dart';
 
 Future<void> main() async {
@@ -15,7 +16,17 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-  runApp(const ProviderScope(child: GaijinLifeNaviApp()));
+
+  // Initialize local notifications plugin.
+  final container = ProviderContainer();
+  await container.read(notificationServiceProvider).init();
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const GaijinLifeNaviApp(),
+    ),
+  );
 }
 
 /// Root application widget.

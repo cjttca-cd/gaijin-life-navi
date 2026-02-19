@@ -552,5 +552,10 @@
   "tabAccount": "账户",
   "accountSectionProfile": "个人资料",
   "accountSectionManagement": "账户管理",
-  "accountSectionDanger": "危险操作"
+  "accountSectionDanger": "危险操作",
+  "notificationSettingsTitle": "通知设置",
+  "notificationTodoReminder": "待办提醒",
+  "notificationReminderTime": "提醒时间",
+  "notificationEnabled": "已开启",
+  "notificationDisabled": "已关闭"
 }

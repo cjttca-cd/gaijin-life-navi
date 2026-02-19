@@ -1691,4 +1691,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get accountSectionDanger => '위험 영역';
+
+  @override
+  String get notificationSettingsTitle => '알림';
+
+  @override
+  String get notificationTodoReminder => '할일 알림';
+
+  @override
+  String get notificationReminderTime => '알림 시간';
+
+  @override
+  String get notificationEnabled => '활성화됨';
+
+  @override
+  String get notificationDisabled => '비활성화됨';
 }

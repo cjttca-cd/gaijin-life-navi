@@ -3361,6 +3361,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Danger Zone'**
   String get accountSectionDanger;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @notificationTodoReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Todo Reminders'**
+  String get notificationTodoReminder;
+
+  /// No description provided for @notificationReminderTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Time'**
+  String get notificationReminderTime;
+
+  /// No description provided for @notificationEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get notificationEnabled;
+
+  /// No description provided for @notificationDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get notificationDisabled;
 }
 
 class _AppLocalizationsDelegate

@@ -1745,4 +1745,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get accountSectionDanger => 'Zona de Perigo';
+
+  @override
+  String get notificationSettingsTitle => 'Notificações';
+
+  @override
+  String get notificationTodoReminder => 'Lembretes de Tarefas';
+
+  @override
+  String get notificationReminderTime => 'Horário do Lembrete';
+
+  @override
+  String get notificationEnabled => 'Ativado';
+
+  @override
+  String get notificationDisabled => 'Desativado';
 }

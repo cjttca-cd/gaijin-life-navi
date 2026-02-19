@@ -708,5 +708,10 @@
   "tabAccount": "Account",
   "accountSectionProfile": "Profile",
   "accountSectionManagement": "Account",
-  "accountSectionDanger": "Danger Zone"
+  "accountSectionDanger": "Danger Zone",
+  "notificationSettingsTitle": "Notifications",
+  "notificationTodoReminder": "Todo Reminders",
+  "notificationReminderTime": "Reminder Time",
+  "notificationEnabled": "Enabled",
+  "notificationDisabled": "Disabled"
 }

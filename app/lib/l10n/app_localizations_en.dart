@@ -1731,4 +1731,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountSectionDanger => 'Danger Zone';
+
+  @override
+  String get notificationSettingsTitle => 'Notifications';
+
+  @override
+  String get notificationTodoReminder => 'Todo Reminders';
+
+  @override
+  String get notificationReminderTime => 'Reminder Time';
+
+  @override
+  String get notificationEnabled => 'Enabled';
+
+  @override
+  String get notificationDisabled => 'Disabled';
 }

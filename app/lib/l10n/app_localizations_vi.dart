@@ -1726,4 +1726,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get accountSectionDanger => 'Vùng nguy hiểm';
+
+  @override
+  String get notificationSettingsTitle => 'Thông báo';
+
+  @override
+  String get notificationTodoReminder => 'Nhắc nhở việc cần làm';
+
+  @override
+  String get notificationReminderTime => 'Thời gian nhắc nhở';
+
+  @override
+  String get notificationEnabled => 'Đã bật';
+
+  @override
+  String get notificationDisabled => 'Đã tắt';
 }

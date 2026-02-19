@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/services/notification_service.dart';
 import '../../../chat/presentation/providers/chat_providers.dart';
 import '../../data/tracker_repository.dart';
 import '../../domain/tracker_item.dart';
@@ -47,6 +48,14 @@ class TrackerItemsNotifier extends AsyncNotifier<List<TrackerItem>> {
     final repo = await _getRepo();
     await repo.add(item);
     state = AsyncData(repo.getAll());
+
+    // Schedule notification if the item has a due date.
+    if (item.dueDate != null && !item.completed) {
+      final notificationService = ref.read(notificationServiceProvider);
+      // Request permission on first dueDate-bearing todo.
+      await notificationService.requestPermission();
+      await notificationService.scheduleForItem(item);
+    }
   }
 
   /// Update an existing item.
@@ -54,13 +63,32 @@ class TrackerItemsNotifier extends AsyncNotifier<List<TrackerItem>> {
     final repo = await _getRepo();
     await repo.update(item);
     state = AsyncData(repo.getAll());
+
+    // Re-schedule notification (cancel old, schedule new if applicable).
+    final notificationService = ref.read(notificationServiceProvider);
+    await notificationService.cancelForItem(item.id);
+    if (item.dueDate != null && !item.completed) {
+      await notificationService.scheduleForItem(item);
+    }
   }
 
   /// Toggle complete state.
   Future<void> toggleComplete(String id) async {
     final repo = await _getRepo();
     await repo.toggleComplete(id);
-    state = AsyncData(repo.getAll());
+    final items = repo.getAll();
+    state = AsyncData(items);
+
+    // Cancel or re-schedule notification based on new completed state.
+    final notificationService = ref.read(notificationServiceProvider);
+    final item = items.where((e) => e.id == id).firstOrNull;
+    if (item != null) {
+      if (item.completed) {
+        await notificationService.cancelForItem(id);
+      } else if (item.dueDate != null) {
+        await notificationService.scheduleForItem(item);
+      }
+    }
   }
 
   /// Delete an item.
@@ -68,6 +96,10 @@ class TrackerItemsNotifier extends AsyncNotifier<List<TrackerItem>> {
     final repo = await _getRepo();
     await repo.delete(id);
     state = AsyncData(repo.getAll());
+
+    // Cancel any scheduled notification for this item.
+    final notificationService = ref.read(notificationServiceProvider);
+    await notificationService.cancelForItem(id);
   }
 
   /// Remove all items with a given tag (e.g. 'visa_renewal').
@@ -110,6 +142,14 @@ class TrackerItemsNotifier extends AsyncNotifier<List<TrackerItem>> {
 
     await repo.add(item);
     state = AsyncData(repo.getAll());
+
+    // Schedule notification if the item has a due date.
+    if (item.dueDate != null) {
+      final notificationService = ref.read(notificationServiceProvider);
+      await notificationService.requestPermission();
+      await notificationService.scheduleForItem(item);
+    }
+
     return true;
   }
 }

@@ -1681,4 +1681,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get accountSectionDanger => '危险操作';
+
+  @override
+  String get notificationSettingsTitle => '通知设置';
+
+  @override
+  String get notificationTodoReminder => '待办提醒';
+
+  @override
+  String get notificationReminderTime => '提醒时间';
+
+  @override
+  String get notificationEnabled => '已开启';
+
+  @override
+  String get notificationDisabled => '已关闭';
 }
