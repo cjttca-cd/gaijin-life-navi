@@ -11,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/domain_colors.dart';
 import '../../chat/presentation/providers/chat_providers.dart';
+import '../../profile/presentation/providers/profile_providers.dart';
 import '../../tracker/domain/tracker_item.dart';
 import '../../tracker/presentation/providers/tracker_providers.dart';
 
@@ -32,8 +33,17 @@ class HomeScreen extends ConsumerWidget {
     }
 
     // Determine greeting based on time.
+    // Display name priority: backend Profile → Firebase Auth → email fallback.
     final hour = DateTime.now().hour;
-    final name = user?.displayName ?? user?.email?.split('@').first ?? '';
+    final profileName = isGuest
+        ? null
+        : ref.watch(userProfileProvider).valueOrNull?.displayName;
+    final firebaseName = user?.displayName;
+    final emailName = user?.email?.split('@').first;
+    final name = _nonEmpty(profileName) ??
+        _nonEmpty(firebaseName) ??
+        emailName ??
+        '';
     final greeting = _greeting(l10n, hour, name);
 
     return Scaffold(
@@ -183,6 +193,10 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
+
+  /// Returns [value] if non-null and non-empty, otherwise null.
+  String? _nonEmpty(String? value) =>
+      (value != null && value.isNotEmpty) ? value : null;
 
   String _greeting(AppLocalizations l10n, int hour, String name) {
     if (name.isEmpty) return l10n.homeGreetingNoName;
