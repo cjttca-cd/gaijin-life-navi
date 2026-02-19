@@ -90,6 +90,38 @@ async def register(
     db.add(profile)
     await db.flush()
 
+    # #30: Abuse prevention — if a soft-deleted profile with the same
+    # email exists, exhaust the free-tier chat allowance so the
+    # re-registering user does not get another 20 free chats.
+    if current_user.email:
+        prev_deleted = await db.execute(
+            select(Profile).where(
+                Profile.email == current_user.email,
+                Profile.id != current_user.uid,
+                Profile.deleted_at.isnot(None),
+            )
+        )
+        if prev_deleted.scalars().first() is not None:
+            import uuid as _uuid
+            from datetime import date
+
+            from models.daily_usage import DailyUsage
+            exhaustion_record = DailyUsage(
+                id=str(_uuid.uuid4()),
+                user_id=current_user.uid,
+                usage_date=date.today(),
+                chat_count=20,  # exhaust free-tier 20 lifetime chats
+                scan_count_monthly=0,
+            )
+            db.add(exhaustion_record)
+            await db.flush()
+            logger.warning(
+                "Re-registration detected for email=%s (new uid=%s). "
+                "Free-tier chats exhausted.",
+                current_user.email,
+                current_user.uid,
+            )
+
     user_data = UserInRegisterResponse(
         id=profile.id,
         email=profile.email,

@@ -4,6 +4,7 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../chat/domain/chat_response.dart';
 import '../../chat/presentation/providers/chat_providers.dart';
 import 'providers/subscription_providers.dart';
 
@@ -19,6 +20,10 @@ class SubscriptionScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final plansAsync = ref.watch(subscriptionPlansProvider);
     final currentTier = ref.watch(userTierProvider);
+    final usageInfo = ref.watch(chatUsageProvider);
+
+    // Trigger usage fetch on screen load.
+    ref.listen(fetchUsageProvider, (_, __) {});
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.subTitle)),
@@ -30,6 +35,11 @@ class SubscriptionScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: AppSpacing.spaceLg),
+
+                // Usage statistics banner.
+                _UsageBanner(usageInfo: usageInfo, tier: currentTier),
+
                 const SizedBox(height: AppSpacing.space2xl),
 
                 // Choose a Plan section
@@ -500,6 +510,109 @@ class _FaqItem extends StatelessWidget {
           answer,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Usage statistics banner shown at the top of the subscription screen.
+class _UsageBanner extends StatelessWidget {
+  const _UsageBanner({required this.usageInfo, required this.tier});
+
+  final ChatUsageInfo? usageInfo;
+  final String tier;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenPadding,
+      ),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.spaceLg),
+          child: Row(
+            children: [
+              Icon(
+                Icons.bar_chart_outlined,
+                size: 28,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: AppSpacing.spaceMd),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.subUsageTitle,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: AppSpacing.spaceXs),
+                    _buildUsageText(context),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUsageText(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    if (usageInfo == null) {
+      // Loading state — show a subtle placeholder.
+      return Text(
+        '...',
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      );
+    }
+
+    if (usageInfo!.isUnlimited) {
+      return Text(
+        l10n.subUsageUnlimited,
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: AppColors.success,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+    }
+
+    final used = usageInfo!.used;
+    final limit = usageInfo!.limit;
+    final ratio = limit > 0 ? (used / limit).clamp(0.0, 1.0) : 0.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.subUsageCount(used, limit),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.spaceXs),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: ratio,
+            minHeight: 6,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
+            valueColor: AlwaysStoppedAnimation<Color>(
+              ratio >= 0.9
+                  ? theme.colorScheme.error
+                  : theme.colorScheme.primary,
+            ),
           ),
         ),
       ],

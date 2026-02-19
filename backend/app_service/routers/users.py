@@ -56,6 +56,36 @@ async def _get_active_profile(
         db.add(profile)
         await db.flush()
         logger.info("Auto-created profile for user %s", user_id)
+
+        # #30: Abuse prevention — if a soft-deleted profile with the same
+        # email exists, exhaust the free-tier chat allowance so the
+        # re-registering user does not get another 20 free chats.
+        email = user.email if user else ""
+        if email:
+            prev_deleted = await db.execute(
+                select(Profile).where(
+                    Profile.email == email,
+                    Profile.id != user_id,
+                    Profile.deleted_at.isnot(None),
+                )
+            )
+            if prev_deleted.scalars().first() is not None:
+                from models.daily_usage import DailyUsage
+                exhaustion_record = DailyUsage(
+                    id=str(uuid.uuid4()),
+                    user_id=user_id,
+                    usage_date=datetime.now(timezone.utc).date(),
+                    chat_count=20,  # exhaust free-tier 20 lifetime chats
+                    scan_count_monthly=0,
+                )
+                db.add(exhaustion_record)
+                await db.flush()
+                logger.warning(
+                    "Re-registration detected for email=%s (new uid=%s). "
+                    "Free-tier chats exhausted.",
+                    email,
+                    user_id,
+                )
     return profile
 
 
