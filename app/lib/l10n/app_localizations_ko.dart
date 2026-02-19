@@ -1616,7 +1616,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get profilePersonalizationHint =>
-      '프로필을 완성하면 AI 가이드가 더 정확하고 맞춤화된 조언을 제공합니다.';
+      'AI 가이드가 완성된 프로필을 바탕으로 더 정확한 맞춤 조언을 제공합니다';
 
   @override
   String get profileVisaExpiry => '체류 기한';
@@ -1652,10 +1652,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get profileSearchNationality => '국적 검색';
 
   @override
-  String get visaRenewalPrep => '재류기간 갱신허가 신청 준비';
+  String get visaRenewalPrepTitle => '재류기간 갱신허가 신청 준비';
 
   @override
-  String get visaRenewalDeadline => '재류기간 갱신 마감';
+  String get visaRenewalDeadlineTitle => '재류기간 갱신 마감';
 
   @override
   String get profileSave => '저장';
@@ -1668,4 +1668,15 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get profileDeleteAccount => '계정 삭제';
+
+  @override
+  String get subUsageTitle => '사용 현황';
+
+  @override
+  String subUsageCount(int used, int limit) {
+    return '$used / $limit 채팅 사용';
+  }
+
+  @override
+  String get subUsageUnlimited => '무제한 채팅';
 }

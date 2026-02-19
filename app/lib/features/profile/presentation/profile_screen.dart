@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/config/app_config.dart';
-import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -140,7 +139,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     await trackerNotifier.add(
       TrackerItem(
         id: TrackerItem.generateId(),
-        title: l10n.visaRenewalPrep,
+        title: l10n.visaRenewalPrepTitle,
         dueDate: threeMonthsBefore,
         tag: 'visa_renewal',
         completed: false,
@@ -152,7 +151,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     await trackerNotifier.add(
       TrackerItem(
         id: TrackerItem.generateId(),
-        title: l10n.visaRenewalDeadline,
+        title: l10n.visaRenewalDeadlineTitle,
         dueDate: oneMonthBefore,
         tag: 'visa_renewal',
         completed: false,
@@ -322,102 +321,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       context,
                       _effectiveValue(profile, 'preferred_language'),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: AppSpacing.space2xl),
-
-          // Usage stats + manage subscription + logout + delete.
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Card(
-              child: Column(
-                children: [
-                  // Usage statistics.
-                  ListTile(
-                    leading: Icon(
-                      Icons.bar_chart_outlined,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    title: Text(
-                      l10n.profileUsageStats,
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    onTap: () {
-                      // TODO: navigate to usage stats
-                    },
-                  ),
-                  Divider(
-                    height: 1,
-                    color: theme.colorScheme.outlineVariant,
-                    indent: 56,
-                  ),
-
-                  // Manage subscription.
-                  ListTile(
-                    leading: const Text('⭐', style: TextStyle(fontSize: 20)),
-                    title: Text(
-                      l10n.profileManageSubscription,
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    onTap: () => context.push(AppRoutes.subscription),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: AppSpacing.spaceLg),
-
-          // Logout + Delete account.
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      Icons.logout,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    title: Text(
-                      l10n.profileLogout,
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    onTap: _logout,
-                  ),
-                  Divider(
-                    height: 1,
-                    color: theme.colorScheme.outlineVariant,
-                    indent: 56,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.delete_outline,
-                      color: theme.colorScheme.error,
-                    ),
-                    title: Text(
-                      l10n.profileDeleteAccount,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: theme.colorScheme.error,
-                      ),
-                    ),
-                    onTap: _deleteAccount,
                   ),
                 ],
               ),
@@ -774,85 +677,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
       },
     );
-  }
-
-  // ── Logout / Delete ────────────────────────────────────
-
-  Future<void> _logout() async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.settingsLogoutTitle),
-        content: Text(l10n.settingsLogoutMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l10n.settingsLogoutCancel),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(ctx).colorScheme.error,
-            ),
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l10n.settingsLogoutConfirm),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed != true) return;
-
-    try {
-      await ref.read(firebaseAuthProvider).signOut();
-      if (mounted) context.go(AppRoutes.login);
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.settingsErrorLogout)),
-        );
-      }
-    }
-  }
-
-  Future<void> _deleteAccount() async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.settingsDeleteTitle),
-        content: Text(l10n.settingsDeleteMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(l10n.settingsDeleteCancel),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(ctx).colorScheme.error,
-              foregroundColor: Theme.of(ctx).colorScheme.onError,
-            ),
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(l10n.settingsDeleteConfirmAction),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed != true) return;
-
-    try {
-      final repo = ref.read(profileRepositoryProvider);
-      await repo.deleteAccount();
-      await ref.read(firebaseAuthProvider).signOut();
-      if (mounted) context.go(AppRoutes.language);
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.settingsErrorDelete)),
-        );
-      }
-    }
   }
 
   // ── Helpers ────────────────────────────────────────────

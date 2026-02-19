@@ -92,6 +92,25 @@ class HomeScreen extends ConsumerWidget {
 
                 const SizedBox(height: AppSpacing.space2xl),
 
+                // ── Upgrade Banner (Free users only) ──────────
+                if (!isGuest)
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final tier = ref.watch(userTierProvider);
+                      if (tier != 'free') return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: AppSpacing.space2xl,
+                        ),
+                        child: _UpgradeBannerWithAnalytics(
+                          title: l10n.homeUpgradeTitle,
+                          cta: l10n.homeUpgradeCta,
+                          isGuest: false,
+                        ),
+                      );
+                    },
+                  ),
+
                 // ── Tracker Summary (above quick actions) ─────
                 if (!isGuest) ...[
                   Text(
@@ -174,15 +193,6 @@ class HomeScreen extends ConsumerWidget {
                   subtitle: l10n.homeQaMedicalSubtitle,
                   accentColor: DomainColors.medical.accent,
                   onTap: () => context.push(AppRoutes.emergency),
-                ),
-
-                const SizedBox(height: AppSpacing.space2xl),
-
-                // ── Upgrade Banner (Free/Guest) ───────────────
-                _UpgradeBannerWithAnalytics(
-                  title: l10n.homeUpgradeTitle,
-                  cta: isGuest ? l10n.chatGuestSignUp : l10n.homeUpgradeCta,
-                  isGuest: isGuest,
                 ),
 
                 const SizedBox(height: AppSpacing.space3xl),

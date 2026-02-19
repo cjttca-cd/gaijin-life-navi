@@ -1588,7 +1588,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trackerItemSaved => '已添加到待办列表';
 
   @override
-  String get homeQaTrackerTitle => '待办';
+  String get homeQaTrackerTitle => '待办事项';
 
   @override
   String get homeQaTrackerSubtitle => '管理待办事项';
@@ -1606,7 +1606,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatImageTooLarge => '图片太大（最大 5MB）';
 
   @override
-  String get profilePersonalizationHint => '完善个人资料后，AI 向导将根据你的信息提供更精准的个性化建议。';
+  String get profilePersonalizationHint => 'AI向导会根据完善后的个人资料提供为你更精准的建议';
 
   @override
   String get profileVisaExpiry => '在留期限';
@@ -1642,10 +1642,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get profileSearchNationality => '搜索国籍';
 
   @override
-  String get visaRenewalPrep => '在留期間更新許可申請の準備';
+  String get visaRenewalPrepTitle => '签证续签申请准备';
 
   @override
-  String get visaRenewalDeadline => '在留期間更新の締切';
+  String get visaRenewalDeadlineTitle => '签证续签截止日期';
 
   @override
   String get profileSave => '保存';
@@ -1658,4 +1658,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get profileDeleteAccount => '删除账号';
+
+  @override
+  String get subUsageTitle => '使用情况';
+
+  @override
+  String subUsageCount(int used, int limit) {
+    return '已使用 $used / $limit 次';
+  }
+
+  @override
+  String get subUsageUnlimited => '无限次对话';
 }

@@ -1,7 +1,6 @@
 {
   "@@locale": "en",
   "appTitle": "Gaijin Life Navi",
-
   "langTitle": "Choose your language",
   "langContinue": "Continue",
   "langEn": "English",
@@ -9,7 +8,6 @@
   "langVi": "Tiếng Việt",
   "langKo": "한국어",
   "langPt": "Português",
-
   "loginWelcome": "Sign in to your account",
   "loginSubtitle": "Sign in to continue",
   "loginEmailLabel": "Email",
@@ -24,7 +22,6 @@
   "loginErrorInvalidCredentials": "Incorrect email or password. Please try again.",
   "loginErrorNetwork": "Unable to connect. Please check your internet connection.",
   "loginErrorTooManyAttempts": "Too many attempts. Please try again later.",
-
   "registerTitle": "Create your account",
   "registerSubtitle": "Start your journey in Japan",
   "registerEmailLabel": "Email",
@@ -46,7 +43,6 @@
   "registerErrorPasswordShort": "Password must be at least 8 characters.",
   "registerErrorPasswordMismatch": "Passwords don't match.",
   "registerErrorTermsRequired": "Please agree to the Terms of Service.",
-
   "resetTitle": "Reset your password",
   "resetSubtitle": "Enter your email and we'll send you a reset link.",
   "resetEmailLabel": "Email",
@@ -55,15 +51,29 @@
   "resetBackToLogin": "Back to Sign In",
   "resetSuccessTitle": "Check your email",
   "resetSuccessSubtitle": "We've sent a reset link to {email}",
-  "@resetSuccessSubtitle": { "placeholders": { "email": { "type": "String" } } },
+  "@resetSuccessSubtitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "resetResend": "Didn't receive it? Resend",
   "resetErrorEmailInvalid": "Please enter a valid email address.",
-
   "onboardingSkip": "Skip",
   "onboardingNext": "Next",
   "onboardingGetStarted": "Get Started",
   "onboardingStepOf": "Step {current} of {total}",
-  "@onboardingStepOf": { "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } } },
+  "@onboardingStepOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "onboardingS1Title": "What's your nationality?",
   "onboardingS1Subtitle": "This helps us give you relevant information.",
   "onboardingS2Title": "What's your residence status?",
@@ -76,7 +86,6 @@
   "onboardingS4NotYet": "I haven't arrived yet",
   "onboardingChangeDate": "Change Date",
   "onboardingErrorSave": "Unable to save your information. Please try again.",
-
   "statusEngineer": "Engineer / Specialist in Humanities",
   "statusStudent": "Student",
   "statusDependent": "Dependent",
@@ -85,24 +94,55 @@
   "statusWorkingHoliday": "Working Holiday",
   "statusSpecifiedSkilled": "Specified Skilled Worker",
   "statusOther": "Other",
-
   "tabHome": "Home",
   "tabChat": "AI Guide",
   "tabGuide": "Guide",
   "tabSOS": "SOS",
   "tabProfile": "Profile",
-
   "homeGreetingMorning": "Good morning, {name} 👋",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Good afternoon, {name} 👋",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Good evening, {name} 👋",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingDefault": "Hello, {name} 👋",
-  "@homeGreetingDefault": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingDefault": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNoName": "Welcome! 👋",
   "homeUsageFree": "Free • {remaining}/{limit} chats remaining",
-  "@homeUsageFree": { "placeholders": { "remaining": { "type": "int" }, "limit": { "type": "int" } } },
+  "@homeUsageFree": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
   "homeSectionQuickActions": "Quick Actions",
   "homeSectionExplore": "Explore",
   "homeTrackerSummary": "My To-Dos",
@@ -120,7 +160,6 @@
   "homeExploreEmergency": "Emergency contacts",
   "homeUpgradeTitle": "Get more from your AI assistant",
   "homeUpgradeCta": "Upgrade now",
-
   "chatTitle": "AI Guide",
   "chatInputPlaceholder": "Type your message...",
   "chatEmptyTitle": "Ask me anything!",
@@ -132,14 +171,22 @@
   "chatSourcesHeader": "Sources",
   "chatDisclaimer": "This is general information only. It does not constitute legal advice. Please verify with relevant authorities.",
   "chatLimitRemaining": "{remaining}/{limit} free chats remaining.",
-  "@chatLimitRemaining": { "placeholders": { "remaining": { "type": "int" }, "limit": { "type": "int" } } },
+  "@chatLimitRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
   "chatLimitUpgrade": "Upgrade",
   "chatLimitExhausted": "You've used all your free chats for today. Upgrade to keep chatting!",
   "chatErrorSend": "Unable to send your message. Please try again.",
   "chatErrorRetry": "Retry",
   "chatDateToday": "Today",
   "chatDateYesterday": "Yesterday",
-
   "chatNewSession": "New Chat",
   "chatUntitledSession": "New Conversation",
   "chatDeleteTitle": "Delete Chat",
@@ -147,7 +194,6 @@
   "chatDeleteCancel": "Cancel",
   "chatDeleteAction": "Delete",
   "chatRetry": "Retry",
-
   "countryCN": "China",
   "countryVN": "Vietnam",
   "countryKR": "South Korea",
@@ -168,7 +214,6 @@
   "countryFR": "France",
   "countryDE": "Germany",
   "countryOther": "Other",
-
   "regionTokyo": "Tokyo",
   "regionOsaka": "Osaka",
   "regionNagoya": "Nagoya",
@@ -180,11 +225,9 @@
   "regionSendai": "Sendai",
   "regionHiroshima": "Hiroshima",
   "regionOther": "Other",
-
   "genericError": "Something went wrong. Please try again.",
   "networkError": "Network error. Please check your connection.",
   "logout": "Logout",
-
   "bankingTitle": "Banking Navigator",
   "bankingFriendlyScore": "Foreigner-Friendly Score",
   "bankingEmpty": "No banks found",
@@ -204,7 +247,6 @@
   "bankingConversationTemplates": "Useful Phrases at the Bank",
   "bankingTroubleshooting": "Troubleshooting Tips",
   "bankingSource": "Source",
-
   "visaTitle": "Visa Navigator",
   "visaEmpty": "No procedures found",
   "visaFilterAll": "All",
@@ -214,7 +256,6 @@
   "visaFees": "Fees",
   "visaProcessingTime": "Processing Time",
   "visaDisclaimer": "IMPORTANT: This is general information about visa procedures and does not constitute immigration advice.",
-
   "trackerTitle": "To-Do",
   "trackerAddItem": "New To-Do",
   "trackerNoItems": "No to-dos yet",
@@ -229,7 +270,6 @@
   "trackerDeleteConfirm": "Are you sure you want to delete this to-do?",
   "trackerLimitReached": "Free plan allows up to 3 to-dos. Upgrade for unlimited.",
   "trackerAlreadyTracking": "This item is already in your to-do list",
-
   "scannerTitle": "Document Scanner",
   "scannerDescription": "Scan Japanese documents to get instant translations and explanations",
   "scannerFromCamera": "Scan from Camera",
@@ -247,7 +287,6 @@
   "scannerFailed": "Scan failed. Please try again.",
   "scannerFreeLimitInfo": "Free plan: 3 scans/month. Upgrade for more.",
   "scannerLimitReached": "Monthly scan limit reached. Upgrade to Premium for more scans.",
-
   "medicalTitle": "Medical Guide",
   "medicalTabEmergency": "Emergency",
   "medicalTabPhrases": "Phrases",
@@ -262,7 +301,6 @@
   "medicalCategoryGeneral": "General",
   "medicalNoPhrases": "No phrases found",
   "medicalDisclaimer": "This guide provides general health information and is not a substitute for professional medical advice. In an emergency, call 119 immediately.",
-
   "navigateBanking": "Banking",
   "navigateBankingDesc": "Find foreigner-friendly banks",
   "navigateVisa": "Visa",
@@ -273,9 +311,7 @@
   "navigateMedicalDesc": "Emergency guide & phrases",
   "navigateCommunity": "Community",
   "navigateCommunityDesc": "Q&A with other foreigners",
-
   "upgradeToPremium": "Upgrade to Premium",
-
   "communityTitle": "Community Q&A",
   "communityEmpty": "No posts yet",
   "communityNewPost": "New Post",
@@ -295,12 +331,24 @@
   "communityCategoryTax": "Tax",
   "communityCategoryOther": "Other",
   "communityReplies": "{count} Replies",
-  "@communityReplies": { "placeholders": { "count": { "type": "int" } } },
+  "@communityReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "communityNoReplies": "No replies yet. Be the first to answer!",
   "communityReplyHint": "Write a reply...",
   "communityReplyPremiumOnly": "Posting and replying requires a Premium subscription.",
   "communityVoteCount": "{count} votes",
-  "@communityVoteCount": { "placeholders": { "count": { "type": "int" } } },
+  "@communityVoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "communityModerationPending": "Under review",
   "communityModerationFlagged": "Flagged for review",
   "communityModerationNotice": "Your post will be reviewed by our AI moderation system before it becomes visible to others.",
@@ -314,12 +362,29 @@
   "communityContentMinLength": "Content must be at least 10 characters",
   "communitySubmit": "Post",
   "communityTimeAgoDays": "{days}d ago",
-  "@communityTimeAgoDays": { "placeholders": { "days": { "type": "int" } } },
+  "@communityTimeAgoDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "communityTimeAgoHours": "{hours}h ago",
-  "@communityTimeAgoHours": { "placeholders": { "hours": { "type": "int" } } },
+  "@communityTimeAgoHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
   "communityTimeAgoMinutes": "{minutes}m ago",
-  "@communityTimeAgoMinutes": { "placeholders": { "minutes": { "type": "int" } } },
-
+  "@communityTimeAgoMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "subscriptionTitle": "Subscription",
   "subscriptionPlansTitle": "Choose Your Plan",
   "subscriptionPlansSubtitle": "Unlock the full potential of Gaijin Life Navi",
@@ -330,19 +395,30 @@
   "subscriptionTierPremiumPlus": "Premium+",
   "subscriptionFreePrice": "¥0",
   "subscriptionPricePerMonth": "¥{price}/month",
-  "@subscriptionPricePerMonth": { "placeholders": { "price": { "type": "int" } } },
+  "@subscriptionPricePerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
   "subscriptionCheckout": "Subscribe Now",
   "subscriptionRecommended": "RECOMMENDED",
   "subscriptionCancelling": "Cancelling...",
   "subscriptionCancellingAt": "Your plan will end on {date}",
-  "@subscriptionCancellingAt": { "placeholders": { "date": { "type": "String" } } },
+  "@subscriptionCancellingAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "subscriptionFeatureFreeChat": "20 free AI chats on signup",
   "subscriptionFeatureFreeScans": "3 document scans per month",
   "subscriptionFeatureFreeTracker": "Track up to 3 procedures",
   "subscriptionFeatureFreeCommunityRead": "Read community posts",
   "subscriptionFeatureCommunityPost": "Post & reply in community",
   "subscriptionFeatureUnlimitedChat": "Unlimited AI chats",
-
   "profileTitle": "Profile",
   "profileEditTitle": "Edit Profile",
   "profileEdit": "Edit Profile",
@@ -359,7 +435,6 @@
   "profileSaveButton": "Save",
   "profileSaveError": "Failed to save profile",
   "profileLoadError": "Failed to load profile",
-
   "settingsTitle": "Settings",
   "settingsLanguageSection": "Language",
   "settingsAccountSection": "Account",
@@ -376,17 +451,21 @@
   "settingsCancel": "Cancel",
   "settingsDelete": "Delete",
   "settingsConfirm": "Confirm",
-
   "navTitle": "Guide",
   "navSubtitle": "Explore topics to help you navigate life in Japan.",
   "navGuideCount": "{count} guides",
-  "@navGuideCount": { "placeholders": { "count": { "type": "int" } } },
+  "@navGuideCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "navGuideCountOne": "1 guide",
   "navComingSoon": "Coming Soon",
   "navComingSoonSnackbar": "Coming soon! We're working on it.",
   "navErrorLoad": "Unable to load guides.",
   "navErrorRetry": "Tap to retry",
-
   "domainBanking": "Banking & Finance",
   "domainVisa": "Visa & Immigration",
   "domainMedical": "Medical & Health",
@@ -395,25 +474,40 @@
   "domainEmployment": "Employment & Tax",
   "domainEducation": "Education & Childcare",
   "domainLegal": "Legal & Insurance",
-
   "guideSearchPlaceholder": "Search guides...",
   "guideComingSoonTitle": "Coming Soon",
   "guideComingSoonSubtitle": "We're working on {domain} guides. Check back soon!",
-  "@guideComingSoonSubtitle": { "placeholders": { "domain": { "type": "String" } } },
+  "@guideComingSoonSubtitle": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      }
+    }
+  },
   "guideComingSoonAskAi": "Ask AI about {domain}",
-  "@guideComingSoonAskAi": { "placeholders": { "domain": { "type": "String" } } },
+  "@guideComingSoonAskAi": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      }
+    }
+  },
   "guideSearchEmpty": "No guides found for \"{query}\".",
-  "@guideSearchEmpty": { "placeholders": { "query": { "type": "String" } } },
+  "@guideSearchEmpty": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
   "guideSearchTry": "Try a different search term.",
   "guideErrorLoad": "Unable to load guides for this category.",
-
   "guideAskAi": "Ask AI about this topic",
   "guideDisclaimer": "This is general information and does not constitute legal advice. Please verify with relevant authorities.",
   "guideShare": "Share",
   "guideErrorNotFound": "This guide is no longer available.",
   "guideErrorLoadDetail": "Unable to load this guide. Please try again.",
   "guideErrorRetryBack": "Go back",
-
   "emergencyTitle": "Emergency",
   "emergencyWarning": "If you are in immediate danger, call 110 (Police) or 119 (Fire/Ambulance) immediately.",
   "emergencySectionContacts": "Emergency Contacts",
@@ -445,7 +539,6 @@
   "emergencyDisclaimer": "This guide provides general health information and is not a substitute for professional medical advice. In an emergency, call 119 immediately.",
   "emergencyCallButton": "Call",
   "emergencyOffline": "Unable to load additional information. Call 110 or 119 if you need help.",
-
   "subTitle": "Subscription",
   "subSectionCurrent": "Current Plan",
   "subSectionChoose": "Choose a Plan",
@@ -476,7 +569,13 @@
   "subFeatureImageYes": "AI image analysis (in chat)",
   "subButtonCurrent": "Current Plan",
   "subButtonChoose": "Choose {plan}",
-  "@subButtonChoose": { "placeholders": { "plan": { "type": "String" } } },
+  "@subButtonChoose": {
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
+  },
   "subCharge100": "100 Chats Pack",
   "subCharge50": "50 Chats Pack",
   "subCharge100Price": "¥360 (¥3.6/chat)",
@@ -490,18 +589,22 @@
   "subFaqDowngradeA": "When you downgrade, you'll keep your current plan benefits until the end of the billing period. Then your plan will switch to the new tier.",
   "subFooter": "Subscription managed via App Store / Google Play",
   "subPurchaseSuccess": "Welcome to {plan}! Your upgrade is now active.",
-  "@subPurchaseSuccess": { "placeholders": { "plan": { "type": "String" } } },
+  "@subPurchaseSuccess": {
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
+  },
   "subPurchaseError": "Unable to complete purchase. Please try again.",
   "subErrorLoad": "Unable to load subscription plans.",
   "subErrorRetry": "Tap to retry",
-
   "profileSectionInfo": "Your Information",
   "profileSectionStats": "Usage Statistics",
   "profileChatsToday": "Chats today",
   "profileMemberSince": "Member since",
   "profileManageSubscription": "Manage Subscription",
   "profileNotSet": "Not set",
-
   "editTitle": "Edit Profile",
   "editSave": "Save",
   "editNameLabel": "Display Name",
@@ -520,7 +623,6 @@
   "editUnsavedMessage": "You have unsaved changes. Discard them?",
   "editUnsavedDiscard": "Discard",
   "editUnsavedKeep": "Keep editing",
-
   "settingsSectionGeneral": "General",
   "settingsSectionAccount": "Account",
   "settingsSectionDanger": "Danger Zone",
@@ -544,7 +646,6 @@
   "settingsLanguageTitle": "Choose Language",
   "settingsErrorLogout": "Unable to log out. Please try again.",
   "settingsErrorDelete": "Unable to delete account. Please try again.",
-
   "chatGuestTitle": "Ask AI anything about life in Japan",
   "chatGuestFeature1": "How to open a bank account",
   "chatGuestFeature2": "Visa renewal procedures",
@@ -556,7 +657,6 @@
   "guestRegisterCta": "Sign up free to use AI Chat",
   "guideReadMore": "Sign up to read the full guide",
   "guideAskAI": "Ask AI for details",
-
   "guideGuestCtaButton": "Create Free Account",
   "homeGuestCtaText": "Create your free account to unlock AI chat and personalized guides",
   "homeGuestCtaButton": "Get Started",
@@ -565,18 +665,16 @@
   "guidePremiumCta": "This content is available with a Premium subscription",
   "guidePremiumCtaButton": "View Plans",
   "guideTierLimitError": "Upgrade to access the full guide content",
-
   "trackerSave": "Save",
   "trackerSaved": "Saved",
   "trackerItemSaved": "Added to to-do list",
   "homeQaTrackerTitle": "To-Do",
   "homeQaTrackerSubtitle": "Manage your to-do list",
-
   "chatAttachPhoto": "Take Photo",
   "chatAttachGallery": "Choose from Gallery",
   "chatAttachCancel": "Cancel",
   "chatImageTooLarge": "Image is too large (max 5MB)",
-  "profilePersonalizationHint": "Complete your profile so the AI guide can give you more accurate, personalized advice.",
+  "profilePersonalizationHint": "The AI guide will provide more personalized advice based on your completed profile",
   "profileVisaExpiry": "Visa Expiry",
   "profileResidenceRegion": "Residence Area",
   "profilePreferredLanguage": "Preferred Language",
@@ -588,10 +686,23 @@
   "profileCommonStatuses": "Common",
   "profileOtherStatuses": "Other",
   "profileSearchNationality": "Search nationality",
-  "visaRenewalPrep": "Prepare visa renewal application",
-  "visaRenewalDeadline": "Visa renewal deadline",
+  "visaRenewalPrepTitle": "Prepare visa renewal application",
+  "visaRenewalDeadlineTitle": "Visa renewal deadline",
   "profileSave": "Save",
   "profileUsageStats": "Usage Statistics",
   "profileLogout": "Log Out",
-  "profileDeleteAccount": "Delete Account"
+  "profileDeleteAccount": "Delete Account",
+  "subUsageTitle": "Your Usage",
+  "subUsageCount": "Used {used} / {limit} chats",
+  "@subUsageCount": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "subUsageUnlimited": "Unlimited chats"
 }

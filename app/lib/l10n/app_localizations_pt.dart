@@ -1670,7 +1670,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get profilePersonalizationHint =>
-      'Complete seu perfil para que o guia de IA forneça conselhos mais precisos e personalizados.';
+      'O guia de IA fornecerá conselhos mais precisos e personalizados com base no seu perfil completo';
 
   @override
   String get profileVisaExpiry => 'Validade do Visto';
@@ -1706,10 +1706,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileSearchNationality => 'Pesquisar nacionalidade';
 
   @override
-  String get visaRenewalPrep => 'Preparar pedido de renovação do visto';
+  String get visaRenewalPrepTitle => 'Preparar pedido de renovação do visto';
 
   @override
-  String get visaRenewalDeadline => 'Prazo de renovação do visto';
+  String get visaRenewalDeadlineTitle => 'Prazo de renovação do visto';
 
   @override
   String get profileSave => 'Salvar';
@@ -1722,4 +1722,15 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get profileDeleteAccount => 'Excluir Conta';
+
+  @override
+  String get subUsageTitle => 'Seu Uso';
+
+  @override
+  String subUsageCount(int used, int limit) {
+    return 'Usou $used / $limit chats';
+  }
+
+  @override
+  String get subUsageUnlimited => 'Chats ilimitados';
 }

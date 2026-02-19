@@ -337,7 +337,6 @@
   "langVi": "Tiếng Việt",
   "langKo": "한국어",
   "langPt": "Português",
-
   "navTitle": "Guia",
   "navSubtitle": "Explore tópicos para ajudar você a viver no Japão.",
   "navGuideCount": "{count} guias",
@@ -491,7 +490,6 @@
   "settingsLanguageTitle": "Escolher idioma",
   "settingsErrorLogout": "Não foi possível sair. Tente novamente.",
   "settingsErrorDelete": "Não foi possível excluir a conta. Tente novamente.",
-
   "chatGuestTitle": "Pergunte ao AI sobre a vida no Japão",
   "chatGuestFeature1": "Como abrir uma conta bancária",
   "chatGuestFeature2": "Procedimentos de renovação de visto",
@@ -503,7 +501,6 @@
   "guestRegisterCta": "Cadastre-se grátis para usar o AI Chat",
   "guideReadMore": "Cadastre-se para ler o guia completo",
   "guideAskAI": "Pergunte detalhes ao AI",
-
   "guideGuestCtaButton": "Criar conta gratuita",
   "homeGuestCtaText": "Crie sua conta gratuita para acessar chat IA e guias personalizados",
   "homeGuestCtaButton": "Começar",
@@ -512,18 +509,16 @@
   "guidePremiumCta": "Este conteúdo requer assinatura Premium",
   "guidePremiumCtaButton": "Ver planos",
   "guideTierLimitError": "Faça upgrade para acessar o conteúdo completo",
-
   "trackerSave": "Salvar",
   "trackerSaved": "Salvo",
   "trackerItemSaved": "Adicionado à lista de tarefas",
   "homeQaTrackerTitle": "Tarefas",
   "homeQaTrackerSubtitle": "Gerenciar suas tarefas",
-
   "chatAttachPhoto": "Tirar Foto",
   "chatAttachGallery": "Escolher da Galeria",
   "chatAttachCancel": "Cancelar",
   "chatImageTooLarge": "Imagem muito grande (máx. 5MB)",
-  "profilePersonalizationHint": "Complete seu perfil para que o guia de IA forneça conselhos mais precisos e personalizados.",
+  "profilePersonalizationHint": "O guia de IA fornecerá conselhos mais precisos e personalizados com base no seu perfil completo",
   "profileVisaExpiry": "Validade do Visto",
   "profileResidenceRegion": "Região de Residência",
   "profilePreferredLanguage": "Idioma Preferido",
@@ -535,10 +530,23 @@
   "profileCommonStatuses": "Comuns",
   "profileOtherStatuses": "Outros",
   "profileSearchNationality": "Pesquisar nacionalidade",
-  "visaRenewalPrep": "Preparar pedido de renovação do visto",
-  "visaRenewalDeadline": "Prazo de renovação do visto",
+  "visaRenewalPrepTitle": "Preparar pedido de renovação do visto",
+  "visaRenewalDeadlineTitle": "Prazo de renovação do visto",
   "profileSave": "Salvar",
   "profileUsageStats": "Estatísticas de Uso",
   "profileLogout": "Sair",
-  "profileDeleteAccount": "Excluir Conta"
+  "profileDeleteAccount": "Excluir Conta",
+  "subUsageTitle": "Seu Uso",
+  "subUsageCount": "Usou {used} / {limit} chats",
+  "@subUsageCount": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "subUsageUnlimited": "Chats ilimitados"
 }

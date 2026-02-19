@@ -1651,7 +1651,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get profilePersonalizationHint =>
-      'Hoàn thiện hồ sơ để trợ lý AI đưa ra lời khuyên chính xác và cá nhân hóa hơn.';
+      'Trợ lý AI sẽ đưa ra lời khuyên chính xác hơn dựa trên hồ sơ hoàn chỉnh của bạn';
 
   @override
   String get profileVisaExpiry => 'Hạn thị thực';
@@ -1687,10 +1687,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileSearchNationality => 'Tìm quốc tịch';
 
   @override
-  String get visaRenewalPrep => 'Chuẩn bị gia hạn tư cách lưu trú';
+  String get visaRenewalPrepTitle => 'Chuẩn bị gia hạn tư cách lưu trú';
 
   @override
-  String get visaRenewalDeadline => 'Hạn chót gia hạn tư cách lưu trú';
+  String get visaRenewalDeadlineTitle => 'Hạn chót gia hạn tư cách lưu trú';
 
   @override
   String get profileSave => 'Lưu';
@@ -1703,4 +1703,15 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get profileDeleteAccount => 'Xóa tài khoản';
+
+  @override
+  String get subUsageTitle => 'Tình trạng sử dụng';
+
+  @override
+  String subUsageCount(int used, int limit) {
+    return 'Đã dùng $used / $limit lượt chat';
+  }
+
+  @override
+  String get subUsageUnlimited => 'Chat không giới hạn';
 }

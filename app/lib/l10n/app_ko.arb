@@ -337,7 +337,6 @@
   "langVi": "Tiếng Việt",
   "langKo": "한국어",
   "langPt": "Português",
-
   "navTitle": "가이드",
   "navSubtitle": "일본 생활에 도움이 되는 주제를 탐색하세요.",
   "navGuideCount": "{count}개 가이드",
@@ -491,7 +490,6 @@
   "settingsLanguageTitle": "언어 선택",
   "settingsErrorLogout": "로그아웃할 수 없습니다. 다시 시도해주세요.",
   "settingsErrorDelete": "계정을 삭제할 수 없습니다. 다시 시도해주세요.",
-
   "chatGuestTitle": "AI에게 일본 생활에 대해 무엇이든 물어보세요",
   "chatGuestFeature1": "은행 계좌 개설 방법",
   "chatGuestFeature2": "비자 갱신 절차",
@@ -503,7 +501,6 @@
   "guestRegisterCta": "무료 가입하고 AI Chat 이용하기",
   "guideReadMore": "가입하고 전체 가이드 읽기",
   "guideAskAI": "AI에게 자세히 물어보기",
-
   "guideGuestCtaButton": "무료 계정 만들기",
   "homeGuestCtaText": "무료 계정을 만들어 AI 채팅과 맞춤 가이드를 이용하세요",
   "homeGuestCtaButton": "시작하기",
@@ -512,18 +509,16 @@
   "guidePremiumCta": "이 콘텐츠는 프리미엄 구독이 필요합니다",
   "guidePremiumCtaButton": "플랜 보기",
   "guideTierLimitError": "전체 가이드를 보려면 업그레이드하세요",
-
   "trackerSave": "저장",
   "trackerSaved": "저장됨",
   "trackerItemSaved": "할 일 목록에 추가됨",
   "homeQaTrackerTitle": "할 일",
   "homeQaTrackerSubtitle": "할 일 관리",
-
   "chatAttachPhoto": "사진 촬영",
   "chatAttachGallery": "갤러리에서 선택",
   "chatAttachCancel": "취소",
   "chatImageTooLarge": "이미지가 너무 큽니다 (최대 5MB)",
-  "profilePersonalizationHint": "프로필을 완성하면 AI 가이드가 더 정확하고 맞춤화된 조언을 제공합니다.",
+  "profilePersonalizationHint": "AI 가이드가 완성된 프로필을 바탕으로 더 정확한 맞춤 조언을 제공합니다",
   "profileVisaExpiry": "체류 기한",
   "profileResidenceRegion": "거주 지역",
   "profilePreferredLanguage": "선호 언어",
@@ -535,10 +530,23 @@
   "profileCommonStatuses": "자주 사용",
   "profileOtherStatuses": "기타",
   "profileSearchNationality": "국적 검색",
-  "visaRenewalPrep": "재류기간 갱신허가 신청 준비",
-  "visaRenewalDeadline": "재류기간 갱신 마감",
+  "visaRenewalPrepTitle": "재류기간 갱신허가 신청 준비",
+  "visaRenewalDeadlineTitle": "재류기간 갱신 마감",
   "profileSave": "저장",
   "profileUsageStats": "사용 통계",
   "profileLogout": "로그아웃",
-  "profileDeleteAccount": "계정 삭제"
+  "profileDeleteAccount": "계정 삭제",
+  "subUsageTitle": "사용 현황",
+  "subUsageCount": "{used} / {limit} 채팅 사용",
+  "@subUsageCount": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "subUsageUnlimited": "무제한 채팅"
 }

@@ -337,7 +337,6 @@
   "langVi": "Tiếng Việt",
   "langKo": "한국어",
   "langPt": "Português",
-
   "navTitle": "Hướng dẫn",
   "navSubtitle": "Khám phá các chủ đề giúp bạn sống tại Nhật Bản.",
   "navGuideCount": "{count} hướng dẫn",
@@ -491,7 +490,6 @@
   "settingsLanguageTitle": "Chọn ngôn ngữ",
   "settingsErrorLogout": "Không thể đăng xuất. Vui lòng thử lại.",
   "settingsErrorDelete": "Không thể xóa tài khoản. Vui lòng thử lại.",
-
   "chatGuestTitle": "Hỏi AI bất cứ điều gì về cuộc sống tại Nhật",
   "chatGuestFeature1": "Cách mở tài khoản ngân hàng",
   "chatGuestFeature2": "Thủ tục gia hạn visa",
@@ -503,7 +501,6 @@
   "guestRegisterCta": "Đăng ký miễn phí để dùng AI Chat",
   "guideReadMore": "Đăng ký để đọc toàn bộ",
   "guideAskAI": "Hỏi AI chi tiết",
-
   "guideGuestCtaButton": "Tạo tài khoản miễn phí",
   "homeGuestCtaText": "Tạo tài khoản miễn phí để mở khóa AI chat và hướng dẫn cá nhân",
   "homeGuestCtaButton": "Bắt đầu",
@@ -512,18 +509,16 @@
   "guidePremiumCta": "Nội dung này yêu cầu đăng ký Premium",
   "guidePremiumCtaButton": "Xem gói",
   "guideTierLimitError": "Nâng cấp để truy cập toàn bộ nội dung",
-
   "trackerSave": "Lưu",
   "trackerSaved": "Đã lưu",
   "trackerItemSaved": "Đã thêm vào danh sách việc cần làm",
   "homeQaTrackerTitle": "Việc cần làm",
   "homeQaTrackerSubtitle": "Quản lý việc cần làm",
-
   "chatAttachPhoto": "Chụp ảnh",
   "chatAttachGallery": "Chọn từ Thư viện",
   "chatAttachCancel": "Hủy",
   "chatImageTooLarge": "Ảnh quá lớn (tối đa 5MB)",
-  "profilePersonalizationHint": "Hoàn thiện hồ sơ để trợ lý AI đưa ra lời khuyên chính xác và cá nhân hóa hơn.",
+  "profilePersonalizationHint": "Trợ lý AI sẽ đưa ra lời khuyên chính xác hơn dựa trên hồ sơ hoàn chỉnh của bạn",
   "profileVisaExpiry": "Hạn thị thực",
   "profileResidenceRegion": "Khu vực cư trú",
   "profilePreferredLanguage": "Ngôn ngữ ưa thích",
@@ -535,10 +530,23 @@
   "profileCommonStatuses": "Phổ biến",
   "profileOtherStatuses": "Khác",
   "profileSearchNationality": "Tìm quốc tịch",
-  "visaRenewalPrep": "Chuẩn bị gia hạn tư cách lưu trú",
-  "visaRenewalDeadline": "Hạn chót gia hạn tư cách lưu trú",
+  "visaRenewalPrepTitle": "Chuẩn bị gia hạn tư cách lưu trú",
+  "visaRenewalDeadlineTitle": "Hạn chót gia hạn tư cách lưu trú",
   "profileSave": "Lưu",
   "profileUsageStats": "Thống kê sử dụng",
   "profileLogout": "Đăng xuất",
-  "profileDeleteAccount": "Xóa tài khoản"
+  "profileDeleteAccount": "Xóa tài khoản",
+  "subUsageTitle": "Tình trạng sử dụng",
+  "subUsageCount": "Đã dùng {used} / {limit} lượt chat",
+  "@subUsageCount": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "subUsageUnlimited": "Chat không giới hạn"
 }

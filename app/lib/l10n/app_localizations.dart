@@ -3215,7 +3215,7 @@ abstract class AppLocalizations {
   /// No description provided for @profilePersonalizationHint.
   ///
   /// In en, this message translates to:
-  /// **'Complete your profile so the AI guide can give you more accurate, personalized advice.'**
+  /// **'The AI guide will provide more personalized advice based on your completed profile'**
   String get profilePersonalizationHint;
 
   /// No description provided for @profileVisaExpiry.
@@ -3284,17 +3284,17 @@ abstract class AppLocalizations {
   /// **'Search nationality'**
   String get profileSearchNationality;
 
-  /// No description provided for @visaRenewalPrep.
+  /// No description provided for @visaRenewalPrepTitle.
   ///
   /// In en, this message translates to:
   /// **'Prepare visa renewal application'**
-  String get visaRenewalPrep;
+  String get visaRenewalPrepTitle;
 
-  /// No description provided for @visaRenewalDeadline.
+  /// No description provided for @visaRenewalDeadlineTitle.
   ///
   /// In en, this message translates to:
   /// **'Visa renewal deadline'**
-  String get visaRenewalDeadline;
+  String get visaRenewalDeadlineTitle;
 
   /// No description provided for @profileSave.
   ///
@@ -3319,6 +3319,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete Account'**
   String get profileDeleteAccount;
+
+  /// No description provided for @subUsageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Usage'**
+  String get subUsageTitle;
+
+  /// No description provided for @subUsageCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Used {used} / {limit} chats'**
+  String subUsageCount(int used, int limit);
+
+  /// No description provided for @subUsageUnlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited chats'**
+  String get subUsageUnlimited;
 }
 
 class _AppLocalizationsDelegate

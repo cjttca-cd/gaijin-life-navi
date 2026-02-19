@@ -337,7 +337,6 @@
   "langVi": "Tiếng Việt",
   "langKo": "한국어",
   "langPt": "Português",
-
   "navTitle": "指南",
   "navSubtitle": "探索各种主题，帮助你在日本生活。",
   "navGuideCount": "{count} 篇指南",
@@ -491,7 +490,6 @@
   "settingsLanguageTitle": "选择语言",
   "settingsErrorLogout": "无法退出登录，请重试。",
   "settingsErrorDelete": "无法删除账号，请重试。",
-
   "chatGuestTitle": "AI 帮你解答日本生活的一切问题",
   "chatGuestFeature1": "如何开设银行账户",
   "chatGuestFeature2": "签证续签手续",
@@ -503,7 +501,6 @@
   "guestRegisterCta": "免费注册即可使用 AI 对话",
   "guideReadMore": "注册查看全文",
   "guideAskAI": "向 AI 详细咨询",
-
   "guideGuestCtaButton": "免费创建账号",
   "homeGuestCtaText": "免费注册，解锁 AI 对话和个性化指南",
   "homeGuestCtaButton": "开始使用",
@@ -512,18 +509,16 @@
   "guidePremiumCta": "此内容需要高级订阅",
   "guidePremiumCtaButton": "查看方案",
   "guideTierLimitError": "升级以查看完整指南内容",
-
   "trackerSave": "保存",
   "trackerSaved": "已保存",
   "trackerItemSaved": "已添加到待办列表",
-  "homeQaTrackerTitle": "待办",
+  "homeQaTrackerTitle": "待办事项",
   "homeQaTrackerSubtitle": "管理待办事项",
-
   "chatAttachPhoto": "拍照",
   "chatAttachGallery": "从相册选择",
   "chatAttachCancel": "取消",
   "chatImageTooLarge": "图片太大（最大 5MB）",
-  "profilePersonalizationHint": "完善个人资料后，AI 向导将根据你的信息提供更精准的个性化建议。",
+  "profilePersonalizationHint": "AI向导会根据完善后的个人资料提供为你更精准的建议",
   "profileVisaExpiry": "在留期限",
   "profileResidenceRegion": "居住地域",
   "profilePreferredLanguage": "首选语言",
@@ -535,10 +530,23 @@
   "profileCommonStatuses": "常用",
   "profileOtherStatuses": "其他",
   "profileSearchNationality": "搜索国籍",
-  "visaRenewalPrep": "在留期間更新許可申請の準備",
-  "visaRenewalDeadline": "在留期間更新の締切",
+  "visaRenewalPrepTitle": "签证续签申请准备",
+  "visaRenewalDeadlineTitle": "签证续签截止日期",
   "profileSave": "保存",
   "profileUsageStats": "使用统计",
   "profileLogout": "退出登录",
-  "profileDeleteAccount": "删除账号"
+  "profileDeleteAccount": "删除账号",
+  "subUsageTitle": "使用情况",
+  "subUsageCount": "已使用 {used} / {limit} 次",
+  "@subUsageCount": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "subUsageUnlimited": "无限次对话"
 }
