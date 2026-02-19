@@ -306,20 +306,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               AppSpacing.screenPadding,
               AppSpacing.spaceSm,
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('🌐', style: TextStyle(fontSize: 20)),
-                const SizedBox(width: AppSpacing.spaceSm),
-                Expanded(
-                  child: Text(
-                    l10n.profilePersonalizationHint,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ],
+            child: Text(
+              l10n.profilePersonalizationHint,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
 
@@ -474,8 +465,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           const SizedBox(height: AppSpacing.space2xl),
 
-          // ── Section 3: Danger Zone ──
-          _SectionLabel(label: l10n.accountSectionDanger),
+          // ── Section 3: Delete Account (no header) ──
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.screenPadding,

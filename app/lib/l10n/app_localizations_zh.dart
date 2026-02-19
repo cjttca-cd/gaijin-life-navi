@@ -954,7 +954,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subscriptionFeatureUnlimitedChat => '无限AI对话';
 
   @override
-  String get profileTitle => '个人资料';
+  String get profileTitle => '账户';
 
   @override
   String get profileEditTitle => '编辑资料';
@@ -1671,7 +1671,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subUsageUnlimited => '无限次对话';
 
   @override
-  String get tabAccount => '我的账户';
+  String get tabAccount => '账户';
 
   @override
   String get accountSectionProfile => '个人资料';

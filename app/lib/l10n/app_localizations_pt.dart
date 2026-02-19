@@ -996,7 +996,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get subscriptionFeatureUnlimitedChat => 'Chats IA ilimitados';
 
   @override
-  String get profileTitle => 'Perfil';
+  String get profileTitle => 'Conta';
 
   @override
   String get profileEditTitle => 'Editar Perfil';
@@ -1735,7 +1735,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get subUsageUnlimited => 'Chats ilimitados';
 
   @override
-  String get tabAccount => 'Minha Conta';
+  String get tabAccount => 'Conta';
 
   @override
   String get accountSectionProfile => 'Perfil';

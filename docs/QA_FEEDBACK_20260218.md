@@ -35,7 +35,7 @@
 | 24 | HomeScreen | 🟡 Major | 名前表示が Firebase email になる（Profile で設定した displayName が反映されない） | ✅ Fixed `91365d8` |
 | 25 | ProfileScreen | 🟡 改善 | Profile 情報を AI prompt に注入して個性化回答 | ✅ Fixed `342d3c2` |
 | 26 | ProfileScreen | 🔴 大規模改修 | Profile 全面リデザイン（フィールド変更 + UI 変更 + Tracker 連携） | ✅ Fixed `a9db1ae` |
-| 34 | Profile/Settings | 🟡 大改修 | Tab「我的」→「我的账户」+ 页面再構成（個人資料/アカウント管理/削除）、Settings 簡素化 | 📋 実施中 |
+| 34 | Profile/Settings | 🟡 大改修 | Tab→我的账户、3区域再構成、Settings簡素化 | ✅ Fixed `a28db3f` |
 | 35 | Settings 通知 | 🟡 改善 | 通知=Todo 期限リマインダー（本地通知）。UI は保留、実装は後日 | 📋 設計記録 |
 
 ## Z の決定事項

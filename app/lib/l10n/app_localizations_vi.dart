@@ -979,7 +979,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get subscriptionFeatureUnlimitedChat => 'Chat AI không giới hạn';
 
   @override
-  String get profileTitle => 'Hồ sơ';
+  String get profileTitle => 'Tài khoản';
 
   @override
   String get profileEditTitle => 'Chỉnh sửa hồ sơ';

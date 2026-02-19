@@ -1937,7 +1937,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileTitle.
   ///
   /// In en, this message translates to:
-  /// **'Profile'**
+  /// **'Account'**
   String get profileTitle;
 
   /// No description provided for @profileEditTitle.
@@ -3341,7 +3341,7 @@ abstract class AppLocalizations {
   /// No description provided for @tabAccount.
   ///
   /// In en, this message translates to:
-  /// **'My Account'**
+  /// **'Account'**
   String get tabAccount;
 
   /// No description provided for @accountSectionProfile.

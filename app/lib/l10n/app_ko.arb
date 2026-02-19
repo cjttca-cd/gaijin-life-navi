@@ -300,7 +300,7 @@
   "subscriptionFeatureFreeCommunityRead": "커뮤니티 게시물 읽기",
   "subscriptionFeatureCommunityPost": "커뮤니티 게시 & 답변",
   "subscriptionFeatureUnlimitedChat": "무제한 AI 채팅",
-  "profileTitle": "프로필",
+  "profileTitle": "계정",
   "profileEditTitle": "프로필 편집",
   "profileEdit": "프로필 편집",
   "profileEmail": "이메일",
@@ -549,7 +549,7 @@
     }
   },
   "subUsageUnlimited": "무제한 채팅",
-  "tabAccount": "내 계정",
+  "tabAccount": "계정",
   "accountSectionProfile": "프로필",
   "accountSectionManagement": "계정 관리",
   "accountSectionDanger": "위험 영역"

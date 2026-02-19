@@ -300,7 +300,7 @@
   "subscriptionFeatureFreeCommunityRead": "阅读社区帖子",
   "subscriptionFeatureCommunityPost": "在社区发帖和回复",
   "subscriptionFeatureUnlimitedChat": "无限AI对话",
-  "profileTitle": "个人资料",
+  "profileTitle": "账户",
   "profileEditTitle": "编辑资料",
   "profileEdit": "编辑资料",
   "profileEmail": "邮箱",
@@ -549,7 +549,7 @@
     }
   },
   "subUsageUnlimited": "无限次对话",
-  "tabAccount": "我的账户",
+  "tabAccount": "账户",
   "accountSectionProfile": "个人资料",
   "accountSectionManagement": "账户管理",
   "accountSectionDanger": "危险操作"

@@ -957,7 +957,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get subscriptionFeatureUnlimitedChat => '무제한 AI 채팅';
 
   @override
-  String get profileTitle => '프로필';
+  String get profileTitle => '계정';
 
   @override
   String get profileEditTitle => '프로필 편집';
@@ -1681,7 +1681,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get subUsageUnlimited => '무제한 채팅';
 
   @override
-  String get tabAccount => '내 계정';
+  String get tabAccount => '계정';
 
   @override
   String get accountSectionProfile => '프로필';

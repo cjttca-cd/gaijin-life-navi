@@ -419,7 +419,7 @@
   "subscriptionFeatureFreeCommunityRead": "Read community posts",
   "subscriptionFeatureCommunityPost": "Post & reply in community",
   "subscriptionFeatureUnlimitedChat": "Unlimited AI chats",
-  "profileTitle": "Profile",
+  "profileTitle": "Account",
   "profileEditTitle": "Edit Profile",
   "profileEdit": "Edit Profile",
   "profileEmail": "Email",
@@ -705,7 +705,7 @@
     }
   },
   "subUsageUnlimited": "Unlimited chats",
-  "tabAccount": "My Account",
+  "tabAccount": "Account",
   "accountSectionProfile": "Profile",
   "accountSectionManagement": "Account",
   "accountSectionDanger": "Danger Zone"

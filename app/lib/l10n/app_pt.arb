@@ -300,7 +300,7 @@
   "subscriptionFeatureFreeCommunityRead": "Ler publicações da comunidade",
   "subscriptionFeatureCommunityPost": "Publicar & responder na comunidade",
   "subscriptionFeatureUnlimitedChat": "Chats IA ilimitados",
-  "profileTitle": "Perfil",
+  "profileTitle": "Conta",
   "profileEditTitle": "Editar Perfil",
   "profileEdit": "Editar Perfil",
   "profileEmail": "E-mail",
@@ -549,7 +549,7 @@
     }
   },
   "subUsageUnlimited": "Chats ilimitados",
-  "tabAccount": "Minha Conta",
+  "tabAccount": "Conta",
   "accountSectionProfile": "Perfil",
   "accountSectionManagement": "Gerenciar Conta",
   "accountSectionDanger": "Zona de Perigo"

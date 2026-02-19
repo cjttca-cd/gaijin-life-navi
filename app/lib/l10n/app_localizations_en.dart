@@ -982,7 +982,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subscriptionFeatureUnlimitedChat => 'Unlimited AI chats';
 
   @override
-  String get profileTitle => 'Profile';
+  String get profileTitle => 'Account';
 
   @override
   String get profileEditTitle => 'Edit Profile';
@@ -1721,7 +1721,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subUsageUnlimited => 'Unlimited chats';
 
   @override
-  String get tabAccount => 'My Account';
+  String get tabAccount => 'Account';
 
   @override
   String get accountSectionProfile => 'Profile';
