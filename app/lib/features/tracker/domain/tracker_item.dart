@@ -10,6 +10,7 @@ class TrackerItem {
     required this.title,
     this.memo,
     this.dueDate,
+    this.tag,
     required this.completed,
     required this.createdAt,
   });
@@ -25,6 +26,9 @@ class TrackerItem {
 
   /// Optional due date.
   final DateTime? dueDate;
+
+  /// Optional tag for auto-generated items (e.g. 'visa_renewal').
+  final String? tag;
 
   /// Whether the item is completed.
   final bool completed;
@@ -44,16 +48,19 @@ class TrackerItem {
     String? title,
     String? memo,
     DateTime? dueDate,
+    String? tag,
     bool? completed,
     DateTime? createdAt,
     bool clearMemo = false,
     bool clearDueDate = false,
+    bool clearTag = false,
   }) {
     return TrackerItem(
       id: id ?? this.id,
       title: title ?? this.title,
       memo: clearMemo ? null : (memo ?? this.memo),
       dueDate: clearDueDate ? null : (dueDate ?? this.dueDate),
+      tag: clearTag ? null : (tag ?? this.tag),
       completed: completed ?? this.completed,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -65,6 +72,7 @@ class TrackerItem {
       'title': title,
       'memo': memo,
       'dueDate': dueDate?.toIso8601String(),
+      'tag': tag,
       'completed': completed,
       'createdAt': createdAt.toIso8601String(),
     };
@@ -78,6 +86,7 @@ class TrackerItem {
       dueDate: json['dueDate'] != null
           ? DateTime.tryParse(json['dueDate'] as String)
           : null,
+      tag: json['tag'] as String?,
       completed: json['completed'] as bool? ?? false,
       createdAt:
           DateTime.tryParse(json['createdAt'] as String? ?? '') ??

@@ -70,6 +70,13 @@ class TrackerItemsNotifier extends AsyncNotifier<List<TrackerItem>> {
     state = AsyncData(repo.getAll());
   }
 
+  /// Remove all items with a given tag (e.g. 'visa_renewal').
+  Future<void> removeByTag(String tag) async {
+    final repo = await _getRepo();
+    await repo.removeByTag(tag);
+    state = AsyncData(repo.getAll());
+  }
+
   /// Save a to-do from chat AI suggestion.
   ///
   /// Converts a chat-suggested item (title + optional date string) into a

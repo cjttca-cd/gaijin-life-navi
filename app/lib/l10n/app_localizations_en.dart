@@ -1350,16 +1350,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subFeatureAdsNo => 'No ads';
 
   @override
-  String get subFeatureGuideFree => 'Browse popular guides';
+  String get subFeatureGuideFree => 'Browse selected guides';
 
   @override
   String get subFeatureGuidePaid => 'Browse all guides';
 
   @override
-  String get subFeatureImageNo => 'AI image analysis';
+  String get subFeatureImageNo => 'AI image analysis (in chat)';
 
   @override
-  String get subFeatureImageYes => 'AI image analysis';
+  String get subFeatureImageYes => 'AI image analysis (in chat)';
 
   @override
   String get subButtonCurrent => 'Current Plan';
@@ -1653,4 +1653,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatImageTooLarge => 'Image is too large (max 5MB)';
+
+  @override
+  String get profilePersonalizationHint =>
+      'Complete your profile so the AI guide can give you more accurate, personalized advice.';
+
+  @override
+  String get profileVisaExpiry => 'Visa Expiry';
+
+  @override
+  String get profileResidenceRegion => 'Residence Area';
+
+  @override
+  String get profilePreferredLanguage => 'Preferred Language';
+
+  @override
+  String get profileSelectNationality => 'Select Nationality';
+
+  @override
+  String get profileSelectResidenceStatus => 'Select Residence Status';
+
+  @override
+  String get profileSelectPrefecture => 'Select Prefecture';
+
+  @override
+  String get profileSelectCity => 'Select City';
+
+  @override
+  String get profileSelectLanguage => 'Select Language';
+
+  @override
+  String get profileCommonStatuses => 'Common';
+
+  @override
+  String get profileOtherStatuses => 'Other';
+
+  @override
+  String get profileSearchNationality => 'Search nationality';
+
+  @override
+  String get visaRenewalPrep => 'Prepare visa renewal application';
+
+  @override
+  String get visaRenewalDeadline => 'Visa renewal deadline';
+
+  @override
+  String get profileSave => 'Save';
+
+  @override
+  String get profileUsageStats => 'Usage Statistics';
+
+  @override
+  String get profileLogout => 'Log Out';
+
+  @override
+  String get profileDeleteAccount => 'Delete Account';
 }

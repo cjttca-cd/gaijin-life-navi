@@ -8,11 +8,10 @@ void main() {
         'id': 'test_uid',
         'email': 'test@example.com',
         'display_name': 'Test User',
-        'avatar_url': 'https://example.com/avatar.jpg',
         'nationality': 'US',
         'residence_status': 'engineer_specialist',
-        'residence_region': '13',
-        'arrival_date': '2024-04-01',
+        'residence_region': '東京都 新宿区',
+        'visa_expiry': '2027-03-15',
         'preferred_language': 'en',
         'subscription_tier': 'free',
         'onboarding_completed': true,
@@ -24,11 +23,10 @@ void main() {
       expect(profile.id, 'test_uid');
       expect(profile.email, 'test@example.com');
       expect(profile.displayName, 'Test User');
-      expect(profile.avatarUrl, 'https://example.com/avatar.jpg');
       expect(profile.nationality, 'US');
       expect(profile.residenceStatus, 'engineer_specialist');
-      expect(profile.residenceRegion, '13');
-      expect(profile.arrivalDate, '2024-04-01');
+      expect(profile.residenceRegion, '東京都 新宿区');
+      expect(profile.visaExpiry, '2027-03-15');
       expect(profile.preferredLanguage, 'en');
       expect(profile.subscriptionTier, 'free');
       expect(profile.onboardingCompleted, true);
@@ -39,7 +37,6 @@ void main() {
         'id': 'uid1',
         'email': 'a@b.com',
         'display_name': '',
-        'preferred_language': 'en',
         'subscription_tier': 'free',
         'onboarding_completed': false,
         'created_at': '2026-01-01T00:00:00Z',
@@ -47,11 +44,11 @@ void main() {
 
       final profile = UserProfile.fromJson(json);
 
-      expect(profile.avatarUrl, isNull);
       expect(profile.nationality, isNull);
       expect(profile.residenceStatus, isNull);
       expect(profile.residenceRegion, isNull);
-      expect(profile.arrivalDate, isNull);
+      expect(profile.visaExpiry, isNull);
+      expect(profile.preferredLanguage, isNull);
     });
 
     test('tierLabel returns correct labels', () {
@@ -72,6 +69,7 @@ void main() {
         'email': 'e@e.com',
         'display_name': 'Name',
         'nationality': 'JP',
+        'visa_expiry': '2027-06-01',
         'preferred_language': 'zh',
         'subscription_tier': 'premium',
         'onboarding_completed': true,
@@ -83,6 +81,7 @@ void main() {
       expect(json['id'], 'uid');
       expect(json['display_name'], 'Name');
       expect(json['nationality'], 'JP');
+      expect(json['visa_expiry'], '2027-06-01');
       expect(json['preferred_language'], 'zh');
       expect(json['subscription_tier'], 'premium');
     });
@@ -94,7 +93,6 @@ Map<String, dynamic> _minJson({String tier = 'free'}) {
     'id': 'uid',
     'email': 'e@e.com',
     'display_name': '',
-    'preferred_language': 'en',
     'subscription_tier': tier,
     'onboarding_completed': false,
     'created_at': '2026-01-01T00:00:00Z',

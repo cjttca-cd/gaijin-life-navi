@@ -4,12 +4,11 @@ class UserProfile {
     required this.id,
     required this.email,
     required this.displayName,
-    this.avatarUrl,
     this.nationality,
     this.residenceStatus,
     this.residenceRegion,
-    this.arrivalDate,
-    required this.preferredLanguage,
+    this.visaExpiry,
+    this.preferredLanguage,
     required this.subscriptionTier,
     required this.onboardingCompleted,
     required this.createdAt,
@@ -18,12 +17,11 @@ class UserProfile {
   final String id;
   final String email;
   final String displayName;
-  final String? avatarUrl;
   final String? nationality;
   final String? residenceStatus;
   final String? residenceRegion;
-  final String? arrivalDate;
-  final String preferredLanguage;
+  final String? visaExpiry;
+  final String? preferredLanguage;
   final String subscriptionTier;
   final bool onboardingCompleted;
   final DateTime createdAt;
@@ -45,12 +43,11 @@ class UserProfile {
       id: json['id'] as String,
       email: json['email'] as String? ?? '',
       displayName: json['display_name'] as String? ?? '',
-      avatarUrl: json['avatar_url'] as String?,
       nationality: json['nationality'] as String?,
       residenceStatus: json['residence_status'] as String?,
       residenceRegion: json['residence_region'] as String?,
-      arrivalDate: json['arrival_date'] as String?,
-      preferredLanguage: json['preferred_language'] as String? ?? 'en',
+      visaExpiry: json['visa_expiry'] as String?,
+      preferredLanguage: json['preferred_language'] as String?,
       subscriptionTier: json['subscription_tier'] as String? ?? 'free',
       onboardingCompleted: json['onboarding_completed'] as bool? ?? false,
       createdAt:
@@ -65,11 +62,10 @@ class UserProfile {
       'id': id,
       'email': email,
       'display_name': displayName,
-      'avatar_url': avatarUrl,
       'nationality': nationality,
       'residence_status': residenceStatus,
       'residence_region': residenceRegion,
-      'arrival_date': arrivalDate,
+      'visa_expiry': visaExpiry,
       'preferred_language': preferredLanguage,
       'subscription_tier': subscriptionTier,
       'onboarding_completed': onboardingCompleted,

@@ -1345,16 +1345,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get subFeatureAdsNo => 'Không quảng cáo';
 
   @override
-  String get subFeatureGuideFree => 'Xem hướng dẫn phổ biến';
+  String get subFeatureGuideFree => 'Xem một số hướng dẫn';
 
   @override
   String get subFeatureGuidePaid => 'Xem tất cả hướng dẫn';
 
   @override
-  String get subFeatureImageNo => 'Phân tích ảnh AI';
+  String get subFeatureImageNo => 'Phân tích ảnh AI (trong trò chuyện)';
 
   @override
-  String get subFeatureImageYes => 'Phân tích ảnh AI';
+  String get subFeatureImageYes => 'Phân tích ảnh AI (trong trò chuyện)';
 
   @override
   String get subButtonCurrent => 'Gói hiện tại';
@@ -1648,4 +1648,59 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get chatImageTooLarge => 'Ảnh quá lớn (tối đa 5MB)';
+
+  @override
+  String get profilePersonalizationHint =>
+      'Hoàn thiện hồ sơ để trợ lý AI đưa ra lời khuyên chính xác và cá nhân hóa hơn.';
+
+  @override
+  String get profileVisaExpiry => 'Hạn thị thực';
+
+  @override
+  String get profileResidenceRegion => 'Khu vực cư trú';
+
+  @override
+  String get profilePreferredLanguage => 'Ngôn ngữ ưa thích';
+
+  @override
+  String get profileSelectNationality => 'Chọn quốc tịch';
+
+  @override
+  String get profileSelectResidenceStatus => 'Chọn tư cách lưu trú';
+
+  @override
+  String get profileSelectPrefecture => 'Chọn tỉnh/thành';
+
+  @override
+  String get profileSelectCity => 'Chọn quận/huyện';
+
+  @override
+  String get profileSelectLanguage => 'Chọn ngôn ngữ';
+
+  @override
+  String get profileCommonStatuses => 'Phổ biến';
+
+  @override
+  String get profileOtherStatuses => 'Khác';
+
+  @override
+  String get profileSearchNationality => 'Tìm quốc tịch';
+
+  @override
+  String get visaRenewalPrep => 'Chuẩn bị gia hạn tư cách lưu trú';
+
+  @override
+  String get visaRenewalDeadline => 'Hạn chót gia hạn tư cách lưu trú';
+
+  @override
+  String get profileSave => 'Lưu';
+
+  @override
+  String get profileUsageStats => 'Thống kê sử dụng';
+
+  @override
+  String get profileLogout => 'Đăng xuất';
+
+  @override
+  String get profileDeleteAccount => 'Xóa tài khoản';
 }

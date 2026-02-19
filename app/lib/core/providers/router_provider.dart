@@ -16,7 +16,6 @@ import '../../features/navigate/presentation/guide_detail_screen.dart';
 import '../../features/navigate/presentation/guide_list_screen.dart';
 import '../../features/navigate/presentation/navigate_screen.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
-import '../../features/profile/presentation/profile_edit_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/profile/presentation/settings_screen.dart';
 import '../../features/subscription/presentation/subscription_screen.dart';
@@ -41,7 +40,6 @@ class AppRoutes {
   static const String chatConversation = '/chat/:id';
   static const String navigate = '/navigate';
   static const String profile = '/profile';
-  static const String profileEdit = '/profile/edit';
   static const String settings = '/settings';
 
   // Subscription
@@ -186,12 +184,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.tracker,
         builder: (context, state) => const TrackerScreen(),
-      ),
-
-      // Profile Edit (full-screen).
-      GoRoute(
-        path: AppRoutes.profileEdit,
-        builder: (context, state) => const ProfileEditScreen(),
       ),
 
       // Settings (full-screen).

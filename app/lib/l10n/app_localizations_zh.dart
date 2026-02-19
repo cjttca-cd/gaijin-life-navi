@@ -1310,16 +1310,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subFeatureAdsNo => '无广告';
 
   @override
-  String get subFeatureGuideFree => '参阅热门类别指南';
+  String get subFeatureGuideFree => '参阅部分指南';
 
   @override
-  String get subFeatureGuidePaid => '参阅所有类别指南';
+  String get subFeatureGuidePaid => '参阅所有指南';
 
   @override
-  String get subFeatureImageNo => 'AI 图片分析';
+  String get subFeatureImageNo => 'AI 图片分析（向导对话中）';
 
   @override
-  String get subFeatureImageYes => 'AI 图片分析';
+  String get subFeatureImageYes => 'AI 图片分析（向导对话中）';
 
   @override
   String get subButtonCurrent => '当前方案';
@@ -1604,4 +1604,58 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get chatImageTooLarge => '图片太大（最大 5MB）';
+
+  @override
+  String get profilePersonalizationHint => '完善个人资料后，AI 向导将根据你的信息提供更精准的个性化建议。';
+
+  @override
+  String get profileVisaExpiry => '在留期限';
+
+  @override
+  String get profileResidenceRegion => '居住地域';
+
+  @override
+  String get profilePreferredLanguage => '首选语言';
+
+  @override
+  String get profileSelectNationality => '选择国籍';
+
+  @override
+  String get profileSelectResidenceStatus => '选择在留资格';
+
+  @override
+  String get profileSelectPrefecture => '选择都道府县';
+
+  @override
+  String get profileSelectCity => '选择市区町村';
+
+  @override
+  String get profileSelectLanguage => '选择语言';
+
+  @override
+  String get profileCommonStatuses => '常用';
+
+  @override
+  String get profileOtherStatuses => '其他';
+
+  @override
+  String get profileSearchNationality => '搜索国籍';
+
+  @override
+  String get visaRenewalPrep => '在留期間更新許可申請の準備';
+
+  @override
+  String get visaRenewalDeadline => '在留期間更新の締切';
+
+  @override
+  String get profileSave => '保存';
+
+  @override
+  String get profileUsageStats => '使用统计';
+
+  @override
+  String get profileLogout => '退出登录';
+
+  @override
+  String get profileDeleteAccount => '删除账号';
 }

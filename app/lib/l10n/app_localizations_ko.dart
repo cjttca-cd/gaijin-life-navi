@@ -1317,16 +1317,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get subFeatureAdsNo => '광고 없음';
 
   @override
-  String get subFeatureGuideFree => '인기 가이드 열람';
+  String get subFeatureGuideFree => '일부 가이드 열람';
 
   @override
   String get subFeatureGuidePaid => '전체 가이드 열람';
 
   @override
-  String get subFeatureImageNo => 'AI 이미지 분석';
+  String get subFeatureImageNo => 'AI 이미지 분석 (채팅 중)';
 
   @override
-  String get subFeatureImageYes => 'AI 이미지 분석';
+  String get subFeatureImageYes => 'AI 이미지 분석 (채팅 중)';
 
   @override
   String get subButtonCurrent => '현재 플랜';
@@ -1613,4 +1613,59 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get chatImageTooLarge => '이미지가 너무 큽니다 (최대 5MB)';
+
+  @override
+  String get profilePersonalizationHint =>
+      '프로필을 완성하면 AI 가이드가 더 정확하고 맞춤화된 조언을 제공합니다.';
+
+  @override
+  String get profileVisaExpiry => '체류 기한';
+
+  @override
+  String get profileResidenceRegion => '거주 지역';
+
+  @override
+  String get profilePreferredLanguage => '선호 언어';
+
+  @override
+  String get profileSelectNationality => '국적 선택';
+
+  @override
+  String get profileSelectResidenceStatus => '체류 자격 선택';
+
+  @override
+  String get profileSelectPrefecture => '도도부현 선택';
+
+  @override
+  String get profileSelectCity => '시구정촌 선택';
+
+  @override
+  String get profileSelectLanguage => '언어 선택';
+
+  @override
+  String get profileCommonStatuses => '자주 사용';
+
+  @override
+  String get profileOtherStatuses => '기타';
+
+  @override
+  String get profileSearchNationality => '국적 검색';
+
+  @override
+  String get visaRenewalPrep => '재류기간 갱신허가 신청 준비';
+
+  @override
+  String get visaRenewalDeadline => '재류기간 갱신 마감';
+
+  @override
+  String get profileSave => '저장';
+
+  @override
+  String get profileUsageStats => '사용 통계';
+
+  @override
+  String get profileLogout => '로그아웃';
+
+  @override
+  String get profileDeleteAccount => '계정 삭제';
 }

@@ -32,6 +32,9 @@
 | 14 | Backend | 🔴 Critical | mock auth残留→JWT全体がuidに | ✅ Fixed `0f45109` (真Firebase Auth切替) |
 | 15 | Backend | 🟢 Cleanup | 旧ai_service/shared残留(2784行) | ✅ Fixed `0f45109` (削除) |
 | 16 | ChatConversation | 🟡 Major | 戻るボタン→ChatListScreen→再push→無限ループ | ✅ Fixed `f6f5d70` (go homeに変更) |
+| 24 | HomeScreen | 🟡 Major | 名前表示が Firebase email になる（Profile で設定した displayName が反映されない） | ✅ Fixed `91365d8` |
+| 25 | ProfileScreen | 🟡 改善 | Profile 情報を AI prompt に注入して個性化回答 | ✅ Fixed `342d3c2` |
+| 26 | ProfileScreen | 🔴 大規模改修 | Profile 全面リデザイン（フィールド変更 + UI 変更 + Tracker 連携） | 🔧 対応中 |
 
 ## Z の決定事項
 
@@ -105,6 +108,63 @@
 - 機能: 追加/完了/削除/日付ソート
 - **首頁**: 「浏览指南」→ Tracker カード摘要に差替え
 - **実装**: Pipeline 不使用、直接実装
+
+### #24-25 Profile 活用 + 表示名顺位 (Z 指示 2026-02-19)
+
+**Z 決定: 方案 A — Profile 情報を AI prompt に注入**
+
+**表示名顺位（#24）:**
+```
+後端 Profile displayName（ユーザー設定）
+  → Firebase Auth displayName（Google/Apple 登录自動填充）
+    → email.split('@').first（最終 fallback）
+```
+- Firebase Auth と後端は同期しない。後端 PostgreSQL が SSOT
+- Firebase Auth は認証のみ担当、カスタムフィールド非対応
+
+**Profile → AI prompt 注入（#25）:**
+- ユーザーが nationality / residenceStatus / region / arrivalDate を設定済みの場合、Backend が `/reset` メッセージ拼接時に user profile context として付加
+- Agent はユーザー背景に基づいた個性化回答が可能に（例: 在留資格に応じたビザ advice）
+- 未設定フィールドは省略（不要な推測をしない）
+- **データ保存先**: 後端 PostgreSQL `profiles` テーブル（Firebase には同期しない）
+
+### #26 Profile 全面リデザイン (Z 指示 2026-02-19)
+
+**フィールド変更:**
+| フィールド | 変更 | 選択肢 | 表示言語 |
+|-----------|------|--------|---------|
+| display_name | 維持 | フリーテキスト | — |
+| nationality | 維持 | ISO 3166 native names（各国語混合1リスト） | 各国語 |
+| residence_status | 維持 | 出入国在留管理庁 29 種 | 日+英 |
+| visa_expiry | **新規**（arrival_date 置換） | 日付選択 | — |
+| residence_region | **拡張** | 都道府県→市区町村（2段階） | 日+英 |
+| preferred_language | **新規** | アプリ対応 5 言語 | 各言語 |
+| ~~arrival_date~~ | **削除** | — | — |
+| ~~avatar~~ | **削除** | — | — |
+
+**UI 変更:**
+- アバター削除
+- 「AI 向導が個性化回答する」説明文追加
+- 独立編集ページ廃止 → 項目タップで直接 BottomSheet 編集
+- 変更あり → 保存ボタン表示
+
+**Tracker 連携:**
+- 在留期限設定時、自動で 2 件 Todo 生成:
+  1. 「在留期間更新許可申請の準備」— 期限 3 ヶ月前
+  2. 「在留期間更新の締切」— 期限 1 ヶ月前
+
+**国籍リスト:**
+- 各国名は native language 表示（中国、日本、한국、United States、France、Deutschland...）
+- ISO 3166 native name 基準、1 リストのみ管理
+
+**在留資格リスト:**
+- よく使う 10 種を上位表示、残り 19 種を折りたたみ
+- 日+英 双語表示
+
+**居住地域:**
+- 2 段階選択: 都道府県（47）→ 市区町村
+- データソース: デジタル庁 or Geolonia オープンデータ
+- 日+英 表示
 
 ## 流程改善（検討中）
 - [ ] Pipeline に「人間 QA レビュー」ステップを入れるか

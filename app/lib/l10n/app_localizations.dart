@@ -2633,7 +2633,7 @@ abstract class AppLocalizations {
   /// No description provided for @subFeatureGuideFree.
   ///
   /// In en, this message translates to:
-  /// **'Browse popular guides'**
+  /// **'Browse selected guides'**
   String get subFeatureGuideFree;
 
   /// No description provided for @subFeatureGuidePaid.
@@ -2645,13 +2645,13 @@ abstract class AppLocalizations {
   /// No description provided for @subFeatureImageNo.
   ///
   /// In en, this message translates to:
-  /// **'AI image analysis'**
+  /// **'AI image analysis (in chat)'**
   String get subFeatureImageNo;
 
   /// No description provided for @subFeatureImageYes.
   ///
   /// In en, this message translates to:
-  /// **'AI image analysis'**
+  /// **'AI image analysis (in chat)'**
   String get subFeatureImageYes;
 
   /// No description provided for @subButtonCurrent.
@@ -3211,6 +3211,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Image is too large (max 5MB)'**
   String get chatImageTooLarge;
+
+  /// No description provided for @profilePersonalizationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile so the AI guide can give you more accurate, personalized advice.'**
+  String get profilePersonalizationHint;
+
+  /// No description provided for @profileVisaExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa Expiry'**
+  String get profileVisaExpiry;
+
+  /// No description provided for @profileResidenceRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Residence Area'**
+  String get profileResidenceRegion;
+
+  /// No description provided for @profilePreferredLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Language'**
+  String get profilePreferredLanguage;
+
+  /// No description provided for @profileSelectNationality.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Nationality'**
+  String get profileSelectNationality;
+
+  /// No description provided for @profileSelectResidenceStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Residence Status'**
+  String get profileSelectResidenceStatus;
+
+  /// No description provided for @profileSelectPrefecture.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Prefecture'**
+  String get profileSelectPrefecture;
+
+  /// No description provided for @profileSelectCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select City'**
+  String get profileSelectCity;
+
+  /// No description provided for @profileSelectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get profileSelectLanguage;
+
+  /// No description provided for @profileCommonStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'Common'**
+  String get profileCommonStatuses;
+
+  /// No description provided for @profileOtherStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get profileOtherStatuses;
+
+  /// No description provided for @profileSearchNationality.
+  ///
+  /// In en, this message translates to:
+  /// **'Search nationality'**
+  String get profileSearchNationality;
+
+  /// No description provided for @visaRenewalPrep.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare visa renewal application'**
+  String get visaRenewalPrep;
+
+  /// No description provided for @visaRenewalDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa renewal deadline'**
+  String get visaRenewalDeadline;
+
+  /// No description provided for @profileSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get profileSave;
+
+  /// No description provided for @profileUsageStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Statistics'**
+  String get profileUsageStats;
+
+  /// No description provided for @profileLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get profileLogout;
+
+  /// No description provided for @profileDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get profileDeleteAccount;
 }
 
 class _AppLocalizationsDelegate

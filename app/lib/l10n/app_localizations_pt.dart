@@ -1363,16 +1363,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get subFeatureAdsNo => 'Sem anúncios';
 
   @override
-  String get subFeatureGuideFree => 'Ver guias populares';
+  String get subFeatureGuideFree => 'Ver alguns guias';
 
   @override
   String get subFeatureGuidePaid => 'Ver todos os guias';
 
   @override
-  String get subFeatureImageNo => 'Análise de imagem IA';
+  String get subFeatureImageNo => 'Análise de imagem IA (no chat)';
 
   @override
-  String get subFeatureImageYes => 'Análise de imagem IA';
+  String get subFeatureImageYes => 'Análise de imagem IA (no chat)';
 
   @override
   String get subButtonCurrent => 'Plano atual';
@@ -1667,4 +1667,59 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get chatImageTooLarge => 'Imagem muito grande (máx. 5MB)';
+
+  @override
+  String get profilePersonalizationHint =>
+      'Complete seu perfil para que o guia de IA forneça conselhos mais precisos e personalizados.';
+
+  @override
+  String get profileVisaExpiry => 'Validade do Visto';
+
+  @override
+  String get profileResidenceRegion => 'Região de Residência';
+
+  @override
+  String get profilePreferredLanguage => 'Idioma Preferido';
+
+  @override
+  String get profileSelectNationality => 'Selecionar Nacionalidade';
+
+  @override
+  String get profileSelectResidenceStatus => 'Selecionar Status de Residência';
+
+  @override
+  String get profileSelectPrefecture => 'Selecionar Província';
+
+  @override
+  String get profileSelectCity => 'Selecionar Cidade';
+
+  @override
+  String get profileSelectLanguage => 'Selecionar Idioma';
+
+  @override
+  String get profileCommonStatuses => 'Comuns';
+
+  @override
+  String get profileOtherStatuses => 'Outros';
+
+  @override
+  String get profileSearchNationality => 'Pesquisar nacionalidade';
+
+  @override
+  String get visaRenewalPrep => 'Preparar pedido de renovação do visto';
+
+  @override
+  String get visaRenewalDeadline => 'Prazo de renovação do visto';
+
+  @override
+  String get profileSave => 'Salvar';
+
+  @override
+  String get profileUsageStats => 'Estatísticas de Uso';
+
+  @override
+  String get profileLogout => 'Sair';
+
+  @override
+  String get profileDeleteAccount => 'Excluir Conta';
 }

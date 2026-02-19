@@ -54,6 +54,13 @@ class TrackerRepository {
     return _persist(items);
   }
 
+  /// Remove all items with a given tag (e.g. 'visa_renewal').
+  Future<bool> removeByTag(String tag) async {
+    final items = getAll();
+    items.removeWhere((e) => e.tag == tag);
+    return _persist(items);
+  }
+
   /// Toggle the completed state of an item.
   Future<bool> toggleComplete(String id) async {
     final items = getAll();
