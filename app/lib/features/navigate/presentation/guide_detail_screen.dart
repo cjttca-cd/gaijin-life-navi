@@ -157,7 +157,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton.tonal(
-                    onPressed: () => context.push(AppRoutes.chat),
+                    onPressed: () => context.go(AppRoutes.chat),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -328,7 +328,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
           SizedBox(
             width: double.infinity,
             child: FilledButton.tonal(
-              onPressed: () => context.push(AppRoutes.chat),
+              onPressed: () => context.go(AppRoutes.chat),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
