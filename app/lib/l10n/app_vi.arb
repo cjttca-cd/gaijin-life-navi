@@ -557,5 +557,8 @@
   "notificationTodoReminder": "Nhắc nhở việc cần làm",
   "notificationReminderTime": "Thời gian nhắc nhở",
   "notificationEnabled": "Đã bật",
-  "notificationDisabled": "Đã tắt"
+  "notificationDisabled": "Đã tắt",
+  "guideLocked": "Hướng dẫn này là nội dung trả phí",
+  "guideUpgradePrompt": "Nâng cấp lên gói Standard để đọc toàn bộ hướng dẫn",
+  "guideUpgradeButton": "Nâng cấp gói"
 }

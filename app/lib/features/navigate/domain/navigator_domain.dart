@@ -82,6 +82,10 @@ class NavigatorGuideDetail {
     required this.content,
     this.summary,
     this.domain,
+    this.access = 'public',
+    this.locked = false,
+    this.excerpt,
+    this.upgradeCta = false,
   });
 
   final String title;
@@ -91,12 +95,28 @@ class NavigatorGuideDetail {
   final String? summary;
   final String? domain;
 
+  /// Access level: "public", "premium", or "agent-only".
+  final String access;
+
+  /// Whether the full content is locked for the current user.
+  final bool locked;
+
+  /// Short excerpt shown when the guide is locked.
+  final String? excerpt;
+
+  /// Whether to show an upgrade CTA.
+  final bool upgradeCta;
+
   factory NavigatorGuideDetail.fromJson(Map<String, dynamic> json) {
     return NavigatorGuideDetail(
       title: json['title'] as String? ?? '',
       content: json['content'] as String? ?? '',
       summary: json['summary'] as String?,
       domain: json['domain'] as String?,
+      access: json['access'] as String? ?? 'public',
+      locked: json['locked'] as bool? ?? false,
+      excerpt: json['excerpt'] as String?,
+      upgradeCta: json['upgrade_cta'] as bool? ?? false,
     );
   }
 }

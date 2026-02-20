@@ -1760,4 +1760,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get notificationDisabled => 'Desativado';
+
+  @override
+  String get guideLocked => 'Este guia é conteúdo premium';
+
+  @override
+  String get guideUpgradePrompt =>
+      'Atualize para o plano Standard para ler o guia completo';
+
+  @override
+  String get guideUpgradeButton => 'Atualizar Plano';
 }

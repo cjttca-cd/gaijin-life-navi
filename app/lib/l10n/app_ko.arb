@@ -557,5 +557,8 @@
   "notificationTodoReminder": "할일 알림",
   "notificationReminderTime": "알림 시간",
   "notificationEnabled": "활성화됨",
-  "notificationDisabled": "비활성화됨"
+  "notificationDisabled": "비활성화됨",
+  "guideLocked": "이 가이드는 유료 콘텐츠입니다",
+  "guideUpgradePrompt": "Standard 플랜으로 업그레이드하면 전체 가이드를 볼 수 있습니다",
+  "guideUpgradeButton": "플랜 업그레이드"
 }

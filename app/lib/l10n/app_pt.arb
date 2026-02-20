@@ -557,5 +557,8 @@
   "notificationTodoReminder": "Lembretes de Tarefas",
   "notificationReminderTime": "Horário do Lembrete",
   "notificationEnabled": "Ativado",
-  "notificationDisabled": "Desativado"
+  "notificationDisabled": "Desativado",
+  "guideLocked": "Este guia é conteúdo premium",
+  "guideUpgradePrompt": "Atualize para o plano Standard para ler o guia completo",
+  "guideUpgradeButton": "Atualizar Plano"
 }

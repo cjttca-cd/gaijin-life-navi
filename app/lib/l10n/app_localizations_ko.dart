@@ -1706,4 +1706,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get notificationDisabled => '비활성화됨';
+
+  @override
+  String get guideLocked => '이 가이드는 유료 콘텐츠입니다';
+
+  @override
+  String get guideUpgradePrompt => 'Standard 플랜으로 업그레이드하면 전체 가이드를 볼 수 있습니다';
+
+  @override
+  String get guideUpgradeButton => '플랜 업그레이드';
 }

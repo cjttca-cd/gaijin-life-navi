@@ -713,5 +713,8 @@
   "notificationTodoReminder": "Todo Reminders",
   "notificationReminderTime": "Reminder Time",
   "notificationEnabled": "Enabled",
-  "notificationDisabled": "Disabled"
+  "notificationDisabled": "Disabled",
+  "guideLocked": "This guide is premium content",
+  "guideUpgradePrompt": "Upgrade to Standard plan to read the full guide",
+  "guideUpgradeButton": "Upgrade Plan"
 }

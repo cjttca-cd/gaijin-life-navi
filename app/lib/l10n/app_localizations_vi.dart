@@ -1741,4 +1741,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get notificationDisabled => 'Đã tắt';
+
+  @override
+  String get guideLocked => 'Hướng dẫn này là nội dung trả phí';
+
+  @override
+  String get guideUpgradePrompt =>
+      'Nâng cấp lên gói Standard để đọc toàn bộ hướng dẫn';
+
+  @override
+  String get guideUpgradeButton => 'Nâng cấp gói';
 }

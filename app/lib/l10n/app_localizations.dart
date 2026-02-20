@@ -3391,6 +3391,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disabled'**
   String get notificationDisabled;
+
+  /// No description provided for @guideLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This guide is premium content'**
+  String get guideLocked;
+
+  /// No description provided for @guideUpgradePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Standard plan to read the full guide'**
+  String get guideUpgradePrompt;
+
+  /// No description provided for @guideUpgradeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade Plan'**
+  String get guideUpgradeButton;
 }
 
 class _AppLocalizationsDelegate

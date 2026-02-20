@@ -1696,4 +1696,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get notificationDisabled => '已关闭';
+
+  @override
+  String get guideLocked => '此指南为付费内容';
+
+  @override
+  String get guideUpgradePrompt => '升级到 Standard 套餐即可查看完整指南';
+
+  @override
+  String get guideUpgradeButton => '升级套餐';
 }

@@ -371,11 +371,25 @@ class _GuideCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        guide.title,
-                        style: theme.textTheme.titleSmall,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              guide.title,
+                              style: theme.textTheme.titleSmall,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (guide.isPremium) ...[
+                            const SizedBox(width: AppSpacing.spaceXs),
+                            Icon(
+                              Icons.lock,
+                              size: 16,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ],
+                        ],
                       ),
                       if (guide.summary != null) ...[
                         const SizedBox(height: AppSpacing.spaceXs),

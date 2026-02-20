@@ -1746,4 +1746,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationDisabled => 'Disabled';
+
+  @override
+  String get guideLocked => 'This guide is premium content';
+
+  @override
+  String get guideUpgradePrompt =>
+      'Upgrade to Standard plan to read the full guide';
+
+  @override
+  String get guideUpgradeButton => 'Upgrade Plan';
 }

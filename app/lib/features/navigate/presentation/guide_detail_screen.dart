@@ -11,6 +11,7 @@ import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../chat/presentation/providers/chat_providers.dart';
+import '../domain/navigator_domain.dart';
 import 'providers/navigator_providers.dart';
 
 /// S11: Navigator Guide Detail — full guide with markdown content.
@@ -75,11 +76,19 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
           final isBanking = domain == 'banking';
           final showFullContent = !isGuest || isBanking;
 
+          // Check if the guide is locked by the API (premium access control).
+          final isLocked = detail.locked;
+
           // Truncate content for guests on non-banking domains.
           final displayContent =
               showFullContent
                   ? detail.content
                   : _truncateContent(detail.content, 200);
+
+          // If the guide is locked, show the locked view.
+          if (isLocked) {
+            return _buildLockedView(context, detail, l10n, theme);
+          }
 
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(
@@ -165,6 +174,174 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  /// Builds the locked guide view: excerpt with gradient fade + upgrade CTA.
+  Widget _buildLockedView(
+    BuildContext context,
+    NavigatorGuideDetail detail,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
+    final excerptText = detail.excerpt ?? detail.summary ?? '';
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenPadding,
+        vertical: AppSpacing.spaceLg,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Guide title
+          Text(detail.title, style: theme.textTheme.headlineLarge),
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Divider
+          Divider(color: theme.colorScheme.outlineVariant, height: 1),
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Excerpt text
+          if (excerptText.isNotEmpty)
+            MarkdownBody(
+              data: excerptText,
+              selectable: true,
+              styleSheet: _markdownStyleSheet(theme),
+              onTapLink: (text, href, title) {
+                if (href != null) {
+                  launchUrl(
+                    Uri.parse(href),
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
+              },
+            ),
+
+          // Gradient fade-out effect over placeholder lines
+          ShaderMask(
+            shaderCallback: (bounds) {
+              return LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.white,
+                  Colors.white.withValues(alpha: 0),
+                ],
+                stops: const [0.0, 1.0],
+              ).createShader(bounds);
+            },
+            blendMode: BlendMode.dstIn,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                5,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.spaceSm),
+                  child: Container(
+                    width: double.infinity,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Lock icon + locked message
+          Center(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.lock_outline,
+                  size: 40,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(height: AppSpacing.spaceMd),
+                Text(
+                  l10n.guideLocked,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Upgrade banner
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(AppSpacing.spaceLg),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.tertiaryContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.star,
+                  size: 32,
+                  color: theme.colorScheme.onTertiaryContainer,
+                ),
+                const SizedBox(height: AppSpacing.spaceMd),
+                Text(
+                  l10n.guideUpgradePrompt,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.onTertiaryContainer,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppSpacing.spaceLg),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: FilledButton(
+                    onPressed: () {
+                      final tier = ref.read(userTierProvider);
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logUpgradeCTATapped(
+                            tier: tier,
+                            source: 'navigator_locked',
+                          );
+                      context.push(AppRoutes.subscription);
+                    },
+                    child: Text(l10n.guideUpgradeButton),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // Ask AI button
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.tonal(
+              onPressed: () => context.push(AppRoutes.chat),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.chat_bubble_outline, size: 20),
+                  const SizedBox(width: AppSpacing.spaceSm),
+                  Text(l10n.guideAskAi),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: AppSpacing.space2xl),
+        ],
       ),
     );
   }

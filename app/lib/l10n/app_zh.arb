@@ -557,5 +557,8 @@
   "notificationTodoReminder": "待办提醒",
   "notificationReminderTime": "提醒时间",
   "notificationEnabled": "已开启",
-  "notificationDisabled": "已关闭"
+  "notificationDisabled": "已关闭",
+  "guideLocked": "此指南为付费内容",
+  "guideUpgradePrompt": "升级到 Standard 套餐即可查看完整指南",
+  "guideUpgradeButton": "升级套餐"
 }
