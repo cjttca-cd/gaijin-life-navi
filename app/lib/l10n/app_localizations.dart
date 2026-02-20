@@ -2267,7 +2267,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideAskAi.
   ///
   /// In en, this message translates to:
-  /// **'Ask AI about this topic'**
+  /// **'Chat with AI Guide (get details)'**
   String get guideAskAi;
 
   /// No description provided for @guideDisclaimer.

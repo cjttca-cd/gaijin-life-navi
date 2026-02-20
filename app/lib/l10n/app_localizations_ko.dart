@@ -1131,7 +1131,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get guideErrorLoad => '이 카테고리의 가이드를 불러올 수 없습니다.';
 
   @override
-  String get guideAskAi => 'AI에게 이 주제에 대해 질문하기';
+  String get guideAskAi => 'AI 가이드와 대화하기 (자세한 정보 얻기)';
 
   @override
   String get guideDisclaimer => '이 정보는 일반적인 안내이며 법적 조언이 아닙니다. 관련 기관에 확인하세요.';

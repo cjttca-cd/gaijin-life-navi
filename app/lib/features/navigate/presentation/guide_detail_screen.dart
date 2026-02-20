@@ -322,24 +322,6 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
             ),
           ),
 
-          const SizedBox(height: AppSpacing.spaceLg),
-
-          // Ask AI button
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.tonal(
-              onPressed: () => context.go(AppRoutes.chat),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.chat_bubble_outline, size: 20),
-                  const SizedBox(width: AppSpacing.spaceSm),
-                  Text(l10n.guideAskAi),
-                ],
-              ),
-            ),
-          ),
-
           const SizedBox(height: AppSpacing.space2xl),
         ],
       ),

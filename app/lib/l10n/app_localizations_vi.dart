@@ -1154,7 +1154,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get guideErrorLoad => 'Không thể tải hướng dẫn cho danh mục này.';
 
   @override
-  String get guideAskAi => 'Hỏi AI về chủ đề này';
+  String get guideAskAi => 'Trò chuyện với AI hướng dẫn (xem chi tiết)';
 
   @override
   String get guideDisclaimer =>

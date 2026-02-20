@@ -360,7 +360,7 @@
   "guideSearchEmpty": "Không tìm thấy hướng dẫn cho \"{query}\".",
   "guideSearchTry": "Thử từ khóa khác.",
   "guideErrorLoad": "Không thể tải hướng dẫn cho danh mục này.",
-  "guideAskAi": "Hỏi AI về chủ đề này",
+  "guideAskAi": "Trò chuyện với AI hướng dẫn (xem chi tiết)",
   "guideDisclaimer": "Đây là thông tin chung và không phải tư vấn pháp lý. Vui lòng xác nhận với cơ quan liên quan.",
   "guideShare": "Chia sẻ",
   "guideErrorNotFound": "Hướng dẫn này không còn khả dụng.",

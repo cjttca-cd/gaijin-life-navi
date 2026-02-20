@@ -360,7 +360,7 @@
   "guideSearchEmpty": "未找到与\"{query}\"相关的指南。",
   "guideSearchTry": "试试其他搜索词。",
   "guideErrorLoad": "无法加载该类别的指南。",
-  "guideAskAi": "向 AI 询问此话题",
+  "guideAskAi": "与AI向导交谈（获取详细信息）",
   "guideDisclaimer": "以上为一般性信息，不构成法律建议。请向相关机构确认。",
   "guideShare": "分享",
   "guideErrorNotFound": "此指南已不可用。",

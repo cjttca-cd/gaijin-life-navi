@@ -1158,7 +1158,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guideErrorLoad => 'Unable to load guides for this category.';
 
   @override
-  String get guideAskAi => 'Ask AI about this topic';
+  String get guideAskAi => 'Chat with AI Guide (get details)';
 
   @override
   String get guideDisclaimer =>

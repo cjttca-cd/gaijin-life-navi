@@ -360,7 +360,7 @@
   "guideSearchEmpty": "Nenhum guia encontrado para \"{query}\".",
   "guideSearchTry": "Tente um termo de busca diferente.",
   "guideErrorLoad": "Não foi possível carregar os guias desta categoria.",
-  "guideAskAi": "Perguntar à IA sobre este tópico",
+  "guideAskAi": "Conversar com o Guia IA (obter detalhes)",
   "guideDisclaimer": "Esta é uma informação geral e não constitui aconselhamento jurídico. Verifique com as autoridades competentes.",
   "guideShare": "Compartilhar",
   "guideErrorNotFound": "Este guia não está mais disponível.",

@@ -1127,7 +1127,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get guideErrorLoad => '无法加载该类别的指南。';
 
   @override
-  String get guideAskAi => '向 AI 询问此话题';
+  String get guideAskAi => '与AI向导交谈（获取详细信息）';
 
   @override
   String get guideDisclaimer => '以上为一般性信息，不构成法律建议。请向相关机构确认。';

@@ -502,7 +502,7 @@
   },
   "guideSearchTry": "Try a different search term.",
   "guideErrorLoad": "Unable to load guides for this category.",
-  "guideAskAi": "Ask AI about this topic",
+  "guideAskAi": "Chat with AI Guide (get details)",
   "guideDisclaimer": "This is general information and does not constitute legal advice. Please verify with relevant authorities.",
   "guideShare": "Share",
   "guideErrorNotFound": "This guide is no longer available.",

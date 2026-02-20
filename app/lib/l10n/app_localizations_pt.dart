@@ -1172,7 +1172,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Não foi possível carregar os guias desta categoria.';
 
   @override
-  String get guideAskAi => 'Perguntar à IA sobre este tópico';
+  String get guideAskAi => 'Conversar com o Guia IA (obter detalhes)';
 
   @override
   String get guideDisclaimer =>
