@@ -11,10 +11,11 @@
 ### データ隔離
 
 - 全ユーザーデータはアプリケーション層（FastAPI）で `user_id = current_firebase_uid` を検証して制限
-- ナビゲーターコンテンツは三層アクセス制御（詳細: `docs/GUIDE_ACCESS_DESIGN.md`）:
-  - `access: public` → 全ユーザーに全文提供
-  - `access: premium` → Standard/Premium に全文、Free/Guest に excerpt のみ
-  - `access: agent-only` → Navigator API に出さない（Agent knowledge 専用）
+- ナビゲーターコンテンツは knowledge/ と guides/ に分離（詳細: `docs/GUIDE_ACCESS_DESIGN.md` v2）:
+  - **knowledge/** — Agent 専用（経験・判断ロジック・暗黙知）。Navigator API には公開しない
+  - **guides/** — ユーザー向け指南。Navigator API で配信:
+    - `access: free` → 全ユーザーに全文提供
+    - `access: premium` → Standard/Premium に全文、Free/Guest に excerpt のみ
 - Agent 間の workspace は完全分離 → 他 agent の知識は見えない
 - 開発用 Agent と Service Agent は完全に分離された名前空間で動作
 
@@ -170,8 +171,9 @@ Agent のテキストレスポンスから以下のブロックを解析:
 
 ### ガイドコンテンツの管理
 
-- ガイドは各 agent の `workspace/knowledge/*.md` に配置
-- Navigator API は knowledge ディレクトリを直接走査して提供
+- ガイドは各 agent の `workspace/guides/*.md` に配置（ユーザー向け指南）
+- knowledge/ は Agent 専用（経験則・判断ロジック）。Navigator API には公開しない
+- Navigator API は guides/ ディレクトリを直接走査して提供
 - .md ファイルの先頭 `# heading` がタイトル、最初の段落がサマリー
 
 ---
@@ -208,7 +210,7 @@ for professional medical advice. In an emergency, call 119 immediately.
 ### 免責事項の実装方法
 
 - AI チャット: 各 agent の AGENTS.md に免責事項生成を指示
-- Navigator ガイド: knowledge ファイルの末尾に免責事項を含める
+- Navigator ガイド: guides ファイルの末尾に免責事項を含める
 - フロントエンド: disclaimer 系テキストが含まれる場合に専用コンポーネントで表示
 
 ---

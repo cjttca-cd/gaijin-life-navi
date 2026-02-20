@@ -1,4 +1,7 @@
-"""Navigator & Emergency endpoints — serve static knowledge guides.
+"""Navigator & Emergency endpoints — serve static guides.
+
+Guides are sourced from each agent's workspace/guides/ directory.
+Agent-internal knowledge (workspace/knowledge/) is NOT exposed via this API.
 
 GET  /api/v1/navigator/domains                  — List all domains
 GET  /api/v1/navigator/{domain}/guides           — List guides for a domain
@@ -21,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["navigator"])
 
-# ── Domain → knowledge directory mapping ───────────────────────────────
+# ── Domain → guides directory mapping ──────────────────────────────────
 
 _AGENTS_ROOT = Path("/root/.openclaw/agents")
 
@@ -30,49 +33,49 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "label": "Banking & Finance",
         "icon": "🏦",
         "status": "active",
-        "knowledge_path": _AGENTS_ROOT / "svc-banking" / "workspace" / "knowledge",
+        "guides_path": _AGENTS_ROOT / "svc-banking" / "workspace" / "guides",
     },
     "visa": {
         "label": "Visa & Immigration",
         "icon": "🛂",
         "status": "active",
-        "knowledge_path": _AGENTS_ROOT / "svc-visa" / "workspace" / "knowledge",
+        "guides_path": _AGENTS_ROOT / "svc-visa" / "workspace" / "guides",
     },
     "medical": {
         "label": "Medical & Health",
         "icon": "🏥",
         "status": "active",
-        "knowledge_path": _AGENTS_ROOT / "svc-medical" / "workspace" / "knowledge",
+        "guides_path": _AGENTS_ROOT / "svc-medical" / "workspace" / "guides",
     },
     "concierge": {
         "label": "Life & General",
         "icon": "🗾",
         "status": "active",
-        "knowledge_path": _AGENTS_ROOT / "svc-concierge" / "workspace" / "knowledge",
+        "guides_path": _AGENTS_ROOT / "svc-concierge" / "workspace" / "guides",
     },
     "housing": {
         "label": "Housing & Utilities",
         "icon": "🏠",
         "status": "coming_soon",
-        "knowledge_path": None,
+        "guides_path": None,
     },
     "employment": {
         "label": "Employment & Tax",
         "icon": "💼",
         "status": "coming_soon",
-        "knowledge_path": None,
+        "guides_path": None,
     },
     "education": {
         "label": "Education & Childcare",
         "icon": "🎓",
         "status": "coming_soon",
-        "knowledge_path": None,
+        "guides_path": None,
     },
     "legal": {
         "label": "Legal & Insurance",
         "icon": "⚖️",
         "status": "coming_soon",
-        "knowledge_path": None,
+        "guides_path": None,
     },
 }
 
@@ -255,9 +258,10 @@ async def list_domains() -> dict:
     domains = []
     for key, cfg in DOMAIN_CONFIG.items():
         guide_count = 0
-        if cfg["knowledge_path"] and Path(cfg["knowledge_path"]).is_dir():
-            # Count guides excluding agent-only files
-            for md_file in Path(cfg["knowledge_path"]).glob("*.md"):
+        if cfg["guides_path"] and Path(cfg["guides_path"]).is_dir():
+            # Count guides (guides/ dir should not contain agent-only files,
+            # but filter defensively just in case)
+            for md_file in Path(cfg["guides_path"]).glob("*.md"):
                 parsed = _parse_md_file(md_file)
                 if parsed["access"] != "agent-only":
                     guide_count += 1
@@ -296,19 +300,19 @@ async def list_guides(domain: str) -> dict:
             },
         )
 
-    if cfg["status"] == "coming_soon" or cfg["knowledge_path"] is None:
+    if cfg["status"] == "coming_soon" or cfg["guides_path"] is None:
         return SuccessResponse(
             data={"domain": domain, "status": "coming_soon", "guides": []}
         ).model_dump()
 
-    knowledge_dir = Path(cfg["knowledge_path"])
-    if not knowledge_dir.is_dir():
+    guides_dir = Path(cfg["guides_path"])
+    if not guides_dir.is_dir():
         return SuccessResponse(
             data={"domain": domain, "guides": []}
         ).model_dump()
 
     guides = []
-    for md_file in sorted(knowledge_dir.glob("*.md")):
+    for md_file in sorted(guides_dir.glob("*.md")):
         parsed = _parse_md_file(md_file)
 
         # Exclude agent-only guides from the listing
@@ -342,12 +346,12 @@ async def get_guide(
 ) -> dict:
     """Get a specific guide with tier-based access control.
 
-    - agent-only → 404
-    - public → full content for everyone
+    - agent-only → 404 (defensive; should not exist in guides/)
+    - free → full content for everyone
     - premium → full content for standard/premium; excerpt + locked for free/guest
     """
     cfg = DOMAIN_CONFIG.get(domain)
-    if cfg is None or cfg["knowledge_path"] is None:
+    if cfg is None or cfg["guides_path"] is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={
@@ -359,7 +363,7 @@ async def get_guide(
             },
         )
 
-    file_path = Path(cfg["knowledge_path"]) / f"{slug}.md"
+    file_path = Path(cfg["guides_path"]) / f"{slug}.md"
     if not file_path.is_file():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -392,8 +396,8 @@ async def get_guide(
     premium_tiers = {"standard", "premium", "premium_plus"}
     has_premium_access = tier is not None and tier in premium_tiers
 
-    # public → full content for everyone
-    if access == "public":
+    # free/public → full content for everyone
+    if access in ("public", "free"):
         return SuccessResponse(
             data={
                 "domain": domain,
@@ -442,7 +446,7 @@ async def get_guide(
 )
 async def emergency_info() -> dict:
     """Emergency contacts and quick guide — always public, no auth required."""
-    emergency_path = _AGENTS_ROOT / "svc-medical" / "workspace" / "knowledge" / "emergency.md"
+    emergency_path = _AGENTS_ROOT / "svc-medical" / "workspace" / "guides" / "emergency.md"
 
     if not emergency_path.is_file():
         # Return hardcoded essentials as fallback

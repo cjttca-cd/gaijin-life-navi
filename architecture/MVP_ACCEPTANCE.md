@@ -62,22 +62,23 @@
 - [ ] ガイド詳細（markdown 全文）が表示される
 - [ ] Coming_soon ドメインは「準備中」表示
 - [ ] Navigator API は認証不要で公開アクセス可能
-- [ ] ガイドコンテンツが knowledge ファイルから正しく読み込まれる
+- [ ] ガイドコンテンツが guides ファイルから正しく読み込まれる
 
 ## 5. Emergency ガイド
 
 - [ ] GET /api/v1/emergency → 緊急連絡先 (110, 119, #7119 等) が返却される
-- [ ] 救急ガイドコンテンツ（svc-medical/knowledge/emergency.md）が表示される
+- [ ] 救急ガイドコンテンツ（svc-medical/workspace/guides/emergency.md）が表示される
 - [ ] 認証不要でアクセス可能
 - [ ] 免責事項が表示される
 
 ## 6. Knowledge 品質
 
-- [ ] svc-banking: 6 knowledge files が配置され、memory_search で検索可能
-- [ ] svc-visa: 6 knowledge files が配置され、memory_search で検索可能
-- [ ] svc-medical: 7 knowledge files が配置され、memory_search で検索可能
-- [ ] svc-concierge: 5 knowledge files が配置され、memory_search で検索可能
-- [ ] 各 agent の knowledge ファイルに正確な情報が含まれる（公式ソース準拠）
+- [ ] svc-banking: 6 knowledge files（Agent 専用）+ 6 guides files（ユーザー向け指南）が配置され、memory_search で検索可能
+- [ ] svc-visa: 6 knowledge files + 6 guides files が配置され、memory_search で検索可能
+- [ ] svc-medical: 7 knowledge files + 7 guides files が配置され、memory_search で検索可能
+- [ ] svc-concierge: 5 knowledge files（含 routing-rules）+ 4 guides files が配置され、memory_search で検索可能
+- [ ] 各 agent の knowledge ファイル（Agent 専用）に正確な情報が含まれる（公式ソース準拠）
+- [ ] 各 agent の guides ファイル（ユーザー向け）に正確な情報が含まれる
 - [ ] memory_search が多言語クエリ（日中英）で関連情報を取得できる
 
 ## 7. Agent 分離とセキュリティ

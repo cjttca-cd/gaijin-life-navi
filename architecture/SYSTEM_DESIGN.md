@@ -96,11 +96,11 @@ graph TB
         Ollama[Ollama<br/>bge-m3 Embedding]
     end
 
-    subgraph Knowledge["Knowledge Files"]
-        KB_Banking[svc-banking/workspace/knowledge/*.md]
-        KB_Visa[svc-visa/workspace/knowledge/*.md]
-        KB_Medical[svc-medical/workspace/knowledge/*.md]
-        KB_Concierge[svc-concierge/workspace/knowledge/*.md]
+    subgraph Knowledge["Knowledge & Guides"]
+        KB_Banking[svc-banking/workspace/knowledge/*.md<br/>svc-banking/workspace/guides/*.md]
+        KB_Visa[svc-visa/workspace/knowledge/*.md<br/>svc-visa/workspace/guides/*.md]
+        KB_Medical[svc-medical/workspace/knowledge/*.md<br/>svc-medical/workspace/guides/*.md]
+        KB_Concierge[svc-concierge/workspace/knowledge/*.md<br/>svc-concierge/workspace/guides/*.md]
     end
 
     iOS --> AuthMW
@@ -147,7 +147,7 @@ graph TB
 | 種別 | Agent 例 | 呼び出し元 | 特徴 |
 |------|---------|-----------|------|
 | 開発用 | main, pm, strategist, architect, coder, designer, tester, writer | Telegram/WhatsApp | 個人データ・プロジェクト情報にアクセス |
-| Service用 | svc-concierge, svc-banking, svc-visa, svc-medical | API Gateway (subprocess) | ユーザーデータは最小限。knowledge/ のみ参照 |
+| Service用 | svc-concierge, svc-banking, svc-visa, svc-medical | API Gateway (subprocess) | ユーザーデータは最小限。knowledge/ + guides/ を保持。API は guides/ のみ配信 |
 
 ### 4.2 MVP Agent 一覧（4体）
 
@@ -187,13 +187,20 @@ graph TB
   ├── IDENTITY.md        # Agent のアイデンティティ
   ├── TOOLS.md           # 利用可能ツールのメモ
   ├── SOUL.md            # Agent の個性定義
-  └── knowledge/         # 知識ファイル（memory_search + read 対象）
-      ├── banks-overview.md
-      ├── account-opening.md
-      ├── remittance.md
-      ├── tax-payment.md
-      ├── online-banking.md
-      └── faq.md
+  ├── knowledge/         # Agent 専用知識（経験則・判断ロジック・暗黙知）
+  │   ├── banks-overview.md
+  │   ├── account-opening.md
+  │   ├── remittance.md
+  │   ├── tax-payment.md
+  │   ├── online-banking.md
+  │   └── faq.md
+  └── guides/            # ユーザー向け指南（Navigator API で配信）
+      ├── account-opening.md   # access: free
+      ├── banks-overview.md    # access: premium
+      ├── remittance.md        # access: premium
+      ├── tax-payment.md       # access: premium
+      ├── online-banking.md    # access: premium
+      └── faq.md               # access: premium
 ```
 
 ---
@@ -272,15 +279,15 @@ sequenceDiagram
     participant FS as File System
 
     U->>GW: GET /api/v1/navigator/domains
-    GW->>FS: knowledge/ ディレクトリ走査
+    GW->>FS: guides/ ディレクトリ走査
     GW-->>U: 8 ドメイン一覧 (4 active + 4 coming_soon)
 
     U->>GW: GET /api/v1/navigator/banking/guides
-    GW->>FS: svc-banking/workspace/knowledge/*.md 読み込み
+    GW->>FS: svc-banking/workspace/guides/*.md 読み込み
     GW-->>U: ガイド一覧 (slug + title + summary)
 
     U->>GW: GET /api/v1/navigator/banking/guides/account-opening
-    GW->>FS: account-opening.md 読み込み + パース
+    GW->>FS: guides/account-opening.md 読み込み + パース
     GW-->>U: ガイド詳細 (title + summary + content)
 ```
 
@@ -336,8 +343,11 @@ OpenClaw memory_search をそのまま RAG として使用。
 
 ### 6.2 知識ファイル配置
 
-各 agent の `workspace/knowledge/` ディレクトリに .md ファイルとして配置。
-`memorySearch.extraPaths: ["knowledge"]` が defaults で設定済みのため、自動的に検索対象になる。
+各 agent の workspace に 2 つのディレクトリを配置:
+- **`knowledge/`** — Agent 専用の知識ベース（経験則・判断ロジック・暗黙知）。memory_search + read の対象。Navigator API には公開しない。
+- **`guides/`** — ユーザー向け指南コンテンツ。Navigator API で配信。Agent は参照しない。
+
+`memorySearch.extraPaths: ["knowledge"]` が defaults で設定済みのため、knowledge/ は自動的に検索対象になる。
 
 ### 6.3 現在の知識ファイル一覧
 

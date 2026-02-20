@@ -2,7 +2,7 @@
 
 > 本文書は論理モデル。Phase 0 では **SQLite (aiosqlite)** で実装する。将来 PostgreSQL への移行を想定し、型定義は互換性を考慮。
 > 認証は Firebase Auth が管理する。アプリ固有のプロフィールは `profiles` テーブルに格納。
-> ナビゲーターコンテンツ（銀行ガイド、ビザ手続き等）は **knowledge ファイル** (svc-* agent の workspace/knowledge/*.md) で管理し、DB には格納しない。
+> ナビゲーターコンテンツ（銀行ガイド、ビザ手続き等）は **guides ファイル** (svc-* agent の workspace/guides/*.md — ユーザー向け指南) で管理し、DB には格納しない。knowledge/ は Agent 専用（経験則・判断ロジック）であり、Navigator API には公開しない。
 
 ## 共通フィールド
 

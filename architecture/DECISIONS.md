@@ -182,9 +182,22 @@
 - **理由**: OpenClaw がコロンを含む session ID を拒否するため。
 - **例**: `app_firebase_uid_abc123_banking`, `app_firebase_uid_abc123_visa`
 
+### ADR-008: knowledge/guides 分離（2026-02-20）
+
+- **状態**: 承認（2026-02-20）
+- **背景**: knowledge/ が Agent 参照用の知識とユーザー向け指南コンテンツを兼用していた。Agent に必要な情報（暗黙知、判断ロジック、経験則）とユーザーに見せる情報（体系的手順、チェックリスト）は本質的に異なり、同一ディレクトリでの管理は役割の衝突を招いていた。
+- **決定**: knowledge/ は Agent 専用（経験・判断ロジック）、guides/ はユーザー向け指南（Navigator API で配信）に分離。
+- **理由**:
+  - Agent は knowledge/ + ベース知識 + web_search で回答する（guides/ は参照しない）
+  - Navigator API は guides/ のみ配信（knowledge/ は非公開）
+  - frontmatter の `access` 値を `public/premium/agent-only` → `free/premium`（guides/ 内）に変更
+  - knowledge/ の情報は将来、経験則・暗黙知のみに再構築予定
+- **影響**: Navigator API の参照先変更（knowledge/ → guides/）、Agent AGENTS.md のルール変更、フロントエンド影響なし
+
 ---
 
 ## 変更履歴
 
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
+- 2026-02-20: ADR-008 追加（knowledge/guides 分離）

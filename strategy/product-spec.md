@@ -88,7 +88,8 @@ OpenClaw Gateway
     ├── svc-medical   → 医療
     └── [Phase 1+] svc-housing / svc-work / svc-admin / svc-transport
     ↓ memory_search (bge-m3)
-workspace/knowledge/*.md（各 agent 独立）
+workspace/knowledge/*.md（Agent 専用: 経験則・判断ロジック）
+workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
     ↓
 回答生成 + ソース引用 + 次のアクション提示 + Tracker 項目自動抽出
 ```
@@ -231,16 +232,16 @@ workspace/knowledge/*.md（各 agent 独立）
 | Auto Tracker | ❌ | ✅ | ✅ | ✅ |
 | 広告 | あり | あり | なし | なし |
 
-**三層指南アーキテクチャ** (詳細: `docs/GUIDE_ACCESS_DESIGN.md`):
-- **Layer 1 (公開)**: SEO 引流用。各ドメイン 1-2 篇、5 言語対応
-- **Layer 2 (付費)**: Standard/Premium で全文閲覧。Free にはタイトル + excerpt + 升级 CTA
-- **Layer 3 (Agent 専用)**: API 非公開。Agent が回答品質向上に活用（経験則、地域情報、比較データ等）
+**三層指南アーキテクチャ** (詳細: `docs/GUIDE_ACCESS_DESIGN.md` v2):
+- **Layer 1 (Free 指南)**: SEO 引流用。各ドメイン 1-2 篇、5 言語対応。ソース: `guides/`（`access: free`）
+- **Layer 2 (Premium 指南)**: Standard/Premium で全文閲覧。Free にはタイトル + excerpt + 升级 CTA。ソース: `guides/`（`access: premium`）
+- **Layer 3 (AI 向導)**: API 非公開。Agent が `knowledge/`（経験則・判断ロジック・暗黙知）+ ベース知識 + web_search で直接回答
 
 **設計原則**:
-- Free で「このアプリがないと困る」と感じさせる。公開指南 + AI Tips で初回体験
+- Free で「このアプリがないと困る」と感じさせる。Free 指南 + AI 概要回答で初回体験
 - 付費指南の**体系的情報**が Standard/Premium 転換のドライバー
-- AI Chat は Free でも概要 + Tips を回答（但し詳細手順は付費指南へ誘導）
-- ゲストでも公開指南 + Emergency にアクセス可能 → 登録への導線
+- AI Chat: 付費ユーザーには knowledge の全情報を活用して直接回答（「指南を読め」とは言わない）。Free ユーザーには概要回答 + 升级案内
+- ゲストでも Free 指南 + Emergency にアクセス可能 → 登録への導線
 
 ---
 

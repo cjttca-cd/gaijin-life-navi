@@ -15,7 +15,8 @@
 **範囲:**
 - svc-concierge + svc-banking の Agent 作成
   - workspace/AGENTS.md + IDENTITY.md + SOUL.md + TOOLS.md
-  - workspace/knowledge/ に知識ファイル配置
+  - workspace/knowledge/ に Agent 専用知識ファイル配置
+  - workspace/guides/ にユーザー向け指南ファイル配置
   - OpenClaw config に agent 追加（tool 制限: web_search, web_fetch, read, memory_search, memory_get）
 - 動作確認: `openclaw agent --agent svc-banking --json` テスト
 - Session 持続性テスト: 同一 session ID で連続会話
@@ -84,7 +85,7 @@ curl -X POST http://localhost:8000/api/v1/chat \
 
 **範囲:**
 - svc-visa + svc-medical Agent 追加
-- 全 4 agent の knowledge/ ディレクトリに知識 .md ファイル作成
+- 全 4 agent の knowledge/ + guides/ ディレクトリに知識・指南 .md ファイル作成
 - memory_search 動作確認（検索精度テスト）
 - LLM ルーティング（svc-concierge による分類）の実装確認
 
@@ -121,7 +122,7 @@ curl -X POST http://localhost:8000/api/v1/chat \
 
 **受入基準:**
 - [ ] GET /api/v1/navigator/domains → 8 ドメイン (4 active + 4 coming_soon) 返却
-- [ ] GET /api/v1/navigator/banking/guides → knowledge/*.md 一覧返却
+- [ ] GET /api/v1/navigator/banking/guides → guides/*.md 一覧返却
 - [ ] GET /api/v1/navigator/banking/guides/account-opening → ガイド全文返却
 - [ ] GET /api/v1/emergency → 緊急連絡先 + ガイドコンテンツ返却
 - [ ] GET /api/v1/subscription/plans → 3 プラン + 従量チャージ返却
