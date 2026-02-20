@@ -11,7 +11,10 @@
 ### データ隔離
 
 - 全ユーザーデータはアプリケーション層（FastAPI）で `user_id = current_firebase_uid` を検証して制限
-- ナビゲーターコンテンツ（knowledge files）は全ユーザーに読み取り許可
+- ナビゲーターコンテンツは三層アクセス制御（詳細: `docs/GUIDE_ACCESS_DESIGN.md`）:
+  - `access: public` → 全ユーザーに全文提供
+  - `access: premium` → Standard/Premium に全文、Free/Guest に excerpt のみ
+  - `access: agent-only` → Navigator API に出さない（Agent knowledge 専用）
 - Agent 間の workspace は完全分離 → 他 agent の知識は見えない
 - 開発用 Agent と Service Agent は完全に分離された名前空間で動作
 
@@ -58,7 +61,8 @@ profiles.subscription_tier 取得
 tier == 'guest' の場合:
   └── 全 Chat → 拒否 (0 回)
 tier == 'free' の場合:
-  └── AI Chat: daily_usage.chat_count >= 5 → 429 USAGE_LIMIT_EXCEEDED
+  └── AI Chat: lifetime chat_count >= 20 → 429 USAGE_LIMIT_EXCEEDED
+  └── AI 回答深度: Layer 1 詳細 OK / Layer 2 概要のみ + 升级案内 / Layer 3 Tips のみ
 tier == 'standard' の場合:
   └── AI Chat: 月間合計 chat_count >= 300 → 429 USAGE_LIMIT_EXCEEDED
 tier == 'premium' の場合:

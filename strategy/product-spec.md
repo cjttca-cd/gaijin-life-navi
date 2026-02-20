@@ -224,21 +224,23 @@ workspace/knowledge/*.md（各 agent 独立）
 | 機能 | 🔓 ゲスト | 🆓 Free | ⭐ Standard | 💎 Premium |
 |------|:---------:|:-------:|:-----------:|:----------:|
 | Medical Emergency Guide | ✅ | ✅ | ✅ | ✅ |
-| Navigator 一覧・概要閲覧（全8ドメイン） | ✅ | ✅ | ✅ | ✅ |
-| Banking 詳細ガイド（全機能） | ✅ | ✅ | ✅ | ✅ |
-| Visa/Medical/Admin 等 詳細 | 概要+CTA | ✅ | ✅ | ✅ |
-| AI Chat（テキスト + 画像解読） | ❌ | 5回/日 | 300回/月 | 無制限 |
-| Auto Tracker | ❌ | 3件 | 無制限 | 無制限 |
+| 公開指南（各ドメイン 1-2 篇） | ✅ | ✅ | ✅ | ✅ |
+| 付費指南（タイトル + 冒頭 excerpt） | 🔒 excerpt | 🔒 excerpt | ✅ 全文 | ✅ 全文 |
+| AI Chat（テキスト + 画像解読） | ❌ | 20回/生涯 | 300回/月 | 無制限 |
+| AI Chat の回答深度 | — | 概要+Tips | 全知識活用 | 全知識活用 |
+| Auto Tracker | ❌ | ✅ | ✅ | ✅ |
 | 広告 | あり | あり | なし | なし |
-| ~~Doc Scanner~~ | — | — | — | — |
-| ~~Community Q&A~~ | — | — | — | — |
-| ~~Premium+ 専用機能~~ | — | — | — | — |
+
+**三層指南アーキテクチャ** (詳細: `docs/GUIDE_ACCESS_DESIGN.md`):
+- **Layer 1 (公開)**: SEO 引流用。各ドメイン 1-2 篇、5 言語対応
+- **Layer 2 (付費)**: Standard/Premium で全文閲覧。Free にはタイトル + excerpt + 升级 CTA
+- **Layer 3 (Agent 専用)**: API 非公開。Agent が回答品質向上に活用（経験則、地域情報、比較データ等）
 
 **設計原則**:
-- Free で「このアプリがないと困る」と感じさせる。Banking Navigator は全機能無料（最初の成功体験）
-- AI Chat の回数制限（5回/日）が Standard/Premium 転換のドライバー
-- ゲストでも Navigator 閲覧 + Emergency にアクセス可能 → 登録への導線
-- ~~Premium+ (¥1,500)~~ → 廃止（Premium ¥1,360 との価格差に対する差別化不足）
+- Free で「このアプリがないと困る」と感じさせる。公開指南 + AI Tips で初回体験
+- 付費指南の**体系的情報**が Standard/Premium 転換のドライバー
+- AI Chat は Free でも概要 + Tips を回答（但し詳細手順は付費指南へ誘導）
+- ゲストでも公開指南 + Emergency にアクセス可能 → 登録への導線
 
 ---
 

@@ -330,6 +330,7 @@ async def chat(
     if profile and profile.deleted_at is None:
         user_profile = {
             "display_name": profile.display_name or None,
+            "subscription_tier": profile.subscription_tier or "free",
             "nationality": profile.nationality,
             "residence_status": profile.residence_status,
             "visa_expiry": str(profile.visa_expiry) if profile.visa_expiry else None,

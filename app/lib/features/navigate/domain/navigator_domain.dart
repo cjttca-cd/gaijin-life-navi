@@ -37,6 +37,7 @@ class NavigatorGuide {
     required this.title,
     this.summary,
     this.domain,
+    this.access = 'public',
   });
 
   final String slug;
@@ -46,6 +47,12 @@ class NavigatorGuide {
   /// Domain ID this guide belongs to (set when aggregating cross-domain).
   final String? domain;
 
+  /// Access level: "public", "premium", or "agent-only".
+  final String access;
+
+  /// Whether this guide requires a premium subscription.
+  bool get isPremium => access == 'premium';
+
   /// Create a copy with a domain assigned.
   NavigatorGuide withDomain(String domainId) {
     return NavigatorGuide(
@@ -53,6 +60,7 @@ class NavigatorGuide {
       title: title,
       summary: summary,
       domain: domainId,
+      access: access,
     );
   }
 
@@ -62,6 +70,7 @@ class NavigatorGuide {
       title: json['title'] as String? ?? '',
       summary: json['summary'] as String?,
       domain: json['domain'] as String?,
+      access: json['access'] as String? ?? 'public',
     );
   }
 }

@@ -116,6 +116,7 @@ async def call_agent(
         profile_lines = ["【ユーザープロフィール】"]
         field_map = {
             "display_name": "表示名",
+            "subscription_tier": "会員プラン",
             "nationality": "国籍",
             "residence_status": "在留資格",
             "visa_expiry": "在留期限",

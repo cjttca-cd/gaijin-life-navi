@@ -67,7 +67,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 | POST | /api/v1/chat | AI Chat（テキスト + 画像） | Required |
 | GET | /api/v1/navigator/domains | ドメイン一覧 | Public |
 | GET | /api/v1/navigator/{domain}/guides | ドメイン別ガイド一覧 | Public |
-| GET | /api/v1/navigator/{domain}/guides/{slug} | ガイド詳細 | Public |
+| GET | /api/v1/navigator/{domain}/guides/{slug} | ガイド詳細 | Optional（tier で全文/excerpt 分岐） |
 | GET | /api/v1/emergency | 緊急連絡先・救急ガイド | Public |
 | POST | /api/v1/auth/register | ユーザー登録 | Required (JWT) |
 | POST | /api/v1/auth/delete-account | アカウント削除 | Required |

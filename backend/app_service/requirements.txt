@@ -14,5 +14,8 @@ pydantic-settings>=2.0.0
 # Firebase Admin SDK
 firebase-admin>=6.0.0
 
+# YAML frontmatter parsing (knowledge files)
+pyyaml>=6.0
+
 # Alembic (migrations — referenced from infra/migrations/)
 alembic>=1.13.0
