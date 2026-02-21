@@ -162,7 +162,7 @@ class _NavigateScreenState extends ConsumerState<NavigateScreen> {
               const SizedBox(height: AppSpacing.spaceSm),
           itemBuilder: (context, index) {
             final guide = filtered[index];
-            final colors = DomainColors.forDomain(guide.domain ?? 'concierge');
+            final colors = DomainColors.forDomain(guide.domain ?? 'life');
             return _SearchGuideCard(
               guide: guide,
               accentColor: colors.accent,
@@ -417,20 +417,16 @@ class _DomainCard extends StatelessWidget {
 
   String _getDomainLabel(String domainId, AppLocalizations l10n) {
     switch (domainId) {
-      case 'banking':
-        return l10n.domainBanking;
+      case 'finance':
+        return l10n.domainFinance;
+      case 'tax':
+        return l10n.domainTax;
       case 'visa':
         return l10n.domainVisa;
       case 'medical':
         return l10n.domainMedical;
-      case 'concierge':
-        return l10n.domainConcierge;
-      case 'housing':
-        return l10n.domainHousing;
-      case 'employment':
-        return l10n.domainEmployment;
-      case 'education':
-        return l10n.domainEducation;
+      case 'life':
+        return l10n.domainLife;
       case 'legal':
         return l10n.domainLegal;
       default:
@@ -457,7 +453,7 @@ class _SearchGuideCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          final domain = guide.domain ?? 'concierge';
+          final domain = guide.domain ?? 'life';
           context.push('${AppRoutes.navigate}/$domain/${guide.slug}');
         },
         child: IntrinsicHeight(

@@ -120,7 +120,7 @@ class _ChatConversationScreenState
       ref
           .read(analyticsServiceProvider)
           .logChatMessageSent(
-            domain: lastAssistant?.domain ?? 'concierge',
+            domain: lastAssistant?.domain ?? 'life',
             tier: latestUsage?.tier ?? 'free',
             locale: locale,
           );

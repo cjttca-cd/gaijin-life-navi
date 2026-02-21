@@ -1080,7 +1080,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get navErrorRetry => '탭하여 다시 시도';
 
   @override
-  String get domainBanking => '은행 및 금융';
+  String get domainFinance => '금융 서비스';
 
   @override
   String get domainVisa => '비자 및 출입국';
@@ -1089,19 +1089,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get domainMedical => '의료 및 건강';
 
   @override
-  String get domainConcierge => '생활 및 종합';
+  String get domainLife => '일상생활';
 
   @override
   String get domainHousing => '주거 및 공공요금';
 
   @override
-  String get domainEmployment => '취업 및 세금';
+  String get domainTax => '세금 및 사회보험';
 
   @override
   String get domainEducation => '교육 및 육아';
 
   @override
-  String get domainLegal => '법률 및 보험';
+  String get domainLegal => '법률 & 권리';
 
   @override
   String get guideSearchPlaceholder => '가이드 검색...';

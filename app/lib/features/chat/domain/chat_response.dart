@@ -12,7 +12,7 @@ class ChatResponse {
   /// AI response text (markdown format).
   final String reply;
 
-  /// Routing domain (banking/visa/medical/concierge).
+  /// Routing domain (finance/tax/visa/medical/life/legal).
   final String domain;
 
   /// Reference sources [{title, url}].
@@ -30,7 +30,7 @@ class ChatResponse {
   factory ChatResponse.fromJson(Map<String, dynamic> json) {
     return ChatResponse(
       reply: json['reply'] as String? ?? '',
-      domain: json['domain'] as String? ?? 'concierge',
+      domain: json['domain'] as String? ?? 'life',
       sources:
           (json['sources'] as List<dynamic>?)
               ?.map((e) => ChatSource.fromJson(e as Map<String, dynamic>))

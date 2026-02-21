@@ -314,20 +314,16 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
 
   String _getDomainLabel(String domainId, AppLocalizations l10n) {
     switch (domainId) {
-      case 'banking':
-        return l10n.domainBanking;
+      case 'finance':
+        return l10n.domainFinance;
+      case 'tax':
+        return l10n.domainTax;
       case 'visa':
         return l10n.domainVisa;
       case 'medical':
         return l10n.domainMedical;
-      case 'concierge':
-        return l10n.domainConcierge;
-      case 'housing':
-        return l10n.domainHousing;
-      case 'employment':
-        return l10n.domainEmployment;
-      case 'education':
-        return l10n.domainEducation;
+      case 'life':
+        return l10n.domainLife;
       case 'legal':
         return l10n.domainLegal;
       default:

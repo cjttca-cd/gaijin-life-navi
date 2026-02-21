@@ -2174,11 +2174,11 @@ abstract class AppLocalizations {
   /// **'Tap to retry'**
   String get navErrorRetry;
 
-  /// No description provided for @domainBanking.
+  /// No description provided for @domainFinance.
   ///
   /// In en, this message translates to:
-  /// **'Banking & Finance'**
-  String get domainBanking;
+  /// **'Finance & Banking'**
+  String get domainFinance;
 
   /// No description provided for @domainVisa.
   ///
@@ -2192,11 +2192,11 @@ abstract class AppLocalizations {
   /// **'Medical & Health'**
   String get domainMedical;
 
-  /// No description provided for @domainConcierge.
+  /// No description provided for @domainLife.
   ///
   /// In en, this message translates to:
-  /// **'Life & General'**
-  String get domainConcierge;
+  /// **'Daily Life'**
+  String get domainLife;
 
   /// No description provided for @domainHousing.
   ///
@@ -2204,11 +2204,11 @@ abstract class AppLocalizations {
   /// **'Housing & Utilities'**
   String get domainHousing;
 
-  /// No description provided for @domainEmployment.
+  /// No description provided for @domainTax.
   ///
   /// In en, this message translates to:
-  /// **'Employment & Tax'**
-  String get domainEmployment;
+  /// **'Tax & Social Insurance'**
+  String get domainTax;
 
   /// No description provided for @domainEducation.
   ///
@@ -2219,7 +2219,7 @@ abstract class AppLocalizations {
   /// No description provided for @domainLegal.
   ///
   /// In en, this message translates to:
-  /// **'Legal & Insurance'**
+  /// **'Legal & Rights'**
   String get domainLegal;
 
   /// No description provided for @guideSearchPlaceholder.

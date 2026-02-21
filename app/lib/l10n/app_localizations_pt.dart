@@ -1120,7 +1120,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navErrorRetry => 'Toque para tentar novamente';
 
   @override
-  String get domainBanking => 'Banco e Finanças';
+  String get domainFinance => 'Serviços Financeiros';
 
   @override
   String get domainVisa => 'Visto e Imigração';
@@ -1129,19 +1129,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get domainMedical => 'Saúde e Medicina';
 
   @override
-  String get domainConcierge => 'Vida e Geral';
+  String get domainLife => 'Vida Diária';
 
   @override
   String get domainHousing => 'Moradia e Utilidades';
 
   @override
-  String get domainEmployment => 'Emprego e Impostos';
+  String get domainTax => 'Impostos & Seguro Social';
 
   @override
   String get domainEducation => 'Educação e Cuidado Infantil';
 
   @override
-  String get domainLegal => 'Jurídico e Seguros';
+  String get domainLegal => 'Jurídico & Direitos';
 
   @override
   String get guideSearchPlaceholder => 'Buscar guias...';

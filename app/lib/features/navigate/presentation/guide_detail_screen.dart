@@ -73,8 +73,8 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
           //   - Banking guides: full content for all (including guests)
           //   - Other domains: guests see first 200 chars + registration CTA
           final isGuest = ref.watch(authStateProvider).valueOrNull == null;
-          final isBanking = domain == 'banking';
-          final showFullContent = !isGuest || isBanking;
+          final isFinance = domain == 'finance';
+          final showFullContent = !isGuest || isFinance;
 
           // Check if the guide is locked by the API (premium access control).
           final isLocked = detail.locked;
@@ -493,20 +493,16 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
 
   String _getDomainLabel(String domainId, AppLocalizations l10n) {
     switch (domainId) {
-      case 'banking':
-        return l10n.domainBanking;
+      case 'finance':
+        return l10n.domainFinance;
+      case 'tax':
+        return l10n.domainTax;
       case 'visa':
         return l10n.domainVisa;
       case 'medical':
         return l10n.domainMedical;
-      case 'concierge':
-        return l10n.domainConcierge;
-      case 'housing':
-        return l10n.domainHousing;
-      case 'employment':
-        return l10n.domainEmployment;
-      case 'education':
-        return l10n.domainEducation;
+      case 'life':
+        return l10n.domainLife;
       case 'legal':
         return l10n.domainLegal;
       default:
@@ -515,7 +511,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
   }
 }
 
-/// CTA card shown to guests on non-banking guide detail pages.
+/// CTA card shown to guests on non-finance guide detail pages.
 /// Encourages registration to view the full guide content.
 ///
 /// Per task-041 spec:

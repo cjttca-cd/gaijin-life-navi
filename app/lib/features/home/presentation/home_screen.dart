@@ -177,8 +177,8 @@ class HomeScreen extends ConsumerWidget {
                 _HomeGuideListItem(
                   title: l10n.homeQaBankingTitle,
                   subtitle: l10n.homeQaBankingSubtitle,
-                  accentColor: DomainColors.banking.accent,
-                  onTap: () => context.push('${AppRoutes.navigate}/banking'),
+                  accentColor: DomainColors.finance.accent,
+                  onTap: () => context.push('${AppRoutes.navigate}/finance'),
                 ),
                 const SizedBox(height: AppSpacing.spaceSm),
                 _HomeGuideListItem(

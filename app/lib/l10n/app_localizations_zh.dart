@@ -1076,7 +1076,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get navErrorRetry => '点击重试';
 
   @override
-  String get domainBanking => '银行与金融';
+  String get domainFinance => '金融服务';
 
   @override
   String get domainVisa => '签证与入境';
@@ -1085,19 +1085,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get domainMedical => '医疗与健康';
 
   @override
-  String get domainConcierge => '生活与综合';
+  String get domainLife => '日常生活';
 
   @override
   String get domainHousing => '住房与公共事业';
 
   @override
-  String get domainEmployment => '就业与税务';
+  String get domainTax => '税务与社保';
 
   @override
   String get domainEducation => '教育与育儿';
 
   @override
-  String get domainLegal => '法律与保险';
+  String get domainLegal => '法律与权益';
 
   @override
   String get guideSearchPlaceholder => '搜索指南...';

@@ -1103,7 +1103,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get navErrorRetry => 'Nhấn để thử lại';
 
   @override
-  String get domainBanking => 'Ngân hàng & Tài chính';
+  String get domainFinance => 'Dịch vụ tài chính';
 
   @override
   String get domainVisa => 'Visa & Nhập cư';
@@ -1112,19 +1112,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get domainMedical => 'Y tế & Sức khỏe';
 
   @override
-  String get domainConcierge => 'Cuộc sống & Tổng hợp';
+  String get domainLife => 'Cuộc sống hàng ngày';
 
   @override
   String get domainHousing => 'Nhà ở & Tiện ích';
 
   @override
-  String get domainEmployment => 'Việc làm & Thuế';
+  String get domainTax => 'Thuế & Bảo hiểm xã hội';
 
   @override
   String get domainEducation => 'Giáo dục & Chăm sóc trẻ';
 
   @override
-  String get domainLegal => 'Pháp lý & Bảo hiểm';
+  String get domainLegal => 'Pháp lý & Quyền lợi';
 
   @override
   String get guideSearchPlaceholder => 'Tìm kiếm hướng dẫn...';
