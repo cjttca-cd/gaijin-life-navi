@@ -90,7 +90,7 @@ async def call_agent(
     Conversation history is passed explicitly via *context*.
 
     Parameters:
-        agent_id: The agent identifier to route to (e.g. ``"svc-concierge"``).
+        agent_id: The agent identifier to route to (e.g. ``"svc-life"``).
         message: The user's message text.
         context: Optional list of prior conversation turns, each a dict
             with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
@@ -403,12 +403,14 @@ _CLASSIFY_PROMPT = """\
 Classify the user message into exactly ONE domain. Reply with ONLY the domain name, nothing else.
 
 Domains:
-- banking — bank accounts, money transfer, ATM, tax payment, credit cards, cashless payment
+- finance — bank accounts, money transfer, credit cards, insurance, loans, investment (NISA/iDeCo), cashless payment
+- tax — income tax, resident tax, pension, social insurance, tax filing (確定申告), furusato nozei, payslip
 - visa — residence status, visa renewal, immigration, permanent residency, residence card, work permit
-- medical — hospitals, doctors, health insurance, pharmacy, vaccination, mental health
-- concierge — general life in Japan, housing, transport, food, culture, anything else
+- medical — hospitals, doctors, health insurance, pharmacy, vaccination, mental health, pregnancy
+- life — housing, transport, shopping, mobile phone, garbage, culture, education, administrative procedures (city hall, My Number)
+- legal — labor disputes, consumer protection, traffic accidents, crime victims, divorce, legal rights
 
-If the message is ambiguous, choose the MOST relevant domain. If truly unclear, reply "concierge".
+If the message is ambiguous, choose the MOST relevant domain. If truly unclear, reply "life".
 
 User message: {message}"""
 
@@ -422,7 +424,7 @@ async def route_to_agent(
     Uses a two-layer approach:
     1. **Emergency keyword detection** (instant, no LLM) → svc-medical
     2. **LLM classification** via lightweight OpenClaw CLI call → domain agent
-    3. **Fallback** to current_domain or svc-concierge if LLM fails
+    3. **Fallback** to current_domain or svc-life if LLM fails
 
     Parameters:
         message: The user's raw message text.
@@ -433,7 +435,7 @@ async def route_to_agent(
         Agent identifier string (e.g. ``"svc-medical"``).
     """
     if not message or not message.strip():
-        return current_domain or "svc-concierge"
+        return current_domain or "svc-life"
 
     # 1. Emergency — instant keyword detection, no LLM needed.
     if _EMERGENCY_PATTERN.search(message):
@@ -441,11 +443,11 @@ async def route_to_agent(
         return "svc-medical"
 
     # 2. LLM classification via OpenClaw CLI (lightweight, fast).
-    valid_domains = {"banking", "visa", "medical", "concierge"}
+    valid_domains = {"finance", "tax", "visa", "medical", "life", "legal"}
     try:
         classify_msg = _CLASSIFY_PROMPT.format(message=message[:500])
         resp = await call_agent(
-            agent_id="svc-concierge",
+            agent_id="svc-router",
             message=classify_msg,
             timeout=15,
         )
@@ -467,13 +469,13 @@ async def route_to_agent(
     except Exception:
         logger.exception("LLM classification failed, falling back")
 
-    # 3. Fallback — sticky domain or concierge.
+    # 3. Fallback — sticky domain or life.
     if current_domain:
         logger.debug("Classification fallback; staying on %s", current_domain)
         return current_domain
 
-    logger.debug("Classification fallback; routing to svc-concierge")
-    return "svc-concierge"
+    logger.debug("Classification fallback; routing to svc-life")
+    return "svc-life"
 
 
 

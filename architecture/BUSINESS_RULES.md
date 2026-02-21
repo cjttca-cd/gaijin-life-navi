@@ -106,10 +106,10 @@ tier == 'premium' の場合:
    - パターン: `119`, `110`, `救急`, `emergency`, `ambulance`, `緊急通報`, `救命`, `急救`, `救护车`
    - → svc-medical にルーティング
 
-2. **LLM classification**（~4 秒）:
-   - svc-concierge に分類プロンプトを送信
-   - 4 ドメインから 1 つを判定: `banking`, `visa`, `medical`, `concierge`
-   - Fallback: LLM 失敗時は `current_domain` or `svc-concierge`
+2. **LLM 軽量分類**（~3 秒）:
+   - API Gateway が LLM に分類プロンプトを送信（旧 svc-concierge の分類機能を軽量ルーターに移行）
+   - 6 ドメインから 1 つを判定: `finance`, `tax`, `visa`, `medical`, `life`, `legal`
+   - Fallback: LLM 失敗時は `current_domain` or `svc-life`
 
 3. **Domain hint**: クライアントが `domain` パラメータを指定した場合、LLM routing をスキップ
 
@@ -160,14 +160,12 @@ Agent のテキストレスポンスから以下のブロックを解析:
 
 | ドメイン | ラベル | ステータス | Agent |
 |---------|--------|----------|-------|
-| banking | Banking & Finance | 🟢 active | svc-banking |
+| finance | Finance & Banking | 🟢 active | svc-finance |
+| tax | Tax & Pension | 🟢 active | svc-tax |
 | visa | Visa & Immigration | 🟢 active | svc-visa |
 | medical | Medical & Health | 🟢 active | svc-medical |
-| concierge | Life & General | 🟢 active | svc-concierge |
-| housing | Housing & Utilities | 🔜 coming_soon | svc-housing (Phase 1) |
-| employment | Employment & Tax | 🔜 coming_soon | svc-work (Phase 1) |
-| education | Education & Childcare | 🔜 coming_soon | — |
-| legal | Legal & Insurance | 🔜 coming_soon | — |
+| life | Life & Daily Living | 🟢 active | svc-life |
+| legal | Legal & Rights | 🟢 active | svc-legal |
 
 ### ガイドコンテンツの管理
 
@@ -267,6 +265,60 @@ API Gateway → Flutter: subscription 状態返却
 
 ---
 
+## 8. 士業独占業務の法的制約（全 Agent 必須）
+
+### ⚠️ 以下の制約は全 svc-* Agent の AGENTS.md に明記し、厳守すること
+
+#### 8.1 Agent 別リスクと法的根拠
+
+| Agent | リスク | 根拠法 | 許可される範囲 | 禁止される範囲 |
+|-------|:------:|--------|--------------|--------------|
+| svc-tax | **🔴 高** | 税理士法52条（無償でも違法） | 公開制度の説明、該当判断（「あなたは確定申告が必要」）、書類記入案内 | 個別税額計算、節税戦略の提案、税務代理 |
+| svc-legal | **🔴 高** | 弁護士法72条 | 制度説明、事例紹介（「類似ケースでは一般的にこうする」）、権利案内、専門家誘導 | 個別法律事件の法的判断・助言 |
+| svc-visa | **🟡 中** | 行政書士法19条 | 手続き説明、必要書類案内 | 書類作成代行 |
+| svc-finance | **🟡 低〜中** | 金商法 | 制度説明、商品比較 | 個別投資助言 |
+| svc-medical | **🟡 低** | 医師法17条 | 一般健康情報 | 診断、処方 |
+| svc-life | **🟢 低** | — | ほぼ制約なし | — |
+
+#### 8.2 共通ルール（全 Agent に適用）
+
+**合法（全 agent 共通で OK）:**
+- ✅ 公開情報の適用判断 —「あなたの状況は確定申告が必要なケースに該当します」
+- ✅ 公開書類の記入方法の平易な解説 —「この欄は源泉徴収票のこの金額を転記します」
+- ✅ 制度の仕組みの説明 — 難しい公式文書を外国人にわかる言葉に
+- ✅ 手続きフロー・期限・届出先の案内
+- ✅ 必要書類のリスト案内
+- ✅ 「類似ケースでは一般的にこうする」という事例紹介
+
+**違法（絶対 NG）:**
+- ❌ 個別の税額計算・節税戦略の提案（税理士法52条、無償でも違法）
+- ❌ 個別法律事件の法的判断・助言（弁護士法72条）
+- ❌ 申請書類の作成代行（行政書士法19条）
+- ❌ 医療の診断・処方（医師法17条）
+- ❌ 個別銘柄の投資推奨（金商法）
+
+#### 8.3 判例・先例
+
+- **国税庁チャットボット「ふたば」**: 確定申告に関する一般的な Q&A を提供 → 公開情報に基づく制度説明・手続き案内・該当判断は適法の証左
+- **法務省ガイドライン（令和5年8月）**: AI 契約書レビューについて、一般的な場面を想定した支援で、個別事案の法的処理でなければ弁護士法72条に違反しない
+
+#### 8.4 svc-tax 特有の制約と対策
+
+svc-tax は最もリスクが高い（税理士法52条は無償でも違法）。以下を厳守:
+
+- 全回答に「税理士への相談を推奨」する誘導を含める
+- 個別の税額計算を求められた場合は「税理士に相談してください」と拒否
+- 公開されている記入例の参照・解説は OK（国税庁の記入例を基に案内）
+- ふるさと納税の限度額シミュレーションは「概算参考値」として提供可（公開計算式の適用）
+
+#### 8.5 svc-legal 特有の制約と対策
+
+- 全回答に「弁護士・行政書士への相談を推奨」する誘導を含める
+- 「あなたのケースではこうすべき」ではなく「一般的にこのような制度があります」という表現を使用
+- 法テラス（0570-078374）等の無料相談窓口を積極的に案内
+
+---
+
 ## ~~Phase 0 ピボットで削除されたルール~~
 
 以下のルールは Phase 0 ピボットで削除:
@@ -282,3 +334,4 @@ API Gateway → Flutter: subscription 状態返却
 
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
+- 2026-02-21: 6 Agent 体系反映（ドメイン更新、§8 士業独占業務の法的制約追加）

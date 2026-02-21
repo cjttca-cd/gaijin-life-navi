@@ -6,7 +6,7 @@
 
 - **API Gateway**: FastAPI (Python, port 8000)（Firebase JWT 認証、Rate Limiting、Agent ルーティング、レスポンス構造化）
 - **Agent Runtime**: OpenClaw Gateway (port 18789)（Session 管理、LLM 呼び出し、Tool 制御、memory_search）
-- **Service Agents**: svc-concierge / svc-banking / svc-visa / svc-medical（各自 workspace + knowledge files）
+- **Service Agents**: svc-finance / svc-tax / svc-visa / svc-medical / svc-life / svc-legal（各自 workspace + knowledge files）+ 軽量ルーター（分類判断のみ）
 - **Client**: Flutter (Dart 3)（iOS / Android / Web — 単一コードベース）
 - **Data Layer**: SQLite (aiosqlite) + Firebase Auth + memory_search (bge-m3, Ollama)
 
@@ -69,22 +69,17 @@ graph TB
     subgraph APIGateway["API Gateway (FastAPI, port 8000)"]
         AuthMW[Firebase JWT 認証]
         RateLimit[Rate Limiting]
-        Router[Intent Router<br/>LLM + keyword]
+        Router[Intent Router<br/>Emergency keyword + LLM 軽量分類]
         Structurizer[Response 構造化<br/>blocks → JSON]
     end
 
     subgraph OCRuntime["OpenClaw Gateway (port 18789)"]
-        SvcConcierge[svc-concierge<br/>路由 + 統合 + 汎用 Q&A]
-        SvcBanking[svc-banking<br/>銀行ドメイン]
+        SvcFinance[svc-finance<br/>金融ドメイン]
+        SvcTax[svc-tax<br/>税務ドメイン]
         SvcVisa[svc-visa<br/>ビザ・在留]
         SvcMedical[svc-medical<br/>医療]
-
-        subgraph Phase1["Phase 1+ Agents"]
-            SvcHousing[svc-housing]
-            SvcWork[svc-work]
-            SvcAdmin[svc-admin]
-            SvcTransport[svc-transport]
-        end
+        SvcLife[svc-life<br/>生活全般]
+        SvcLegal[svc-legal<br/>法律]
 
         MemSearch[memory_search<br/>bge-m3 / Ollama]
     end
@@ -97,10 +92,12 @@ graph TB
     end
 
     subgraph Knowledge["Knowledge & Guides"]
-        KB_Banking[svc-banking/workspace/knowledge/*.md<br/>svc-banking/workspace/guides/*.md]
+        KB_Finance[svc-finance/workspace/knowledge/*.md<br/>svc-finance/workspace/guides/*.md]
+        KB_Tax[svc-tax/workspace/knowledge/*.md<br/>svc-tax/workspace/guides/*.md]
         KB_Visa[svc-visa/workspace/knowledge/*.md<br/>svc-visa/workspace/guides/*.md]
         KB_Medical[svc-medical/workspace/knowledge/*.md<br/>svc-medical/workspace/guides/*.md]
-        KB_Concierge[svc-concierge/workspace/knowledge/*.md<br/>svc-concierge/workspace/guides/*.md]
+        KB_Life[svc-life/workspace/knowledge/*.md<br/>svc-life/workspace/guides/*.md]
+        KB_Legal[svc-legal/workspace/knowledge/*.md<br/>svc-legal/workspace/guides/*.md]
     end
 
     iOS --> AuthMW
@@ -113,26 +110,34 @@ graph TB
 
     AuthMW --> RateLimit
     RateLimit --> Router
-    Router -->|subprocess: openclaw agent --json| SvcConcierge
-    Router -->|subprocess: openclaw agent --json| SvcBanking
+    Router -->|subprocess: openclaw agent --json| SvcFinance
+    Router -->|subprocess: openclaw agent --json| SvcTax
     Router -->|subprocess: openclaw agent --json| SvcVisa
     Router -->|subprocess: openclaw agent --json| SvcMedical
+    Router -->|subprocess: openclaw agent --json| SvcLife
+    Router -->|subprocess: openclaw agent --json| SvcLegal
 
-    SvcBanking -->|memory_search| MemSearch
+    SvcFinance -->|memory_search| MemSearch
+    SvcTax -->|memory_search| MemSearch
     SvcVisa -->|memory_search| MemSearch
     SvcMedical -->|memory_search| MemSearch
-    SvcConcierge -->|memory_search| MemSearch
+    SvcLife -->|memory_search| MemSearch
+    SvcLegal -->|memory_search| MemSearch
 
     MemSearch --> Ollama
-    SvcBanking --> Claude
+    SvcFinance --> Claude
+    SvcTax --> Claude
     SvcVisa --> Claude
     SvcMedical --> Claude
-    SvcConcierge --> Claude
+    SvcLife --> Claude
+    SvcLegal --> Claude
 
-    MemSearch -.-> KB_Banking
+    MemSearch -.-> KB_Finance
+    MemSearch -.-> KB_Tax
     MemSearch -.-> KB_Visa
     MemSearch -.-> KB_Medical
-    MemSearch -.-> KB_Concierge
+    MemSearch -.-> KB_Life
+    MemSearch -.-> KB_Legal
 
     Router --> SQLite
     Structurizer --> SQLite
@@ -147,31 +152,38 @@ graph TB
 | 種別 | Agent 例 | 呼び出し元 | 特徴 |
 |------|---------|-----------|------|
 | 開発用 | main, pm, strategist, architect, coder, designer, tester, writer | Telegram/WhatsApp | 個人データ・プロジェクト情報にアクセス |
-| Service用 | svc-concierge, svc-banking, svc-visa, svc-medical | API Gateway (subprocess) | ユーザーデータは最小限。knowledge/ + guides/ を保持。API は guides/ のみ配信 |
+| Service用 | svc-finance, svc-tax, svc-visa, svc-medical, svc-life, svc-legal | API Gateway (subprocess) | ユーザーデータは最小限。knowledge/ + guides/ を保持。API は guides/ のみ配信 |
 
-### 4.2 MVP Agent 一覧（4体）
+### 4.2 Service Agent 一覧（6体）
 
-| Agent ID | 役割 | 知識ドメイン | 知識ファイル数 |
-|----------|------|------------|-------------|
-| svc-concierge | 意図分類 + domain routing + 汎用 Q&A | 全ドメイン横断 | ~5 files |
-| svc-banking | 口座開設 wizard、送金比較、税金支払い | 金融庁、全銀協、各行公式 | ~6 files |
-| svc-visa | 更新/変更/永住フロー、期限計算 | 入管庁、ISA ポータル | ~6 files |
-| svc-medical | 症状→診療科、保険説明、緊急対応 | 厚労省、多言語医療ガイド | ~7 files |
+| Agent ID | 役割 | 思維モード | 知識ドメイン | 知識ファイル数 |
+|----------|------|-----------|------------|-------------|
+| svc-finance | 銀行口座開設、送金比較、投資・保険・クレジットカード | コスト/リスク/収益分析 | 金融庁、全銀協、各行公式 | ~6 files |
+| svc-tax | 確定申告、年金、社会保険、ふるさと納税 | 法的義務/期限/該当判断 | 国税庁、年金機構 | ~6 files |
+| svc-visa | 更新/変更/永住フロー、期限計算、家族滞在 | 法的合規/期限管理 | 入管庁、ISA ポータル | ~6 files |
+| svc-medical | 症状→診療科、保険説明、緊急対応、薬局、メンタルヘルス | 緊急判断/医療制度 | 厚労省、多言語医療ガイド | ~7 files |
+| svc-life | 住居、交通、就労、行政手続き、買い物、文化、教育 | how-to/実用情報 | ISA 生活支援ポータル | ~8 files |
+| svc-legal | 労働紛争、事故、犯罪被害、消費者保護、離婚、権利 | 処境分析+専門家誘導 | 法テラス、弁護士会 | ~5 files |
 
-### 4.3 Phase 1+ 追加 Agent（4体）
+### 4.3 ルーター（旧 svc-concierge）
 
-| Agent ID | 役割 |
-|----------|------|
-| svc-housing | 物件探し、契約用語、退去トラブル |
-| svc-work | 労働法、社保、確定申告、転職 |
-| svc-admin | 転入届、マイナンバー、年金、国保 |
-| svc-transport | IC カード、定期券、免許切替 |
+Concierge を専門 agent として廃止し、軽量ルーターに変更。API Gateway で LLM 軽量分類（分類判断のみ）を行い、6 ドメインのいずれかにルーティングする。専門 prompt 不要。
+
+**Agent 分離の基準** — 「異なる思維モードが必要か？」:
+- finance = コスト/リスク/収益分析
+- tax = 法的義務/期限/該当判断
+- visa = 法的合規/期限管理
+- medical = 緊急判断/医療制度
+- life = how-to/実用情報
+- legal = 処境分析+専門家誘導
+
+**跨領域対応**: 現段階は主 agent が回答 + 他領域への案内テンプレ方式を採用。
 
 ### 4.4 Agent 共通設定
 
 ```jsonc
 {
-  "id": "svc-banking",
+  "id": "svc-finance",
   "model": "anthropic/claude-sonnet-4-5",
   "tools": {
     "allow": ["web_search", "web_fetch", "read", "memory_search", "memory_get"]
@@ -182,7 +194,7 @@ graph TB
 ### 4.5 Agent Workspace 構造
 
 ```
-~/.openclaw/agents/svc-banking/workspace/
+~/.openclaw/agents/svc-finance/workspace/
   ├── AGENTS.md          # Agent の役割・行動規範
   ├── IDENTITY.md        # Agent のアイデンティティ
   ├── TOOLS.md           # 利用可能ツールのメモ
@@ -191,14 +203,14 @@ graph TB
   │   ├── banks-overview.md
   │   ├── account-opening.md
   │   ├── remittance.md
-  │   ├── tax-payment.md
+  │   ├── investment-insurance.md
   │   ├── online-banking.md
   │   └── faq.md
   └── guides/            # ユーザー向け指南（Navigator API で配信）
       ├── account-opening.md   # access: free
       ├── banks-overview.md    # access: premium
       ├── remittance.md        # access: premium
-      ├── tax-payment.md       # access: premium
+      ├── investment-basics.md # access: premium
       ├── online-banking.md    # access: premium
       └── faq.md               # access: premium
 ```
@@ -213,8 +225,8 @@ API Gateway から OpenClaw agent を subprocess で呼び出す:
 
 ```bash
 openclaw agent \
-  --agent svc-banking \
-  --session-id "app_{user_id}_banking" \
+  --agent svc-finance \
+  --session-id "app_{user_id}_finance" \
   --message "{user_message}" \
   --json --thinking low \
   --timeout 60
@@ -251,11 +263,9 @@ sequenceDiagram
     GW->>GW: Emergency keyword 検出?
     alt 緊急キーワード (119/110/救急/emergency)
         GW->>GW: → svc-medical にルーティング
-    else LLM 分類
-        GW->>OC: subprocess: svc-concierge に分類依頼
-        OC->>CL: classification prompt
-        CL-->>OC: "banking" / "visa" / "medical" / "concierge"
-        OC-->>GW: domain 判定結果
+    else LLM 軽量分類
+        GW->>CL: 分類プロンプト（6 ドメイン判定）
+        CL-->>GW: "finance" / "tax" / "visa" / "medical" / "life" / "legal"
     end
 
     GW->>OC: subprocess: openclaw agent --agent svc-{domain}
@@ -280,13 +290,13 @@ sequenceDiagram
 
     U->>GW: GET /api/v1/navigator/domains
     GW->>FS: guides/ ディレクトリ走査
-    GW-->>U: 8 ドメイン一覧 (4 active + 4 coming_soon)
+    GW-->>U: 6 ドメイン一覧 (全 active)
 
-    U->>GW: GET /api/v1/navigator/banking/guides
-    GW->>FS: svc-banking/workspace/guides/*.md 読み込み
+    U->>GW: GET /api/v1/navigator/finance/guides
+    GW->>FS: svc-{domain}/workspace/guides/*.md 読み込み
     GW-->>U: ガイド一覧 (slug + title + summary)
 
-    U->>GW: GET /api/v1/navigator/banking/guides/account-opening
+    U->>GW: GET /api/v1/navigator/finance/guides/account-opening
     GW->>FS: guides/account-opening.md 読み込み + パース
     GW-->>U: ガイド詳細 (title + summary + content)
 ```
@@ -353,11 +363,17 @@ OpenClaw memory_search をそのまま RAG として使用。
 
 | Agent | ファイル | 内容 |
 |-------|---------|------|
-| svc-banking | banks-overview.md | 主要銀行比較表 |
+| svc-finance | banks-overview.md | 主要銀行比較表 |
 | | account-opening.md | 口座開設手順・必要書類 |
 | | remittance.md | 海外送金方法比較 |
-| | tax-payment.md | 税金支払い方法 |
+| | investment-insurance.md | 投資・保険の基礎 |
 | | online-banking.md | ネットバンキング・ATM |
+| | faq.md | よくある質問 |
+| svc-tax | tax-overview.md | 税制度概要（所得税・住民税） |
+| | kakutei-shinkoku.md | 確定申告ガイド |
+| | nenkin.md | 年金制度 |
+| | social-insurance.md | 社会保険 |
+| | furusato-nozei.md | ふるさと納税 |
 | | faq.md | よくある質問 |
 | svc-visa | residence-status-overview.md | 在留資格概要 |
 | | visa-renewal.md | ビザ更新手順 |
@@ -372,20 +388,30 @@ OpenClaw memory_search をそのまま RAG として使用。
 | | mental-health.md | メンタルヘルス |
 | | pharmacy-guide.md | 薬局ガイド |
 | | vaccination.md | 予防接種 |
-| svc-concierge | domains-overview.md | ドメイン概要 |
-| | life-basics.md | 生活基本情報 |
+| svc-life | housing.md | 住居探し・契約 |
+| | transportation.md | 交通・IC カード・免許 |
+| | admin-procedures.md | 行政手続き（転入届・マイナンバー） |
+| | shopping.md | 買い物・日用品 |
 | | cultural-tips.md | 文化 Tips |
-| | routing-rules.md | ルーティングルール |
-| | useful-contacts.md | 便利な連絡先 |
+| | education.md | 教育・保育 |
+| | work-basics.md | 就労の基礎知識 |
+| | faq.md | よくある質問 |
+| svc-legal | labor-disputes.md | 労働紛争 |
+| | accidents.md | 事故対応 |
+| | consumer-protection.md | 消費者保護 |
+| | crime-victims.md | 犯罪被害 |
+| | faq.md | よくある質問 |
 
 ### 6.4 知識源と更新頻度
 
 | ドメイン | 主要ソース | 更新頻度 |
 |---------|-----------|---------|
-| Banking | 金融庁、全銀協、主要銀行公式サイト | 半年 |
+| Finance | 金融庁、全銀協、主要銀行公式サイト | 半年 |
+| Tax | 国税庁、年金機構、各自治体 | 法改正時・年次 |
 | Visa | 入管庁、ISA ポータル | 法改正時 |
 | Medical | 厚労省、AMDA 多文化共生ガイド | 四半期 |
-| General | ISA 外国人生活支援ポータル（17言語） | 月次 |
+| Life | ISA 外国人生活支援ポータル（17言語）、各自治体 | 月次 |
+| Legal | 法テラス、弁護士会、厚労省（労働関連） | 法改正時 |
 
 ### 6.5 Agent からの知識利用方式
 
@@ -510,3 +536,4 @@ GitHub Repository (monorepo)
 
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
+- 2026-02-21: 6 Agent 体系への変更反映（ADR-009: svc-finance / svc-tax / svc-life / svc-legal 追加、concierge 廃止→軽量ルーター）

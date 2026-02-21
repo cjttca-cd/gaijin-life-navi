@@ -124,7 +124,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 |-----------|------|------|------|
 | message | string | ✅ | ユーザーメッセージ (1-4000文字) |
 | image | string\|null | — | Base64 画像 (Phase 1 で実装) |
-| domain | string\|null | — | ドメインヒント: banking, visa, medical, concierge。指定時は LLM routing をスキップ |
+| domain | string\|null | — | ドメインヒント: finance, tax, visa, medical, life, legal。指定時は LLM routing をスキップ |
 | locale | string | — | ユーザー言語 (default: "en") |
 
 **Response 200**:
@@ -132,7 +132,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 {
   "data": {
     "reply": "銀行口座の開設についてご案内します。\n\n日本で外国人が銀行口座を開設するには、以下の書類が必要です：\n\n1. **在留カード**（有効期限が3ヶ月以上残っていること）\n2. **パスポート**\n3. **住民票**（発行から3ヶ月以内）\n\n## おすすめの銀行\n\n多言語対応の銀行をいくつかご紹介します：\n- **ゆうちょ銀行**: 全国に支店があり、英語対応ATMが多い\n- **三井住友銀行**: 英語・中国語対応のオンラインバンキング\n- **セブン銀行**: コンビニATMで24時間利用可能",
-    "domain": "banking",
+    "domain": "finance",
     "sources": [
       {
         "title": "金融庁 外国人向けガイド",
@@ -172,7 +172,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 | レスポンスフィールド | 型 | 説明 |
 |---|---|---|
 | reply | string | AI の回答テキスト（markdown 形式） |
-| domain | string | ルーティング先ドメイン (banking/visa/medical/concierge) |
+| domain | string | ルーティング先ドメイン (finance/tax/visa/medical/life/legal) |
 | sources | array | 参考ソース `[{title, url}]` |
 | actions | array | 提案アクション `[{type, ...}]` |
 | tracker_items | array | Tracker 自動追加候補 `[{type, title, date}]` |
@@ -212,7 +212,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 1. Firebase JWT 検証 → user_id 取得
 2. profiles.subscription_tier 取得
 3. daily_usage チェック + インクリメント（制限超過なら 429）
-4. Emergency keyword 検出 → svc-medical / LLM classification → domain 判定
+4. Emergency keyword 検出 → svc-medical / LLM 軽量分類 → 6 ドメイン判定 (finance/tax/visa/medical/life/legal)
 5. `openclaw agent --agent svc-{domain} --session-id app_{uid}_{domain}` 呼び出し
 6. Response text から `[SOURCES]` `[ACTIONS]` `[TRACKER]` ブロック解析
 7. 構造化 ChatResponse を返却
@@ -223,7 +223,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 
 #### `GET /api/v1/navigator/domains`
 
-- **説明**: 全ナビゲーションドメインの一覧取得
+- **説明**: 全ナビゲーションドメインの一覧取得（6 ドメイン、全 active）
 - **認証**: 不要（公開情報）
 
 **Response 200**:
@@ -232,9 +232,16 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
   "data": {
     "domains": [
       {
-        "id": "banking",
-        "label": "Banking & Finance",
+        "id": "finance",
+        "label": "Finance & Banking",
         "icon": "🏦",
+        "status": "active",
+        "guide_count": 6
+      },
+      {
+        "id": "tax",
+        "label": "Tax & Pension",
+        "icon": "📋",
         "status": "active",
         "guide_count": 6
       },
@@ -253,39 +260,18 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
         "guide_count": 7
       },
       {
-        "id": "concierge",
-        "label": "Life & General",
+        "id": "life",
+        "label": "Life & Daily Living",
         "icon": "🗾",
         "status": "active",
-        "guide_count": 5
-      },
-      {
-        "id": "housing",
-        "label": "Housing & Utilities",
-        "icon": "🏠",
-        "status": "coming_soon",
-        "guide_count": 0
-      },
-      {
-        "id": "employment",
-        "label": "Employment & Tax",
-        "icon": "💼",
-        "status": "coming_soon",
-        "guide_count": 0
-      },
-      {
-        "id": "education",
-        "label": "Education & Childcare",
-        "icon": "🎓",
-        "status": "coming_soon",
-        "guide_count": 0
+        "guide_count": 8
       },
       {
         "id": "legal",
-        "label": "Legal & Insurance",
+        "label": "Legal & Rights",
         "icon": "⚖️",
-        "status": "coming_soon",
-        "guide_count": 0
+        "status": "active",
+        "guide_count": 5
       }
     ]
   }
@@ -301,7 +287,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 ```json
 {
   "data": {
-    "domain": "banking",
+    "domain": "finance",
     "guides": [
       {
         "slug": "account-opening",
@@ -323,17 +309,6 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 }
 ```
 
-**Response 200 (coming_soon ドメイン)**:
-```json
-{
-  "data": {
-    "domain": "housing",
-    "status": "coming_soon",
-    "guides": []
-  }
-}
-```
-
 #### `GET /api/v1/navigator/{domain}/guides/{slug}`
 
 - **説明**: 特定ガイドの全文取得（markdown コンテンツ）
@@ -343,7 +318,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 ```json
 {
   "data": {
-    "domain": "banking",
+    "domain": "finance",
     "slug": "account-opening",
     "title": "Bank Account Opening Guide for Foreign Residents",
     "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident.",
@@ -357,7 +332,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 {
   "error": {
     "code": "NOT_FOUND",
-    "message": "Guide 'nonexistent' not found in domain 'banking'.",
+    "message": "Guide 'nonexistent' not found in domain 'finance'.",
     "details": {}
   }
 }
@@ -663,3 +638,4 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
+- 2026-02-21: 6 Agent 体系反映（ドメイン一覧 6 active に更新、routing 分類ロジック更新）

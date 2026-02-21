@@ -29,11 +29,17 @@ router = APIRouter(tags=["navigator"])
 _AGENTS_ROOT = Path("/root/.openclaw/agents")
 
 DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
-    "banking": {
-        "label": "Banking & Finance",
-        "icon": "🏦",
+    "finance": {
+        "label": "Finance & Banking",
+        "icon": "💰",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-banking" / "workspace" / "guides",
+        "guides_path": _AGENTS_ROOT / "svc-finance" / "workspace" / "guides",
+    },
+    "tax": {
+        "label": "Tax & Social Insurance",
+        "icon": "📊",
+        "status": "active",
+        "guides_path": _AGENTS_ROOT / "svc-tax" / "workspace" / "guides",
     },
     "visa": {
         "label": "Visa & Immigration",
@@ -47,11 +53,17 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "status": "active",
         "guides_path": _AGENTS_ROOT / "svc-medical" / "workspace" / "guides",
     },
-    "concierge": {
-        "label": "Life & General",
-        "icon": "🗾",
+    "life": {
+        "label": "Daily Life",
+        "icon": "🌏",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-concierge" / "workspace" / "guides",
+        "guides_path": _AGENTS_ROOT / "svc-life" / "workspace" / "guides",
+    },
+    "legal": {
+        "label": "Legal & Rights",
+        "icon": "⚖️",
+        "status": "active",
+        "guides_path": _AGENTS_ROOT / "svc-legal" / "workspace" / "guides",
     },
     "housing": {
         "label": "Housing & Utilities",
@@ -68,12 +80,6 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
     "education": {
         "label": "Education & Childcare",
         "icon": "🎓",
-        "status": "coming_soon",
-        "guides_path": None,
-    },
-    "legal": {
-        "label": "Legal & Insurance",
-        "icon": "⚖️",
         "status": "coming_soon",
         "guides_path": None,
     },

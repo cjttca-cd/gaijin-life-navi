@@ -128,17 +128,17 @@
 
 ### ADR-003: LLM ベース intent routing
 
-- **状態**: 承認（2026-02-17）
+- **状態**: 更新（2026-02-21、ADR-009 で拡張）
 - **コンテキスト**: ユーザーメッセージを適切なドメイン agent にルーティングする必要がある。
 - **決定**: 2 層ルーティング方式:
   1. **Emergency keyword 検出**（即座、LLM 不要）: 119/110/救急/emergency/ambulance → svc-medical
-  2. **LLM classification**: svc-concierge に分類プロンプトを送信 → banking/visa/medical/concierge の 4 ドメインから判定
+  2. **LLM 軽量分類**: 6 ドメインから判定（finance/tax/visa/medical/life/legal）。旧 svc-concierge を廃止し、軽量ルーターに移行（ADR-009 参照）
 - **理由**:
   - 緊急時は keyword で即座にルーティング（レイテンシ最小化）
   - 一般メッセージは LLM が意図を正確に分類（keyword ベースでは多言語対応が困難）
-  - Fallback: LLM 失敗時は current_domain or svc-concierge
+  - Fallback: LLM 失敗時は current_domain or svc-life
 - **トレードオフ**:
-  - routing に ~4 秒追加（LLM 呼び出し）
+  - routing に ~3 秒追加（LLM 呼び出し）
   - domain hint を指定すれば routing をスキップ可能
 
 ### ADR-004: プロダクトピボット（Scanner → Chat 画像、Community → 削除、Navigator 拡張）
@@ -194,6 +194,42 @@
   - knowledge/ の情報は将来、経験則・暗黙知のみに再構築予定
 - **影響**: Navigator API の参照先変更（knowledge/ → guides/）、Agent AGENTS.md のルール変更、フロントエンド影響なし
 
+### ADR-009: 6 Agent 体系 + Concierge 廃止 + 軽量ルーター（2026-02-21）
+
+- **状態**: 承認（2026-02-21）
+- **背景**: 旧 4 Agent 体系（svc-concierge, svc-banking, svc-visa, svc-medical）では、生活全般を svc-concierge が担当し、Phase 1 で svc-housing / svc-work / svc-admin / svc-transport を追加予定だった。しかし以下の問題が判明:
+  1. **税務と法律が欠落**: 税理士法52条（無償でも違法）や弁護士法72条等の士業独占業務への対応が設計に含まれていなかった
+  2. **思維モードの違い**: 金融（コスト/リスク分析）、税務（法的義務/期限判断）、法律（処境分析+専門家誘導）、生活（how-to）は異なる推論パターンを必要とする
+  3. **Concierge の二重役割**: svc-concierge が「ルーティング」と「汎用回答」を兼務しており、分類精度と回答品質の両立が困難
+- **決定**: 6 Agent 体系に変更し、Concierge を専門 agent として廃止。軽量ルーター方式に移行。
+  ```
+  svc-finance  — 金融（銀行/投資/信用卡/保険/贷款/送金）← svc-banking 拡張
+  svc-tax      — 税務（税金/年金/社保/確定申告/ふるさと納税）← 新設
+  svc-visa     — 签证（在留資格/入管/永住/家族）← 維持
+  svc-medical  — 医疗（看病/保険/急救/薬局/心理/妊娠出産の医療面）← 維持
+  svc-life     — 生活（住居/交通/工作/行政/购物/文化/教育）← svc-concierge 改名拡張
+  svc-legal    — 法律（労働紛争/事故/犯罪被害/消費者保護/離婚/権利）← 新設
+  ```
+  + 軽量ルーター `svc-router`（分類判断のみ、専門 prompt 不要）
+- **ルーターの実装**: `svc-router` agent を新設。workspace には分類ルールのみ記載した最小 AGENTS.md を配置。knowledge/ や guides/ は持たない。tools は空（web_search 等不要）。Backend の `route_to_agent()` は `svc-router` を呼び出して 6 ドメインのいずれかを返させる。専門 agent の system prompt が分類精度に干渉することを防ぐ。
+- **Agent 分離の基準**: 「異なる思維モードが必要か？」
+  - finance = コスト/リスク/収益分析
+  - tax = 法的義務/期限/該当判断
+  - visa = 法的合規/期限管理
+  - medical = 緊急判断/医療制度
+  - life = how-to/実用情報
+  - legal = 処境分析+専門家誘導
+- **跨領域対応**: 現段階は方案 A（主 agent が回答 + 他領域への案内テンプレ）。将来は各 agent の knowledge に跨領域シナリオ別の知識を配置。
+- **法的制約**: 各 agent の AGENTS.md に士業独占業務の法的制約ルールを明記（BUSINESS_RULES.md §8 参照）。特に svc-tax（税理士法52条）と svc-legal（弁護士法72条）は高リスク。
+- **理由**:
+  - Phase 1 で追加予定だった svc-housing / svc-work / svc-admin / svc-transport は svc-life と svc-tax に統合 → Phase 0 で 6 agent 全てを提供
+  - ルーターを分離することで、分類精度と各 agent の回答品質を独立に改善可能
+  - 国税庁チャットボット「ふたば」の先例により、税務の一般的な制度説明・該当判断は適法と判断
+- **トレードオフ**:
+  - Agent 数増加（4→6）による運用・保守コストの増加
+  - 軽量ルーターの分類精度が 6 ドメインで十分か要検証
+- **影響**: SYSTEM_DESIGN.md（コンポーネント図・フロー）、API_DESIGN.md（routing ドメイン）、BUSINESS_RULES.md（法的制約追加）、DEV_PHASES.md（Phase 構成）、product-spec.md（agent 構成）、GUIDE_ACCESS_DESIGN.md（領域別境界）を更新
+
 ---
 
 ## 変更履歴
@@ -201,3 +237,4 @@
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
 - 2026-02-20: ADR-008 追加（knowledge/guides 分離）
+- 2026-02-21: ADR-009 追加（6 Agent 体系 + Concierge 廃止 + 軽量ルーター）

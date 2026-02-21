@@ -55,7 +55,7 @@ class ChatRequest(BaseModel):
     image: str | None = Field(default=None, description="Base64 image")
     domain: str | None = Field(
         default=None,
-        description="Domain hint: banking, visa, medical, concierge",
+        description="Domain hint: finance, tax, visa, medical, life, legal",
     )
     locale: str = Field(default="en", max_length=10)
     context: list[ContextMessage] | None = Field(

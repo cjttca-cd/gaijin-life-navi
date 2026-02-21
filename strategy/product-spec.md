@@ -20,7 +20,7 @@ Reddit r/japanlife に書き込む代わりに、このアプリのAIに聞け�
 
 ### 1.3 USP（Unique Selling Proposition）
 1. **AI Chat ファースト**: 静的ガイドではなく、個人の状況に合わせた AI 対話がプライマリ・インターフェース
-2. **8ドメイン専門知識**: Banking, Visa, Medical, Housing, Work, Transport, Admin, Food — 各ドメインに特化した Service Agent が高品質な回答を提供
+2. **6ドメイン専門知識**: Finance, Tax, Visa, Medical, Life, Legal — 各ドメインに特化した Service Agent が高品質な回答を提供
 3. **多言語ネイティブ**: 14言語対応（AI動的翻訳。テンプレ翻訳ではない）
 4. **手続き完結型**: 情報提供だけでなく「次に何をすべきか」のアクション提示 + AI 自動 Tracker 生成
 5. **ワンストップ**: 求人サイト、翻訳アプリ、Q&A掲示板が分断している現状を AI Chat 一本で統合
@@ -33,33 +33,31 @@ Reddit r/japanlife に書き込む代わりに、このアプリのAIに聞け�
 
 | # | Gap（Stage 2 で特定） | 対応機能 | 優先度 | Phase |
 |---|----------------------|---------|--------|-------|
-| G1 | AI×生活支援の統合プラットフォームが不在 | **AI Life Concierge**（svc-concierge + 専門 agent） | Must | 0 |
-| G2 | 銀行口座開設の言語障壁 | **Banking Navigator** + svc-banking | Must | 0 |
+| G1 | AI×生活支援の統合プラットフォームが不在 | **AI Life Concierge**（6 専門 agent + 軽量ルーター） | Must | 0 |
+| G2 | 銀行口座開設の言語障壁 | **Finance Navigator** + svc-finance | Must | 0 |
 | G3 | ビザ・在留手続きの複雑さ | **Visa Navigator** + svc-visa | Must | 0 |
 | G4 | 医療受診時の言語障壁 | **Medical Guide** + svc-medical | Must | 0 |
-| G5 | 行政手続き全般の情報不足 | **Admin Navigator** + svc-admin | Must | 1 |
+| G5 | 税務・年金・社保の複雑さ | **Tax Navigator** + svc-tax | Must | 0 |
 | G6 | 日本語の公文書が読めない | ~~Document Scanner~~ → **AI Chat 画像送信で代替**（独立機能として廃止。OCR は AI Chat に統合：ユーザーが書類画像を送信 → AI が読み取り・解説） | — | 0 |
 | G7 | 同じ境遇の人と情報交換できない | ~~Community Q&A~~ → **完全廃止**（AI が質問に直接回答。コミュニティはコールドスタート問題が深刻で、初期に価値を提供できない） | — | — |
 | G8 | 個別の状況に合った情報がない | **AI パーソナライズ回答**（ユーザープロフィール連携） | Should | 0 |
-| G9 | 住居探しの情報不足 | **Housing Navigator** + svc-housing | Must | 1 |
-| G10 | 労働法・社保の複雑さ | **Work Navigator** + svc-work | Must | 1 |
-| G11 | 交通系の手続き不明 | **Transport Navigator** + svc-transport | Must | 1 |
-| G12 | 食事・食材の情報（宗教対応等） | **Food Navigator** + AI Chat | Should | 1+ |
-| G13 | 企業の外国人オンボーディング支援 | B2B 企業ダッシュボード | Could | 2 |
+| G9 | 住居・交通・行政・文化等の生活全般 | **Life Navigator** + svc-life | Must | 0 |
+| G10 | 労働紛争・事故・犯罪被害等の法的問題 | **Legal Navigator** + svc-legal | Must | 0 |
+| G11 | 食事・食材の情報（宗教対応等） | **Life Navigator**（svc-life のサブトピック） | Should | 0 |
+| G12 | 企業の外国人オンボーディング支援 | B2B 企業ダッシュボード | Could | 2 |
 
 ### 2.2 機能 × ペルソナ マトリクス
 
 | 機能 | Chen Wei (技術者) | Nguyen Thi Lan (特定技能) | Kim Jihye (留学生) | 企業HR |
 |------|:---:|:---:|:---:|:---:|
 | AI Life Concierge (Chat) | ◎ | ◎ | ◎ | — |
-| Banking Navigator + Agent | ◎ | ◎ | ○ | — |
+| Finance Navigator + Agent | ◎ | ◎ | ○ | — |
+| Tax Navigator + Agent | ◎ | ◎ | ○ | ○ |
 | Visa Navigator + Agent | ◎ | ◎ | ◎ | ○ |
 | Medical Guide + Agent | ○ | ◎ | ○ | — |
+| Life Navigator + Agent | ◎ | ◎ | ◎ | — |
+| Legal Navigator + Agent | ◎ | ◎ | ○ | ○ |
 | Auto Tracker | ◎ | ◎ | ◎ | ○ |
-| Housing Navigator (Ph1) | ◎ | ○ | ◎ | — |
-| Work Navigator (Ph1) | ◎ | ◎ | ○ | ○ |
-| Admin Navigator (Ph1) | ◎ | ◎ | ◎ | ○ |
-| Transport Navigator (Ph1) | ○ | ○ | ◎ | — |
 | ~~Doc Scanner~~ | — | — | — | — |
 | ~~Community Q&A~~ | — | — | — | — |
 
@@ -82,11 +80,13 @@ API Gateway (FastAPI)
     └── Session Mapping: app:{uid}:{domain}
     ↓ subprocess
 OpenClaw Gateway
-    ├── svc-concierge → 意図分類 + routing
-    ├── svc-banking   → 銀行ドメイン
+    ├── 軽量ルーター  → 6 ドメイン分類（旧 svc-concierge）
+    ├── svc-finance   → 金融ドメイン
+    ├── svc-tax       → 税務ドメイン
     ├── svc-visa      → ビザ・在留
     ├── svc-medical   → 医療
-    └── [Phase 1+] svc-housing / svc-work / svc-admin / svc-transport
+    ├── svc-life      → 生活全般
+    └── svc-legal     → 法律
     ↓ memory_search (bge-m3)
 workspace/knowledge/*.md（Agent 専用: 経験則・判断ロジック）
 workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
@@ -95,48 +95,44 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 ```
 
 **LLM routing**:
-- svc-concierge がユーザーの意図を分類
-- 専門ドメインの場合 → 該当の svc-* agent にルーティング
-- 汎用質問 → svc-concierge が直接回答
+- 軽量ルーター（旧 svc-concierge を分類専用に変更）がユーザーの意図を 6 ドメインに分類
+- Emergency keyword → svc-medical に即座にルーティング
+- 専門ドメイン → 該当の svc-* agent にルーティング（finance / tax / visa / medical / life / legal）
 - 画像付きメッセージ → AI が画像を解読（書類翻訳・解説含む）
 
 **RAG ナレッジベース（memory_search ベース）**:
 
 | ドメイン | 主要ソース | 更新頻度 | Agent |
 |---------|-----------|---------|-------|
-| Banking | 金融庁、全銀協、主要銀行公式 | 半年 | svc-banking |
+| Finance | 金融庁、全銀協、主要銀行公式 | 半年 | svc-finance |
+| Tax | 国税庁、年金機構、各自治体 | 法改正時・年次 | svc-tax |
 | Visa | 入管庁、ISA ポータル | 法改正時 | svc-visa |
 | Medical | 厚労省、AMDA 多文化共生ガイド | 四半期 | svc-medical |
-| General | ISA 外国人生活支援ポータル（17言語） | 月次 | svc-concierge |
-| Housing (Ph1) | 不動産ポータル、国交省 | 四半期 | svc-housing |
-| Work (Ph1) | 厚労省、ハローワーク | 法改正時 | svc-work |
-| Admin (Ph1) | 各自治体多文化共生情報 | 四半期 | svc-admin |
-| Transport (Ph1) | 各交通機関公式 | 半年 | svc-transport |
+| Life | ISA 外国人生活支援ポータル（17言語）、各自治体、不動産ポータル | 月次 | svc-life |
+| Legal | 法テラス、弁護士会、厚労省（労働関連） | 法改正時 | svc-legal |
 
 **差別化ポイント**:
-- 汎用 ChatGPT との違い: 8ドメインに特化した RAG + ユーザープロフィール（在留資格、国籍、地域）に応じたパーソナライズ + 日本の行政手続きに最適化された Agent 群
+- 汎用 ChatGPT との違い: 6ドメインに特化した RAG + ユーザープロフィール（在留資格、国籍、地域）に応じたパーソナライズ + 日本の行政手続きに最適化された Agent 群 + 士業独占業務の法的制約を組み込んだ安全設計
 - 既存アプリとの違い: 「読む」のではなく「聞く」体験。会話の中で段階的に情報を提供 + 自動 Tracker 生成
 
 **免責事項**: 全ての回答に「一般的な情報提供であり、法的助言ではありません。最新情報は関係機関にご確認ください」を表示。ソースURLを必ず引用。
 
-### 3.2 Navigator（8ドメイン静的ガイド + SEO 流入口）
+### 3.2 Navigator（6ドメイン静的ガイド + SEO 流入口）
 
 **概要**: ドメイン別の静的ガイドコンテンツ。SEO 流入口として機能し、AI Chat への導線を作る。ゲストでも閲覧可能（一部制限あり）。
 
-**8ドメイン（Phase 0: 4、Phase 1: +4）**:
+**6ドメイン（Phase 0 で全て active）**:
 
-| # | ドメイン | Phase | コンテンツ例 |
+| # | ドメイン | Agent | コンテンツ例 |
 |---|---------|-------|-------------|
-| 1 | **Banking** | 0 | 口座開設ガイド、銀行比較、送金方法、ATM利用 |
-| 2 | **Visa** | 0 | 在留資格更新、資格変更、永住申請、再入国許可 |
-| 3 | **Medical** | 0 | 診療科検索、保険制度、緊急対応（119の呼び方）、受診フレーズ |
-| 4 | **Admin** | 0* | 転入届、マイナンバー、年金、国保（*Phase 0 は Navigator のみ、Agent は Phase 1） |
-| 5 | **Housing** | 1 | 物件探し、契約用語、退去トラブル、保証人 |
-| 6 | **Work** | 1 | 労働法、社保、確定申告、転職手続き |
-| 7 | **Transport** | 1 | IC カード、定期券、免許切替、自転車登録 |
-| 8 | **Food** | 1+ | ハラール・ベジタリアン対応、食材入手、外食Tips |
+| 1 | **Finance** | svc-finance | 口座開設ガイド、銀行比較、送金方法、投資・保険基礎 |
+| 2 | **Tax** | svc-tax | 確定申告、年金、社会保険、ふるさと納税 |
+| 3 | **Visa** | svc-visa | 在留資格更新、資格変更、永住申請、家族滞在 |
+| 4 | **Medical** | svc-medical | 診療科検索、保険制度、緊急対応（119の呼び方）、薬局、メンタルヘルス |
+| 5 | **Life** | svc-life | 住居探し、交通、行政手続き（転入届・マイナンバー）、買い物、文化、教育 |
+| 6 | **Legal** | svc-legal | 労働紛争、事故対応、犯罪被害、消費者保護、権利案内 |
 
-**Note**: Phase 0 では Navigator コンテンツ（静的ガイド）は 4 ドメイン + Admin の基本ガイドを提供。AI Chat Agent は 4 体（concierge, banking, visa, medical）。
+**Note**: Phase 0 で 6 ドメイン全てが active。旧 Phase 1 で追加予定だった Housing / Work / Admin / Transport は svc-life に統合。Tax / Legal は新設。
 
 ### 3.3 Auto Tracker（AI 自動生成 TODO）
 
@@ -312,11 +308,13 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 | ドメイン | 必要ファイル数 | 必要コンテンツ | 言語 | ソース |
 |---------|-------------|-------------|------|--------|
-| Banking (svc-banking) | 6 files | 5大銀行比較、口座開設手順、送金方法、ATM、ネットバンキング、FAQ | JA（AI が多言語対応） | 金融庁、全銀協、各行公式 |
+| Finance (svc-finance) | 6 files | 5大銀行比較、口座開設手順、送金方法、投資・保険基礎、ネットバンキング、FAQ | JA（AI が多言語対応） | 金融庁、全銀協、各行公式 |
+| Tax (svc-tax) | 6 files | 税制度概要、確定申告、年金制度、社会保険、ふるさと納税、FAQ | JA | 国税庁、年金機構 |
 | Visa (svc-visa) | 6 files | 在留更新、資格変更、永住、再入国、資格外活動、家族滞在 | JA | 入管庁、ISA |
 | Medical (svc-medical) | 7 files | 診療科ガイド、保険制度、緊急対応、受診フレーズ、薬局、健診、メンタルヘルス | JA | 厚労省、AMDA |
-| General (svc-concierge) | 5 files | 来日直後チェックリスト、生活基盤、FAQ、地域情報、食事Tips | JA | ISA 17言語ポータル |
-| **合計** | **~24 files** | **~120KB** | | |
+| Life (svc-life) | 8 files | 住居、交通、行政手続き、買い物、文化Tips、教育、就労基礎、FAQ | JA | ISA 17言語ポータル |
+| Legal (svc-legal) | 5 files | 労働紛争、事故対応、消費者保護、犯罪被害、FAQ | JA | 法テラス、弁護士会 |
+| **合計** | **~38 files** | **~200KB** | | |
 
 ### 8.2 データ準備基準
 - ソフトウェアが動いてもナレッジファイルが空なら MVP 未完成
@@ -332,10 +330,12 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 | 機能 | リスクレベル | 主要リスク | 必須措置 |
 |------|:---------:|-----------|---------|
 | AI Chat 全般 | 🟡 中 | 誤情報による損害 | 免責表示必須、ソース引用、「法的助言ではない」明示 |
-| Visa Navigator | 🔴 高 | 行政書士法抵触（無資格での申請代行） | 「情報提供」の範囲厳守、申請書作成・代行は行わない、行政書士マッチングに誘導 |
-| Medical Guide | 🔴 高 | 医師法抵触（無資格での診断行為） | 「診断」は行わない、「情報提供」に限定、緊急時は119誘導 |
-| Banking Navigator | 🟡 中 | 金商法（投資助言に該当する可能性） | 投資助言は行わない、口座開設の手続きガイドに限定 |
-| Admin Tracker | 🟢 低 | 個人情報の管理 | 最小限のデータ保持、暗号化 |
+| svc-tax | 🔴 高 | 税理士法52条（無償でも違法） | 個別税額計算・節税戦略 NG、「税理士に要相談」の誘導を常に含める |
+| svc-legal | 🔴 高 | 弁護士法72条 | 個別法律事件の法的判断 NG、「弁護士/行政書士に要相談」の誘導を常に含める |
+| svc-visa | 🟡 中 | 行政書士法19条（書類作成代行） | 「情報提供」の範囲厳守、書類作成・代行は行わない、行政書士マッチングに誘導 |
+| svc-finance | 🟡 中 | 金商法（投資助言に該当する可能性） | 投資助言は行わない、制度説明・商品比較に限定 |
+| svc-medical | 🟡 低〜中 | 医師法17条 | 「診断」は行わない、「情報提供」に限定、緊急時は119誘導 |
+| svc-life | 🟢 低 | — | ほぼ制約なし |
 | Navigator (静的ガイド) | 🟢 低 | 情報の正確性 | 出典明示、更新日表示 |
 
 ### 9.2 「情報提供」と「代行」の境界線
@@ -395,17 +395,18 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 | # | 機能 | MoSCoW | MVP 仕様 | Phase |
 |---|------|--------|---------|-------|
-| 1 | AI Life Concierge | **Must** | svc-concierge + ドメイン routing、テキスト + 画像対応 | 0 |
-| 2 | Banking Navigator + Agent | **Must** | 静的ガイド + svc-banking（口座開設 wizard） | 0 |
-| 3 | Visa Navigator + Agent | **Must** | 静的ガイド + svc-visa（更新・変更フロー） | 0 |
-| 4 | Medical Guide + Agent | **Must** | 静的ガイド + svc-medical（症状→診療科、緊急対応） | 0 |
-| 5 | Auto Tracker | **Must** | AI Chat から自動生成（手動追加も可） | 0 |
-| 6 | Emergency Guide | **Must** | 全ユーザー無料、オフライン対応 | 0 |
-| 7 | Admin Navigator（静的のみ） | **Should** | Navigator コンテンツのみ（Agent は Phase 1） | 0 |
-| 8 | Housing/Work/Transport/Food Navigator + Agent | **Could** | Phase 1 で追加 | 1 |
-| 9 | ~~Doc Scanner~~ | **Won't** | ~~廃止~~ AI Chat 画像送信で代替 | — |
-| 10 | ~~Community Q&A~~ | **Won't** | ~~完全廃止~~ AI が直接回答 | — |
-| 11 | B2B Dashboard | **Won't** | Phase 2 | 2 |
+| 1 | AI Life Concierge | **Must** | 軽量ルーター + 6 専門 agent、テキスト + 画像対応 | 0 |
+| 2 | Finance Navigator + Agent | **Must** | 静的ガイド + svc-finance（口座開設 wizard、送金比較） | 0 |
+| 3 | Tax Navigator + Agent | **Must** | 静的ガイド + svc-tax（確定申告、年金、社保） | 0 |
+| 4 | Visa Navigator + Agent | **Must** | 静的ガイド + svc-visa（更新・変更フロー） | 0 |
+| 5 | Medical Guide + Agent | **Must** | 静的ガイド + svc-medical（症状→診療科、緊急対応） | 0 |
+| 6 | Life Navigator + Agent | **Must** | 静的ガイド + svc-life（住居、交通、行政、文化） | 0 |
+| 7 | Legal Navigator + Agent | **Must** | 静的ガイド + svc-legal（労働紛争、権利案内） | 0 |
+| 8 | Auto Tracker | **Must** | AI Chat から自動生成（手動追加も可） | 0 |
+| 9 | Emergency Guide | **Must** | 全ユーザー無料、オフライン対応 | 0 |
+| 10 | ~~Doc Scanner~~ | **Won't** | ~~廃止~~ AI Chat 画像送信で代替 | — |
+| 11 | ~~Community Q&A~~ | **Won't** | ~~完全廃止~~ AI が直接回答 | — |
+| 12 | B2B Dashboard | **Won't** | Phase 2 | 2 |
 
 ### 11.2 MVP で検証する仮説
 
@@ -413,7 +414,7 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 |---|------|---------|---------|
 | H1 | 在日外国人は生活手続きの AI Concierge に需要がある | DL数 + DAU | 3ヶ月で10,000 DL |
 | H2 | AI Chat の回数制限で Standard 転換が起きる | Free→Standard 転換率 | 8%以上 |
-| H3 | Banking Navigator が最初の AHA モーメントになる | 機能別利用率 | 初回セッションの60%が Banking |
+| H3 | Finance Navigator が最初の AHA モーメントになる | 機能別利用率 | 初回セッションの60%が Finance |
 | H4 | ユーザーは月¥720を払う意思がある | 課金率 | DL数の8%が Standard 課金 |
 | H5 | ~~コミュニティが自律的に成長する~~ → 廃止 | — | — |
 | H6 | AI 自動 Tracker がユーザーの継続利用を促進する | Tracker 完了率、リテンション | 7日リテンション 40%以上 |
@@ -422,8 +423,8 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 | Week | 内容 |
 |------|------|
-| Week 1 | 基盤構築: svc-concierge + svc-banking 作成、API Gateway scaffold (FastAPI)、知識ファイル作成 |
-| Week 2 | 拡張: svc-visa + svc-medical 追加、Flutter Chat UI + Navigator UI + API 接続、Tracker 自動生成 |
+| Week 1 | 基盤構築: 6 Agent 作成（svc-finance, svc-tax, svc-visa, svc-medical, svc-life, svc-legal）+ 軽量ルーター、API Gateway scaffold (FastAPI)、知識ファイル作成 |
+| Week 2 | 拡張: Flutter Chat UI + Navigator UI + API 接続、Tracker 自動生成、6 ドメイン Navigator |
 | Week 3 | 品質: 知識庫拡充、Access Boundary 実装、E2E テスト、Backend deploy、App Store 準備 |
 
 ### 11.4 MVP コスト見積（硬性支出のみ）
@@ -457,10 +458,10 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 | Version | Phase | 追加内容 | 時期 |
 |---------|-------|---------|------|
-| MVP (v0.1) | Phase 0 | AI Chat (4 Agent) + Navigator (4 domain) + Auto Tracker + Emergency | Week 3 |
+| MVP (v0.1) | Phase 0 | AI Chat (6 Agent + 軽量ルーター) + Navigator (6 domain) + Auto Tracker + Emergency | Week 3 |
 | v0.5 | Phase 0.5 | 知識庫拡充、パフォーマンス改善、多言語品質向上 | MVP +1ヶ月 |
-| v1.0 | Phase 1 | +4 Agent (housing/work/admin/transport) + Navigator 8 domain 完成 | MVP +3ヶ月 |
-| v1.5 | Phase 1.5 | +5言語、B2B 企業ダッシュボード、行政書士マッチング | MVP +6ヶ月 |
+| v1.0 | Phase 1 | SSE ストリーミング、AI Chat 画像入力、知識庫深化、LP | MVP +3ヶ月 |
+| v1.5 | Phase 1.5 | +5言語、B2B 企業ダッシュボード、士業マッチング（行政書士/税理士/弁護士） | MVP +6ヶ月 |
 | v2.0 | Phase 2 | 住居検索連携、求人連携（API）、AI 音声対話 | MVP +12ヶ月 |
 
 ---
@@ -469,3 +470,4 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 - 2026-02-15: 初版作成
 - 2026-02-16: Z レビュー APPROVED
 - 2026-02-17: Phase 0 プロダクトピボット反映（AI Concierge 中心化 / 課金体系再構築 / OC Runtime）
+- 2026-02-21: 6 Agent 体系反映（svc-finance / svc-tax / svc-life / svc-legal 追加、concierge 廃止→軽量ルーター、Phase 0 = 6 agent 全部）

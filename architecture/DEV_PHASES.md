@@ -13,35 +13,43 @@
 #### Day 1-2: Service Agent 作成 + OC Runtime 確認
 
 **範囲:**
-- svc-concierge + svc-banking の Agent 作成
-  - workspace/AGENTS.md + IDENTITY.md + SOUL.md + TOOLS.md
-  - workspace/knowledge/ に Agent 専用知識ファイル配置
-  - workspace/guides/ にユーザー向け指南ファイル配置
+- 6 Agent 全体の作成: svc-finance, svc-tax, svc-visa, svc-medical, svc-life, svc-legal
+  - 各 workspace/AGENTS.md + IDENTITY.md + SOUL.md + TOOLS.md
+  - 各 workspace/knowledge/ に Agent 専用知識ファイル配置
+  - 各 workspace/guides/ にユーザー向け指南ファイル配置
   - OpenClaw config に agent 追加（tool 制限: web_search, web_fetch, read, memory_search, memory_get）
-- 動作確認: `openclaw agent --agent svc-banking --json` テスト
+  - 各 Agent の AGENTS.md に士業独占業務の法的制約ルールを明記
+- 軽量ルーター（旧 svc-concierge）の分類プロンプト作成
+- 動作確認: `openclaw agent --agent svc-finance --json` テスト
 - Session 持続性テスト: 同一 session ID で連続会話
 
 **含まれるストーリー:** —（インフラ準備）
 
 **産出物:**
-- `~/.openclaw/agents/svc-concierge/workspace/` — Agent workspace + knowledge/
-- `~/.openclaw/agents/svc-banking/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-finance/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-tax/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-visa/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-medical/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-life/workspace/` — Agent workspace + knowledge/
+- `~/.openclaw/agents/svc-legal/workspace/` — Agent workspace + knowledge/
 - OpenClaw config 更新（tool 制限設定）
+- 軽量ルーター分類プロンプト
 
 **検証方法:**
 ```bash
 # Agent 呼び出しテスト
-openclaw agent --agent svc-banking --session-id test_banking \
+openclaw agent --agent svc-finance --session-id test_finance \
   --message "日本で銀行口座を開設するには？" --json --thinking low
 
 # 期待: JSON レスポンス、3-5 秒、knowledge ベースの回答
 ```
 
 **受入基準:**
-- [ ] svc-concierge, svc-banking が `--json` で正常応答する
-- [ ] memory_search が knowledge/ ファイルから関連情報を取得する
+- [ ] 6 Agent 全て（svc-finance, svc-tax, svc-visa, svc-medical, svc-life, svc-legal）が `--json` で正常応答する
+- [ ] memory_search が各 agent の knowledge/ ファイルから関連情報を取得する
 - [ ] tool 制限が機能する（exec, write 等が使用不可）
 - [ ] Session 持続性: 同一 session ID で文脈が保持される
+- [ ] 各 Agent の AGENTS.md に法的制約ルールが記載されている
 
 #### Day 3: API Gateway scaffold
 
@@ -81,23 +89,23 @@ curl -X POST http://localhost:8000/api/v1/chat \
 - [ ] Free ティア 5回/日の制限が enforce される
 - [ ] SQLite に profiles, daily_usage テーブルが作成される
 
-#### Day 4-5: 残り Agent + 知識ファイル作成
+#### Day 4-5: 知識ファイル拡充 + ルーティング検証
 
 **範囲:**
-- svc-visa + svc-medical Agent 追加
-- 全 4 agent の knowledge/ + guides/ ディレクトリに知識・指南 .md ファイル作成
+- 全 6 agent の knowledge/ + guides/ ディレクトリに知識・指南 .md ファイル拡充
 - memory_search 動作確認（検索精度テスト）
-- LLM ルーティング（svc-concierge による分類）の実装確認
+- 軽量ルーター（LLM 分類）の実装確認（6 ドメイン分類精度テスト）
 
 **産出物:**
-- `~/.openclaw/agents/svc-visa/workspace/` — Agent workspace + knowledge/
-- `~/.openclaw/agents/svc-medical/workspace/` — Agent workspace + knowledge/
+- 全 6 agent の knowledge/ + guides/ ファイル完成
+- 軽量ルーターの分類精度レポート
 
 **受入基準:**
-- [ ] 全 4 agent が正常に応答する
+- [ ] 全 6 agent が正常に応答する
 - [ ] Emergency keyword (119, 救急 等) で svc-medical に即座にルーティングされる
-- [ ] LLM 分類で banking/visa/medical/concierge が正しく判定される
+- [ ] LLM 軽量分類で finance/tax/visa/medical/life/legal が正しく判定される
 - [ ] memory_search が各 agent の knowledge/ から適切な情報を取得する
+- [ ] 跨領域質問（例: 妊娠出産）で主 agent が回答 + 他領域への案内テンプレが動作する
 
 ---
 
@@ -121,9 +129,9 @@ curl -X POST http://localhost:8000/api/v1/chat \
 - `backend/app_service/routers/profile_router.py`
 
 **受入基準:**
-- [ ] GET /api/v1/navigator/domains → 8 ドメイン (4 active + 4 coming_soon) 返却
-- [ ] GET /api/v1/navigator/banking/guides → guides/*.md 一覧返却
-- [ ] GET /api/v1/navigator/banking/guides/account-opening → ガイド全文返却
+- [ ] GET /api/v1/navigator/domains → 6 ドメイン (全 active) 返却
+- [ ] GET /api/v1/navigator/finance/guides → guides/*.md 一覧返却
+- [ ] GET /api/v1/navigator/finance/guides/account-opening → ガイド全文返却
 - [ ] GET /api/v1/emergency → 緊急連絡先 + ガイドコンテンツ返却
 - [ ] GET /api/v1/subscription/plans → 3 プラン + 従量チャージ返却
 - [ ] GET /api/v1/usage → ティア別利用状況返却
@@ -228,12 +236,12 @@ curl -X POST http://localhost:8000/api/v1/chat \
 ## Phase 1: 拡張（Phase 0 完了後）
 
 ### 範囲
-- **追加 4 Agent**: svc-housing, svc-work, svc-admin, svc-transport（knowledge files + workspace 作成）
+- **知識庫深化**: 全 6 Agent の knowledge/ を Z の実践経験で拡充、guides/ の品質向上
 - **AI Chat 画像入力**: image フィールドの実装（書類撮影 → AI 解読）
 - **SSE ストリーミング**: Chat レスポンスのストリーミング対応
-- **Navigator 拡張**: coming_soon → active（4 ドメイン追加）
 - **LP（ランディングページ）**: Astro or Next.js で構築
 - **Tracker 強化**: AI 提案の Tracker アイテムを DB に保存、CRUD
+- **士業マッチング**: 行政書士/税理士/弁護士への誘導・マッチング機能
 - **PostgreSQL 移行**: 必要に応じて SQLite → PostgreSQL
 
 ---
@@ -260,3 +268,4 @@ graph LR
 
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
+- 2026-02-21: 6 Agent 体系反映（Phase 0 = 6 agent 全部、Phase 1 から agent 追加を削除）
