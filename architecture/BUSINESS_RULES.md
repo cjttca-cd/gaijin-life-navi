@@ -35,10 +35,10 @@
 |------|:---------:|:------------:|:--------------------:|:---------------------:|
 | Medical Emergency Guide | ✅ | ✅ | ✅ | ✅ |
 | Navigator 一覧・概要閲覧（全ドメイン） | ✅ | ✅ | ✅ | ✅ |
-| Banking 詳細ガイド（全機能） | ✅ | ✅ | ✅ | ✅ |
-| Visa/Medical/Admin 等 詳細 | 概要+CTA | ✅ | ✅ | ✅ |
-| AI Chat（テキスト + 画像） | ❌ | **5回/日** | **300回/月** | **無制限** |
-| Auto Tracker（AI 提案） | ❌ | 3件 | 無制限 | 無制限 |
+| Free 指南（各ドメイン） | ✅ | ✅ | ✅ | ✅ |
+| Premium 指南（各ドメイン） | excerpt+登録CTA | ✅ | ✅ | ✅ |
+| AI Chat（テキスト + 画像） | **5回/lifetime（概要級）** | **10回/lifetime（概要級）** | **300回/月（深度級）** | **無制限（深度級）** |
+| Auto Tracker（AI 提案） | ❌ | ✅ | ✅ | ✅ |
 | 広告 | あり | あり | なし | なし |
 
 ### 従量チャージ（都度購入）
@@ -60,10 +60,11 @@ JWT からユーザー ID 取得
 profiles.subscription_tier 取得
   ↓
 tier == 'guest' の場合:
-  └── 全 Chat → 拒否 (0 回)
+  └── AI Chat: lifetime chat_count >= 5 → 429 USAGE_LIMIT_EXCEEDED
+  └── AI 回答深度: 概要級のみ + 登録案内
 tier == 'free' の場合:
-  └── AI Chat: lifetime chat_count >= 20 → 429 USAGE_LIMIT_EXCEEDED
-  └── AI 回答深度: Layer 1 詳細 OK / Layer 2 概要のみ + 升级案内 / Layer 3 Tips のみ
+  └── AI Chat: lifetime chat_count >= 10 → 429 USAGE_LIMIT_EXCEEDED
+  └── AI 回答深度: 概要級のみ + アップグレード案内
 tier == 'standard' の場合:
   └── AI Chat: 月間合計 chat_count >= 300 → 429 USAGE_LIMIT_EXCEEDED
 tier == 'premium' の場合:
@@ -72,7 +73,8 @@ tier == 'premium' の場合:
 
 ### 日次 / 月次カウントのリセット
 
-- **Free (日次)**: `daily_usage` テーブル。`usage_date` ごとにレコード。翌日は新しいレコードが作成されるため自動リセット
+- **Guest (lifetime)**: `daily_usage` テーブルの全行合計。リセットなし（5回で終了）
+- **Free (lifetime)**: `daily_usage` テーブルの全行合計。リセットなし（10回で終了）
 - **Standard (月次)**: `daily_usage` テーブルの月初〜当日の `chat_count` を SUM で集計。月変わりで自動リセット（バッチジョブ不要）
 - **Premium (無制限)**: カウントは情報提供目的のみ
 
@@ -82,7 +84,7 @@ tier == 'premium' の場合:
 {
   "error": {
     "code": "USAGE_LIMIT_EXCEEDED",
-    "message": "Chat limit reached for your free plan. Used 5/5 chats.",
+    "message": "Chat limit reached for your plan. Used 10/10 chats.",
     "details": {
       "usage": {
         "used": 5,
