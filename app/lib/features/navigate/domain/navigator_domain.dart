@@ -86,6 +86,7 @@ class NavigatorGuideDetail {
     this.locked = false,
     this.excerpt,
     this.upgradeCta = false,
+    this.registerCta = false,
   });
 
   final String title;
@@ -107,6 +108,9 @@ class NavigatorGuideDetail {
   /// Whether to show an upgrade CTA.
   final bool upgradeCta;
 
+  /// Whether to show a registration CTA (for guests).
+  final bool registerCta;
+
   factory NavigatorGuideDetail.fromJson(Map<String, dynamic> json) {
     return NavigatorGuideDetail(
       title: json['title'] as String? ?? '',
@@ -117,6 +121,7 @@ class NavigatorGuideDetail {
       locked: json['locked'] as bool? ?? false,
       excerpt: json['excerpt'] as String?,
       upgradeCta: json['upgrade_cta'] as bool? ?? false,
+      registerCta: json['register_cta'] as bool? ?? false,
     );
   }
 }

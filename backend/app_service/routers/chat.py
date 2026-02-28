@@ -71,6 +71,7 @@ class UsageInfo(BaseModel):
     used: int
     limit: int | None = None  # None ⇒ unlimited
     tier: str
+    period: str | None = None  # "lifetime" | "month" | None(unlimited)
 
 
 class ChatResponse(BaseModel):
@@ -251,7 +252,7 @@ async def _get_user_tier(db: AsyncSession, uid: str, is_anonymous: bool = False)
 
 
 def _usage_to_info(uc: UsageCheck) -> UsageInfo:
-    return UsageInfo(used=uc.used, limit=uc.limit, tier=uc.tier)
+    return UsageInfo(used=uc.used, limit=uc.limit, tier=uc.tier, period=uc.period)
 
 
 # ── Endpoint ───────────────────────────────────────────────────────────

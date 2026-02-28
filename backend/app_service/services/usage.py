@@ -37,6 +37,7 @@ class UsageCheck:
     used: int
     limit: int | None  # None ⇒ unlimited
     tier: str
+    period: str | None = None  # "lifetime" | "month" | None(unlimited)
 
 
 # ── Tier configuration ─────────────────────────────────────────────────
@@ -131,7 +132,7 @@ async def check_and_increment(
 
     # ── Guest / unknown tier: always blocked ───────────────────────────
     if max_count is not None and max_count <= 0:
-        return UsageCheck(allowed=False, used=0, limit=0, tier=tier)
+        return UsageCheck(allowed=False, used=0, limit=0, tier=tier, period=period)
 
     # ── Unlimited tiers ────────────────────────────────────────────────
     if max_count is None:
@@ -140,20 +141,20 @@ async def check_and_increment(
         await db.flush()
         # Report monthly total for informational purposes
         monthly = await _monthly_chat_count(db, user_id)
-        return UsageCheck(allowed=True, used=monthly, limit=None, tier=tier)
+        return UsageCheck(allowed=True, used=monthly, limit=None, tier=tier, period=period)
 
     # ── Lifetime limit (free tier — 20 total, no reset) ──────────────
     if period == "lifetime":
         total = await _lifetime_chat_count(db, user_id)
         if total >= max_count:
             return UsageCheck(
-                allowed=False, used=total, limit=max_count, tier=tier,
+                allowed=False, used=total, limit=max_count, tier=tier, period=period,
             )
         record = await _get_or_create_today(db, user_id)
         record.chat_count += 1
         await db.flush()
         return UsageCheck(
-            allowed=True, used=total + 1, limit=max_count, tier=tier,
+            allowed=True, used=total + 1, limit=max_count, tier=tier, period=period,
         )
 
     # ── Daily limit (legacy, kept for future use) ──────────────────────
@@ -161,12 +162,12 @@ async def check_and_increment(
         record = await _get_or_create_today(db, user_id)
         if record.chat_count >= max_count:
             return UsageCheck(
-                allowed=False, used=record.chat_count, limit=max_count, tier=tier,
+                allowed=False, used=record.chat_count, limit=max_count, tier=tier, period=period,
             )
         record.chat_count += 1
         await db.flush()
         return UsageCheck(
-            allowed=True, used=record.chat_count, limit=max_count, tier=tier,
+            allowed=True, used=record.chat_count, limit=max_count, tier=tier, period=period,
         )
 
     # ── Monthly limit (standard tier) ──────────────────────────────────
@@ -174,15 +175,15 @@ async def check_and_increment(
         monthly = await _monthly_chat_count(db, user_id)
         if monthly >= max_count:
             return UsageCheck(
-                allowed=False, used=monthly, limit=max_count, tier=tier,
+                allowed=False, used=monthly, limit=max_count, tier=tier, period=period,
             )
         record = await _get_or_create_today(db, user_id)
         record.chat_count += 1
         await db.flush()
         return UsageCheck(
-            allowed=True, used=monthly + 1, limit=max_count, tier=tier,
+            allowed=True, used=monthly + 1, limit=max_count, tier=tier, period=period,
         )
 
     # ── Fallback: deny ─────────────────────────────────────────────────
     logger.warning("Unhandled tier/period combination: tier=%s, period=%s", tier, period)
-    return UsageCheck(allowed=False, used=0, limit=0, tier=tier)
+    return UsageCheck(allowed=False, used=0, limit=0, tier=tier, period=period)

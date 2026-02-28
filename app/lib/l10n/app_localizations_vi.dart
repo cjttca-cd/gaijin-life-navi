@@ -388,8 +388,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get chatLimitUpgrade => 'Nâng cấp';
 
   @override
-  String get chatLimitExhausted =>
-      'Bạn đã dùng hết lượt chat miễn phí hôm nay. Nâng cấp để tiếp tục!';
+  String get chatLimitExhausted => 'Bạn đã dùng hết lượt chat miễn phí.';
 
   @override
   String get chatErrorSend => 'Không thể gửi tin nhắn. Vui lòng thử lại.';
@@ -960,7 +959,8 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '5 lượt chat AI mỗi ngày';
+  String get subscriptionFeatureFreeChat =>
+      '10 lượt AI chat miễn phí (trọn đời)';
 
   @override
   String get subscriptionFeatureFreeScans => '3 lượt quét tài liệu mỗi tháng';
@@ -1324,7 +1324,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get subRecommended => 'ĐỀ XUẤT';
 
   @override
-  String get subFeatureChatFree => '20 lượt AI Guide khi đăng ký';
+  String get subFeatureChatFree => '10 lượt AI Guide trọn đời';
 
   @override
   String get subFeatureChatStandard => '300 lượt AI Guide/tháng';
@@ -1580,7 +1580,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get chatGuestFeature4 => 'Và bất cứ điều gì khác';
 
   @override
-  String get chatGuestFreeOffer => 'Đăng ký miễn phí — 5 lần chat/ngày';
+  String get chatGuestFreeOffer =>
+      'Thử 5 lượt chat miễn phí — không cần đăng ký';
 
   @override
   String get chatGuestSignUp => 'Bắt đầu miễn phí';
@@ -1743,12 +1744,33 @@ class AppLocalizationsVi extends AppLocalizations {
   String get notificationDisabled => 'Đã tắt';
 
   @override
-  String get guideLocked => 'Hướng dẫn này là nội dung trả phí';
+  String get guideLocked => 'Đăng ký để đọc toàn bộ hướng dẫn';
 
   @override
   String get guideUpgradePrompt =>
-      'Nâng cấp lên gói Standard để đọc toàn bộ hướng dẫn';
+      'Tạo tài khoản miễn phí để mở khóa tất cả 45 hướng dẫn';
 
   @override
-  String get guideUpgradeButton => 'Nâng cấp gói';
+  String get guideUpgradeButton => 'Tạo tài khoản miễn phí';
+
+  @override
+  String chatGuestUsageHint(int remaining) {
+    return 'Bạn còn $remaining lượt chat miễn phí để khám phá';
+  }
+
+  @override
+  String get chatGuestExhausted =>
+      'Đăng ký để tiếp tục chat — thêm 10 lượt miễn phí';
+
+  @override
+  String get chatFreeExhausted =>
+      'Nâng cấp lên Standard để có 300 lượt chat/tháng';
+
+  @override
+  String usageLifetimeRemaining(int remaining, int limit) {
+    return 'Còn $remaining/$limit lượt chat';
+  }
+
+  @override
+  String get chatGuestWelcome => 'Hỏi bất cứ điều gì về cuộc sống tại Nhật';
 }

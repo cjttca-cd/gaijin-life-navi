@@ -112,7 +112,7 @@
   "chatDisclaimer": "Đây chỉ là thông tin chung, không phải tư vấn pháp lý. Vui lòng xác nhận với cơ quan liên quan.",
   "chatLimitRemaining": "Còn {remaining}/{limit} lượt chat miễn phí hôm nay.",
   "chatLimitUpgrade": "Nâng cấp",
-  "chatLimitExhausted": "Bạn đã dùng hết lượt chat miễn phí hôm nay. Nâng cấp để tiếp tục!",
+  "chatLimitExhausted": "Bạn đã dùng hết lượt chat miễn phí.",
   "chatErrorSend": "Không thể gửi tin nhắn. Vui lòng thử lại.",
   "chatErrorRetry": "Thử lại",
   "chatDateToday": "Hôm nay",
@@ -294,7 +294,7 @@
   "subscriptionRecommended": "ĐỀ XUẤT",
   "subscriptionCancelling": "Đang hủy...",
   "subscriptionCancellingAt": "Gói của bạn sẽ kết thúc vào {date}",
-  "subscriptionFeatureFreeChat": "5 lượt chat AI mỗi ngày",
+  "subscriptionFeatureFreeChat": "10 lượt AI chat miễn phí (trọn đời)",
   "subscriptionFeatureFreeScans": "3 lượt quét tài liệu mỗi tháng",
   "subscriptionFeatureFreeTracker": "Theo dõi tối đa 3 thủ tục",
   "subscriptionFeatureFreeCommunityRead": "Đọc bài viết cộng đồng",
@@ -414,7 +414,7 @@
   "subPricePremium": "¥1,360",
   "subPriceInterval": "/tháng",
   "subRecommended": "ĐỀ XUẤT",
-  "subFeatureChatFree": "20 lượt AI Guide khi đăng ký",
+  "subFeatureChatFree": "10 lượt AI Guide trọn đời",
   "subFeatureChatStandard": "300 lượt AI Guide/tháng",
   "subFeatureChatPremium": "AI Guide không giới hạn",
   "subFeatureTrackerFree": "Tối đa 3 mục theo dõi",
@@ -495,7 +495,7 @@
   "chatGuestFeature2": "Thủ tục gia hạn visa",
   "chatGuestFeature3": "Cách đi khám bệnh",
   "chatGuestFeature4": "Và bất cứ điều gì khác",
-  "chatGuestFreeOffer": "Đăng ký miễn phí — 5 lần chat/ngày",
+  "chatGuestFreeOffer": "Thử 5 lượt chat miễn phí — không cần đăng ký",
   "chatGuestSignUp": "Bắt đầu miễn phí",
   "chatGuestLogin": "Đã có tài khoản? Đăng nhập",
   "guestRegisterCta": "Đăng ký miễn phí để dùng AI Chat",
@@ -558,7 +558,29 @@
   "notificationReminderTime": "Thời gian nhắc nhở",
   "notificationEnabled": "Đã bật",
   "notificationDisabled": "Đã tắt",
-  "guideLocked": "Hướng dẫn này là nội dung trả phí",
-  "guideUpgradePrompt": "Nâng cấp lên gói Standard để đọc toàn bộ hướng dẫn",
-  "guideUpgradeButton": "Nâng cấp gói"
+  "guideLocked": "Đăng ký để đọc toàn bộ hướng dẫn",
+  "guideUpgradePrompt": "Tạo tài khoản miễn phí để mở khóa tất cả 45 hướng dẫn",
+  "guideUpgradeButton": "Tạo tài khoản miễn phí",
+  "chatGuestUsageHint": "Bạn còn {remaining} lượt chat miễn phí để khám phá",
+  "@chatGuestUsageHint": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestExhausted": "Đăng ký để tiếp tục chat — thêm 10 lượt miễn phí",
+  "chatFreeExhausted": "Nâng cấp lên Standard để có 300 lượt chat/tháng",
+  "usageLifetimeRemaining": "Còn {remaining}/{limit} lượt chat",
+  "@usageLifetimeRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestWelcome": "Hỏi bất cứ điều gì về cuộc sống tại Nhật"
 }

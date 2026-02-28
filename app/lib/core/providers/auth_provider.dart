@@ -16,3 +16,19 @@ final authStateProvider = StreamProvider<User?>((ref) {
 final isAuthenticatedProvider = Provider<bool>((ref) {
   return ref.watch(authStateProvider).valueOrNull != null;
 });
+
+/// Whether the current user is an anonymous (guest) user.
+final isAnonymousProvider = Provider<bool>((ref) {
+  final user = ref.watch(authStateProvider).valueOrNull;
+  return user?.isAnonymous ?? false;
+});
+
+/// Sign in anonymously (for guest chat access).
+Future<User?> signInAnonymously(FirebaseAuth auth) async {
+  try {
+    final credential = await auth.signInAnonymously();
+    return credential.user;
+  } catch (e) {
+    return null;
+  }
+}

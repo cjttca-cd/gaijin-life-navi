@@ -109,20 +109,26 @@ class ChatUsageInfo {
     required this.used,
     required this.limit,
     required this.tier,
+    this.period,
   });
 
   final int used;
   final int limit;
   final String tier;
 
+  /// "lifetime" | "month" | null (unlimited).
+  final String? period;
+
   int get remaining => limit > 0 ? (limit - used).clamp(0, limit) : -1;
   bool get isUnlimited => limit <= 0;
+  bool get isLifetime => period == 'lifetime';
 
   factory ChatUsageInfo.fromJson(Map<String, dynamic> json) {
     return ChatUsageInfo(
       used: json['used'] as int? ?? 0,
       limit: json['limit'] as int? ?? 0,
       tier: json['tier'] as String? ?? 'free',
+      period: json['period'] as String?,
     );
   }
 }

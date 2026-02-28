@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../../core/providers/auth_provider.dart';
+import '../../../../core/providers/router_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../providers/chat_providers.dart';
 
-/// Usage limit banner — handoff-chat.md §3 Usage Limit Banner.
+/// Usage limit banner — shows remaining chats for non-unlimited tiers.
 ///
-/// colorWarningContainer bg, shown for Free/Standard tiers.
+/// Plan C behavior:
+///   - lifetime: "{remaining} of {limit} chats remaining"
+///   - month: "本月剩余 X/Y 次"
+///   - exhausted + guest → registration CTA
+///   - exhausted + free → upgrade CTA
 class UsageCounter extends ConsumerWidget {
   const UsageCounter({super.key});
 
@@ -19,38 +26,93 @@ class UsageCounter extends ConsumerWidget {
     final tt = Theme.of(context).textTheme;
     final remaining = usage.remaining;
     final limit = usage.limit;
+    final l10n = AppLocalizations.of(context);
 
     // Don't show for unlimited (premium) users.
     if (usage.isUnlimited) return const SizedBox.shrink();
 
     final isExhausted = remaining <= 0;
-    final l10n = AppLocalizations.of(context);
+    final isAnonymous = ref.watch(isAnonymousProvider);
+    final isGuest = usage.tier == 'guest' || isAnonymous;
+
+    // Exhausted state — show CTA
+    if (isExhausted) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.errorContainer,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.lock_outlined,
+                  size: 16,
+                  color: AppColors.onErrorContainer,
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    l10n.chatLimitExhausted,
+                    style: tt.bodySmall?.copyWith(
+                      color: AppColors.onErrorContainer,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            SizedBox(
+              height: 32,
+              child: TextButton(
+                onPressed: () {
+                  if (isGuest) {
+                    context.push(AppRoutes.register);
+                  } else {
+                    context.push(AppRoutes.subscription);
+                  }
+                },
+                child: Text(
+                  isGuest ? l10n.chatGuestExhausted : l10n.chatFreeExhausted,
+                  style: tt.labelSmall?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Normal state — show remaining count
+    final displayText =
+        usage.isLifetime
+            ? l10n.usageLifetimeRemaining(remaining, limit)
+            : l10n.chatLimitRemaining(remaining, limit);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color:
-            isExhausted ? AppColors.errorContainer : AppColors.warningContainer,
+        color: AppColors.warningContainer,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            isExhausted ? Icons.lock_outlined : Icons.info_outline,
-            size: 16,
-            color: isExhausted ? AppColors.onErrorContainer : AppColors.warning,
-          ),
+          const Icon(Icons.info_outline, size: 16, color: AppColors.warning),
           const SizedBox(width: 4),
-          Text(
-            isExhausted
-                ? l10n.chatLimitExhausted
-                : l10n.chatLimitRemaining(remaining, limit),
-            style: tt.bodySmall?.copyWith(
-              color:
-                  isExhausted
-                      ? AppColors.onErrorContainer
-                      : AppColors.onWarningContainer,
+          Flexible(
+            child: Text(
+              displayText,
+              style: tt.bodySmall?.copyWith(
+                color: AppColors.onWarningContainer,
+              ),
             ),
           ),
         ],

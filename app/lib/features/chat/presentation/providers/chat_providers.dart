@@ -71,9 +71,12 @@ class ConversationsNotifier extends Notifier<Map<String, Conversation>> {
 /// Conversations sorted by last activity (newest first).
 final sortedConversationsProvider = Provider<List<Conversation>>((ref) {
   final convs = ref.watch(conversationsProvider);
-  final sorted = convs.values.toList()
-    ..sort((a, b) =>
-        (b.lastMessageAt ?? b.createdAt).compareTo(a.lastMessageAt ?? a.createdAt));
+  final sorted =
+      convs.values.toList()..sort(
+        (a, b) => (b.lastMessageAt ?? b.createdAt).compareTo(
+          a.lastMessageAt ?? a.createdAt,
+        ),
+      );
   return sorted;
 });
 
@@ -134,10 +137,12 @@ final fetchUsageProvider = FutureProvider<void>((ref) async {
       final used = data['used'] as int? ?? 0;
       final limit = data['limit'] as int? ?? 0;
       final tier = data['tier'] as String? ?? 'free';
+      final period = data['period'] as String?;
       ref.read(chatUsageProvider.notifier).state = ChatUsageInfo(
         used: used,
         limit: limit,
         tier: tier,
+        period: period,
       );
     }
   } catch (_) {
@@ -229,9 +234,12 @@ class ChatSendController {
       lastMessage: content,
       messageCount: msgCount,
       // Set title from first user message.
-      title: msgCount <= 1
-          ? (content.length > 30 ? '${content.substring(0, 30)}...' : content)
-          : null,
+      title:
+          msgCount <= 1
+              ? (content.length > 30
+                  ? '${content.substring(0, 30)}...'
+                  : content)
+              : null,
     );
 
     // Start loading.
@@ -263,9 +271,10 @@ class ChatSendController {
       final newCount = (_ref.read(allMessagesProvider)[activeId] ?? []).length;
       convs.updateConversation(
         activeId,
-        lastMessage: response.reply.length > 60
-            ? '${response.reply.substring(0, 60)}...'
-            : response.reply,
+        lastMessage:
+            response.reply.length > 60
+                ? '${response.reply.substring(0, 60)}...'
+                : response.reply,
         messageCount: newCount,
       );
 

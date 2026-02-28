@@ -12,31 +12,53 @@ class UsageData {
   final int? chatLimit;
   final int? chatRemaining;
 
-  /// "day" for free, "month" for paid tiers.
+  /// "lifetime" for guest/free, "month" for standard, null for unlimited.
   final String period;
   final String tier;
 
   bool get isUnlimited => chatLimit == null;
 
-  /// Parse from backend JSON (SSOT field names):
-  ///   queries_used_today, daily_limit, monthly_limit, tier
+  /// Parse from backend JSON.
+  /// Supports new Plan C format: used, limit, period, tier
+  /// Also backward-compatible with legacy: queries_used_today, daily_limit, monthly_limit
   factory UsageData.fromJson(Map<String, dynamic> json) {
+    // New Plan C format (preferred)
+    if (json.containsKey('used') && json.containsKey('period')) {
+      final used = json['used'] as int? ?? 0;
+      final limit = json['limit'] as int?;
+      final period = json['period'] as String? ?? 'lifetime';
+      final tier = json['tier'] as String? ?? 'free';
+
+      final int? remaining;
+      if (limit != null) {
+        remaining = (limit - used).clamp(0, limit);
+      } else {
+        remaining = null;
+      }
+
+      return UsageData(
+        chatCount: used,
+        chatLimit: limit,
+        chatRemaining: remaining,
+        period: period,
+        tier: tier,
+      );
+    }
+
+    // Legacy format (backward compat)
     final queriesUsed = json['queries_used_today'] as int? ?? 0;
     final dailyLimit = json['daily_limit'] as int?;
     final monthlyLimit = json['monthly_limit'] as int?;
 
-    // Use daily_limit if set, otherwise monthly_limit.
     final effectiveLimit = dailyLimit ?? monthlyLimit;
 
-    // Compute remaining from limit − used.
     final int? remaining;
     if (effectiveLimit != null) {
       remaining = (effectiveLimit - queriesUsed).clamp(0, effectiveLimit);
     } else {
-      remaining = null; // unlimited
+      remaining = null;
     }
 
-    // Derive period: daily if daily_limit is set, else monthly.
     final period = dailyLimit != null ? 'day' : 'month';
 
     return UsageData(

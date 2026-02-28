@@ -389,8 +389,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatLimitUpgrade => 'Upgrade';
 
   @override
-  String get chatLimitExhausted =>
-      'You\'ve used all your free chats for today. Upgrade to keep chatting!';
+  String get chatLimitExhausted => 'You\'ve used all your free chats.';
 
   @override
   String get chatErrorSend => 'Unable to send your message. Please try again.';
@@ -964,7 +963,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '20 free AI chats on signup';
+  String get subscriptionFeatureFreeChat => '10 free AI chats (lifetime)';
 
   @override
   String get subscriptionFeatureFreeScans => '3 document scans per month';
@@ -1329,7 +1328,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subRecommended => 'RECOMMENDED';
 
   @override
-  String get subFeatureChatFree => '20 AI Guide chats on signup';
+  String get subFeatureChatFree => '10 lifetime AI Guide chats';
 
   @override
   String get subFeatureChatStandard => '300 AI Guide chats/month';
@@ -1584,7 +1583,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatGuestFeature4 => 'And anything else';
 
   @override
-  String get chatGuestFreeOffer => 'Free signup — 20 chats included';
+  String get chatGuestFreeOffer => 'Try 5 free chats — no signup needed';
 
   @override
   String get chatGuestSignUp => 'Get started free';
@@ -1748,12 +1747,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationDisabled => 'Disabled';
 
   @override
-  String get guideLocked => 'This guide is premium content';
+  String get guideLocked => 'Sign up to read the full guide';
 
   @override
   String get guideUpgradePrompt =>
-      'Upgrade to Standard plan to read the full guide';
+      'Create a free account to unlock all 45 guides';
 
   @override
-  String get guideUpgradeButton => 'Upgrade Plan';
+  String get guideUpgradeButton => 'Create Free Account';
+
+  @override
+  String chatGuestUsageHint(int remaining) {
+    return 'You have $remaining free chats to explore';
+  }
+
+  @override
+  String get chatGuestExhausted =>
+      'Sign up to keep chatting — 10 more chats free';
+
+  @override
+  String get chatFreeExhausted => 'Upgrade to Standard for 300 chats/month';
+
+  @override
+  String usageLifetimeRemaining(int remaining, int limit) {
+    return '$remaining of $limit chats remaining';
+  }
+
+  @override
+  String get chatGuestWelcome => 'Ask anything about life in Japan';
 }

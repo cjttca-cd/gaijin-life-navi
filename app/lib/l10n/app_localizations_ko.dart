@@ -377,7 +377,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chatLimitUpgrade => '업그레이드';
 
   @override
-  String get chatLimitExhausted => '오늘의 무료 채팅을 모두 사용했습니다. 업그레이드하여 계속하세요!';
+  String get chatLimitExhausted => '무료 채팅을 모두 사용했습니다.';
 
   @override
   String get chatErrorSend => '메시지를 보낼 수 없습니다. 다시 시도해주세요.';
@@ -939,7 +939,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '하루 5회 AI 채팅';
+  String get subscriptionFeatureFreeChat => '10회 무료 AI 채팅 (평생)';
 
   @override
   String get subscriptionFeatureFreeScans => '월 3회 문서 스캔';
@@ -1296,7 +1296,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get subRecommended => '추천';
 
   @override
-  String get subFeatureChatFree => '가입 시 AI 가이드 대화 20회';
+  String get subFeatureChatFree => '10회 평생 AI 가이드 채팅';
 
   @override
   String get subFeatureChatStandard => '월 300회 AI 가이드 대화';
@@ -1546,7 +1546,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chatGuestFeature4 => '그 외 무엇이든';
 
   @override
-  String get chatGuestFreeOffer => '무료 가입 — 하루 5회 채팅';
+  String get chatGuestFreeOffer => '가입 없이 5회 무료 채팅 체험';
 
   @override
   String get chatGuestSignUp => '무료로 시작하기';
@@ -1708,11 +1708,30 @@ class AppLocalizationsKo extends AppLocalizations {
   String get notificationDisabled => '비활성화됨';
 
   @override
-  String get guideLocked => '이 가이드는 유료 콘텐츠입니다';
+  String get guideLocked => '가입하고 전체 가이드를 읽으세요';
 
   @override
-  String get guideUpgradePrompt => 'Standard 플랜으로 업그레이드하면 전체 가이드를 볼 수 있습니다';
+  String get guideUpgradePrompt => '무료 계정을 만들어 45개 가이드 모두 이용하세요';
 
   @override
-  String get guideUpgradeButton => '플랜 업그레이드';
+  String get guideUpgradeButton => '무료 계정 만들기';
+
+  @override
+  String chatGuestUsageHint(int remaining) {
+    return '무료 채팅 $remaining회 남음';
+  }
+
+  @override
+  String get chatGuestExhausted => '가입하고 채팅 계속 — 10회 추가 무료';
+
+  @override
+  String get chatFreeExhausted => 'Standard로 업그레이드하면 월 300회 채팅';
+
+  @override
+  String usageLifetimeRemaining(int remaining, int limit) {
+    return '$limit회 중 $remaining회 남음';
+  }
+
+  @override
+  String get chatGuestWelcome => '일본 생활에 대해 무엇이든 물어보세요';
 }

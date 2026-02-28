@@ -376,7 +376,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatLimitUpgrade => '升级';
 
   @override
-  String get chatLimitExhausted => '你今天的免费对话已用完。升级以继续对话！';
+  String get chatLimitExhausted => '免费对话次数已用完。';
 
   @override
   String get chatErrorSend => '无法发送消息，请重试。';
@@ -936,7 +936,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get subscriptionFeatureFreeChat => '注册赠送20次AI对话';
+  String get subscriptionFeatureFreeChat => '10 次免费 AI 对话（终身）';
 
   @override
   String get subscriptionFeatureFreeScans => '每月3次文件扫描';
@@ -1289,7 +1289,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subRecommended => '推荐';
 
   @override
-  String get subFeatureChatFree => '注册赠送 20 次 AI 向导对话';
+  String get subFeatureChatFree => '10 次终身 AI 向导对话';
 
   @override
   String get subFeatureChatStandard => '每月 300 次 AI 向导对话';
@@ -1537,7 +1537,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatGuestFeature4 => '其他任何问题';
 
   @override
-  String get chatGuestFreeOffer => '免费注册，赠送 20 次对话';
+  String get chatGuestFreeOffer => '免注册，免费体验 5 次对话';
 
   @override
   String get chatGuestSignUp => '免费开始';
@@ -1698,11 +1698,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notificationDisabled => '已关闭';
 
   @override
-  String get guideLocked => '此指南为付费内容';
+  String get guideLocked => '注册即可阅读完整指南';
 
   @override
-  String get guideUpgradePrompt => '升级到 Standard 套餐即可查看完整指南';
+  String get guideUpgradePrompt => '免费注册，解锁全部 45 篇指南';
 
   @override
-  String get guideUpgradeButton => '升级套餐';
+  String get guideUpgradeButton => '免费创建账号';
+
+  @override
+  String chatGuestUsageHint(int remaining) {
+    return '还有 $remaining 次免费对话可探索';
+  }
+
+  @override
+  String get chatGuestExhausted => '注册继续聊天 — 再获得 10 次免费对话';
+
+  @override
+  String get chatFreeExhausted => '升级到 Standard，每月 300 次对话';
+
+  @override
+  String usageLifetimeRemaining(int remaining, int limit) {
+    return '剩余 $remaining/$limit 次对话';
+  }
+
+  @override
+  String get chatGuestWelcome => '关于日本生活的任何问题都可以问';
 }

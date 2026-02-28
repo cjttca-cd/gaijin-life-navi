@@ -182,7 +182,7 @@
     }
   },
   "chatLimitUpgrade": "Upgrade",
-  "chatLimitExhausted": "You've used all your free chats for today. Upgrade to keep chatting!",
+  "chatLimitExhausted": "You've used all your free chats.",
   "chatErrorSend": "Unable to send your message. Please try again.",
   "chatErrorRetry": "Retry",
   "chatDateToday": "Today",
@@ -413,7 +413,7 @@
       }
     }
   },
-  "subscriptionFeatureFreeChat": "20 free AI chats on signup",
+  "subscriptionFeatureFreeChat": "10 free AI chats (lifetime)",
   "subscriptionFeatureFreeScans": "3 document scans per month",
   "subscriptionFeatureFreeTracker": "Track up to 3 procedures",
   "subscriptionFeatureFreeCommunityRead": "Read community posts",
@@ -556,7 +556,7 @@
   "subPricePremium": "¥1,360",
   "subPriceInterval": "/month",
   "subRecommended": "RECOMMENDED",
-  "subFeatureChatFree": "20 AI Guide chats on signup",
+  "subFeatureChatFree": "10 lifetime AI Guide chats",
   "subFeatureChatStandard": "300 AI Guide chats/month",
   "subFeatureChatPremium": "Unlimited AI Guide chats",
   "subFeatureTrackerFree": "Up to 3 tracker items",
@@ -651,7 +651,7 @@
   "chatGuestFeature2": "Visa renewal procedures",
   "chatGuestFeature3": "How to visit a hospital",
   "chatGuestFeature4": "And anything else",
-  "chatGuestFreeOffer": "Free signup — 20 chats included",
+  "chatGuestFreeOffer": "Try 5 free chats — no signup needed",
   "chatGuestSignUp": "Get started free",
   "chatGuestLogin": "Already have an account? Log in",
   "guestRegisterCta": "Sign up free to use AI Chat",
@@ -714,7 +714,29 @@
   "notificationReminderTime": "Reminder Time",
   "notificationEnabled": "Enabled",
   "notificationDisabled": "Disabled",
-  "guideLocked": "This guide is premium content",
-  "guideUpgradePrompt": "Upgrade to Standard plan to read the full guide",
-  "guideUpgradeButton": "Upgrade Plan"
+  "guideLocked": "Sign up to read the full guide",
+  "guideUpgradePrompt": "Create a free account to unlock all 45 guides",
+  "guideUpgradeButton": "Create Free Account",
+  "chatGuestUsageHint": "You have {remaining} free chats to explore",
+  "@chatGuestUsageHint": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestExhausted": "Sign up to keep chatting — 10 more chats free",
+  "chatFreeExhausted": "Upgrade to Standard for 300 chats/month",
+  "usageLifetimeRemaining": "{remaining} of {limit} chats remaining",
+  "@usageLifetimeRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestWelcome": "Ask anything about life in Japan"
 }

@@ -112,7 +112,7 @@
   "chatDisclaimer": "Esta é apenas informação geral. Não constitui aconselhamento jurídico. Verifique com as autoridades competentes.",
   "chatLimitRemaining": "{remaining}/{limit} chats grátis restantes hoje.",
   "chatLimitUpgrade": "Upgrade",
-  "chatLimitExhausted": "Você usou todos os chats grátis de hoje. Faça upgrade para continuar!",
+  "chatLimitExhausted": "Você usou todos os seus chats grátis.",
   "chatErrorSend": "Não foi possível enviar sua mensagem. Tente novamente.",
   "chatErrorRetry": "Tentar novamente",
   "chatDateToday": "Hoje",
@@ -294,7 +294,7 @@
   "subscriptionRecommended": "RECOMENDADO",
   "subscriptionCancelling": "Cancelando...",
   "subscriptionCancellingAt": "Seu plano terminará em {date}",
-  "subscriptionFeatureFreeChat": "5 chats IA por dia",
+  "subscriptionFeatureFreeChat": "10 chats AI grátis (vitalício)",
   "subscriptionFeatureFreeScans": "3 digitalizações por mês",
   "subscriptionFeatureFreeTracker": "Rastrear até 3 procedimentos",
   "subscriptionFeatureFreeCommunityRead": "Ler publicações da comunidade",
@@ -414,7 +414,7 @@
   "subPricePremium": "¥1,360",
   "subPriceInterval": "/mês",
   "subRecommended": "RECOMENDADO",
-  "subFeatureChatFree": "20 conversas AI Guide ao registrar",
+  "subFeatureChatFree": "10 chats AI Guide vitalícios",
   "subFeatureChatStandard": "300 conversas AI Guide/mês",
   "subFeatureChatPremium": "Conversas AI Guide ilimitadas",
   "subFeatureTrackerFree": "Até 3 itens no rastreador",
@@ -495,7 +495,7 @@
   "chatGuestFeature2": "Procedimentos de renovação de visto",
   "chatGuestFeature3": "Como ir ao hospital",
   "chatGuestFeature4": "E qualquer outra coisa",
-  "chatGuestFreeOffer": "Cadastro gratuito — 5 chats por dia",
+  "chatGuestFreeOffer": "Experimente 5 chats grátis — sem cadastro",
   "chatGuestSignUp": "Comece grátis",
   "chatGuestLogin": "Já tem conta? Entrar",
   "guestRegisterCta": "Cadastre-se grátis para usar o AI Chat",
@@ -558,7 +558,29 @@
   "notificationReminderTime": "Horário do Lembrete",
   "notificationEnabled": "Ativado",
   "notificationDisabled": "Desativado",
-  "guideLocked": "Este guia é conteúdo premium",
-  "guideUpgradePrompt": "Atualize para o plano Standard para ler o guia completo",
-  "guideUpgradeButton": "Atualizar Plano"
+  "guideLocked": "Cadastre-se para ler o guia completo",
+  "guideUpgradePrompt": "Crie uma conta gratuita para acessar todos os 45 guias",
+  "guideUpgradeButton": "Criar conta gratuita",
+  "chatGuestUsageHint": "Você tem {remaining} chats grátis para explorar",
+  "@chatGuestUsageHint": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestExhausted": "Cadastre-se para continuar — mais 10 chats grátis",
+  "chatFreeExhausted": "Atualize para Standard por 300 chats/mês",
+  "usageLifetimeRemaining": "{remaining} de {limit} chats restantes",
+  "@usageLifetimeRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestWelcome": "Pergunte qualquer coisa sobre a vida no Japão"
 }

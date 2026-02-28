@@ -112,7 +112,7 @@
   "chatDisclaimer": "以上为一般性信息，不构成法律建议。请向相关机构确认。",
   "chatLimitRemaining": "剩余 {remaining}/{limit} 次免费对话。",
   "chatLimitUpgrade": "升级",
-  "chatLimitExhausted": "你今天的免费对话已用完。升级以继续对话！",
+  "chatLimitExhausted": "免费对话次数已用完。",
   "chatErrorSend": "无法发送消息，请重试。",
   "chatErrorRetry": "重试",
   "chatDateToday": "今天",
@@ -294,7 +294,7 @@
   "subscriptionRecommended": "推荐",
   "subscriptionCancelling": "取消中...",
   "subscriptionCancellingAt": "你的计划将于 {date} 结束",
-  "subscriptionFeatureFreeChat": "注册赠送20次AI对话",
+  "subscriptionFeatureFreeChat": "10 次免费 AI 对话（终身）",
   "subscriptionFeatureFreeScans": "每月3次文件扫描",
   "subscriptionFeatureFreeTracker": "跟踪最多3个手续",
   "subscriptionFeatureFreeCommunityRead": "阅读社区帖子",
@@ -414,7 +414,7 @@
   "subPricePremium": "¥1,360",
   "subPriceInterval": "/月",
   "subRecommended": "推荐",
-  "subFeatureChatFree": "注册赠送 20 次 AI 向导对话",
+  "subFeatureChatFree": "10 次终身 AI 向导对话",
   "subFeatureChatStandard": "每月 300 次 AI 向导对话",
   "subFeatureChatPremium": "无限 AI 向导对话",
   "subFeatureTrackerFree": "最多 3 个待办事项",
@@ -495,7 +495,7 @@
   "chatGuestFeature2": "签证续签手续",
   "chatGuestFeature3": "如何去医院看病",
   "chatGuestFeature4": "其他任何问题",
-  "chatGuestFreeOffer": "免费注册，赠送 20 次对话",
+  "chatGuestFreeOffer": "免注册，免费体验 5 次对话",
   "chatGuestSignUp": "免费开始",
   "chatGuestLogin": "已有账号？登录",
   "guestRegisterCta": "免费注册即可使用 AI 对话",
@@ -558,7 +558,29 @@
   "notificationReminderTime": "提醒时间",
   "notificationEnabled": "已开启",
   "notificationDisabled": "已关闭",
-  "guideLocked": "此指南为付费内容",
-  "guideUpgradePrompt": "升级到 Standard 套餐即可查看完整指南",
-  "guideUpgradeButton": "升级套餐"
+  "guideLocked": "注册即可阅读完整指南",
+  "guideUpgradePrompt": "免费注册，解锁全部 45 篇指南",
+  "guideUpgradeButton": "免费创建账号",
+  "chatGuestUsageHint": "还有 {remaining} 次免费对话可探索",
+  "@chatGuestUsageHint": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestExhausted": "注册继续聊天 — 再获得 10 次免费对话",
+  "chatFreeExhausted": "升级到 Standard，每月 300 次对话",
+  "usageLifetimeRemaining": "剩余 {remaining}/{limit} 次对话",
+  "@usageLifetimeRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatGuestWelcome": "关于日本生活的任何问题都可以问"
 }

@@ -809,7 +809,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatLimitExhausted.
   ///
   /// In en, this message translates to:
-  /// **'You\'ve used all your free chats for today. Upgrade to keep chatting!'**
+  /// **'You\'ve used all your free chats.'**
   String get chatLimitExhausted;
 
   /// No description provided for @chatErrorSend.
@@ -1901,7 +1901,7 @@ abstract class AppLocalizations {
   /// No description provided for @subscriptionFeatureFreeChat.
   ///
   /// In en, this message translates to:
-  /// **'20 free AI chats on signup'**
+  /// **'10 free AI chats (lifetime)'**
   String get subscriptionFeatureFreeChat;
 
   /// No description provided for @subscriptionFeatureFreeScans.
@@ -2591,7 +2591,7 @@ abstract class AppLocalizations {
   /// No description provided for @subFeatureChatFree.
   ///
   /// In en, this message translates to:
-  /// **'20 AI Guide chats on signup'**
+  /// **'10 lifetime AI Guide chats'**
   String get subFeatureChatFree;
 
   /// No description provided for @subFeatureChatStandard.
@@ -3077,7 +3077,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatGuestFreeOffer.
   ///
   /// In en, this message translates to:
-  /// **'Free signup — 20 chats included'**
+  /// **'Try 5 free chats — no signup needed'**
   String get chatGuestFreeOffer;
 
   /// No description provided for @chatGuestSignUp.
@@ -3395,20 +3395,50 @@ abstract class AppLocalizations {
   /// No description provided for @guideLocked.
   ///
   /// In en, this message translates to:
-  /// **'This guide is premium content'**
+  /// **'Sign up to read the full guide'**
   String get guideLocked;
 
   /// No description provided for @guideUpgradePrompt.
   ///
   /// In en, this message translates to:
-  /// **'Upgrade to Standard plan to read the full guide'**
+  /// **'Create a free account to unlock all 45 guides'**
   String get guideUpgradePrompt;
 
   /// No description provided for @guideUpgradeButton.
   ///
   /// In en, this message translates to:
-  /// **'Upgrade Plan'**
+  /// **'Create Free Account'**
   String get guideUpgradeButton;
+
+  /// No description provided for @chatGuestUsageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {remaining} free chats to explore'**
+  String chatGuestUsageHint(int remaining);
+
+  /// No description provided for @chatGuestExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up to keep chatting — 10 more chats free'**
+  String get chatGuestExhausted;
+
+  /// No description provided for @chatFreeExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Standard for 300 chats/month'**
+  String get chatFreeExhausted;
+
+  /// No description provided for @usageLifetimeRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining} of {limit} chats remaining'**
+  String usageLifetimeRemaining(int remaining, int limit);
+
+  /// No description provided for @chatGuestWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask anything about life in Japan'**
+  String get chatGuestWelcome;
 }
 
 class _AppLocalizationsDelegate

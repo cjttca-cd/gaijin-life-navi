@@ -178,7 +178,10 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
     );
   }
 
-  /// Builds the locked guide view: excerpt with gradient fade + upgrade CTA.
+  /// Builds the locked guide view: excerpt with gradient fade + CTA.
+  /// If [detail.registerCta] is true → registration CTA (for guests).
+  /// If [detail.upgradeCta] is true → upgrade CTA (for free users).
+  /// Default fallback → registration CTA.
   Widget _buildLockedView(
     BuildContext context,
     NavigatorGuideDetail detail,
@@ -186,6 +189,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
     ThemeData theme,
   ) {
     final excerptText = detail.excerpt ?? detail.summary ?? '';
+    final showRegisterCta = detail.registerCta || !detail.upgradeCta;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
@@ -225,10 +229,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
               return LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Colors.white,
-                  Colors.white.withValues(alpha: 0),
-                ],
+                colors: [Colors.white, Colors.white.withValues(alpha: 0)],
                 stops: const [0.0, 1.0],
               ).createShader(bounds);
             },
@@ -265,7 +266,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
                 ),
                 const SizedBox(height: AppSpacing.spaceMd),
                 Text(
-                  l10n.guideLocked,
+                  showRegisterCta ? l10n.guideLocked : l10n.guideLocked,
                   style: theme.textTheme.titleSmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -277,7 +278,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
 
           const SizedBox(height: AppSpacing.spaceLg),
 
-          // Upgrade banner
+          // CTA banner — register or upgrade depending on context
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(AppSpacing.spaceLg),
@@ -288,13 +289,15 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
             child: Column(
               children: [
                 Icon(
-                  Icons.star,
+                  showRegisterCta ? Icons.person_add : Icons.star,
                   size: 32,
                   color: theme.colorScheme.onTertiaryContainer,
                 ),
                 const SizedBox(height: AppSpacing.spaceMd),
                 Text(
-                  l10n.guideUpgradePrompt,
+                  showRegisterCta
+                      ? l10n.guideUpgradePrompt
+                      : l10n.guideUpgradePrompt,
                   style: theme.textTheme.titleSmall?.copyWith(
                     color: theme.colorScheme.onTertiaryContainer,
                   ),
@@ -313,9 +316,17 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
                             tier: tier,
                             source: 'navigator_locked',
                           );
-                      context.push(AppRoutes.subscription);
+                      if (showRegisterCta) {
+                        context.push(AppRoutes.register);
+                      } else {
+                        context.push(AppRoutes.subscription);
+                      }
                     },
-                    child: Text(l10n.guideUpgradeButton),
+                    child: Text(
+                      showRegisterCta
+                          ? l10n.guideUpgradeButton
+                          : l10n.guideUpgradeButton,
+                    ),
                   ),
                 ),
               ],

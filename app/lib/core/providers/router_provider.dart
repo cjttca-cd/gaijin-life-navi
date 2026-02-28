@@ -105,6 +105,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         return AppRoutes.login;
       }
 
+      // Profile requires real auth (not anonymous)
+      if (currentPath == AppRoutes.profile) {
+        final user = authState.valueOrNull;
+        if (user == null || user.isAnonymous) {
+          return AppRoutes.login;
+        }
+      }
+
       if (isLoggedIn &&
           (currentPath == AppRoutes.login ||
               currentPath == AppRoutes.register)) {
@@ -232,16 +240,72 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// Routes the Chat tab to either [ChatListScreen] (authenticated) or
-/// [ChatGuestScreen] (guest). Per USER_STORIES.md Tab Access Rules:
-///   Guest → 登録促進画面 (registration promotion).
+/// Routes the Chat tab: logged-in users (including anonymous) go to
+/// [ChatListScreen]; unauthenticated users get anonymous auth first.
+/// Per Plan C: guests get 5 lifetime chats via anonymous Firebase auth.
 class _ChatTabRouter extends ConsumerWidget {
   const _ChatTabRouter();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoggedIn = ref.watch(authStateProvider).valueOrNull != null;
-    // Show conversation list for logged-in users (supports multiple conversations).
-    return isLoggedIn ? const ChatListScreen() : const ChatGuestScreen();
+    final user = ref.watch(authStateProvider).valueOrNull;
+    if (user != null) {
+      // Logged in (real or anonymous) → chat list
+      return const ChatListScreen();
+    }
+    // Not logged in → trigger anonymous auth
+    return const _AnonymousAuthGate();
+  }
+}
+
+/// Automatically signs in anonymously then shows [ChatListScreen].
+class _AnonymousAuthGate extends ConsumerStatefulWidget {
+  const _AnonymousAuthGate();
+
+  @override
+  ConsumerState<_AnonymousAuthGate> createState() => _AnonymousAuthGateState();
+}
+
+class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
+  bool _signingIn = false;
+  bool _failed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _doAnonymousSignIn();
+  }
+
+  Future<void> _doAnonymousSignIn() async {
+    if (_signingIn) return;
+    setState(() {
+      _signingIn = true;
+      _failed = false;
+    });
+    final auth = ref.read(firebaseAuthProvider);
+    final user = await signInAnonymously(auth);
+    if (mounted) {
+      setState(() {
+        _signingIn = false;
+        _failed = user == null;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // If auth state has a user now (anonymous sign-in completed), show chat
+    final user = ref.watch(authStateProvider).valueOrNull;
+    if (user != null) {
+      return const ChatListScreen();
+    }
+
+    if (_failed) {
+      // Fallback: show the guest promotion screen
+      return const ChatGuestScreen();
+    }
+
+    // Loading state
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
