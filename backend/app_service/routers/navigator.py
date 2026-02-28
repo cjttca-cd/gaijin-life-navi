@@ -398,9 +398,9 @@ async def get_guide(
             },
         )
 
-    # Determine if user has premium access
-    premium_tiers = {"standard", "premium", "premium_plus"}
-    has_premium_access = tier is not None and tier in premium_tiers
+    # Plan C: any registered user can read all guides.
+    # tier=None → guest (not logged in); tier!=None → registered user.
+    is_registered = tier is not None
 
     # free/public → full content for everyone
     if access in ("public", "free"):
@@ -417,7 +417,7 @@ async def get_guide(
         ).model_dump()
 
     # premium → check tier
-    if has_premium_access:
+    if is_registered:
         # Full access
         return SuccessResponse(
             data={
@@ -441,7 +441,7 @@ async def get_guide(
             "access": access,
             "locked": True,
             "excerpt": excerpt,
-            "upgrade_cta": True,
+            "register_cta": True,
         }
     ).model_dump()
 

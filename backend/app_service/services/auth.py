@@ -58,6 +58,7 @@ class FirebaseUser:
     email: str
     email_verified: bool = False
     name: str = ""
+    is_anonymous: bool = False
 
 
 # ── Token verification ─────────────────────────────────────────────────
@@ -67,11 +68,13 @@ def _verify_token(token: str) -> FirebaseUser:
     """Verify a Firebase ID token and return a FirebaseUser."""
     try:
         decoded = fb_auth.verify_id_token(token)
+        sign_in_provider = decoded.get("firebase", {}).get("sign_in_provider", "")
         return FirebaseUser(
             uid=decoded["uid"],
             email=decoded.get("email", ""),
             email_verified=decoded.get("email_verified", False),
             name=decoded.get("name", ""),
+            is_anonymous=sign_in_provider == "anonymous",
         )
     except Exception:
         raise HTTPException(
@@ -88,6 +91,20 @@ def _verify_token(token: str) -> FirebaseUser:
 
 # ── FastAPI Dependency ─────────────────────────────────────────────────
 
+
+
+async def get_optional_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(
+        HTTPBearer(auto_error=False)
+    ),
+) -> FirebaseUser | None:
+    """Optional auth — returns FirebaseUser if valid token present, else None."""
+    if credentials is None:
+        return None
+    try:
+        return _verify_token(credentials.credentials)
+    except HTTPException:
+        return None
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),

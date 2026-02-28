@@ -1,11 +1,11 @@
 """Usage tracking service — checks and enforces tier-based chat limits.
 
 Tier limits (from PHASE0_DESIGN.md / Z decision 2026-02-18):
-  • free         → 20 chats total (lifetime, no daily reset)
+  • free         → 10 chats total (lifetime, no daily reset)
   • standard     → 300 chats / month
   • premium      → unlimited
   • premium_plus → unlimited
-  • guest        → 0 (blocked)
+  • guest        → 5 chats total (lifetime, 概要級 only)
 
 The service operates on the existing ``daily_usage`` table, performing an
 atomic get-or-create + check + increment inside the caller's DB session.
@@ -43,11 +43,11 @@ class UsageCheck:
 
 # Each entry: (max_count, period)  —  None max ⇒ unlimited, 0 ⇒ blocked.
 _TIER_LIMITS: dict[str, tuple[int | None, str | None]] = {
-    "free": (20, "lifetime"),
+    "free": (10, "lifetime"),
     "standard": (300, "month"),
     "premium": (None, None),
     "premium_plus": (None, None),
-    "guest": (0, None),
+    "guest": (5, "lifetime"),
 }
 
 

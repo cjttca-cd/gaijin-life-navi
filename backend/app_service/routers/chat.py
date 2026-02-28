@@ -236,8 +236,14 @@ def _cleanup_old_uploads(agent_id: str) -> None:
 # ── Helpers ────────────────────────────────────────────────────────────
 
 
-async def _get_user_tier(db: AsyncSession, uid: str) -> str:
-    """Return the user's subscription tier, defaulting to 'free'."""
+async def _get_user_tier(db: AsyncSession, uid: str, is_anonymous: bool = False) -> str:
+    """Return the user's subscription tier.
+
+    Anonymous Firebase users (no account) → 'guest'.
+    Registered users without profile → 'free'.
+    """
+    if is_anonymous:
+        return "guest"
     profile = await db.get(Profile, uid)
     if profile is None or profile.deleted_at is not None:
         return "free"
@@ -281,7 +287,7 @@ async def chat(
     uid = current_user.uid
 
     # 1. Get user tier
-    tier = await _get_user_tier(db, uid)
+    tier = await _get_user_tier(db, uid, is_anonymous=current_user.is_anonymous)
 
     # 2. Check usage limit (and increment atomically if allowed)
     usage = await check_and_increment(db, uid, tier)
@@ -302,27 +308,31 @@ async def chat(
             },
         )
 
-    # 3. Route to agent domain (LLM-based classification)
-    domain = await route_to_agent(body.message, current_domain=body.domain)
+    # 3. Build context early — needed for both routing and agent call.
+    context_dicts = None
+    if body.context:
+        context_dicts = [{"role": m.role, "text": m.text} for m in body.context]
+
+    # 4. Route to agent domain (LLM-based classification with conversation context)
+    domain = await route_to_agent(
+        body.message,
+        current_domain=body.domain,
+        context=context_dicts,
+    )
     agent_id = domain  # route_to_agent already returns "svc-xxx" format
     domain_short = domain.removeprefix("svc-")
 
-    # 4. Build message with locale hint
+    # 5. Build message with locale hint
     agent_message = body.message
     if body.locale and body.locale != "en":
         agent_message = f"[User language: {body.locale}] {body.message}"
 
-    # 5. Handle image upload — decode, save, pass path to agent.
+    # 6. Handle image upload — decode, save, pass path to agent.
     image_path: str | None = None
     if body.image:
         image_path = _save_image_to_workspace(agent_id, body.image)
         # Clean up old uploads in the background (best-effort).
         _cleanup_old_uploads(agent_id)
-
-    # 6. Convert context to list of dicts for agent service
-    context_dicts = None
-    if body.context:
-        context_dicts = [{"role": m.role, "text": m.text} for m in body.context]
 
     # 7. Fetch user profile for agent personalisation
     profile = await db.get(Profile, uid)
@@ -341,7 +351,11 @@ async def chat(
         if not any(user_profile.values()):
             user_profile = None
 
-    # 8. Call agent (stateless with /reset)
+    # Guest users (anonymous auth) still need tier info for 概要級 response control
+    if user_profile is None:
+        user_profile = {"subscription_tier": tier}
+
+    # 8. Call agent (stateless with /reset, context already built in step 3)
     agent_resp = await call_agent(
         agent_id=agent_id,
         message=agent_message,
@@ -366,10 +380,10 @@ async def chat(
             },
         )
 
-    # 5. Parse structured blocks from agent response
+    # 9. Parse structured blocks from agent response
     reply, sources, actions, tracker_items = _extract_blocks(agent_resp.text)
 
-    # 6. Build response
+    # 10. Build response
     response = ChatResponse(
         reply=reply,
         domain=domain_short,
