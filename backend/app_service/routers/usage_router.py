@@ -31,8 +31,8 @@ PLANS = [
         "currency": "JPY",
         "billing_period": None,
         "features": {
-            "ai_queries_limit": 20,
-            "ai_queries_period": "day",
+            "ai_queries_limit": 10,
+            "ai_queries_period": "lifetime",
             "tracker_items": 3,
             "ads": True,
             "priority_support": False,
