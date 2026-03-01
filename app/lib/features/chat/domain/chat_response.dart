@@ -7,6 +7,7 @@ class ChatResponse {
     this.actions = const [],
     this.trackerItems = const [],
     required this.usage,
+    this.depthLevel,
   });
 
   /// AI response text (markdown format).
@@ -26,6 +27,9 @@ class ChatResponse {
 
   /// Usage info {used, limit, tier}.
   final ChatUsageInfo usage;
+
+  /// Depth level of the response: "deep" | "summary" | null.
+  final String? depthLevel;
 
   factory ChatResponse.fromJson(Map<String, dynamic> json) {
     return ChatResponse(
@@ -50,6 +54,7 @@ class ChatResponse {
           json['usage'] != null
               ? ChatUsageInfo.fromJson(json['usage'] as Map<String, dynamic>)
               : const ChatUsageInfo(used: 0, limit: 0, tier: 'free'),
+      depthLevel: json['depth_level'] as String?,
     );
   }
 }
@@ -110,6 +115,7 @@ class ChatUsageInfo {
     required this.limit,
     required this.tier,
     this.period,
+    this.depthLevel,
   });
 
   final int used;
@@ -118,6 +124,9 @@ class ChatUsageInfo {
 
   /// "lifetime" | "month" | null (unlimited).
   final String? period;
+
+  /// "deep" | "summary" | null.
+  final String? depthLevel;
 
   int get remaining => limit > 0 ? (limit - used).clamp(0, limit) : -1;
   bool get isUnlimited => limit <= 0;
@@ -129,6 +138,7 @@ class ChatUsageInfo {
       limit: json['limit'] as int? ?? 0,
       tier: json['tier'] as String? ?? 'free',
       period: json['period'] as String?,
+      depthLevel: json['depth_level'] as String?,
     );
   }
 }

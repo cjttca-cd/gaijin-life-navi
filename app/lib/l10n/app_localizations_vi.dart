@@ -1773,4 +1773,44 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get chatGuestWelcome => 'Hỏi bất cứ điều gì về cuộc sống tại Nhật';
+
+  @override
+  String get registerNationalityLabel => 'Quốc tịch';
+
+  @override
+  String get registerNationalityHint => 'Chọn quốc tịch của bạn';
+
+  @override
+  String get registerResidenceStatusLabel => 'Tình trạng cư trú';
+
+  @override
+  String get registerResidenceStatusHint => 'Chọn tình trạng cư trú';
+
+  @override
+  String get registerResidenceRegionLabel => 'Khu vực cư trú';
+
+  @override
+  String get registerResidenceRegionHint => 'Chọn khu vực của bạn';
+
+  @override
+  String get registerSearchHint => 'Tìm kiếm...';
+
+  @override
+  String get chatDepthLevelDeep => 'Trả lời chuyên sâu';
+
+  @override
+  String get chatDepthLevelSummary => 'Trả lời tóm tắt';
+
+  @override
+  String get chatSummaryUpgradeCta => 'Nhận tư vấn cá nhân →';
+
+  @override
+  String chatUsageDeepRemaining(int remaining, int limit) {
+    return 'Chuyên sâu: $remaining/$limit';
+  }
+
+  @override
+  String chatUsageSummaryRemaining(int remaining, int limit) {
+    return 'Tóm tắt: $remaining/$limit';
+  }
 }

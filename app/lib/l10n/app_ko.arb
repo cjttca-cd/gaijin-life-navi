@@ -582,5 +582,37 @@
       }
     }
   },
-  "chatGuestWelcome": "일본 생활에 대해 무엇이든 물어보세요"
+  "chatGuestWelcome": "일본 생활에 대해 무엇이든 물어보세요",
+  "registerNationalityLabel": "국적",
+  "registerNationalityHint": "국적을 선택하세요",
+  "registerResidenceStatusLabel": "체류 자격",
+  "registerResidenceStatusHint": "체류 자격을 선택하세요",
+  "registerResidenceRegionLabel": "거주 지역",
+  "registerResidenceRegionHint": "지역을 선택하세요",
+  "registerSearchHint": "검색...",
+  "chatDepthLevelDeep": "심층 답변",
+  "chatDepthLevelSummary": "요약 답변",
+  "chatSummaryUpgradeCta": "맞춤 조언 받기 →",
+  "chatUsageDeepRemaining": "심층: {remaining}/{limit}",
+  "@chatUsageDeepRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatUsageSummaryRemaining": "요약: {remaining}/{limit}",
+  "@chatUsageSummaryRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  }
 }

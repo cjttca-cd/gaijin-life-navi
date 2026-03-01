@@ -3439,6 +3439,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ask anything about life in Japan'**
   String get chatGuestWelcome;
+
+  /// No description provided for @registerNationalityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nationality'**
+  String get registerNationalityLabel;
+
+  /// No description provided for @registerNationalityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your nationality'**
+  String get registerNationalityHint;
+
+  /// No description provided for @registerResidenceStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Residence Status'**
+  String get registerResidenceStatusLabel;
+
+  /// No description provided for @registerResidenceStatusHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your residence status'**
+  String get registerResidenceStatusHint;
+
+  /// No description provided for @registerResidenceRegionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Residence Area'**
+  String get registerResidenceRegionLabel;
+
+  /// No description provided for @registerResidenceRegionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your area'**
+  String get registerResidenceRegionHint;
+
+  /// No description provided for @registerSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search...'**
+  String get registerSearchHint;
+
+  /// No description provided for @chatDepthLevelDeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep answer'**
+  String get chatDepthLevelDeep;
+
+  /// No description provided for @chatDepthLevelSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary answer'**
+  String get chatDepthLevelSummary;
+
+  /// No description provided for @chatSummaryUpgradeCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Get personalized advice →'**
+  String get chatSummaryUpgradeCta;
+
+  /// No description provided for @chatUsageDeepRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep: {remaining}/{limit}'**
+  String chatUsageDeepRemaining(int remaining, int limit);
+
+  /// No description provided for @chatUsageSummaryRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary: {remaining}/{limit}'**
+  String chatUsageSummaryRemaining(int remaining, int limit);
 }
 
 class _AppLocalizationsDelegate

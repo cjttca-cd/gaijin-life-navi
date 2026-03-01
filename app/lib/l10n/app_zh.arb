@@ -582,5 +582,37 @@
       }
     }
   },
-  "chatGuestWelcome": "关于日本生活的任何问题都可以问"
+  "chatGuestWelcome": "关于日本生活的任何问题都可以问",
+  "registerNationalityLabel": "国籍",
+  "registerNationalityHint": "选择你的国籍",
+  "registerResidenceStatusLabel": "在留资格",
+  "registerResidenceStatusHint": "选择你的在留资格",
+  "registerResidenceRegionLabel": "居住地域",
+  "registerResidenceRegionHint": "选择你的居住地域",
+  "registerSearchHint": "搜索...",
+  "chatDepthLevelDeep": "深度回答",
+  "chatDepthLevelSummary": "概要回答",
+  "chatSummaryUpgradeCta": "获取个性化建议 →",
+  "chatUsageDeepRemaining": "深度: {remaining}/{limit}",
+  "@chatUsageDeepRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatUsageSummaryRemaining": "概要: {remaining}/{limit}",
+  "@chatUsageSummaryRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  }
 }

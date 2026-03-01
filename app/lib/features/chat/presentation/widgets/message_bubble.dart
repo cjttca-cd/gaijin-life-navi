@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../../core/providers/router_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../domain/chat_message.dart';
@@ -182,6 +184,12 @@ class _AiBubble extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Depth level indicator chip.
+                    if (message.depthLevel != null) ...[
+                      _DepthLevelChip(depthLevel: message.depthLevel!),
+                      const SizedBox(height: 4),
+                    ],
+
                     // Markdown-rendered content.
                     if (message.content.isNotEmpty)
                       MarkdownBody(
@@ -206,6 +214,12 @@ class _AiBubble extends StatelessWidget {
                     if (message.trackerItems != null &&
                         message.trackerItems!.isNotEmpty)
                       TrackerItemCards(items: message.trackerItems!),
+
+                    // Summary-level upgrade CTA.
+                    if (message.depthLevel == 'summary') ...[
+                      const SizedBox(height: 8),
+                      _SummaryUpgradeCta(),
+                    ],
 
                     // Timestamp.
                     Padding(
@@ -278,6 +292,91 @@ class _AiBubble extends StatelessWidget {
       ),
       blockquotePadding: const EdgeInsets.only(left: 12, top: 4, bottom: 4),
       a: TextStyle(color: cs.primary, decoration: TextDecoration.underline),
+    );
+  }
+}
+
+/// Small chip indicating depth level (deep / summary) at top of AI bubble.
+class _DepthLevelChip extends StatelessWidget {
+  const _DepthLevelChip({required this.depthLevel});
+
+  final String depthLevel;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tt = Theme.of(context).textTheme;
+    final cs = Theme.of(context).colorScheme;
+
+    final isSummary = depthLevel == 'summary';
+    final label =
+        isSummary ? l10n.chatDepthLevelSummary : l10n.chatDepthLevelDeep;
+    final icon = isSummary ? Icons.summarize_outlined : Icons.psychology;
+    final bgColor =
+        isSummary
+            ? AppColors.warningContainer
+            : cs.primaryContainer;
+    final fgColor =
+        isSummary
+            ? AppColors.onWarningContainer
+            : cs.onPrimaryContainer;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: fgColor),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: tt.labelSmall?.copyWith(
+              color: fgColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// CTA shown inside summary-level AI bubbles to encourage upgrade.
+class _SummaryUpgradeCta extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.subscription),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: cs.primaryContainer.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('💡 ', style: TextStyle(fontSize: 14)),
+            Flexible(
+              child: Text(
+                l10n.chatSummaryUpgradeCta,
+                style: tt.labelSmall?.copyWith(
+                  color: cs.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

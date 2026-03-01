@@ -1734,4 +1734,44 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get chatGuestWelcome => '일본 생활에 대해 무엇이든 물어보세요';
+
+  @override
+  String get registerNationalityLabel => '국적';
+
+  @override
+  String get registerNationalityHint => '국적을 선택하세요';
+
+  @override
+  String get registerResidenceStatusLabel => '체류 자격';
+
+  @override
+  String get registerResidenceStatusHint => '체류 자격을 선택하세요';
+
+  @override
+  String get registerResidenceRegionLabel => '거주 지역';
+
+  @override
+  String get registerResidenceRegionHint => '지역을 선택하세요';
+
+  @override
+  String get registerSearchHint => '검색...';
+
+  @override
+  String get chatDepthLevelDeep => '심층 답변';
+
+  @override
+  String get chatDepthLevelSummary => '요약 답변';
+
+  @override
+  String get chatSummaryUpgradeCta => '맞춤 조언 받기 →';
+
+  @override
+  String chatUsageDeepRemaining(int remaining, int limit) {
+    return '심층: $remaining/$limit';
+  }
+
+  @override
+  String chatUsageSummaryRemaining(int remaining, int limit) {
+    return '요약: $remaining/$limit';
+  }
 }

@@ -582,5 +582,37 @@
       }
     }
   },
-  "chatGuestWelcome": "Hỏi bất cứ điều gì về cuộc sống tại Nhật"
+  "chatGuestWelcome": "Hỏi bất cứ điều gì về cuộc sống tại Nhật",
+  "registerNationalityLabel": "Quốc tịch",
+  "registerNationalityHint": "Chọn quốc tịch của bạn",
+  "registerResidenceStatusLabel": "Tình trạng cư trú",
+  "registerResidenceStatusHint": "Chọn tình trạng cư trú",
+  "registerResidenceRegionLabel": "Khu vực cư trú",
+  "registerResidenceRegionHint": "Chọn khu vực của bạn",
+  "registerSearchHint": "Tìm kiếm...",
+  "chatDepthLevelDeep": "Trả lời chuyên sâu",
+  "chatDepthLevelSummary": "Trả lời tóm tắt",
+  "chatSummaryUpgradeCta": "Nhận tư vấn cá nhân →",
+  "chatUsageDeepRemaining": "Chuyên sâu: {remaining}/{limit}",
+  "@chatUsageDeepRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatUsageSummaryRemaining": "Tóm tắt: {remaining}/{limit}",
+  "@chatUsageSummaryRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  }
 }

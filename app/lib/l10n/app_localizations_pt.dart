@@ -1790,4 +1790,45 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get chatGuestWelcome =>
       'Pergunte qualquer coisa sobre a vida no Japão';
+
+  @override
+  String get registerNationalityLabel => 'Nacionalidade';
+
+  @override
+  String get registerNationalityHint => 'Selecione sua nacionalidade';
+
+  @override
+  String get registerResidenceStatusLabel => 'Status de Residência';
+
+  @override
+  String get registerResidenceStatusHint =>
+      'Selecione seu status de residência';
+
+  @override
+  String get registerResidenceRegionLabel => 'Região de Residência';
+
+  @override
+  String get registerResidenceRegionHint => 'Selecione sua região';
+
+  @override
+  String get registerSearchHint => 'Pesquisar...';
+
+  @override
+  String get chatDepthLevelDeep => 'Resposta detalhada';
+
+  @override
+  String get chatDepthLevelSummary => 'Resposta resumida';
+
+  @override
+  String get chatSummaryUpgradeCta => 'Obter aconselhamento personalizado →';
+
+  @override
+  String chatUsageDeepRemaining(int remaining, int limit) {
+    return 'Detalhada: $remaining/$limit';
+  }
+
+  @override
+  String chatUsageSummaryRemaining(int remaining, int limit) {
+    return 'Resumida: $remaining/$limit';
+  }
 }

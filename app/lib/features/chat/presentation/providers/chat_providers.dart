@@ -263,6 +263,7 @@ class ChatSendController {
             response.trackerItems.isNotEmpty ? response.trackerItems : null,
         domain: response.domain,
         usage: response.usage,
+        depthLevel: response.depthLevel ?? response.usage.depthLevel,
         createdAt: DateTime.now(),
       );
       allMsgs.addMessage(activeId, assistantMessage);

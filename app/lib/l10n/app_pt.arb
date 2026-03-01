@@ -582,5 +582,37 @@
       }
     }
   },
-  "chatGuestWelcome": "Pergunte qualquer coisa sobre a vida no Japão"
+  "chatGuestWelcome": "Pergunte qualquer coisa sobre a vida no Japão",
+  "registerNationalityLabel": "Nacionalidade",
+  "registerNationalityHint": "Selecione sua nacionalidade",
+  "registerResidenceStatusLabel": "Status de Residência",
+  "registerResidenceStatusHint": "Selecione seu status de residência",
+  "registerResidenceRegionLabel": "Região de Residência",
+  "registerResidenceRegionHint": "Selecione sua região",
+  "registerSearchHint": "Pesquisar...",
+  "chatDepthLevelDeep": "Resposta detalhada",
+  "chatDepthLevelSummary": "Resposta resumida",
+  "chatSummaryUpgradeCta": "Obter aconselhamento personalizado →",
+  "chatUsageDeepRemaining": "Detalhada: {remaining}/{limit}",
+  "@chatUsageDeepRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "chatUsageSummaryRemaining": "Resumida: {remaining}/{limit}",
+  "@chatUsageSummaryRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -11,8 +11,10 @@ import '../providers/chat_providers.dart';
 /// Usage limit banner — shows remaining chats for non-unlimited tiers.
 ///
 /// Plan C behavior:
-///   - lifetime: "{remaining} of {limit} chats remaining"
-///   - month: "本月剩余 X/Y 次"
+///   - lifetime (free) + deep: "Deep {remaining}/{limit}"
+///   - lifetime (free) + summary: "Summary {remaining}/{limit}"
+///   - standard: "Deep {remaining}/{limit}/mo"
+///   - premium: hidden (unlimited)
 ///   - exhausted + guest → registration CTA
 ///   - exhausted + free → upgrade CTA
 class UsageCounter extends ConsumerWidget {
@@ -90,11 +92,24 @@ class UsageCounter extends ConsumerWidget {
       );
     }
 
-    // Normal state — show remaining count
-    final displayText =
-        usage.isLifetime
-            ? l10n.usageLifetimeRemaining(remaining, limit)
-            : l10n.chatLimitRemaining(remaining, limit);
+    // Determine display text based on tier and depth level.
+    final depthLevel = usage.depthLevel;
+    final String displayText;
+
+    if (usage.tier == 'standard') {
+      // Standard tier — always deep, show monthly.
+      displayText = l10n.chatUsageDeepRemaining(remaining, limit);
+    } else if (usage.isLifetime) {
+      // Free tier (lifetime) — show deep or summary indicator.
+      if (depthLevel == 'summary') {
+        displayText = l10n.chatUsageSummaryRemaining(remaining, limit);
+      } else {
+        displayText = l10n.chatUsageDeepRemaining(remaining, limit);
+      }
+    } else {
+      // Fallback — generic display.
+      displayText = l10n.chatLimitRemaining(remaining, limit);
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -105,7 +120,13 @@ class UsageCounter extends ConsumerWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.info_outline, size: 16, color: AppColors.warning),
+          Icon(
+            depthLevel == 'summary'
+                ? Icons.summarize_outlined
+                : Icons.info_outline,
+            size: 16,
+            color: AppColors.warning,
+          ),
           const SizedBox(width: 4),
           Flexible(
             child: Text(

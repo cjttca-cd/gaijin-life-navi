@@ -1775,4 +1775,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatGuestWelcome => 'Ask anything about life in Japan';
+
+  @override
+  String get registerNationalityLabel => 'Nationality';
+
+  @override
+  String get registerNationalityHint => 'Select your nationality';
+
+  @override
+  String get registerResidenceStatusLabel => 'Residence Status';
+
+  @override
+  String get registerResidenceStatusHint => 'Select your residence status';
+
+  @override
+  String get registerResidenceRegionLabel => 'Residence Area';
+
+  @override
+  String get registerResidenceRegionHint => 'Select your area';
+
+  @override
+  String get registerSearchHint => 'Search...';
+
+  @override
+  String get chatDepthLevelDeep => 'Deep answer';
+
+  @override
+  String get chatDepthLevelSummary => 'Summary answer';
+
+  @override
+  String get chatSummaryUpgradeCta => 'Get personalized advice →';
+
+  @override
+  String chatUsageDeepRemaining(int remaining, int limit) {
+    return 'Deep: $remaining/$limit';
+  }
+
+  @override
+  String chatUsageSummaryRemaining(int remaining, int limit) {
+    return 'Summary: $remaining/$limit';
+  }
 }

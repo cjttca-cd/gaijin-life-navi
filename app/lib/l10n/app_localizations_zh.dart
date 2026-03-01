@@ -1724,4 +1724,44 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get chatGuestWelcome => '关于日本生活的任何问题都可以问';
+
+  @override
+  String get registerNationalityLabel => '国籍';
+
+  @override
+  String get registerNationalityHint => '选择你的国籍';
+
+  @override
+  String get registerResidenceStatusLabel => '在留资格';
+
+  @override
+  String get registerResidenceStatusHint => '选择你的在留资格';
+
+  @override
+  String get registerResidenceRegionLabel => '居住地域';
+
+  @override
+  String get registerResidenceRegionHint => '选择你的居住地域';
+
+  @override
+  String get registerSearchHint => '搜索...';
+
+  @override
+  String get chatDepthLevelDeep => '深度回答';
+
+  @override
+  String get chatDepthLevelSummary => '概要回答';
+
+  @override
+  String get chatSummaryUpgradeCta => '获取个性化建议 →';
+
+  @override
+  String chatUsageDeepRemaining(int remaining, int limit) {
+    return '深度: $remaining/$limit';
+  }
+
+  @override
+  String chatUsageSummaryRemaining(int remaining, int limit) {
+    return '概要: $remaining/$limit';
+  }
 }
