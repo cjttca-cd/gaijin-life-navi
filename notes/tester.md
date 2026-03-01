@@ -1,36 +1,33 @@
 ## 测试报告
 1. 测试范围：
-   - T1 `backend/app_service/services/usage.py` `check_and_increment()` 14 个 tier/计数场景
-   - T2 `backend/app_service/services/agent.py` depth_level prompt 注入（深度級/概要級）
-   - T3 `backend/app_service/routers/chat.py` summary 模式 profile stripping + `depth_level` 出参
-   - T4 `backend/app_service/schemas/auth.py` + `/api/v1/auth/register` 请求校验（必填/长度/422）
-   - T5 `backend/app_service/routers/navigator.py` `access="registered"` 与 `premium` 访问控制
-   - T6 `backend/app_service/models/profile.py` `SubscriptionTier` enum 完整性
+   - Register 画面 3 个 Profile 字段（nationality / residence_status / residence_region）
+   - Chat depth_level 数据传递与 UI 展示（usage counter + message bubble）
+   - 5 语言 l10n 新增文案与编译
+   - flutter analyze / flutter build web --release
 
 2. 测试结果：PASS
 
-3. 用例：24 pass / 0 fail
-   - `test_usage.py`: 14 pass（覆盖需求表 14 场景）
-   - `test_agent_prompt.py`: 2 pass
-   - `test_chat_integration.py`: 1 pass
-   - `test_auth_schema.py`: 3 pass
-   - `test_navigator_access.py`: 3 pass
-   - `test_models.py`: 1 pass
+3. 用例：18 pass / 0 fail
 
 4. 发现问题：
-   - 无（本次新增覆盖范围内未发现阻塞问题）
+   - [minor] 国籍搜索 `Ch` 时可正确过滤（如 Chile / CH 等），但不会匹配“中国(中国)”（因数据使用本地语名称而非英文名）。功能正常，示例预期需对齐。
 
 5. 验证步骤：
-   1) 进入项目根目录：`cd /root/.openclaw/projects/gaijin-life-navi`
-   2) 执行测试：`python3 -m pytest -q backend/tests`
-   3) 预期输出：`24 passed`
+   - 代码审查：
+     - `app/lib/features/auth/presentation/register_screen.dart`
+     - `app/lib/features/chat/domain/chat_response.dart`
+     - `app/lib/features/chat/domain/chat_message.dart`
+     - `app/lib/features/chat/presentation/providers/chat_providers.dart`
+     - `app/lib/features/chat/presentation/widgets/usage_counter.dart`
+     - `app/lib/features/chat/presentation/widgets/message_bubble.dart`
+   - 静态检查：
+     - `cd app && flutter analyze`（0 errors）
+     - `cd app && flutter gen-l10n`（success）
+     - `cd app && flutter build web --release`（success）
+   - Flutter Web 截图：
+     - `cd app/build/web && python3 -m http.server 8085`
+     - Playwright 脚本访问 `/#/register`, `/#/chat` 并截图
 
 6. 产出文件：
-   - `backend/tests/conftest.py`
-   - `backend/tests/test_usage.py`
-   - `backend/tests/test_agent_prompt.py`
-   - `backend/tests/test_chat_integration.py`
-   - `backend/tests/test_auth_schema.py`
-   - `backend/tests/test_navigator_access.py`
-   - `backend/tests/test_models.py`
-   - `notes/tester.md`
+   - `artifacts/epics/phase-c-frontend/features/register-profile-chat-depth/test-report.md`
+   - `artifacts/epics/phase-c-frontend/features/register-profile-chat-depth/screenshots/*.png`
