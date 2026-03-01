@@ -86,6 +86,9 @@ async def register(
         email=current_user.email,
         display_name=body.display_name or current_user.name or "",
         preferred_language=body.preferred_language,
+        nationality=body.nationality,
+        residence_status=body.residence_status,
+        residence_region=body.residence_region,
     )
     db.add(profile)
     await db.flush()
@@ -110,7 +113,8 @@ async def register(
                 id=str(_uuid.uuid4()),
                 user_id=current_user.uid,
                 usage_date=date.today(),
-                chat_count=20,  # exhaust free-tier 20 lifetime chats
+                chat_count=20,  # exhaust free-tier summary chats
+                deep_count=20,  # exhaust free-tier deep chats
                 scan_count_monthly=0,
             )
             db.add(exhaustion_record)

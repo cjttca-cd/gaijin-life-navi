@@ -416,9 +416,43 @@ async def get_guide(
             }
         ).model_dump()
 
-    # premium → check tier
+    # premium / registered → full content for logged-in users;
+    # excerpt + register CTA for guests.
+    # "registered" is treated identically to "premium" (BUSINESS_RULES.md §2).
+    if access in ("premium", "registered"):
+        if is_registered:
+            return SuccessResponse(
+                data={
+                    "domain": domain,
+                    "slug": slug,
+                    "title": parsed["title"],
+                    "access": access,
+                    "locked": False,
+                    "summary": parsed["summary"],
+                    "content": parsed["body"],
+                }
+            ).model_dump()
+
+        # Guest → excerpt only + locked
+        excerpt = _generate_excerpt(parsed["body"], max_chars=300)
+        return SuccessResponse(
+            data={
+                "domain": domain,
+                "slug": slug,
+                "title": parsed["title"],
+                "access": access,
+                "locked": True,
+                "excerpt": excerpt,
+                "register_cta": True,
+            }
+        ).model_dump()
+
+    # Unknown access type → treat as restricted (same as premium)
+    logger.warning(
+        "Unknown access type '%s' for guide %s/%s; treating as restricted",
+        access, domain, slug,
+    )
     if is_registered:
-        # Full access
         return SuccessResponse(
             data={
                 "domain": domain,
@@ -431,7 +465,6 @@ async def get_guide(
             }
         ).model_dump()
 
-    # Free / guest / None → excerpt only + locked
     excerpt = _generate_excerpt(parsed["body"], max_chars=300)
     return SuccessResponse(
         data={

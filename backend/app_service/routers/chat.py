@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import base64
 import logging
-import os
 import re
 import time
 import uuid
@@ -72,6 +71,7 @@ class UsageInfo(BaseModel):
     limit: int | None = None  # None ⇒ unlimited
     tier: str
     period: str | None = None  # "lifetime" | "month" | None(unlimited)
+    depth_level: str = "deep"  # "deep" | "summary"
 
 
 class ChatResponse(BaseModel):
@@ -83,6 +83,7 @@ class ChatResponse(BaseModel):
     actions: list[dict[str, Any]] = Field(default_factory=list)
     tracker_items: list[dict[str, Any]] = Field(default_factory=list)
     usage: UsageInfo
+    depth_level: str = "deep"  # "deep" | "summary"
 
 
 # ── Response-text parsers ──────────────────────────────────────────────
@@ -252,7 +253,10 @@ async def _get_user_tier(db: AsyncSession, uid: str, is_anonymous: bool = False)
 
 
 def _usage_to_info(uc: UsageCheck) -> UsageInfo:
-    return UsageInfo(used=uc.used, limit=uc.limit, tier=uc.tier, period=uc.period)
+    return UsageInfo(
+        used=uc.used, limit=uc.limit, tier=uc.tier,
+        period=uc.period, depth_level=uc.depth_level,
+    )
 
 
 # ── Endpoint ───────────────────────────────────────────────────────────
@@ -356,6 +360,11 @@ async def chat(
     if user_profile is None:
         user_profile = {"subscription_tier": tier}
 
+    # 7b. Strip personalisation fields for summary mode (defence-in-depth)
+    if usage.depth_level == "summary" and user_profile:
+        for key in ("nationality", "residence_status", "residence_region"):
+            user_profile.pop(key, None)
+
     # 8. Call agent (stateless with /reset, context already built in step 3)
     agent_resp = await call_agent(
         agent_id=agent_id,
@@ -363,6 +372,7 @@ async def chat(
         context=context_dicts,
         image_path=image_path,
         user_profile=user_profile,
+        depth_level=usage.depth_level,
     )
 
     if agent_resp.status != "ok":
@@ -392,6 +402,7 @@ async def chat(
         actions=actions,
         tracker_items=tracker_items,
         usage=_usage_to_info(usage),
+        depth_level=usage.depth_level,
     )
 
     return SuccessResponse(data=response.model_dump()).model_dump()

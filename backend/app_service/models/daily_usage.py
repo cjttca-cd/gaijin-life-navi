@@ -1,4 +1,9 @@
-"""DailyUsage model — maps to the daily_usage table (DATA_MODEL.md §4)."""
+"""DailyUsage model — maps to the daily_usage table (DATA_MODEL.md §4).
+
+Tracks per-user daily usage with separate counters for:
+  - deep_count: 深度級 (deep-level) chat usage
+  - chat_count: 概要級 (summary-level) chat usage
+"""
 
 import uuid
 from datetime import date, datetime
@@ -39,6 +44,7 @@ class DailyUsage(Base):
         server_default=func.current_date(),
     )
     chat_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    deep_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     scan_count_monthly: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

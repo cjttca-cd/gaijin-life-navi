@@ -82,6 +82,7 @@ async def call_agent(
     image_path: str | None = None,
     user_profile: dict | None = None,
     timeout: int = 60,
+    depth_level: str = "deep",
 ) -> AgentResponse:
     """Invoke an OpenClaw agent statelessly and return a structured response.
 
@@ -101,6 +102,10 @@ async def call_agent(
             Injected into the prompt so the agent can personalise responses.
         timeout: Maximum seconds to wait for the agent (passed to both
             OpenClaw ``--timeout`` and ``asyncio`` subprocess timeout).
+        depth_level: Response depth — ``"deep"`` for full personalised
+            answers or ``"summary"`` for general-only answers (no profile
+            personalisation).  Injected into the prompt so the agent can
+            adjust response quality accordingly.
 
     Returns:
         An :class:`AgentResponse` — always returned, never raises.
@@ -112,6 +117,10 @@ async def call_agent(
     full_message = "/reset "
 
     # Inject user profile so the agent can personalise responses.
+    # In summary mode, nationality/residence_status/residence_region are
+    # excluded (defence-in-depth — chat.py also strips them before passing).
+    _SUMMARY_EXCLUDED = {"nationality", "residence_status", "residence_region"}
+
     if user_profile:
         profile_lines = ["【ユーザープロフィール】"]
         field_map = {
@@ -124,11 +133,22 @@ async def call_agent(
             "preferred_language": "首選語言",
         }
         for key, label in field_map.items():
+            if depth_level == "summary" and key in _SUMMARY_EXCLUDED:
+                continue
             value = user_profile.get(key)
             if value:
                 profile_lines.append(f"{label}: {value}")
-        if len(profile_lines) > 1:  # has at least one field
-            full_message += "\n".join(profile_lines) + "\n\n"
+
+        # Inject depth-level annotation for the agent
+        if depth_level == "deep":
+            profile_lines.append("回答深度: 深度級")
+        else:
+            profile_lines.append(
+                "回答深度: 概要級（概要級のため Profile 個性化情報を使用しないこと。"
+                "一般的な情報提供のみ。回答末尾に深度級への導線を付与すること。）"
+            )
+
+        full_message += "\n".join(profile_lines) + "\n\n"
 
     # Append conversation history if provided.
     if context:
@@ -147,7 +167,8 @@ async def call_agent(
             f"tool with path: {image_path}]\n\n"
         )
 
-    # Append the actual new message.
+    # Append the actual new message with explicit marker.
+    full_message += "【現在のユーザーの質問】\n"
     full_message += message
 
     cmd = [
@@ -400,7 +421,7 @@ _EMERGENCY_PATTERN = re.compile(
 )
 
 _CLASSIFY_PROMPT = """\
-Classify the user message into exactly ONE domain. Reply with ONLY the domain name, nothing else.
+Classify the conversation into exactly ONE domain. Reply with ONLY the domain name, nothing else.
 
 Domains:
 - finance — bank accounts, money transfer, credit cards, insurance, loans, investment (NISA/iDeCo), cashless payment
@@ -410,26 +431,60 @@ Domains:
 - life — housing, transport, shopping, mobile phone, garbage, culture, education, administrative procedures (city hall, My Number)
 - legal — labor disputes, consumer protection, traffic accidents, crime victims, divorce, legal rights
 
-If the message is ambiguous, choose the MOST relevant domain. If truly unclear, reply "life".
+If the message is ambiguous, choose the MOST relevant domain based on the conversation context. If truly unclear, reply "life".
 
-User message: {message}"""
+{context_section}Current user message: {message}"""
+
+# Maximum number of recent conversation turns to include in routing context.
+_ROUTING_CONTEXT_MAX_TURNS = 10
+
+
+def _build_routing_context(context: list[dict] | None) -> str:
+    """Build a conversation history section for the routing classifier.
+
+    Takes the most recent *_ROUTING_CONTEXT_MAX_TURNS* turns from the
+    frontend-provided context and formats them for the classification
+    prompt.  Each message is truncated to 300 chars to keep the prompt
+    compact — the router only needs enough to understand the topic,
+    not the full detail.
+
+    Returns an empty string when there is no context.
+    """
+    if not context:
+        return ""
+
+    recent = context[-_ROUTING_CONTEXT_MAX_TURNS:]
+    lines = ["Recent conversation history:\n"]
+    for msg in recent:
+        role_label = "User" if msg["role"] == "user" else "Assistant"
+        text = msg["text"][:300]
+        lines.append(f"{role_label}: {text}\n")
+    lines.append("\n")
+    return "\n".join(lines)
 
 
 async def route_to_agent(
     message: str,
     current_domain: str | None = None,
+    context: list[dict] | None = None,
 ) -> str:
     """Determine which domain agent should handle *message*.
 
-    Uses a two-layer approach:
+    Uses a three-layer approach:
     1. **Emergency keyword detection** (instant, no LLM) → svc-medical
-    2. **LLM classification** via lightweight OpenClaw CLI call → domain agent
+    2. **LLM classification** via lightweight OpenClaw CLI call,
+       including recent conversation history for context-aware routing
     3. **Fallback** to current_domain or svc-life if LLM fails
 
     Parameters:
         message: The user's raw message text.
         current_domain: The agent id of the ongoing conversation domain,
             or ``None`` if this is a fresh conversation.
+        context: Optional list of prior conversation turns, each a dict
+            with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
+            The most recent turns are included in the classification
+            prompt so the router can understand the topic even when the
+            latest message alone is ambiguous (e.g. "那这个怎么办？").
 
     Returns:
         Agent identifier string (e.g. ``"svc-medical"``).
@@ -445,7 +500,11 @@ async def route_to_agent(
     # 2. LLM classification via OpenClaw CLI (lightweight, fast).
     valid_domains = {"finance", "tax", "visa", "medical", "life", "legal"}
     try:
-        classify_msg = _CLASSIFY_PROMPT.format(message=message[:500])
+        context_section = _build_routing_context(context)
+        classify_msg = _CLASSIFY_PROMPT.format(
+            context_section=context_section,
+            message=message[:500],
+        )
         resp = await call_agent(
             agent_id="svc-router",
             message=classify_msg,
@@ -458,8 +517,9 @@ async def route_to_agent(
             if domain in valid_domains:
                 agent_id = f"svc-{domain}"
                 logger.info(
-                    "LLM routing to %s (classified in %dms)",
+                    "LLM routing to %s (classified in %dms, context_turns=%d)",
                     agent_id, resp.duration_ms,
+                    len(context) if context else 0,
                 )
                 return agent_id
             else:

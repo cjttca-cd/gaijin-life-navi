@@ -3,16 +3,22 @@
 import enum
 from datetime import date, datetime
 
-from sqlalchemy import Boolean, Date, DateTime, Enum, String, Text, func
+from sqlalchemy import Boolean, Date, DateTime, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
 
 
 class SubscriptionTier(str, enum.Enum):
-    """Subscription tier enum."""
+    """Subscription tier enum.
 
+    GUEST is included for code-level references even though guest users
+    are anonymous and do not have a persisted profile row.
+    """
+
+    GUEST = "guest"
     FREE = "free"
+    STANDARD = "standard"
     PREMIUM = "premium"
     PREMIUM_PLUS = "premium_plus"
 
