@@ -218,26 +218,32 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 ## 5. Access Boundary Matrix
 
-| 機能 | 🔓 ゲスト | 🆓 Free | ⭐ Standard | 💎 Premium |
-|------|:---------:|:-------:|:-----------:|:----------:|
+> 更新: 2026-03-01（統一品質 Guide + AI Chat 概要級/深度級分層。Z 承認済み）
+> SSOT: `architecture/BUSINESS_RULES.md` §2
+> AI Chat 分層詳細: `tasks/ai-chat-tier-design.md`
+
+| 機能 | 🔓 ゲスト | 🆓 Free (¥0) | ⭐ Standard (¥720) | 💎 Premium (¥1,360) |
+|------|:---------:|:------------:|:------------------:|:-------------------:|
 | Medical Emergency Guide | ✅ | ✅ | ✅ | ✅ |
-| 公開指南（各ドメイン 1-2 篇） | ✅ | ✅ | ✅ | ✅ |
-| 付費指南（タイトル + 冒頭 excerpt） | 🔒 excerpt | 🔒 excerpt | ✅ 全文 | ✅ 全文 |
-| AI Chat（テキスト + 画像解読） | ❌ | 20回/生涯 | 300回/月 | 無制限 |
-| AI Chat の回答深度 | — | 概要+Tips | 全知識活用 | 全知識活用 |
+| Free 指南（8篇、全文） | ✅ | ✅ | ✅ | ✅ |
+| Registered 指南（37篇） | excerpt+登録CTA | ✅ 全文 | ✅ 全文 | ✅ 全文 |
+| AI Chat 深度級 | — | **5回/lifetime** | **300回/月** | **無制限** |
+| AI Chat 概要級 | **5回/lifetime** | **3回/lifetime** | — | — |
+| Re-engagement（30日毎1回深度級） | — | ✅ | — | — |
+| 従量チャージ（深度級） | — | ✅ | ✅ | — |
 | Auto Tracker | ❌ | ✅ | ✅ | ✅ |
 | 広告 | あり | あり | なし | なし |
 
-**三層指南アーキテクチャ** (詳細: `docs/GUIDE_ACCESS_DESIGN.md` v2):
-- **Layer 1 (Free 指南)**: SEO 引流用。各ドメイン 1-2 篇、5 言語対応。ソース: `guides/`（`access: free`）
-- **Layer 2 (Premium 指南)**: Standard/Premium で全文閲覧。Free にはタイトル + excerpt + 升级 CTA。ソース: `guides/`（`access: premium`）
-- **Layer 3 (AI 向導)**: API 非公開。Agent が `knowledge/`（経験則・判断ロジック・暗黙知）+ ベース知識 + web_search で直接回答
+**二層コンテンツ + 三層ユーザー**:
+- **Guide（統一品質）**: 全 Guide = 完整 how-to（1000-2000字）。品質差なし。Free 8篇は話題熱度で選定（SEO 引流）、Registered 37篇は登録後に全文閲覧
+- **AI Chat（概要級/深度級）**: 概要級 = Guide 同等の情報を対話形式で提供。深度級 = Profile 個性化 + AI-only knowledge + web_search（核心差別化）
 
 **設計原則**:
-- Free で「このアプリがないと困る」と感じさせる。Free 指南 + AI 概要回答で初回体験
-- 付費指南の**体系的情報**が Standard/Premium 転換のドライバー
-- AI Chat: 付費ユーザーには knowledge の全情報を活用して直接回答（「指南を読め」とは言わない）。Free ユーザーには概要回答 + 升级案内
-- ゲストでも Free 指南 + Emergency にアクセス可能 → 登録への導線
+- Guide の引流効果 = 質で勝負（"この1篇がすごい → 登録すれば40篇以上"）
+- 概要級 AI は"ChatGPT より正確"の認知を作る（knowledge ベースの事実修正）
+- 深度級 AI は"あなたの状況に合わせた具体的アドバイス"で AHA moment を作る
+- Free 注册後に深度級を先に消費させ、概要級への落差で付費を促進（Reverse Trial 効果）
+- 注册時に国籍・在留資格・居住地域の3項目を必須取得 → 深度級の個性化を保証
 
 ---
 
@@ -245,11 +251,11 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 ### 6.1 サブスクリプション
 
-| プラン | 月額 | AI Chat（画像解読含む） | Tracker | 広告 |
-|--------|------|----------------------|---------|------|
-| 🆓 Free | ¥0 | 5回/日 | 3件 | あり |
-| ⭐ Standard | ¥720/月 | 300回/月 | 無制限 | なし |
-| 💎 Premium | ¥1,360/月 | 無制限 | 無制限 | なし |
+| プラン | 月額 | AI Chat | Tracker | 広告 |
+|--------|------|---------|---------|------|
+| 🆓 Free | ¥0 | 深度級5回+概要級3回/lifetime | ✅ | あり |
+| ⭐ Standard | ¥720/月 | 深度級 300回/月 | 無制限 | なし |
+| 💎 Premium | ¥1,360/月 | 深度級 無制限 | 無制限 | なし |
 
 ### 6.2 従量チャージ（都度購入）
 

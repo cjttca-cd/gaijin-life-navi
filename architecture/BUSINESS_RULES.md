@@ -13,9 +13,9 @@
 - 全ユーザーデータはアプリケーション層（FastAPI）で `user_id = current_firebase_uid` を検証して制限
 - ナビゲーターコンテンツは knowledge/ と guides/ に分離（詳細: `docs/GUIDE_ACCESS_DESIGN.md` v2）:
   - **knowledge/** — Agent 専用（経験・判断ロジック・暗黙知）。Navigator API には公開しない
-  - **guides/** — ユーザー向け指南。Navigator API で配信:
-    - `access: free` → 全ユーザーに全文提供
-    - `access: premium` → Standard/Premium に全文、Free/Guest に excerpt のみ
+  - **guides/** — ユーザー向け指南。Navigator API で配信（統一品質：全 Guide = 完整 how-to）:
+    - `access: free` → 全ユーザーに全文提供（8篇、話題熱度で選定、全6ドメインをカバー）
+    - `access: registered` → Free/Standard/Premium に全文提供、Guest には excerpt+登録CTA（37篇）
 - Agent 間の workspace は完全分離 → 他 agent の知識は見えない
 - 開発用 Agent と Service Agent は完全に分離された名前空間で動作
 
@@ -35,11 +35,18 @@
 |------|:---------:|:------------:|:--------------------:|:---------------------:|
 | Medical Emergency Guide | ✅ | ✅ | ✅ | ✅ |
 | Navigator 一覧・概要閲覧（全ドメイン） | ✅ | ✅ | ✅ | ✅ |
-| Free 指南（各ドメイン） | ✅ | ✅ | ✅ | ✅ |
-| Premium 指南（各ドメイン） | excerpt+登録CTA | ✅ | ✅ | ✅ |
-| AI Chat（テキスト + 画像） | **5回/lifetime（概要級）** | **10回/lifetime（概要級）** | **300回/月（深度級）** | **無制限（深度級）** |
+| Free 指南（8篇、全文） | ✅ | ✅ | ✅ | ✅ |
+| Registered 指南（37篇） | excerpt+登録CTA | ✅ 全文 | ✅ 全文 | ✅ 全文 |
+| AI Chat 深度級 | — | **5回/lifetime** | **300回/月** | **無制限** |
+| AI Chat 概要級 | **5回/lifetime** | **3回/lifetime** | — | — |
+| Re-engagement（30日毎1回深度級） | — | ✅（全回数消費後） | — | — |
+| 従量チャージ（深度級） | — | ✅ | ✅ | — |
 | Auto Tracker（AI 提案） | ❌ | ✅ | ✅ | ✅ |
 | 広告 | あり | あり | なし | なし |
+
+> **Guide 品質**: 全 Guide 統一品質（完整 how-to、1000-2000字）。Free/Registered の差異は可見性のみ。
+> **Free 消費順序**: 注册後、先に深度級5回を消費 → 使い切ったら概要級3回に切替。
+> **AI Chat 分層設計の詳細**: `tasks/ai-chat-tier-design.md`（2026-03-01 Z 承認済み）
 
 ### 従量チャージ（都度購入）
 
@@ -63,20 +70,36 @@ tier == 'guest' の場合:
   └── AI Chat: lifetime chat_count >= 5 → 429 USAGE_LIMIT_EXCEEDED
   └── AI 回答深度: 概要級のみ + 登録案内
 tier == 'free' の場合:
-  └── AI Chat: lifetime chat_count >= 10 → 429 USAGE_LIMIT_EXCEEDED
-  └── AI 回答深度: 概要級のみ + アップグレード案内
+  └── 深度級: lifetime deep_count >= 5 → 概要級にフォールバック
+  └── 概要級: lifetime summary_count >= 3 → 429 USAGE_LIMIT_EXCEEDED
+  └── Re-engagement: 全回数消費後、30日毎に深度級1回を付与
+  └── AI 回答深度: 深度級残 → 深度級 / 深度級使い切り → 概要級 + アップグレード案内
 tier == 'standard' の場合:
-  └── AI Chat: 月間合計 chat_count >= 300 → 429 USAGE_LIMIT_EXCEEDED
+  └── AI Chat: 月間合計 chat_count >= 300 → 429 USAGE_LIMIT_EXCEEDED（従量チャージで継続可）
+  └── AI 回答深度: 深度級
 tier == 'premium' の場合:
   └── 制限なし
+  └── AI 回答深度: 深度級
 ```
 
-### 日次 / 月次カウントのリセット
+### カウント管理
 
-- **Guest (lifetime)**: `daily_usage` テーブルの全行合計。リセットなし（5回で終了）
-- **Free (lifetime)**: `daily_usage` テーブルの全行合計。リセットなし（10回で終了）
-- **Standard (月次)**: `daily_usage` テーブルの月初〜当日の `chat_count` を SUM で集計。月変わりで自動リセット（バッチジョブ不要）
-- **Premium (無制限)**: カウントは情報提供目的のみ
+- **Guest (lifetime)**: `daily_usage` テーブルの全行合計。リセットなし（概要級5回で終了）
+- **Free (lifetime)**: 深度級5回 + 概要級3回 = 合計8回。`daily_usage` に `deep_count` と `summary_count` を分離追跡。全消費後、30日毎に深度級1回を付与（re-engagement）
+- **Standard (月次)**: `daily_usage` テーブルの月初〜当日の `chat_count` を SUM で集計。月変わりで自動リセット（バッチジョブ不要）。全回答 = 深度級
+- **Premium (無制限)**: カウントは情報提供目的のみ。全回答 = 深度級
+
+### 注册時の必須 Profile（⚠️ 新規要件）
+
+登録フローで以下3フィールドを必須入力とする:
+
+| フィールド | 必須 | 用途 |
+|-----------|:----:|------|
+| 国籍 (nationality) | ✅ | 租税条約・ビザ要件・銀行推薦 |
+| 在留資格 (residence_status) | ✅ | 就労制限・税務フロー・行政手続き分岐 |
+| 居住地域 (residence_region) | ✅ | 地域差異・窓口案内 |
+
+これにより深度級の初回体験で Profile 個性化が確実に機能する。
 
 ### 制限超過時の API レスポンス
 
@@ -95,6 +118,29 @@ tier == 'premium' の場合:
   }
 }
 ```
+
+---
+
+### 概要級 / 深度級 定義（⚠️ AI Chat の回答品質を制御する SSOT）
+
+> 詳細: `tasks/ai-chat-tier-design.md`
+
+**概要級**（Guest + Free の残り回数）:
+- ✅ 完整操作手順 + 材料リスト + 注意事項（Guide と同等レベル）
+- ✅ LLM旧知識修正（保険証→マイナ保険証、103万→123万 等）
+- ✅ 対話式答疑（追問/明確化 — 静的 Guide にはない対話価値）
+- ❌ Profile 個性化なし（国籍/ビザ/地域を使わない）
+- ❌ AI-only 内容なし（具体機関評価、判断決策樹、地域差異、web_search、跨域連動、🔒情報）
+- 回答末尾に深度級への導線を付与:「あなたの状況に合わせた具体的なおすすめは深度級で」
+
+**深度級**（Free 先行5回 + Standard/Premium + 従量チャージ）:
+- ✅ 概要級の全機能
+- ✅ Profile 個性化 → 「XX国籍XXビザ住XX → 推薦...」
+- ✅ 具体機関名+評価 → 「ゆうちょは電話番号不要」
+- ✅ 判断決策樹 → 「中国籍留学生 → 租税条約全額免税」
+- ✅ web_search → リアルタイム金額・制度変更
+- ✅ 跨域連動 → 「口座開設と携帯を同時解決」
+- ✅ 🔒 AI-only 情報（状況に応じて）
 
 ---
 
