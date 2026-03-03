@@ -16,7 +16,6 @@ class ChatMessage {
     this.domain,
     this.usage,
     this.imageBase64,
-    this.depthLevel,
     required this.createdAt,
   });
 
@@ -40,9 +39,6 @@ class ChatMessage {
   /// Base64-encoded image attached by the user (for display in bubble).
   final String? imageBase64;
 
-  /// Depth level of the AI response: "deep" | "summary" | null.
-  final String? depthLevel;
-
   final DateTime createdAt;
 
   bool get isUser => role == 'user';
@@ -59,7 +55,6 @@ class ChatMessage {
     String? domain,
     ChatUsageInfo? usage,
     String? imageBase64,
-    String? depthLevel,
     DateTime? createdAt,
   }) {
     return ChatMessage(
@@ -73,7 +68,6 @@ class ChatMessage {
       domain: domain ?? this.domain,
       usage: usage ?? this.usage,
       imageBase64: imageBase64 ?? this.imageBase64,
-      depthLevel: depthLevel ?? this.depthLevel,
       createdAt: createdAt ?? this.createdAt,
     );
   }

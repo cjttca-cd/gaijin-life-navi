@@ -1,6 +1,13 @@
+"""Integration tests for the chat endpoint.
+
+Tests verify:
+  - Free users get deep-level responses with full profile
+  - Guest users (anonymous) receive 403 CHAT_REQUIRES_AUTH
+"""
 from __future__ import annotations
 
 import pytest
+from fastapi import HTTPException
 
 from models.profile import Profile
 from routers import chat as chat_router
@@ -10,10 +17,11 @@ from services.usage import UsageCheck
 
 
 @pytest.mark.asyncio
-async def test_chat_summary_mode_strips_profile_and_returns_depth_level(
+async def test_chat_deep_mode_includes_full_profile(
     db_session,
     monkeypatch,
 ) -> None:
+    """Free user gets deep-level response with all profile fields."""
     uid = "chat-user-1"
     db_session.add(
         Profile(
@@ -36,11 +44,10 @@ async def test_chat_summary_mode_strips_profile_and_returns_depth_level(
         assert tier == "free"
         return UsageCheck(
             allowed=True,
-            used=6,
-            limit=8,
+            used=1,
+            limit=5,
             tier="free",
             period="lifetime",
-            depth_level="summary",
         )
 
     async def fake_route_to_agent(message: str, current_domain=None, context=None):  # noqa: ANN001
@@ -48,9 +55,8 @@ async def test_chat_summary_mode_strips_profile_and_returns_depth_level(
 
     async def fake_call_agent(**kwargs):  # noqa: ANN003
         captured["user_profile"] = kwargs.get("user_profile")
-        captured["depth_level"] = kwargs.get("depth_level")
         return AgentResponse(
-            text="一般的な案内です",
+            text="深度級の回答です",
             model="stub",
             duration_ms=10,
             input_tokens=10,
@@ -72,12 +78,31 @@ async def test_chat_summary_mode_strips_profile_and_returns_depth_level(
     response = await chat_router.chat(body=body, current_user=current_user, db=db_session)
     data = response["data"]
 
-    assert data["depth_level"] == "summary"
-    assert data["usage"]["depth_level"] == "summary"
-    assert captured["depth_level"] == "summary"
+    # No depth_level field in response (概要級 deprecated)
+    assert "depth_level" not in data
+    assert "depth_level" not in data["usage"]
 
+    # Full profile including personalisation fields
     user_profile = captured["user_profile"]
     assert isinstance(user_profile, dict)
-    assert "nationality" not in user_profile
-    assert "residence_status" not in user_profile
-    assert "residence_region" not in user_profile
+    assert user_profile.get("nationality") == "JP"
+    assert user_profile.get("residence_status") == "留学"
+    assert user_profile.get("residence_region") == "東京都"
+
+
+@pytest.mark.asyncio
+async def test_chat_guest_returns_403(
+    db_session,
+    monkeypatch,
+) -> None:
+    """Guest (anonymous) users receive 403 CHAT_REQUIRES_AUTH."""
+    uid = "anon-guest-1"
+
+    body = chat_router.ChatRequest(message="口座開設について", locale="en")
+    current_user = FirebaseUser(uid=uid, email=None, is_anonymous=True)
+
+    with pytest.raises(HTTPException) as exc_info:
+        await chat_router.chat(body=body, current_user=current_user, db=db_session)
+
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.detail["error"]["code"] == "CHAT_REQUIRES_AUTH"

@@ -1,7 +1,7 @@
 # PROJECT_MEMORY — gaijin-life-navi
 
 ## Now
-🎉 全 11 Epic 完了。M0〜M4 全マイルストーン受入検証済み ✅。MVP 開発完了。
+🔄 Plan C Access Control（E12）進行中 — 4 層アクセスモデルのフロントエンド対応。
 
 ## Status
 
@@ -49,6 +49,7 @@
 | E9: プロフィール・設定 | M4 | ✅ 完了 | プロフィール編集, 言語変更, アカウント削除 |
 | E10: LP | M4 | ✅ 完了 | Astro LP, 5 言語, SEO |
 | E11: 統合テスト + ローンチ | M4 | ✅ 完了 | E2E テスト, ビルド, 本番デプロイ |
+| E12: Plan C Access Control | Post-MVP | 🔄 進行中 | Backend period field + Frontend 6 改動（匿名auth/guide CTA/guest chat/usage/l10n） |
 
 ### Milestone Dependencies
 ```

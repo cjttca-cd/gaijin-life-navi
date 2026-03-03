@@ -92,20 +92,15 @@ class UsageCounter extends ConsumerWidget {
       );
     }
 
-    // Determine display text based on tier and depth level.
-    final depthLevel = usage.depthLevel;
+    // Determine display text based on tier.
     final String displayText;
 
     if (usage.tier == 'standard') {
-      // Standard tier — always deep, show monthly.
+      // Standard tier — deep, show monthly.
       displayText = l10n.chatUsageDeepRemaining(remaining, limit);
     } else if (usage.isLifetime) {
-      // Free tier (lifetime) — show deep or summary indicator.
-      if (depthLevel == 'summary') {
-        displayText = l10n.chatUsageSummaryRemaining(remaining, limit);
-      } else {
-        displayText = l10n.chatUsageDeepRemaining(remaining, limit);
-      }
+      // Free tier (lifetime) — deep only.
+      displayText = l10n.chatUsageDeepRemaining(remaining, limit);
     } else {
       // Fallback — generic display.
       displayText = l10n.chatLimitRemaining(remaining, limit);
@@ -121,9 +116,7 @@ class UsageCounter extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            depthLevel == 'summary'
-                ? Icons.summarize_outlined
-                : Icons.info_outline,
+            Icons.info_outline,
             size: 16,
             color: AppColors.warning,
           ),

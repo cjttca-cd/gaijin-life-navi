@@ -26,7 +26,7 @@ class _DummyProc:
         return None
 
 
-async def _capture_full_message(monkeypatch, depth_level: str) -> str:
+async def _capture_full_message(monkeypatch) -> str:
     captured: dict[str, tuple] = {}
 
     async def fake_create_subprocess_exec(*cmd, **kwargs):  # noqa: ANN001
@@ -46,7 +46,6 @@ async def _capture_full_message(monkeypatch, depth_level: str) -> str:
             "residence_region": "東京都",
             "preferred_language": "ja",
         },
-        depth_level=depth_level,
     )
 
     assert resp.status == "ok"
@@ -58,19 +57,9 @@ async def _capture_full_message(monkeypatch, depth_level: str) -> str:
 
 @pytest.mark.asyncio
 async def test_prompt_contains_deep_annotation_and_profile_fields(monkeypatch) -> None:
-    full_message = await _capture_full_message(monkeypatch, depth_level="deep")
+    full_message = await _capture_full_message(monkeypatch)
 
     assert "回答深度: 深度級" in full_message
     assert "国籍: JP" in full_message
     assert "在留資格: 留学" in full_message
     assert "居住地域: 東京都" in full_message
-
-
-@pytest.mark.asyncio
-async def test_prompt_summary_strips_sensitive_profile_fields(monkeypatch) -> None:
-    full_message = await _capture_full_message(monkeypatch, depth_level="summary")
-
-    assert "回答深度: 概要級" in full_message
-    assert "国籍: JP" not in full_message
-    assert "在留資格: 留学" not in full_message
-    assert "居住地域: 東京都" not in full_message

@@ -227,22 +227,20 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 | Medical Emergency Guide | ✅ | ✅ | ✅ | ✅ |
 | Free 指南（8篇、全文） | ✅ | ✅ | ✅ | ✅ |
 | Registered 指南（37篇） | excerpt+登録CTA | ✅ 全文 | ✅ 全文 | ✅ 全文 |
-| AI Chat 深度級 | — | **5回/lifetime** | **300回/月** | **無制限** |
-| AI Chat 概要級 | **5回/lifetime** | **3回/lifetime** | — | — |
+| AI Chat（深度級のみ） | ❌（403） | **5回/lifetime** | **300回/月** | **無制限** |
 | Re-engagement（30日毎1回深度級） | — | ✅ | — | — |
 | 従量チャージ（深度級） | — | ✅ | ✅ | — |
 | Auto Tracker | ❌ | ✅ | ✅ | ✅ |
 | 広告 | あり | あり | なし | なし |
 
-**二層コンテンツ + 三層ユーザー**:
+**二層コンテンツ + 二層ユーザー**:
 - **Guide（統一品質）**: 全 Guide = 完整 how-to（1000-2000字）。品質差なし。Free 8篇は話題熱度で選定（SEO 引流）、Registered 37篇は登録後に全文閲覧
-- **AI Chat（概要級/深度級）**: 概要級 = Guide 同等の情報を対話形式で提供。深度級 = Profile 個性化 + AI-only knowledge + web_search（核心差別化）
+- **AI Chat（深度級のみ）**: Profile 個性化 + AI-only knowledge + web_search（核心差別化）。概要級は 2026-03-03 に廃止。
 
 **設計原則**:
 - Guide の引流効果 = 質で勝負（"この1篇がすごい → 登録すれば40篇以上"）
-- 概要級 AI は"ChatGPT より正確"の認知を作る（knowledge ベースの事実修正）
 - 深度級 AI は"あなたの状況に合わせた具体的アドバイス"で AHA moment を作る
-- Free 注册後に深度級を先に消費させ、概要級への落差で付費を促進（Reverse Trial 効果）
+- Guest は AI Chat 利用不可（403）→ 登録促進
 - 注册時に国籍・在留資格・居住地域の3項目を必須取得 → 深度級の個性化を保証
 
 ---
@@ -253,7 +251,7 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 | プラン | 月額 | AI Chat | Tracker | 広告 |
 |--------|------|---------|---------|------|
-| 🆓 Free | ¥0 | 深度級5回+概要級3回/lifetime | ✅ | あり |
+| 🆓 Free | ¥0 | 深度級5回/lifetime | ✅ | あり |
 | ⭐ Standard | ¥720/月 | 深度級 300回/月 | 無制限 | なし |
 | 💎 Premium | ¥1,360/月 | 深度級 無制限 | 無制限 | なし |
 
@@ -477,3 +475,4 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 - 2026-02-16: Z レビュー APPROVED
 - 2026-02-17: Phase 0 プロダクトピボット反映（AI Concierge 中心化 / 課金体系再構築 / OC Runtime）
 - 2026-02-21: 6 Agent 体系反映（svc-finance / svc-tax / svc-life / svc-legal 追加、concierge 廃止→軽量ルーター、Phase 0 = 6 agent 全部）
+- 2026-03-03: 概要級（summary level）全面廃止。§5・§6 から概要級記述を削除

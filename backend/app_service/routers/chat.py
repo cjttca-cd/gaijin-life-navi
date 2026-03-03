@@ -71,7 +71,6 @@ class UsageInfo(BaseModel):
     limit: int | None = None  # None ⇒ unlimited
     tier: str
     period: str | None = None  # "lifetime" | "month" | None(unlimited)
-    depth_level: str = "deep"  # "deep" | "summary"
 
 
 class ChatResponse(BaseModel):
@@ -83,7 +82,6 @@ class ChatResponse(BaseModel):
     actions: list[dict[str, Any]] = Field(default_factory=list)
     tracker_items: list[dict[str, Any]] = Field(default_factory=list)
     usage: UsageInfo
-    depth_level: str = "deep"  # "deep" | "summary"
 
 
 # ── Response-text parsers ──────────────────────────────────────────────
@@ -255,7 +253,7 @@ async def _get_user_tier(db: AsyncSession, uid: str, is_anonymous: bool = False)
 def _usage_to_info(uc: UsageCheck) -> UsageInfo:
     return UsageInfo(
         used=uc.used, limit=uc.limit, tier=uc.tier,
-        period=uc.period, depth_level=uc.depth_level,
+        period=uc.period,
     )
 
 
@@ -294,7 +292,20 @@ async def chat(
     # 1. Get user tier
     tier = await _get_user_tier(db, uid, is_anonymous=current_user.is_anonymous)
 
-    # 2. Check usage limit (and increment atomically if allowed)
+    # 2. Guest users cannot use AI Chat (403)
+    if tier == "guest":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={
+                "error": {
+                    "code": "CHAT_REQUIRES_AUTH",
+                    "message": "AI Chat requires a registered account. Please sign up to continue.",
+                    "details": {},
+                }
+            },
+        )
+
+    # 3. Check usage limit (and increment atomically if allowed)
     usage = await check_and_increment(db, uid, tier)
     if not usage.allowed:
         raise HTTPException(
@@ -313,12 +324,12 @@ async def chat(
             },
         )
 
-    # 3. Build context early — needed for both routing and agent call.
+    # 4. Build context early — needed for both routing and agent call.
     context_dicts = None
     if body.context:
         context_dicts = [{"role": m.role, "text": m.text} for m in body.context]
 
-    # 4. Route to agent domain (LLM-based classification with conversation context)
+    # 5. Route to agent domain (LLM-based classification with conversation context)
     domain = await route_to_agent(
         body.message,
         current_domain=body.domain,
@@ -327,19 +338,19 @@ async def chat(
     agent_id = domain  # route_to_agent already returns "svc-xxx" format
     domain_short = domain.removeprefix("svc-")
 
-    # 5. Build message with locale hint
+    # 6. Build message with locale hint
     agent_message = body.message
     if body.locale and body.locale != "en":
         agent_message = f"[User language: {body.locale}] {body.message}"
 
-    # 6. Handle image upload — decode, save, pass path to agent.
+    # 7. Handle image upload — decode, save, pass path to agent.
     image_path: str | None = None
     if body.image:
         image_path = _save_image_to_workspace(agent_id, body.image)
         # Clean up old uploads in the background (best-effort).
         _cleanup_old_uploads(agent_id)
 
-    # 7. Fetch user profile for agent personalisation
+    # 8. Fetch user profile for agent personalisation
     profile = await db.get(Profile, uid)
     user_profile: dict | None = None
     if profile and profile.deleted_at is None:
@@ -360,19 +371,13 @@ async def chat(
     if user_profile is None:
         user_profile = {"subscription_tier": tier}
 
-    # 7b. Strip personalisation fields for summary mode (defence-in-depth)
-    if usage.depth_level == "summary" and user_profile:
-        for key in ("nationality", "residence_status", "residence_region"):
-            user_profile.pop(key, None)
-
-    # 8. Call agent (stateless with /reset, context already built in step 3)
+    # 9. Call agent (stateless with /reset, context already built in step 3)
     agent_resp = await call_agent(
         agent_id=agent_id,
         message=agent_message,
         context=context_dicts,
         image_path=image_path,
         user_profile=user_profile,
-        depth_level=usage.depth_level,
     )
 
     if agent_resp.status != "ok":
@@ -391,10 +396,10 @@ async def chat(
             },
         )
 
-    # 9. Parse structured blocks from agent response
+    # 10. Parse structured blocks from agent response
     reply, sources, actions, tracker_items = _extract_blocks(agent_resp.text)
 
-    # 10. Build response
+    # 11. Build response
     response = ChatResponse(
         reply=reply,
         domain=domain_short,
@@ -402,7 +407,6 @@ async def chat(
         actions=actions,
         tracker_items=tracker_items,
         usage=_usage_to_info(usage),
-        depth_level=usage.depth_level,
     )
 
     return SuccessResponse(data=response.model_dump()).model_dump()

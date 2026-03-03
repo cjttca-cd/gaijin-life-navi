@@ -591,21 +591,8 @@
   "registerResidenceRegionHint": "选择你的居住地域",
   "registerSearchHint": "搜索...",
   "chatDepthLevelDeep": "深度回答",
-  "chatDepthLevelSummary": "概要回答",
-  "chatSummaryUpgradeCta": "获取个性化建议 →",
   "chatUsageDeepRemaining": "深度: {remaining}/{limit}",
   "@chatUsageDeepRemaining": {
-    "placeholders": {
-      "remaining": {
-        "type": "int"
-      },
-      "limit": {
-        "type": "int"
-      }
-    }
-  },
-  "chatUsageSummaryRemaining": "概要: {remaining}/{limit}",
-  "@chatUsageSummaryRemaining": {
     "placeholders": {
       "remaining": {
         "type": "int"

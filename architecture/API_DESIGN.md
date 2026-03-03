@@ -20,7 +20,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 - **方式**: Bearer Token (Firebase Auth ID Token)
 - **ヘッダー**: `Authorization: Bearer {firebase_id_token}`
 - **JWT 検証**: API Gateway (FastAPI) で Firebase Admin SDK を使用して検証
-- **未認証エンドポイント**: `/api/v1/health`, `/api/v1/auth/register`, `/api/v1/emergency`, `/api/v1/navigator/domains`, `/api/v1/navigator/{domain}/guides`, `/api/v1/subscription/plans`
+- **未認証エンドポイント**: `/api/v1/health`, `/api/v1/auth/register`, `/api/v1/emergency`, `/api/v1/navigator/domains`, `/api/v1/navigator/{domain}/guides`, `/api/v1/plans`
 
 ### エラーフォーマット
 
@@ -74,8 +74,8 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 | GET | /api/v1/users/me | プロフィール取得 | Required |
 | PATCH | /api/v1/users/me | プロフィール更新 | Required |
 | POST | /api/v1/users/me/onboarding | オンボーディング完了 | Required |
-| GET | /api/v1/subscription/plans | 料金プラン一覧 | Public |
-| POST | /api/v1/subscription/purchase | 購入処理（IAP レシート検証） | Required |
+| GET | /api/v1/plans | 料金プラン一覧 | Public |
+| POST | /api/v1/subscriptions/checkout | 購入処理（Stripe Checkout） | Required |
 | GET | /api/v1/usage | 利用状況（残回数等） | Required |
 | GET | /api/v1/profile | プロフィール取得 | Required |
 | PUT | /api/v1/profile | プロフィール更新 | Required |
@@ -116,16 +116,27 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
   "message": "銀行口座を開設したいのですが",
   "image": null,
   "domain": null,
-  "locale": "zh"
+  "locale": "zh",
+  "context": [
+    {"role": "user", "text": "日本に来たばかりです"},
+    {"role": "assistant", "text": "ようこそ！まず銀行口座の開設をおすすめします。..."}
+  ]
 }
 ```
 
 | フィールド | 型 | 必須 | 説明 |
 |-----------|------|------|------|
 | message | string | ✅ | ユーザーメッセージ (1-4000文字) |
-| image | string\|null | — | Base64 画像 (Phase 1 で実装) |
+| image | string\|null | — | Base64 画像データ |
 | domain | string\|null | — | ドメインヒント: finance, tax, visa, medical, life, legal。指定時は LLM routing をスキップ |
 | locale | string | — | ユーザー言語 (default: "en") |
+| context | ContextMessage[]\|null | — | 前端から送信される会話履歴 (max 100件、各 max 8000文字)。ルーティング判定と Agent 回答の両方に使用 |
+
+**ContextMessage**:
+| フィールド | 型 | 必須 | 説明 |
+|-----------|------|------|------|
+| role | string | ✅ | `"user"` or `"assistant"` |
+| text | string | ✅ | メッセージ本文 (max 8000文字) |
 
 **Response 200**:
 ```json
@@ -211,11 +222,43 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 **処理フロー**:
 1. Firebase JWT 検証 → user_id 取得
 2. profiles.subscription_tier 取得
-3. daily_usage チェック + インクリメント（制限超過なら 429）
-4. Emergency keyword 検出 → svc-medical / LLM 軽量分類 → 6 ドメイン判定 (finance/tax/visa/medical/life/legal)
-5. `openclaw agent --agent svc-{domain} --session-id app_{uid}_{domain}` 呼び出し
-6. Response text から `[SOURCES]` `[ACTIONS]` `[TRACKER]` ブロック解析
-7. 構造化 ChatResponse を返却
+3. context 構築 — 前端から送信された会話履歴を dict リストに変換
+4. daily_usage チェック + インクリメント（制限超過なら 429）
+5. Emergency keyword 検出 → svc-medical / LLM 軽量分類（**context 含む**）→ 6 ドメイン判定 (finance/tax/visa/medical/life/legal)
+6. `openclaw agent --agent svc-{domain}` 呼び出し（`/reset` stateless モード。profile + context + 新メッセージを拼接）
+7. Response text から `[SOURCES]` `[ACTIONS]` `[TRACKER]` ブロック解析
+8. 構造化 ChatResponse を返却
+
+**Agent への入力構造** (call_agent が構築):
+
+    /reset 【ユーザープロフィール】
+    表示名: Zhang Wei
+    国籍: 中国
+    会員プラン: standard
+
+    以下は過去の会話履歴です。この文脈を踏まえて回答してください。
+
+    User: 日本に来たばかりです
+
+    Assistant: ようこそ！まず銀行口座の開設を...
+
+    ---
+
+    【現在のユーザーの質問】
+    銀行口座を開設したいのですが
+
+**ルーティング分類への入力構造** (route_to_agent が構築):
+
+    Classify the conversation into exactly ONE domain...
+
+    Recent conversation history:
+
+    User: 日本に来たばかりです
+    Assistant: ようこそ！まず銀行口座の開設を...
+
+    Current user message: 銀行口座を開設したいのですが
+
+> 注: ルーティング分類には最近 10 ターンの context が含まれる（各メッセージ 300 文字まで）。Agent への call_agent には全 context が含まれる（各メッセージ 2000 文字まで）。
 
 ---
 
@@ -292,17 +335,23 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
       {
         "slug": "account-opening",
         "title": "Bank Account Opening Guide for Foreign Residents",
-        "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident."
+        "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident.",
+        "access": "free",
+        "excerpt": "Step-by-step guide to opening a bank account..."
       },
       {
         "slug": "banks-overview",
         "title": "Major Banks Comparison",
-        "summary": "Comparison of major banks in Japan for foreign residents."
+        "summary": "Comparison of major banks in Japan for foreign residents.",
+        "access": "premium",
+        "excerpt": "Compare major banks for foreign residents..."
       },
       {
         "slug": "remittance",
         "title": "International Money Transfer Guide",
-        "summary": "Compare remittance options: bank transfer, Wise, Western Union."
+        "summary": "Compare remittance options: bank transfer, Wise, Western Union.",
+        "access": "premium",
+        "excerpt": "Compare remittance options..."
       }
     ]
   }
@@ -311,18 +360,35 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 
 #### `GET /api/v1/navigator/{domain}/guides/{slug}`
 
-- **説明**: 特定ガイドの全文取得（markdown コンテンツ）
-- **認証**: 不要（公開情報。将来 Tier-based 制限を検討）
+- **説明**: 特定ガイドの全文取得（Tier ベースアクセス制御付き）
+- **認証**: Optional（Bearer Token）。未認証 = guest 扱い
 
-**Response 200**:
+**Response 200 (free ガイド / 有料ユーザー)**:
 ```json
 {
   "data": {
     "domain": "finance",
     "slug": "account-opening",
     "title": "Bank Account Opening Guide for Foreign Residents",
+    "access": "free",
+    "locked": false,
     "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident.",
     "content": "# Bank Account Opening Guide for Foreign Residents\n\n## Required Documents\n\n1. **Residence Card** (在留カード)\n2. **Passport**\n3. **Proof of Address** (住民票)..."
+  }
+}
+```
+
+**Response 200 (premium ガイド / free ユーザー or guest)**:
+```json
+{
+  "data": {
+    "domain": "finance",
+    "slug": "banks-overview",
+    "title": "Major Banks Comparison",
+    "access": "premium",
+    "locked": true,
+    "excerpt": "Compare major banks for foreign residents. Key factors include...",
+    "upgrade_cta": true
   }
 }
 ```
@@ -429,11 +495,10 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
     "id": "firebase_uid_abc123",
     "email": "user@example.com",
     "display_name": "Chen Wei",
-    "avatar_url": null,
     "nationality": "CN",
     "residence_status": "engineer_specialist",
-    "residence_region": "13",
-    "arrival_date": "2024-04-01",
+    "residence_region": "東京都新宿区",
+    "visa_expiry": "2027-03-15",
     "preferred_language": "zh",
     "subscription_tier": "free",
     "onboarding_completed": true,
@@ -469,8 +534,8 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 {
   "nationality": "CN",
   "residence_status": "engineer_specialist",
-  "residence_region": "13",
-  "arrival_date": "2024-04-01",
+  "residence_region": "東京都新宿区",
+  "visa_expiry": "2027-03-15",
   "preferred_language": "zh"
 }
 ```
@@ -481,7 +546,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 
 ### 6. Subscription
 
-#### `GET /api/v1/subscription/plans`
+#### `GET /api/v1/plans`
 
 - **説明**: 利用可能なプラン一覧
 - **認証**: 不要
@@ -498,8 +563,8 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
         "currency": "JPY",
         "interval": null,
         "features": {
-          "chat_limit": "5/day",
-          "tracker_limit": 3,
+          "chat_limit": "20/lifetime",
+          "tracker_limit": null,
           "ads": true
         }
       },
@@ -536,9 +601,9 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 }
 ```
 
-#### `POST /api/v1/subscription/purchase`
+#### `POST /api/v1/subscriptions/checkout`
 
-- **説明**: IAP 購入処理（Apple レシート or Google purchase token を検証）
+- **説明**: 購入処理（Stripe Checkout session 作成。将来 Apple IAP / Google Play Billing に切替予定）
 - **認証**: 必要
 
 **Request Body**:
@@ -576,10 +641,10 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 ```json
 {
   "data": {
-    "chat_count": 3,
-    "chat_limit": 5,
-    "chat_remaining": 2,
-    "period": "day",
+    "chat_count": 8,
+    "chat_limit": 20,
+    "chat_remaining": 12,
+    "period": "lifetime",
     "tier": "free"
   }
 }
@@ -639,3 +704,11 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
 - 2026-02-21: 6 Agent 体系反映（ドメイン一覧 6 active に更新、routing 分類ロジック更新）
+- 2026-02-21: 設計文書と実装の整合性修正:
+  - Chat Request に `context` フィールド追加（ContextMessage 定義）
+  - Agent 入力構造 + ルーティング入力構造を明記
+  - Guide list/detail response に `access`, `excerpt`, `locked`, `upgrade_cta` 追加
+  - Profile: `arrival_date` → `visa_expiry`, `avatar_url` 削除, `residence_region` を市区町村レベルに
+  - Free tier: `5/day` → `20/lifetime`
+  - Subscription endpoint: `/api/v1/subscription/*` → `/api/v1/plans` + `/api/v1/subscriptions/*`
+  - 処理フロー: `/reset` stateless モード + context-aware routing を反映

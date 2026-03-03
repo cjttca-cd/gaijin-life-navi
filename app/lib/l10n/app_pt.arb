@@ -591,21 +591,8 @@
   "registerResidenceRegionHint": "Selecione sua região",
   "registerSearchHint": "Pesquisar...",
   "chatDepthLevelDeep": "Resposta detalhada",
-  "chatDepthLevelSummary": "Resposta resumida",
-  "chatSummaryUpgradeCta": "Obter aconselhamento personalizado →",
   "chatUsageDeepRemaining": "Detalhada: {remaining}/{limit}",
   "@chatUsageDeepRemaining": {
-    "placeholders": {
-      "remaining": {
-        "type": "int"
-      },
-      "limit": {
-        "type": "int"
-      }
-    }
-  },
-  "chatUsageSummaryRemaining": "Resumida: {remaining}/{limit}",
-  "@chatUsageSummaryRemaining": {
     "placeholders": {
       "remaining": {
         "type": "int"

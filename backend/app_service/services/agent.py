@@ -82,13 +82,14 @@ async def call_agent(
     image_path: str | None = None,
     user_profile: dict | None = None,
     timeout: int = 60,
-    depth_level: str = "deep",
 ) -> AgentResponse:
     """Invoke an OpenClaw agent statelessly and return a structured response.
 
     Every call is prefixed with ``/reset`` so OpenClaw creates a fresh
     session, ensuring complete isolation between users/requests.
     Conversation history is passed explicitly via *context*.
+
+    All responses are 深度級 (deep level) — 概要級 was deprecated 2026-03-03.
 
     Parameters:
         agent_id: The agent identifier to route to (e.g. ``"svc-life"``).
@@ -102,10 +103,6 @@ async def call_agent(
             Injected into the prompt so the agent can personalise responses.
         timeout: Maximum seconds to wait for the agent (passed to both
             OpenClaw ``--timeout`` and ``asyncio`` subprocess timeout).
-        depth_level: Response depth — ``"deep"`` for full personalised
-            answers or ``"summary"`` for general-only answers (no profile
-            personalisation).  Injected into the prompt so the agent can
-            adjust response quality accordingly.
 
     Returns:
         An :class:`AgentResponse` — always returned, never raises.
@@ -117,10 +114,6 @@ async def call_agent(
     full_message = "/reset "
 
     # Inject user profile so the agent can personalise responses.
-    # In summary mode, nationality/residence_status/residence_region are
-    # excluded (defence-in-depth — chat.py also strips them before passing).
-    _SUMMARY_EXCLUDED = {"nationality", "residence_status", "residence_region"}
-
     if user_profile:
         profile_lines = ["【ユーザープロフィール】"]
         field_map = {
@@ -133,20 +126,11 @@ async def call_agent(
             "preferred_language": "首選語言",
         }
         for key, label in field_map.items():
-            if depth_level == "summary" and key in _SUMMARY_EXCLUDED:
-                continue
             value = user_profile.get(key)
             if value:
                 profile_lines.append(f"{label}: {value}")
 
-        # Inject depth-level annotation for the agent
-        if depth_level == "deep":
-            profile_lines.append("回答深度: 深度級")
-        else:
-            profile_lines.append(
-                "回答深度: 概要級（概要級のため Profile 個性化情報を使用しないこと。"
-                "一般的な情報提供のみ。回答末尾に深度級への導線を付与すること。）"
-            )
+        profile_lines.append("回答深度: 深度級")
 
         full_message += "\n".join(profile_lines) + "\n\n"
 
