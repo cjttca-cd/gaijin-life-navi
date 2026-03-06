@@ -9,8 +9,14 @@ class NavigatorRepository {
   final Dio apiClient;
 
   /// Fetch all navigator domains.
-  Future<List<NavigatorDomain>> getDomains() async {
-    final response = await apiClient.get('/navigator/domains');
+  ///
+  /// [lang] — ISO 639-1 language code (e.g. ``zh``, ``ja``).
+  /// When omitted the backend defaults to ``ja``.
+  Future<List<NavigatorDomain>> getDomains({String? lang}) async {
+    final response = await apiClient.get(
+      '/navigator/domains',
+      queryParameters: {if (lang != null) 'lang': lang},
+    );
     final data = response.data['data'] as Map<String, dynamic>?;
     final domains = data?['domains'] as List<dynamic>? ?? [];
     return domains
@@ -19,8 +25,14 @@ class NavigatorRepository {
   }
 
   /// Fetch guides for a specific domain.
-  Future<List<NavigatorGuide>> getGuides(String domain) async {
-    final response = await apiClient.get('/navigator/$domain/guides');
+  ///
+  /// [lang] — ISO 639-1 language code.  Falls back to ``ja`` on the server
+  /// when the requested language is unavailable.
+  Future<List<NavigatorGuide>> getGuides(String domain, {String? lang}) async {
+    final response = await apiClient.get(
+      '/navigator/$domain/guides',
+      queryParameters: {if (lang != null) 'lang': lang},
+    );
     final data = response.data['data'] as Map<String, dynamic>?;
     final guides = data?['guides'] as List<dynamic>? ?? [];
     return guides
@@ -36,11 +48,17 @@ class NavigatorRepository {
   }
 
   /// Fetch a single guide's detail.
+  ///
+  /// [lang] — ISO 639-1 language code.
   Future<NavigatorGuideDetail> getGuideDetail(
     String domain,
-    String slug,
-  ) async {
-    final response = await apiClient.get('/navigator/$domain/guides/$slug');
+    String slug, {
+    String? lang,
+  }) async {
+    final response = await apiClient.get(
+      '/navigator/$domain/guides/$slug',
+      queryParameters: {if (lang != null) 'lang': lang},
+    );
     final data =
         response.data['data'] as Map<String, dynamic>? ??
         response.data as Map<String, dynamic>;

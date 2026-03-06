@@ -7,6 +7,10 @@ GET  /api/v1/navigator/domains                  — List all domains
 GET  /api/v1/navigator/{domain}/guides           — List guides for a domain
 GET  /api/v1/navigator/{domain}/guides/{slug}    — Get specific guide
 GET  /api/v1/emergency                           — Emergency contacts (public)
+
+All guide endpoints accept an optional ``lang`` query parameter (e.g. ``zh``,
+``ja``).  When the requested language is unavailable for a given guide the
+server falls back to ``ja`` (Japanese).
 """
 
 import logging
@@ -15,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from schemas.common import ErrorResponse, SuccessResponse
@@ -23,6 +27,11 @@ from schemas.common import ErrorResponse, SuccessResponse
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["navigator"])
+
+# ── Constants ──────────────────────────────────────────────────────────
+
+_FALLBACK_LANG = "ja"
+_SUPPORTED_LANGS = {"zh", "ja", "en", "vi", "pt", "ko"}
 
 # ── Domain → guides directory mapping ──────────────────────────────────
 
@@ -84,6 +93,83 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "guides_path": None,
     },
 }
+
+
+# ── Language-aware file helpers ────────────────────────────────────────
+
+# Filename pattern: {slug}.{lang}.md  (e.g. bank-account-opening.zh.md)
+_LANG_FILE_RE = re.compile(r"^(.+)\.([a-z]{2})\.md$")
+
+
+def _parse_guide_filename(filename: str) -> tuple[str, str | None]:
+    """Extract (slug, lang) from a guide filename.
+
+    Returns (slug, lang) for language-suffixed files like ``foo.zh.md``,
+    or (stem, None) for legacy files like ``foo.md``.
+    """
+    m = _LANG_FILE_RE.match(filename)
+    if m:
+        return m.group(1), m.group(2)
+    # Legacy format (no language suffix)
+    if filename.endswith(".md"):
+        return filename[:-3], None
+    return filename, None
+
+
+def _resolve_guide_file(
+    guides_dir: Path, slug: str, lang: str,
+) -> Path | None:
+    """Resolve the best matching guide file for *slug* and *lang*.
+
+    Priority: {slug}.{lang}.md → {slug}.ja.md (fallback) → None.
+    """
+    # Try requested language first
+    candidate = guides_dir / f"{slug}.{lang}.md"
+    if candidate.is_file():
+        return candidate
+
+    # Fallback to Japanese
+    if lang != _FALLBACK_LANG:
+        fallback = guides_dir / f"{slug}.{_FALLBACK_LANG}.md"
+        if fallback.is_file():
+            return fallback
+
+    # Legacy: {slug}.md (no language suffix)
+    legacy = guides_dir / f"{slug}.md"
+    if legacy.is_file():
+        return legacy
+
+    return None
+
+
+def _collect_guide_slugs(guides_dir: Path) -> set[str]:
+    """Return the set of unique guide slugs in a directory.
+
+    Deduplicates across languages — ``foo.zh.md`` and ``foo.ja.md`` both
+    contribute slug ``foo`` (counted once).
+    """
+    slugs: set[str] = set()
+    for md_file in guides_dir.glob("*.md"):
+        slug, _ = _parse_guide_filename(md_file.name)
+        slugs.add(slug)
+    return slugs
+
+
+def _list_guides_for_lang(
+    guides_dir: Path, lang: str,
+) -> list[tuple[str, Path]]:
+    """Return a sorted list of (slug, file_path) for the requested language.
+
+    For each unique slug, resolves via ``_resolve_guide_file`` so the
+    fallback logic is applied consistently.
+    """
+    slugs = sorted(_collect_guide_slugs(guides_dir))
+    results: list[tuple[str, Path]] = []
+    for slug in slugs:
+        resolved = _resolve_guide_file(guides_dir, slug, lang)
+        if resolved is not None:
+            results.append((slug, resolved))
+    return results
 
 
 # ── Frontmatter parser ─────────────────────────────────────────────────
@@ -179,13 +265,15 @@ def _parse_md_file(file_path: Path) -> dict[str, Any]:
     meta, body = _parse_frontmatter(text)
     access = meta.get("access", "public")
 
-    # Title: first line starting with #
-    title = file_path.stem.replace("-", " ").title()
-    for line in body.splitlines():
-        stripped = line.strip()
-        if stripped.startswith("# "):
-            title = stripped.lstrip("# ").strip()
-            break
+    # Title: prefer frontmatter title, then first # heading, then filename
+    title = meta.get("title", "")
+    if not title:
+        title = file_path.stem.replace("-", " ").title()
+        for line in body.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("# "):
+                title = stripped.lstrip("# ").strip()
+                break
 
     # Summary: first non-empty, non-heading, non-blockquote paragraph
     summary = ""
@@ -209,6 +297,7 @@ def _parse_md_file(file_path: Path) -> dict[str, Any]:
         "body": body,
         "access": access,
         "excerpt": excerpt,
+        "lang": meta.get("lang"),
     }
 
 
@@ -259,16 +348,21 @@ async def _get_optional_tier(
     "/api/v1/navigator/domains",
     response_model=SuccessResponse,
 )
-async def list_domains() -> dict:
-    """List all navigation domains with status."""
+async def list_domains(
+    lang: str = Query(default=_FALLBACK_LANG, description="Language code (e.g. zh, ja)"),
+) -> dict:
+    """List all navigation domains with status and guide count.
+
+    Guide count is deduplicated across languages (each slug counted once).
+    """
     domains = []
     for key, cfg in DOMAIN_CONFIG.items():
         guide_count = 0
         if cfg["guides_path"] and Path(cfg["guides_path"]).is_dir():
-            # Count guides (guides/ dir should not contain agent-only files,
-            # but filter defensively just in case)
-            for md_file in Path(cfg["guides_path"]).glob("*.md"):
-                parsed = _parse_md_file(md_file)
+            guides_dir = Path(cfg["guides_path"])
+            # Count unique slugs that are accessible (not agent-only)
+            for slug, fpath in _list_guides_for_lang(guides_dir, lang):
+                parsed = _parse_md_file(fpath)
                 if parsed["access"] != "agent-only":
                     guide_count += 1
         domains.append(
@@ -288,10 +382,15 @@ async def list_domains() -> dict:
     response_model=SuccessResponse,
     responses={404: {"model": ErrorResponse}},
 )
-async def list_guides(domain: str) -> dict:
-    """List available guides for a domain.
+async def list_guides(
+    domain: str,
+    lang: str = Query(default=_FALLBACK_LANG, description="Language code (e.g. zh, ja)"),
+) -> dict:
+    """List available guides for a domain in the requested language.
 
-    Excludes agent-only guides. Includes access level and excerpt.
+    Deduplicates by slug.  Falls back to ``ja`` when the requested
+    language is unavailable for a given guide.
+    Excludes agent-only guides.
     """
     cfg = DOMAIN_CONFIG.get(domain)
     if cfg is None:
@@ -318,25 +417,29 @@ async def list_guides(domain: str) -> dict:
         ).model_dump()
 
     guides = []
-    for md_file in sorted(guides_dir.glob("*.md")):
-        parsed = _parse_md_file(md_file)
+    for slug, fpath in _list_guides_for_lang(guides_dir, lang):
+        parsed = _parse_md_file(fpath)
 
         # Exclude agent-only guides from the listing
         if parsed["access"] == "agent-only":
             continue
 
+        # Report the actual language served (may differ from requested if fallback)
+        served_lang = parsed.get("lang") or _FALLBACK_LANG
+
         guides.append(
             {
-                "slug": md_file.stem,
+                "slug": slug,
                 "title": parsed["title"],
                 "summary": parsed["summary"],
                 "access": parsed["access"],
                 "excerpt": parsed["excerpt"],
+                "lang": served_lang,
             }
         )
 
     return SuccessResponse(
-        data={"domain": domain, "guides": guides}
+        data={"domain": domain, "lang": lang, "guides": guides}
     ).model_dump()
 
 
@@ -348,13 +451,17 @@ async def list_guides(domain: str) -> dict:
 async def get_guide(
     domain: str,
     slug: str,
+    lang: str = Query(default=_FALLBACK_LANG, description="Language code (e.g. zh, ja)"),
     tier: str | None = Depends(_get_optional_tier),
 ) -> dict:
     """Get a specific guide with tier-based access control.
 
+    Resolves the guide file for the requested language, falling back to
+    ``ja`` when unavailable.
+
     - agent-only → 404 (defensive; should not exist in guides/)
     - free → full content for everyone
-    - premium → full content for standard/premium; excerpt + locked for free/guest
+    - registered/premium → full content for logged-in users; excerpt + locked for guests
     """
     cfg = DOMAIN_CONFIG.get(domain)
     if cfg is None or cfg["guides_path"] is None:
@@ -369,8 +476,8 @@ async def get_guide(
             },
         )
 
-    file_path = Path(cfg["guides_path"]) / f"{slug}.md"
-    if not file_path.is_file():
+    file_path = _resolve_guide_file(Path(cfg["guides_path"]), slug, lang)
+    if file_path is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={
@@ -384,6 +491,7 @@ async def get_guide(
 
     parsed = _parse_md_file(file_path)
     access = parsed["access"]
+    served_lang = parsed.get("lang") or _FALLBACK_LANG
 
     # agent-only → 404 (not exposed via API)
     if access == "agent-only":
@@ -408,6 +516,7 @@ async def get_guide(
             data={
                 "domain": domain,
                 "slug": slug,
+                "lang": served_lang,
                 "title": parsed["title"],
                 "access": access,
                 "locked": False,
@@ -425,6 +534,7 @@ async def get_guide(
                 data={
                     "domain": domain,
                     "slug": slug,
+                    "lang": served_lang,
                     "title": parsed["title"],
                     "access": access,
                     "locked": False,
@@ -439,6 +549,7 @@ async def get_guide(
             data={
                 "domain": domain,
                 "slug": slug,
+                "lang": served_lang,
                 "title": parsed["title"],
                 "access": access,
                 "locked": True,
@@ -457,6 +568,7 @@ async def get_guide(
             data={
                 "domain": domain,
                 "slug": slug,
+                "lang": served_lang,
                 "title": parsed["title"],
                 "access": access,
                 "locked": False,
@@ -470,6 +582,7 @@ async def get_guide(
         data={
             "domain": domain,
             "slug": slug,
+            "lang": served_lang,
             "title": parsed["title"],
             "access": access,
             "locked": True,
