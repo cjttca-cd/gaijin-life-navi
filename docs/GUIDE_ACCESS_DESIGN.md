@@ -47,9 +47,10 @@
 │  ✅ 具体機関 / 決策樹 / 地域差 / 跨域連動            │
 │  ※ "あなたはどうすべきか"（核心壁壘）                │
 │  ※ Guest → 403（登録必須）                          │
-│  ※ Free → 深度級 5回/lifetime                       │
-│  ※ Standard → 深度級 300回/month                    │
-│  ※ Premium → 無制限                                │
+│  ※ Free → 深度級 5回/lifetime（Credit Ledger）       │
+│  ※ Standard → 深度級 300回/month（Credit Ledger）    │
+│  ※ Premium → 無制限（Credit 不使用）                 │
+│  ※ Re-engagement / 従量チャージ → Credit Grant/Purchase │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -318,3 +319,4 @@ svc-{domain}/workspace/guides/
 ## 変更履歴
 
 - 2026-03-03: 概要級（summary level）全面廃止。§2 の情報アーキテクチャ図更新、§5 の概要級ユーザー対応セクション削除
+- 2026-03-07: AI Chat の利用回数管理を Credit Ledger 方式に刷新。subscription/grant/purchase の 3 ソース統一管理。Re-engagement は Grant の一種（config.py で設定可能）。詳細設計: `CHAT_CREDITS_DESIGN.md`

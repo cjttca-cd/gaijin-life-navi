@@ -220,7 +220,7 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 
 > 更新: 2026-03-01（統一品質 Guide + AI Chat 概要級/深度級分層。Z 承認済み）
 > SSOT: `architecture/BUSINESS_RULES.md` §2
-> AI Chat 分層詳細: `tasks/ai-chat-tier-design.md`
+> AI Chat 分層詳細: `docs/CHAT_CREDITS_DESIGN.md`（Credit Ledger 方式）
 
 | 機能 | 🔓 ゲスト | 🆓 Free (¥0) | ⭐ Standard (¥720) | 💎 Premium (¥1,360) |
 |------|:---------:|:------------:|:------------------:|:-------------------:|
@@ -228,10 +228,16 @@ workspace/guides/*.md（ユーザー向け指南: Navigator API で配信）
 | Free 指南（8篇、全文） | ✅ | ✅ | ✅ | ✅ |
 | Registered 指南（37篇） | excerpt+登録CTA | ✅ 全文 | ✅ 全文 | ✅ 全文 |
 | AI Chat（深度級のみ） | ❌（403） | **5回/lifetime** | **300回/月** | **無制限** |
-| Re-engagement（30日毎1回深度級） | — | ✅ | — | — |
+| Re-engagement（Credit Grant 自動付与） | — | ✅ | — | — |
 | 従量チャージ（深度級） | — | ✅ | ✅ | — |
 | Auto Tracker | ❌ | ✅ | ✅ | ✅ |
 | 広告 | あり | あり | なし | なし |
+
+**Credit Ledger 方式（2026-03-07 導入）**:
+- 全ての利用回数を `chat_credits` テーブルで統一管理（subscription/grant/purchase の 3 ソース）
+- 消費優先順位: 最早到期先用 → 同日到期時 grant→subscription→purchase → FIFO
+- Re-engagement は Grant の一種として自動付与（ルールは config.py で設定可能、hardcode ではない）
+- 詳細設計: `docs/CHAT_CREDITS_DESIGN.md`
 
 **二層コンテンツ + 二層ユーザー**:
 - **Guide（統一品質）**: 全 Guide = 完整 how-to（1000-2000字）。品質差なし。Free 8篇は話題熱度で選定（SEO 引流）、Registered 37篇は登録後に全文閲覧

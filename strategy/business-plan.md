@@ -305,3 +305,4 @@ BEP 計算（Apple 手数料込み）:
 - 2026-02-16: Z レビュー APPROVED
 - 2026-02-17: Phase 0 プロダクトピボット反映（AI Concierge 中心化 / 課金体系再構築 / OC Runtime）
 - 2026-03-03: 概要級（summary level）全面廃止。Free = 深度級5回/lifetime のみに変更
+- 2026-03-07: Credit Ledger 方式導入。subscription/grant/purchase の 3 ソースを統一管理。Re-engagement は Grant の一種に再設計（config.py で設定可能）。従量チャージは purchase credits として Credit Ledger に統合。詳細: `docs/CHAT_CREDITS_DESIGN.md`
