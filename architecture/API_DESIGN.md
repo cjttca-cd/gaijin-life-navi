@@ -712,3 +712,54 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
   - Free tier: `5/day` → `20/lifetime`
   - Subscription endpoint: `/api/v1/subscription/*` → `/api/v1/plans` + `/api/v1/subscriptions/*`
   - 処理フロー: `/reset` stateless モード + context-aware routing を反映
+
+---
+
+### 9. Credits（Credit Ledger）
+
+#### `GET /api/v1/credits/balance`
+
+- **説明**: ユーザーのクレジット残高を source 別に返す
+- **認証**: 必要
+
+**Response 200**:
+```json
+{
+  "data": {
+    "total_remaining": 8,
+    "breakdown": {
+      "subscription": { "remaining": 5, "expires_at": "2026-03-31T23:59:59Z" },
+      "grant": { "remaining": 3, "expires_at": "2026-04-15T00:00:00Z" },
+      "purchase": { "remaining": 0, "expires_at": null }
+    },
+    "next_expiry": "2026-03-31T23:59:59Z",
+    "tier": "standard"
+  }
+}
+```
+
+#### `POST /api/v1/chat`（レスポンス拡張 — Credit Ledger 対応）
+
+Chat レスポンスの `usage` オブジェクトに Credit Ledger フィールドを追加:
+
+```json
+{
+  "data": {
+    "reply": "...",
+    "domain": "finance",
+    "usage": {
+      "used": 0,
+      "limit": null,
+      "tier": "standard",
+      "period": null,
+      "credit_used_from": "grant",
+      "total_remaining": 7
+    }
+  }
+}
+```
+
+| フィールド | 型 | 説明 |
+|-----------|------|------|
+| credit_used_from | string\|null | 消費元の source ("grant"/"subscription"/"purchase"/null) |
+| total_remaining | int | 全 source 合計の残りクレジット数 |

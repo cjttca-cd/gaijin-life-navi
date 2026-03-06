@@ -3488,29 +3488,17 @@ abstract class AppLocalizations {
   /// **'Deep answer'**
   String get chatDepthLevelDeep;
 
-  /// No description provided for @chatDepthLevelSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'Summary answer'**
-  String get chatDepthLevelSummary;
-
-  /// No description provided for @chatSummaryUpgradeCta.
-  ///
-  /// In en, this message translates to:
-  /// **'Get personalized advice →'**
-  String get chatSummaryUpgradeCta;
-
   /// No description provided for @chatUsageDeepRemaining.
   ///
   /// In en, this message translates to:
   /// **'Deep: {remaining}/{limit}'**
   String chatUsageDeepRemaining(int remaining, int limit);
 
-  /// No description provided for @chatUsageSummaryRemaining.
+  /// Shows remaining chat credits
   ///
   /// In en, this message translates to:
-  /// **'Summary: {remaining}/{limit}'**
-  String chatUsageSummaryRemaining(int remaining, int limit);
+  /// **'{remaining} chats remaining'**
+  String chatCreditsRemaining(int remaining);
 }
 
 class _AppLocalizationsDelegate

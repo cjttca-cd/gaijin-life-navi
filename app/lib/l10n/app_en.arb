@@ -757,5 +757,15 @@
         "type": "int"
       }
     }
+  },
+  "chatCreditsRemaining": "{remaining} chats remaining",
+  "@chatCreditsRemaining": {
+    "description": "Shows remaining chat credits",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "5"
+      }
+    }
   }
 }

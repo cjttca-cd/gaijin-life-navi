@@ -1801,18 +1801,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatDepthLevelDeep => 'Deep answer';
 
   @override
-  String get chatDepthLevelSummary => 'Summary answer';
-
-  @override
-  String get chatSummaryUpgradeCta => 'Get personalized advice →';
-
-  @override
   String chatUsageDeepRemaining(int remaining, int limit) {
     return 'Deep: $remaining/$limit';
   }
 
   @override
-  String chatUsageSummaryRemaining(int remaining, int limit) {
-    return 'Summary: $remaining/$limit';
+  String chatCreditsRemaining(int remaining) {
+    return '$remaining chats remaining';
   }
 }

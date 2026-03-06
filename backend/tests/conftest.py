@@ -67,6 +67,7 @@ os.environ.setdefault("FIREBASE_CREDENTIALS", "/tmp/fake-firebase-service-accoun
 async def db_session() -> AsyncSession:
     """In-memory SQLite async session for DB-backed tests."""
     from database import Base
+    from models.chat_credit import ChatCredit
     from models.daily_usage import DailyUsage
     from models.profile import Profile
 
@@ -76,7 +77,7 @@ async def db_session() -> AsyncSession:
         await conn.run_sync(
             lambda sync_conn: Base.metadata.create_all(
                 sync_conn,
-                tables=[Profile.__table__, DailyUsage.__table__],
+                tables=[Profile.__table__, DailyUsage.__table__, ChatCredit.__table__],
             )
         )
 

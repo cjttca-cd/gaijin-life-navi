@@ -1,14 +1,15 @@
-"""Usage tracking service — checks and enforces tier-based chat limits.
+"""Usage tracking service — Credit Ledger based chat limit enforcement.
 
-Tier limits (from BUSINESS_RULES.md §2 — SSOT):
+Tier behavior (from BUSINESS_RULES.md §2 — SSOT):
   • guest        → AI Chat 利用不可 (403)
-  • free         → 深度級 5 (lifetime)
-  • standard     → 深度級 300 chats / month
-  • premium      → 深度級 unlimited
-  • premium_plus → 深度級 unlimited
+  • free         → Credit Ledger (initial 5 lifetime + re-engagement grants)
+  • standard     → Credit Ledger (300/month subscription credits)
+  • premium      → unlimited (no credits consumed)
+  • premium_plus → unlimited (no credits consumed)
 
 Counter mapping:
-  • deep_count column  → 深度級 usage
+  • chat_credits table → Credit Ledger (source of truth for limits)
+  • deep_count column  → analytics/legacy (incremented but not used for limits)
 
 Note: chat_count column remains in daily_usage table (DB migration not
 required) but is no longer referenced by application code.  概要級 was
@@ -22,10 +23,11 @@ import uuid
 from dataclasses import dataclass
 from datetime import date
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.daily_usage import DailyUsage
+from services.credits import check_reengagement, consume_credit, get_balance
 
 logger = logging.getLogger(__name__)
 
@@ -42,19 +44,8 @@ class UsageCheck:
     limit: int | None  # None ⇒ unlimited
     tier: str
     period: str | None = None  # "lifetime" | "month" | None(unlimited)
-
-
-# ── Tier configuration ─────────────────────────────────────────────────
-
-# Each tier maps to (max_deep, period).
-# None max ⇒ unlimited;  0 max ⇒ chat unavailable (403).
-_TIER_LIMITS: dict[str, tuple[int | None, str | None]] = {
-    "guest":        (0, None),           # AI Chat 利用不可 → 403
-    "free":         (5, "lifetime"),      # 深度級 5回/lifetime
-    "standard":     (300, "month"),       # 深度級 300回/month
-    "premium":      (None, None),         # 深度級 unlimited
-    "premium_plus": (None, None),         # 深度級 unlimited
-}
+    credit_used_from: str | None = None  # source of the consumed credit
+    total_remaining: int = 0
 
 
 # ── Internal helpers ───────────────────────────────────────────────────
@@ -88,120 +79,109 @@ async def _get_or_create_today(
     return record
 
 
-async def _lifetime_deep_count(
+async def _increment_deep_count(
     db: AsyncSession,
     user_id: str,
-) -> int:
-    """Sum ``deep_count`` across ALL daily_usage rows (深度級 lifetime total)."""
-    stmt = (
-        select(func.coalesce(func.sum(DailyUsage.deep_count), 0))
-        .where(DailyUsage.user_id == user_id)
-    )
-    result = await db.execute(stmt)
-    return result.scalar_one()
-
-
-async def _monthly_deep_count(
-    db: AsyncSession,
-    user_id: str,
-) -> int:
-    """Sum ``deep_count`` across daily_usage rows for the current month."""
-    today = date.today()
-    first_of_month = today.replace(day=1)
-    stmt = (
-        select(func.coalesce(func.sum(DailyUsage.deep_count), 0))
-        .where(
-            DailyUsage.user_id == user_id,
-            DailyUsage.usage_date >= first_of_month,
-            DailyUsage.usage_date <= today,
-        )
-    )
-    result = await db.execute(stmt)
-    return result.scalar_one()
+) -> None:
+    """Increment deep_count for analytics/legacy tracking."""
+    record = await _get_or_create_today(db, user_id)
+    record.deep_count += 1
+    await db.flush()
 
 
 # ── Public API ─────────────────────────────────────────────────────────
 
 
-async def check_and_increment(
+async def check_and_consume(
     db: AsyncSession,
     user_id: str,
     tier: str,
 ) -> UsageCheck:
-    """Check the user's usage against their tier limit and increment.
+    """Check the user's credit balance and consume 1 credit if allowed.
 
-    All tiers use 深度級 only (概要級 was deprecated 2026-03-03):
-      Guest       → blocked (0 deep, returns 403 in router)
-      Free        → 深度級 5 (lifetime)
-      Standard    → 深度級 300/month
-      Premium(+)  → 深度級 unlimited
+    Flow (design doc §3.2):
+      1. guest → 403 (CHAT_REQUIRES_AUTH)
+      2. premium/premium_plus → unlimited (no credit consumed)
+      3. Try to consume 1 credit from ledger
+         → Found → allowed=True
+         → Not found → Try re-engagement → allowed or 429
+      4. Always increment deep_count for analytics
 
-    The increment happens *only* when the check passes (``allowed=True``).
+    The consume happens *only* when the check passes (``allowed=True``).
     All DB work uses the caller's session — commit/rollback is the caller's
     responsibility (handled by ``get_db`` dependency).
     """
-    tier_cfg = _TIER_LIMITS.get(tier)
-    if tier_cfg is None:
+    # ── Guest: no access ───────────────────────────────────────────────
+    if tier == "guest":
+        return UsageCheck(
+            allowed=False, used=0, limit=0, tier=tier, period=None,
+        )
+
+    # ── Unknown tier: blocked ──────────────────────────────────────────
+    known_tiers = {"free", "standard", "premium", "premium_plus"}
+    if tier not in known_tiers:
         logger.warning("Unknown tier '%s'; treating as blocked", tier)
         return UsageCheck(
             allowed=False, used=0, limit=0, tier=tier, period=None,
         )
 
-    deep_max, deep_period = tier_cfg
-
     # ── Unlimited (premium / premium_plus) ─────────────────────────────
-
-    if deep_max is None:
-        record = await _get_or_create_today(db, user_id)
-        record.deep_count += 1
-        await db.flush()
-        monthly = await _monthly_deep_count(db, user_id)
+    if tier in ("premium", "premium_plus"):
+        # Increment analytics counter but don't consume credits
+        await _increment_deep_count(db, user_id)
         return UsageCheck(
-            allowed=True, used=monthly, limit=None, tier=tier, period=None,
+            allowed=True, used=0, limit=None, tier=tier, period=None,
+            credit_used_from=None, total_remaining=0,
         )
 
-    # ── No access (guest: deep_max == 0) ───────────────────────────────
+    # ── Credit-based tiers (free / standard) ───────────────────────────
 
-    if deep_max == 0:
+    # Try to consume 1 credit
+    consume_result = await consume_credit(db, user_id)
+
+    if consume_result.consumed:
+        # Success — also increment analytics counter
+        await _increment_deep_count(db, user_id)
         return UsageCheck(
-            allowed=False, used=0, limit=0, tier=tier, period=None,
+            allowed=True,
+            used=0,  # Not meaningful in credit system
+            limit=None,  # Will be overridden by total_remaining in API
+            tier=tier,
+            period=None,
+            credit_used_from=consume_result.source,
+            total_remaining=consume_result.total_remaining,
         )
 
-    # ── Limited access ─────────────────────────────────────────────────
-
-    if deep_period == "lifetime":
-        deep_used = await _lifetime_deep_count(db, user_id)
-        if deep_used < deep_max:
-            record = await _get_or_create_today(db, user_id)
-            record.deep_count += 1
-            await db.flush()
+    # No credits available — try re-engagement
+    reengage_credit = await check_reengagement(db, user_id, tier)
+    if reengage_credit is not None:
+        # Re-engagement granted — now consume from it
+        consume_result = await consume_credit(db, user_id)
+        if consume_result.consumed:
+            await _increment_deep_count(db, user_id)
             return UsageCheck(
-                allowed=True, used=deep_used + 1, limit=deep_max,
-                tier=tier, period="lifetime",
+                allowed=True,
+                used=0,
+                limit=None,
+                tier=tier,
+                period=None,
+                credit_used_from=consume_result.source,
+                total_remaining=consume_result.total_remaining,
             )
-        # Exhausted
-        return UsageCheck(
-            allowed=False, used=deep_used, limit=deep_max,
-            tier=tier, period="lifetime",
-        )
 
-    if deep_period == "month":
-        deep_used = await _monthly_deep_count(db, user_id)
-        if deep_used < deep_max:
-            record = await _get_or_create_today(db, user_id)
-            record.deep_count += 1
-            await db.flush()
-            return UsageCheck(
-                allowed=True, used=deep_used + 1, limit=deep_max,
-                tier=tier, period="month",
-            )
-        # Exhausted
-        return UsageCheck(
-            allowed=False, used=deep_used, limit=deep_max,
-            tier=tier, period="month",
-        )
-
-    # Fallback — should not reach here
+    # Truly exhausted — 429
+    balance = await get_balance(db, user_id)
     return UsageCheck(
-        allowed=False, used=0, limit=0, tier=tier, period=deep_period,
+        allowed=False,
+        used=0,
+        limit=0,
+        tier=tier,
+        period=None,
+        total_remaining=balance.total_remaining,
     )
+
+
+# ── Backward compatibility alias ──────────────────────────────────────
+
+# Legacy callers that used check_and_increment will now use the credit system.
+check_and_increment = check_and_consume

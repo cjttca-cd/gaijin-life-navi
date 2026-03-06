@@ -55,7 +55,7 @@
 
 従量チャージはサブスク制限を超えた後に消費される。サブスク回数が残っている場合はサブスク側から消費。
 
-### 制限チェックのフロー
+### 制限チェックのフロー（Credit Ledger 方式）
 
 ```
 リクエスト受信 (POST /api/v1/chat)
@@ -66,23 +66,33 @@ profiles.subscription_tier 取得
   ↓
 tier == 'guest' の場合:
   └── 403 CHAT_REQUIRES_AUTH（AI Chat 利用不可 → 登録案内）
-tier == 'free' の場合:
-  └── 深度級: lifetime deep_count >= 5 → 429 USAGE_LIMIT_EXCEEDED
-  └── Re-engagement: 全回数消費後、30日毎に深度級1回を付与
-tier == 'standard' の場合:
-  └── AI Chat: 月間合計 deep_count >= 300 → 429 USAGE_LIMIT_EXCEEDED（従量チャージで継続可）
-tier == 'premium' の場合:
-  └── 制限なし
+tier == 'premium' / 'premium_plus' の場合:
+  └── 無制限通過（Credit 不使用）
+tier == 'free' / 'standard' の場合:
+  └── chat_credits テーブルから有効クレジットを消費
+  └── 消費優先順位: expires_at ASC NULLS LAST → source tiebreaker (grant→subscription→purchase) → created_at ASC
+  └── 残高ゼロ → Re-engagement 判定（free のみ） → 条件充足なら自動 Grant → 429 USAGE_LIMIT_EXCEEDED
+daily_usage.deep_count は全ティアで +1（analytics 用、課金判定には使用しない）
 ```
 
-### カウント管理
+### カウント管理（Credit Ledger）
 
 - **Guest**: AI Chat 利用不可（403 CHAT_REQUIRES_AUTH）
-- **Free (lifetime)**: 深度級5回。`daily_usage` の `deep_count` で追跡。全消費後、30日毎に深度級1回を付与（re-engagement）
-- **Standard (月次)**: `daily_usage` テーブルの月初〜当日の `deep_count` を SUM で集計。月変わりで自動リセット（バッチジョブ不要）
-- **Premium (無制限)**: カウントは情報提供目的のみ
+- **Free**: `chat_credits` テーブル（初回登録時に grant 5回/lifetime）。全消費後、30日毎に re-engagement grant 1回を自動付与
+- **Standard**: `chat_credits` テーブル（月初に subscription 300回/月末期限）。前月未使用分は期限切れで自動消滅
+- **Premium/Premium+**: Credit 不使用で無制限通過（既存動作と同じ）
+- **従量チャージ**: `chat_credits` に purchase 行として記録（無期限）。消費優先順位により最後に消費
 
-> **Note**: `chat_count` カラムは DB に残存するが、概要級廃止（2026-03-03）によりアプリケーションコードからは参照しない。
+> **Note**: `daily_usage.deep_count` は analytics/legacy 用として引き続き increment される。`chat_count` カラムは概要級廃止（2026-03-03）によりアプリケーションコードからは参照しない。
+
+### Re-engagement ルール（Credit Ledger 方式）
+
+設定可能なルールエンジン（`config.py` の `REENGAGE_CONFIG` で管理）:
+- **対象ティア**: free のみ
+- **条件**: 全クレジット消費済み（remaining == 0）
+- **クールダウン**: 前回付与から 30 日以上経過
+- **付与量**: 1 回
+- **有効期限**: 30 日
 
 ### 注册時の必須 Profile（⚠️ 新規要件）
 

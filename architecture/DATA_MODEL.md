@@ -216,3 +216,34 @@ erDiagram
 
 - 2026-02-16: 初版作成
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
+
+---
+
+## 5. chat_credits（Credit Ledger）
+
+> Credit Ledger テーブル。ユーザーの AI Chat 利用クレジットを管理する。
+> daily_usage.deep_count は analytics/legacy 用として引き続き increment されるが、課金判定には使用しない。
+
+| フィールド | 型 | 制約 | デフォルト | 説明 |
+|-----------|------|------|-----------|------|
+| id | VARCHAR(36) | PK | UUID v4 | |
+| user_id | VARCHAR(128) | FK → profiles(id), NOT NULL | — | 対象ユーザー |
+| source | VARCHAR(20) | NOT NULL, CHECK | — | 'subscription' / 'grant' / 'purchase' |
+| source_detail | VARCHAR(100) | NULLable | NULL | 詳細ラベル（例: 'standard-monthly', 're-engagement-2026-03'） |
+| initial_amount | INTEGER | NOT NULL | — | 付与時の総数 |
+| remaining | INTEGER | NOT NULL, CHECK(>=0, <=initial_amount) | — | 残数 |
+| expires_at | DATETIME | NULLable | NULL | 期限（NULL = 無期限） |
+| created_at | DATETIME | NOT NULL | CURRENT_TIMESTAMP | 付与日時 |
+| updated_at | DATETIME | NOT NULL | CURRENT_TIMESTAMP | 最終更新 |
+
+**制約:**
+- `CHECK (remaining >= 0)`
+- `CHECK (remaining <= initial_amount)`
+- `CHECK (source IN ('subscription', 'grant', 'purchase'))`
+
+**インデックス:**
+- `idx_chat_credits_user_active ON chat_credits(user_id, expires_at) WHERE remaining > 0`
+
+**消費優先順位:** expires_at ASC NULLS LAST → source tiebreaker (grant=0, subscription=1, purchase=2) → created_at ASC
+
+**認可**: API 層で `user_id = current_firebase_uid` を検証

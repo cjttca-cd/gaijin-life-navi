@@ -50,3 +50,15 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+# ── Re-engagement configuration (independent dict, not part of Settings) ──
+# See: tasks/chat-credits-design.md §5.1
+REENGAGE_CONFIG: dict = {
+    "enabled": True,
+    "eligible_tiers": ["free"],           # Tiers eligible for re-engagement
+    "condition": "all_credits_exhausted",  # Trigger condition
+    "cooldown_days": 30,                  # Minimum days between grants
+    "grant_amount": 1,                    # Credits per re-engagement grant
+    "grant_expires_days": 30,             # Grant validity in days
+    "source_detail": "re-engagement",     # Tracking label prefix
+}

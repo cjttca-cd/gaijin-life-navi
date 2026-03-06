@@ -65,7 +65,7 @@ async def test_chat_deep_mode_includes_full_profile(
             status="ok",
         )
 
-    monkeypatch.setattr(chat_router, "check_and_increment", fake_check_and_increment)
+    monkeypatch.setattr(chat_router, "check_and_consume", fake_check_and_increment)
 
     import services.agent as agent_service
 

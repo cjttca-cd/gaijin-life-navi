@@ -8,12 +8,10 @@ import '../../../../core/providers/router_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../providers/chat_providers.dart';
 
-/// Usage limit banner — shows remaining chats for non-unlimited tiers.
+/// Usage limit banner — shows remaining credits for non-unlimited tiers.
 ///
-/// Plan C behavior:
-///   - lifetime (free) + deep: "Deep {remaining}/{limit}"
-///   - lifetime (free) + summary: "Summary {remaining}/{limit}"
-///   - standard: "Deep {remaining}/{limit}/mo"
+/// Credit Ledger behavior:
+///   - free/standard: shows total remaining credits
 ///   - premium: hidden (unlimited)
 ///   - exhausted + guest → registration CTA
 ///   - exhausted + free → upgrade CTA
@@ -26,13 +24,12 @@ class UsageCounter extends ConsumerWidget {
     if (usage == null) return const SizedBox.shrink();
 
     final tt = Theme.of(context).textTheme;
-    final remaining = usage.remaining;
-    final limit = usage.limit;
     final l10n = AppLocalizations.of(context);
 
     // Don't show for unlimited (premium) users.
     if (usage.isUnlimited) return const SizedBox.shrink();
 
+    final remaining = usage.remaining;
     final isExhausted = remaining <= 0;
     final isAnonymous = ref.watch(isAnonymousProvider);
     final isGuest = usage.tier == 'guest' || isAnonymous;
@@ -92,19 +89,8 @@ class UsageCounter extends ConsumerWidget {
       );
     }
 
-    // Determine display text based on tier.
-    final String displayText;
-
-    if (usage.tier == 'standard') {
-      // Standard tier — deep, show monthly.
-      displayText = l10n.chatUsageDeepRemaining(remaining, limit);
-    } else if (usage.isLifetime) {
-      // Free tier (lifetime) — deep only.
-      displayText = l10n.chatUsageDeepRemaining(remaining, limit);
-    } else {
-      // Fallback — generic display.
-      displayText = l10n.chatLimitRemaining(remaining, limit);
-    }
+    // Show remaining credits
+    final String displayText = l10n.chatCreditsRemaining(remaining);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

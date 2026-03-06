@@ -30,7 +30,7 @@ from database import get_db
 from models.profile import Profile
 from schemas.common import SuccessResponse
 from services.auth import FirebaseUser, get_current_user
-from services.usage import UsageCheck, check_and_increment
+from services.usage import UsageCheck, check_and_consume
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +71,8 @@ class UsageInfo(BaseModel):
     limit: int | None = None  # None ⇒ unlimited
     tier: str
     period: str | None = None  # "lifetime" | "month" | None(unlimited)
+    credit_used_from: str | None = None  # source of consumed credit
+    total_remaining: int = 0
 
 
 class ChatResponse(BaseModel):
@@ -254,6 +256,8 @@ def _usage_to_info(uc: UsageCheck) -> UsageInfo:
     return UsageInfo(
         used=uc.used, limit=uc.limit, tier=uc.tier,
         period=uc.period,
+        credit_used_from=uc.credit_used_from,
+        total_remaining=uc.total_remaining,
     )
 
 
@@ -306,7 +310,7 @@ async def chat(
         )
 
     # 3. Check usage limit (and increment atomically if allowed)
-    usage = await check_and_increment(db, uid, tier)
+    usage = await check_and_consume(db, uid, tier)
     if not usage.allowed:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,

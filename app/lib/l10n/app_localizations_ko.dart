@@ -1760,18 +1760,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chatDepthLevelDeep => '심층 답변';
 
   @override
-  String get chatDepthLevelSummary => '요약 답변';
-
-  @override
-  String get chatSummaryUpgradeCta => '맞춤 조언 받기 →';
-
-  @override
   String chatUsageDeepRemaining(int remaining, int limit) {
     return '심층: $remaining/$limit';
   }
 
   @override
-  String chatUsageSummaryRemaining(int remaining, int limit) {
-    return '요약: $remaining/$limit';
+  String chatCreditsRemaining(int remaining) {
+    return '$remaining회 대화 남음';
   }
 }

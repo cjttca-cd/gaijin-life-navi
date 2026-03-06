@@ -10,6 +10,7 @@ from models.medical_phrase import MedicalPhrase
 from models.community_post import CommunityPost
 from models.community_reply import CommunityReply
 from models.community_vote import CommunityVote
+from models.chat_credit import ChatCredit
 from models.subscription import Subscription
 
 __all__ = [
@@ -23,5 +24,6 @@ __all__ = [
     "CommunityPost",
     "CommunityReply",
     "CommunityVote",
+    "ChatCredit",
     "Subscription",
 ]

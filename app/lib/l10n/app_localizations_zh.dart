@@ -1750,18 +1750,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chatDepthLevelDeep => '深度回答';
 
   @override
-  String get chatDepthLevelSummary => '概要回答';
-
-  @override
-  String get chatSummaryUpgradeCta => '获取个性化建议 →';
-
-  @override
   String chatUsageDeepRemaining(int remaining, int limit) {
     return '深度: $remaining/$limit';
   }
 
   @override
-  String chatUsageSummaryRemaining(int remaining, int limit) {
-    return '概要: $remaining/$limit';
+  String chatCreditsRemaining(int remaining) {
+    return '剩余 $remaining 次对话';
   }
 }

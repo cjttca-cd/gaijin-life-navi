@@ -1799,18 +1799,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get chatDepthLevelDeep => 'Trả lời chuyên sâu';
 
   @override
-  String get chatDepthLevelSummary => 'Trả lời tóm tắt';
-
-  @override
-  String get chatSummaryUpgradeCta => 'Nhận tư vấn cá nhân →';
-
-  @override
   String chatUsageDeepRemaining(int remaining, int limit) {
     return 'Chuyên sâu: $remaining/$limit';
   }
 
   @override
-  String chatUsageSummaryRemaining(int remaining, int limit) {
-    return 'Tóm tắt: $remaining/$limit';
+  String chatCreditsRemaining(int remaining) {
+    return 'Còn $remaining lượt chat';
   }
 }

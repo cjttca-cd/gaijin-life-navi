@@ -1,7 +1,8 @@
-"""Usage & Plan endpoints.
+"""Usage & Plan & Credits endpoints.
 
-GET  /api/v1/usage  — Current usage stats (auth required)
-GET  /api/v1/plans  — Available subscription plans (public)
+GET  /api/v1/usage           — Current usage stats (auth required)
+GET  /api/v1/plans           — Available subscription plans (public)
+GET  /api/v1/credits/balance — Credit balance by source (auth required)
 """
 
 import logging
@@ -16,6 +17,7 @@ from models.daily_usage import DailyUsage
 from models.profile import Profile
 from schemas.common import ErrorResponse, SuccessResponse
 from services.auth import FirebaseUser, get_current_user
+from services.credits import get_balance
 
 logger = logging.getLogger(__name__)
 
@@ -101,6 +103,69 @@ async def list_plans() -> dict:
 
 
 @router.get(
+    "/api/v1/credits/balance",
+    response_model=SuccessResponse,
+    responses={404: {"model": ErrorResponse}},
+)
+async def get_credit_balance(
+    current_user: FirebaseUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Get credit balance breakdown by source for the authenticated user."""
+    # Determine tier
+    if current_user.is_anonymous:
+        tier = "guest"
+    else:
+        profile = await db.get(Profile, current_user.uid)
+        if profile is None or profile.deleted_at is not None:
+            tier = "free"
+        else:
+            tier = profile.subscription_tier or "free"
+
+    balance = await get_balance(db, current_user.uid)
+
+    # Format expiry dates
+    def _fmt_dt(dt: datetime | None) -> str | None:
+        if dt is None:
+            return None
+        return dt.isoformat().replace("+00:00", "Z") if dt.tzinfo else dt.isoformat() + "Z"
+
+    # Find next expiry across all sources
+    expiries = [
+        dt
+        for dt in [
+            balance.subscription_expires_at,
+            balance.grant_expires_at,
+            balance.purchase_expires_at,
+        ]
+        if dt is not None
+    ]
+    next_expiry = min(expiries) if expiries else None
+
+    return SuccessResponse(
+        data={
+            "total_remaining": balance.total_remaining,
+            "breakdown": {
+                "subscription": {
+                    "remaining": balance.subscription_remaining,
+                    "expires_at": _fmt_dt(balance.subscription_expires_at),
+                },
+                "grant": {
+                    "remaining": balance.grant_remaining,
+                    "expires_at": _fmt_dt(balance.grant_expires_at),
+                },
+                "purchase": {
+                    "remaining": balance.purchase_remaining,
+                    "expires_at": _fmt_dt(balance.purchase_expires_at),
+                },
+            },
+            "next_expiry": _fmt_dt(next_expiry),
+            "tier": tier,
+        }
+    ).model_dump()
+
+
+@router.get(
     "/api/v1/usage",
     response_model=SuccessResponse,
     responses={404: {"model": ErrorResponse}},
@@ -109,7 +174,10 @@ async def get_usage(
     current_user: FirebaseUser = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Get current usage stats for the authenticated user."""
+    """Get current usage stats for the authenticated user.
+
+    Now includes credit balance information alongside legacy usage data.
+    """
     # Determine tier — anonymous Firebase users are "guest"
     if current_user.is_anonymous:
         tier = "guest"
@@ -120,19 +188,10 @@ async def get_usage(
         else:
             tier = profile.subscription_tier or "free"
 
-    # Plan C tier limits (SSOT: BUSINESS_RULES.md §2)
-    tier_limits = {
-        "guest": {"limit": 5, "period": "lifetime"},
-        "free": {"limit": 10, "period": "lifetime"},
-        "standard": {"limit": 300, "period": "month"},
-        "premium": {"limit": None, "period": None},
-        "premium_plus": {"limit": None, "period": None},
-    }
-    limits = tier_limits.get(tier, tier_limits["free"])
-    period = limits["period"]
-    limit = limits["limit"]
+    # Get credit balance
+    balance = await get_balance(db, current_user.uid)
 
-    # Today's usage
+    # Today's usage (analytics)
     today = datetime.now(timezone.utc).date()
     usage_stmt = select(DailyUsage).where(
         DailyUsage.user_id == current_user.uid,
@@ -140,47 +199,32 @@ async def get_usage(
     )
     result = await db.execute(usage_stmt)
     daily = result.scalars().first()
-    queries_used_today = daily.chat_count if daily else 0
+    queries_used_today = daily.deep_count if daily else 0
 
-    # Compute lifetime total
-    from sqlalchemy import func as sqlfunc
-    lifetime_stmt = (
-        select(sqlfunc.coalesce(sqlfunc.sum(DailyUsage.chat_count), 0))
-        .where(DailyUsage.user_id == current_user.uid)
-    )
-    lifetime_result = await db.execute(lifetime_stmt)
-    lifetime_total = lifetime_result.scalar_one()
-
-    # Compute monthly total (for month-based tiers)
-    first_of_month = today.replace(day=1)
-    monthly_stmt = (
-        select(sqlfunc.coalesce(sqlfunc.sum(DailyUsage.chat_count), 0))
-        .where(
-            DailyUsage.user_id == current_user.uid,
-            DailyUsage.usage_date >= first_of_month,
-            DailyUsage.usage_date <= today,
-        )
-    )
-    monthly_result = await db.execute(monthly_stmt)
-    monthly_total = monthly_result.scalar_one()
-
-    # Pick used count based on period
-    if period == "lifetime":
-        used = lifetime_total
-    elif period == "month":
-        used = monthly_total
+    # For premium users, remaining is unlimited
+    if tier in ("premium", "premium_plus"):
+        remaining = None
+        limit = None
+        period = None
     else:
-        used = monthly_total  # unlimited — report monthly for info
-
-    remaining = (limit - used) if limit is not None else None
+        remaining = balance.total_remaining
+        limit = balance.total_remaining  # Dynamic based on credits
+        period = None  # Credit system doesn't use period
 
     return SuccessResponse(
         data={
             "tier": tier,
-            "used": used,
+            "used": 0,  # Not meaningful in credit system
             "limit": limit,
             "period": period,
             "remaining": remaining,
             "queries_used_today": queries_used_today,
+            # Credit-specific fields
+            "credits": {
+                "total_remaining": balance.total_remaining,
+                "subscription": balance.subscription_remaining,
+                "grant": balance.grant_remaining,
+                "purchase": balance.purchase_remaining,
+            },
         }
     ).model_dump()

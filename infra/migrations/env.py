@@ -26,6 +26,7 @@ from models.community_post import CommunityPost  # noqa: F401
 from models.community_reply import CommunityReply  # noqa: F401
 from models.community_vote import CommunityVote  # noqa: F401
 from models.subscription import Subscription  # noqa: F401
+from models.chat_credit import ChatCredit  # noqa: F401
 
 # ── Alembic Config ────────────────────────────────────────────────────
 config = context.config

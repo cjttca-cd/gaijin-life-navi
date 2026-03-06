@@ -110,6 +110,8 @@ class ChatUsageInfo {
     required this.limit,
     required this.tier,
     this.period,
+    this.creditUsedFrom,
+    this.totalRemaining = 0,
   });
 
   final int used;
@@ -119,8 +121,15 @@ class ChatUsageInfo {
   /// "lifetime" | "month" | null (unlimited).
   final String? period;
 
-  int get remaining => limit > 0 ? (limit - used).clamp(0, limit) : -1;
-  bool get isUnlimited => limit <= 0;
+  /// Source of the consumed credit: "grant" | "subscription" | "purchase" | null.
+  final String? creditUsedFrom;
+
+  /// Total remaining credits across all sources.
+  final int totalRemaining;
+
+  int get remaining =>
+      totalRemaining > 0 ? totalRemaining : (limit > 0 ? (limit - used).clamp(0, limit) : -1);
+  bool get isUnlimited => tier == 'premium' || tier == 'premium_plus';
   bool get isLifetime => period == 'lifetime';
 
   factory ChatUsageInfo.fromJson(Map<String, dynamic> json) {
@@ -129,6 +138,8 @@ class ChatUsageInfo {
       limit: json['limit'] as int? ?? 0,
       tier: json['tier'] as String? ?? 'free',
       period: json['period'] as String?,
+      creditUsedFrom: json['credit_used_from'] as String?,
+      totalRemaining: json['total_remaining'] as int? ?? 0,
     );
   }
 }
