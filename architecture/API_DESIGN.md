@@ -763,3 +763,76 @@ Chat レスポンスの `usage` オブジェクトに Credit Ledger フィール
 |-----------|------|------|
 | credit_used_from | string\|null | 消費元の source ("grant"/"subscription"/"purchase"/null) |
 | total_remaining | int | 全 source 合計の残りクレジット数 |
+
+---
+
+### 10. Trial Setup（TestFlight 限定）
+
+#### `POST /api/v1/profile/trial-setup`
+
+- **説明**: TestFlight モードの匿名ユーザー向けプロフィール初期設定。AI Chat 利用前に nationality / residence_status / residence_region の 3 フィールドを収集・保存する。`TESTFLIGHT_MODE=false` の場合は 404 を返す。
+- **認証**: 必要（Firebase Anonymous Auth の ID Token）
+- **条件**: `TESTFLIGHT_MODE=true` の場合のみ有効
+
+**Request Body**:
+```json
+{
+  "nationality": "CN",
+  "residence_status": "engineer_specialist",
+  "residence_region": "13"
+}
+```
+
+| フィールド | 型 | 必須 | 説明 |
+|-----------|------|------|------|
+| nationality | string | ✅ | ISO 3166-1 alpha-2（例: CN, VN, KR） |
+| residence_status | string | ✅ | 在留資格コード（DATA_MODEL.md §1 の許容値参照） |
+| residence_region | string | ✅ | 都道府県コード（例: '13' = 東京） |
+
+**処理フロー**:
+1. `TESTFLIGHT_MODE` チェック → false なら 404
+2. Firebase JWT 検証 → anonymous UID 取得
+3. 既存 Profile チェック → 既に nationality 等が設定済みなら 200（更新はスキップ、既存 profile 返却）
+4. Profile 未存在 → 新規作成（email は `anon-{uid}@testflight.local` をプレースホルダーとして使用）
+5. Profile 存在 but 3 フィールド未設定 → フィールドを更新
+6. Chat Credit 未付与の場合 → 初回 5 回分の trial credit を grant
+
+**Response 200**:
+```json
+{
+  "data": {
+    "id": "anonymous_firebase_uid",
+    "display_name": "",
+    "nationality": "CN",
+    "residence_status": "engineer_specialist",
+    "residence_region": "13",
+    "subscription_tier": "free",
+    "onboarding_completed": false,
+    "created_at": "2026-03-07T10:00:00Z"
+  }
+}
+```
+
+**Response 404** (`TESTFLIGHT_MODE=false`):
+```json
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "This endpoint is only available in TestFlight mode.",
+    "details": {}
+  }
+}
+```
+
+**Response 422** (バリデーションエラー):
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "All three fields (nationality, residence_status, residence_region) are required.",
+    "details": {}
+  }
+}
+```
+
+**Note**: 匿名ユーザーの Firebase UID は同一デバイスで安定（アプリ削除まで変わらない）。Profile は UID に紐づくため、アプリを閉じても次回起動時にプロフィールが保持される。

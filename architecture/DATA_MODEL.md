@@ -247,3 +247,24 @@ erDiagram
 **消費優先順位:** expires_at ASC NULLS LAST → source tiebreaker (grant=0, subscription=1, purchase=2) → created_at ASC
 
 **認可**: API 層で `user_id = current_firebase_uid` を検証
+
+---
+
+## 6. TestFlight: 匿名ユーザーの Profile
+
+`TESTFLIGHT_MODE=true` の場合、匿名ユーザー（Firebase Anonymous Auth）にも Profile 行が作成される。
+
+**特殊処理**:
+- `id`: Firebase Anonymous Auth の UID（例: `anon-abc123def`）
+- `email`: プレースホルダー `anon-{uid}@testflight.local`（UNIQUE 制約を満たすため）
+- `subscription_tier`: `free`（デフォルト）
+- `nationality`, `residence_status`, `residence_region`: trial-setup ダイアログで収集
+- その他のフィールド: デフォルト値
+
+**Firebase Anonymous UID の安定性**:
+- 同一デバイス・同一アプリインスタンスでは UID は不変
+- アプリ削除 → 再インストール時に新 UID が発行される
+- Profile は UID に紐づくため、再インストール前のデータは orphan 化
+
+**本番リリース時**: trial-setup エンドポイントが 404 になるため、新規の匿名 Profile 行は作成されない。既存の orphan 行は放置（将来のクリーンアップバッチで対応可能）。
+
