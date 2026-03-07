@@ -611,5 +611,10 @@
         "example": "5"
       }
     }
-  }
+  },
+  "trialSetupTitle": "Trước khi bắt đầu, hãy cho chúng tôi biết đôi chút về bạn",
+  "trialSetupNationality": "Quốc tịch",
+  "trialSetupResidenceStatus": "Tư cách cư trú",
+  "trialSetupRegion": "Khu vực",
+  "trialSetupSubmit": "Bắt đầu"
 }

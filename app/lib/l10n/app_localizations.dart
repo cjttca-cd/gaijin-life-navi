@@ -3499,6 +3499,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{remaining} chats remaining'**
   String chatCreditsRemaining(int remaining);
+
+  /// No description provided for @trialSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before we start, tell us a bit about yourself'**
+  String get trialSetupTitle;
+
+  /// No description provided for @trialSetupNationality.
+  ///
+  /// In en, this message translates to:
+  /// **'Nationality'**
+  String get trialSetupNationality;
+
+  /// No description provided for @trialSetupResidenceStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Residence Status'**
+  String get trialSetupResidenceStatus;
+
+  /// No description provided for @trialSetupRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get trialSetupRegion;
+
+  /// No description provided for @trialSetupSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get trialSetupSubmit;
 }
 
 class _AppLocalizationsDelegate

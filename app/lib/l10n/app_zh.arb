@@ -611,5 +611,10 @@
         "example": "5"
       }
     }
-  }
+  },
+  "trialSetupTitle": "开始之前，请告诉我们一些关于你的信息",
+  "trialSetupNationality": "国籍",
+  "trialSetupResidenceStatus": "在留资格",
+  "trialSetupRegion": "居住地区",
+  "trialSetupSubmit": "开始使用"
 }

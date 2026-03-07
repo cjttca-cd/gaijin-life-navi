@@ -1825,4 +1825,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String chatCreditsRemaining(int remaining) {
     return '$remaining chats restantes';
   }
+
+  @override
+  String get trialSetupTitle =>
+      'Antes de começar, conte-nos um pouco sobre você';
+
+  @override
+  String get trialSetupNationality => 'Nacionalidade';
+
+  @override
+  String get trialSetupResidenceStatus => 'Status de Residência';
+
+  @override
+  String get trialSetupRegion => 'Região';
+
+  @override
+  String get trialSetupSubmit => 'Começar';
 }

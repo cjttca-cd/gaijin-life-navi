@@ -32,4 +32,25 @@ class ProfileRepository {
   Future<void> deleteAccount() async {
     await _client.post<Map<String, dynamic>>('/auth/delete-account');
   }
+
+  /// POST /api/v1/profile/trial-setup — TestFlight trial profile setup.
+  ///
+  /// Creates a profile for anonymous TestFlight users with the 3 required
+  /// fields and grants trial credits.
+  Future<UserProfile> trialSetup({
+    required String nationality,
+    required String residenceStatus,
+    required String residenceRegion,
+  }) async {
+    final response = await _client.post<Map<String, dynamic>>(
+      '/profile/trial-setup',
+      data: {
+        'nationality': nationality,
+        'residence_status': residenceStatus,
+        'residence_region': residenceRegion,
+      },
+    );
+    final data = response.data!['data'] as Map<String, dynamic>;
+    return UserProfile.fromJson(data);
+  }
 }

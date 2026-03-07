@@ -611,5 +611,10 @@
         "example": "5"
       }
     }
-  }
+  },
+  "trialSetupTitle": "시작하기 전에 몇 가지 알려주세요",
+  "trialSetupNationality": "국적",
+  "trialSetupResidenceStatus": "체류 자격",
+  "trialSetupRegion": "거주 지역",
+  "trialSetupSubmit": "시작하기"
 }

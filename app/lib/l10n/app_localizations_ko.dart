@@ -1768,4 +1768,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String chatCreditsRemaining(int remaining) {
     return '$remaining회 대화 남음';
   }
+
+  @override
+  String get trialSetupTitle => '시작하기 전에 몇 가지 알려주세요';
+
+  @override
+  String get trialSetupNationality => '국적';
+
+  @override
+  String get trialSetupResidenceStatus => '체류 자격';
+
+  @override
+  String get trialSetupRegion => '거주 지역';
+
+  @override
+  String get trialSetupSubmit => '시작하기';
 }

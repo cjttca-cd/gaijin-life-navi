@@ -19,4 +19,11 @@ class AppConfig {
 
   /// Default language fallback
   static const String defaultLanguage = 'en';
+
+  /// TestFlight mode — enables anonymous trial-setup flow.
+  /// Set via --dart-define=TESTFLIGHT_MODE=true at build time.
+  static const bool testFlightMode = bool.fromEnvironment(
+    'TESTFLIGHT_MODE',
+    defaultValue: false,
+  );
 }

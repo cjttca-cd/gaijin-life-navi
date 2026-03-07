@@ -21,6 +21,9 @@ import '../../features/profile/presentation/settings_screen.dart';
 import '../../features/subscription/presentation/subscription_screen.dart';
 import '../../features/tracker/presentation/tracker_screen.dart';
 import '../navigation/main_shell.dart';
+import '../config/app_config.dart';
+import '../../features/chat/presentation/widgets/trial_setup_dialog.dart';
+import '../../features/profile/presentation/providers/profile_providers.dart';
 import 'auth_provider.dart';
 import 'locale_provider.dart';
 
@@ -243,6 +246,9 @@ final routerProvider = Provider<GoRouter>((ref) {
 /// Routes the Chat tab: logged-in users (including anonymous) go to
 /// [ChatListScreen]; unauthenticated users get anonymous auth first.
 /// Per Plan C: guests get 5 lifetime chats via anonymous Firebase auth.
+///
+/// In TestFlight mode, anonymous users without a profile see a
+/// [TrialSetupDialog] before accessing the chat list.
 class _ChatTabRouter extends ConsumerWidget {
   const _ChatTabRouter();
 
@@ -250,15 +256,80 @@ class _ChatTabRouter extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authStateProvider).valueOrNull;
     if (user != null) {
-      // Logged in (real or anonymous) → chat list
-      return const ChatListScreen();
+      // Logged in (real or anonymous) → chat list (with trial gate)
+      return const _TrialSetupGate();
     }
     // Not logged in → trigger anonymous auth
     return const _AnonymousAuthGate();
   }
 }
 
-/// Automatically signs in anonymously then shows [ChatListScreen].
+/// Gate that checks if a TestFlight anonymous user needs trial setup.
+///
+/// If [AppConfig.testFlightMode] is true, user is anonymous, and their
+/// profile has no nationality set, a non-dismissible [TrialSetupDialog]
+/// is shown before they can access the chat list.
+class _TrialSetupGate extends ConsumerStatefulWidget {
+  const _TrialSetupGate();
+
+  @override
+  ConsumerState<_TrialSetupGate> createState() => _TrialSetupGateState();
+}
+
+class _TrialSetupGateState extends ConsumerState<_TrialSetupGate> {
+  bool _dialogShown = false;
+  bool _setupComplete = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // Skip gate for non-TestFlight or non-anonymous users.
+    if (!AppConfig.testFlightMode || !ref.watch(isAnonymousProvider)) {
+      return const ChatListScreen();
+    }
+
+    // If setup is already complete (dialog returned true), show chat.
+    if (_setupComplete) {
+      return const ChatListScreen();
+    }
+
+    // Watch profile to check if nationality is already set.
+    final profileAsync = ref.watch(userProfileProvider);
+
+    return profileAsync.when(
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (_, __) {
+        // Profile fetch failed — show dialog anyway.
+        _showDialogOnce();
+        return const ChatListScreen();
+      },
+      data: (profile) {
+        if (profile.nationality != null && profile.nationality!.isNotEmpty) {
+          // Already set up — go straight to chat.
+          return const ChatListScreen();
+        }
+        // Need setup — show dialog.
+        _showDialogOnce();
+        return const Scaffold(
+            body: Center(child: CircularProgressIndicator()));
+      },
+    );
+  }
+
+  void _showDialogOnce() {
+    if (_dialogShown) return;
+    _dialogShown = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      final success = await TrialSetupDialog.show(context);
+      if (mounted) {
+        setState(() => _setupComplete = success);
+      }
+    });
+  }
+}
+
+/// Automatically signs in anonymously then shows [_TrialSetupGate].
 class _AnonymousAuthGate extends ConsumerStatefulWidget {
   const _AnonymousAuthGate();
 
@@ -297,7 +368,7 @@ class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
     // If auth state has a user now (anonymous sign-in completed), show chat
     final user = ref.watch(authStateProvider).valueOrNull;
     if (user != null) {
-      return const ChatListScreen();
+      return const _TrialSetupGate();
     }
 
     if (_failed) {

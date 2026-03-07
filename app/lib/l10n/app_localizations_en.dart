@@ -1809,4 +1809,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String chatCreditsRemaining(int remaining) {
     return '$remaining chats remaining';
   }
+
+  @override
+  String get trialSetupTitle => 'Before we start, tell us a bit about yourself';
+
+  @override
+  String get trialSetupNationality => 'Nationality';
+
+  @override
+  String get trialSetupResidenceStatus => 'Residence Status';
+
+  @override
+  String get trialSetupRegion => 'Region';
+
+  @override
+  String get trialSetupSubmit => 'Get Started';
 }

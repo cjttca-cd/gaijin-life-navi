@@ -1807,4 +1807,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String chatCreditsRemaining(int remaining) {
     return 'Còn $remaining lượt chat';
   }
+
+  @override
+  String get trialSetupTitle =>
+      'Trước khi bắt đầu, hãy cho chúng tôi biết đôi chút về bạn';
+
+  @override
+  String get trialSetupNationality => 'Quốc tịch';
+
+  @override
+  String get trialSetupResidenceStatus => 'Tư cách cư trú';
+
+  @override
+  String get trialSetupRegion => 'Khu vực';
+
+  @override
+  String get trialSetupSubmit => 'Bắt đầu';
 }

@@ -767,5 +767,10 @@
         "example": "5"
       }
     }
-  }
+  },
+  "trialSetupTitle": "Before we start, tell us a bit about yourself",
+  "trialSetupNationality": "Nationality",
+  "trialSetupResidenceStatus": "Residence Status",
+  "trialSetupRegion": "Region",
+  "trialSetupSubmit": "Get Started"
 }

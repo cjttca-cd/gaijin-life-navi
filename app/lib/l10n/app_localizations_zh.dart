@@ -1758,4 +1758,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String chatCreditsRemaining(int remaining) {
     return '剩余 $remaining 次对话';
   }
+
+  @override
+  String get trialSetupTitle => '开始之前，请告诉我们一些关于你的信息';
+
+  @override
+  String get trialSetupNationality => '国籍';
+
+  @override
+  String get trialSetupResidenceStatus => '在留资格';
+
+  @override
+  String get trialSetupRegion => '居住地区';
+
+  @override
+  String get trialSetupSubmit => '开始使用';
 }

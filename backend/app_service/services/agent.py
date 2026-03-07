@@ -132,11 +132,6 @@ async def call_agent(
 
         profile_lines.append("回答深度: 深度級")
 
-        # TestFlight hint: agent should ask for missing profile fields
-        hint = user_profile.get("_testflight_hint")
-        if hint:
-            profile_lines.append(f"\n⚠️ {hint}")
-
         full_message += "\n".join(profile_lines) + "\n\n"
 
     # Append conversation history if provided.
