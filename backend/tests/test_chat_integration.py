@@ -95,6 +95,9 @@ async def test_chat_guest_returns_403(
     db_session,
     monkeypatch,
 ) -> None:
+    # Ensure production mode for this test
+    from config import settings
+    monkeypatch.setattr(settings, 'TESTFLIGHT_MODE', False)
     """Guest (anonymous) users receive 403 CHAT_REQUIRES_AUTH."""
     uid = "anon-guest-1"
 

@@ -388,9 +388,21 @@ async def chat(
         if not any(user_profile.values()):
             user_profile = None
 
-    # Guest users (anonymous auth) still need tier info for 概要級 response control
+    # Guest users (anonymous auth) still need tier info
     if user_profile is None:
-        user_profile = {"subscription_tier": tier}
+        from config import settings
+        if settings.TESTFLIGHT_MODE:
+            # TestFlight: prompt agent to ask for key profile fields
+            user_profile = {
+                "subscription_tier": tier,
+                "_testflight_hint": (
+                    "このユーザーはプロフィール未設定です。"
+                    "回答する前に、まず国籍・在留資格・居住地域の3点を質問してください。"
+                    "ユーザーが回答したら、その情報に基づいて個性化回答を提供してください。"
+                ),
+            }
+        else:
+            user_profile = {"subscription_tier": tier}
 
     # 9. Call agent (stateless with /reset, context already built in step 3)
     agent_resp = await call_agent(

@@ -54,6 +54,9 @@ async def test_registered_access_full_for_registered_user(tmp_path, monkeypatch)
 
 @pytest.mark.asyncio
 async def test_registered_access_locked_for_guest(tmp_path, monkeypatch) -> None:
+    # Ensure production mode for this test
+    from config import settings
+    monkeypatch.setattr(settings, 'TESTFLIGHT_MODE', False)
     guides_dir = tmp_path / "guides"
     guides_dir.mkdir(parents=True)
 
@@ -87,6 +90,9 @@ async def test_registered_access_locked_for_guest(tmp_path, monkeypatch) -> None
 
 @pytest.mark.asyncio
 async def test_premium_access_backward_compatibility(tmp_path, monkeypatch) -> None:
+    # Ensure production mode for this test
+    from config import settings
+    monkeypatch.setattr(settings, 'TESTFLIGHT_MODE', False)
     guides_dir = tmp_path / "guides"
     guides_dir.mkdir(parents=True)
 
