@@ -15,6 +15,7 @@ from database import get_db
 from models.profile import Profile
 from models.subscription import Subscription
 from schemas.auth import RegisterRequest, RegisterResponse, UserInRegisterResponse
+from services.credits import grant_credits
 from schemas.common import ErrorResponse, SuccessResponse
 from services.auth import FirebaseUser, get_current_user
 
@@ -93,6 +94,17 @@ async def register(
     db.add(profile)
     await db.flush()
 
+    # Grant initial free credits (Credit Ledger system)
+    # Free tier: 5 lifetime credits at registration
+    await grant_credits(
+        db,
+        user_id=current_user.uid,
+        source="grant",
+        amount=5,
+        source_detail="free-signup",
+        expires_at=None,  # lifetime (no expiry)
+    )
+
     # #30: Abuse prevention — if a soft-deleted profile with the same
     # email exists, exhaust the free-tier chat allowance so the
     # re-registering user does not get another 20 free chats.
@@ -105,23 +117,18 @@ async def register(
             )
         )
         if prev_deleted.scalars().first() is not None:
-            import uuid as _uuid
-            from datetime import date
-
-            from models.daily_usage import DailyUsage
-            exhaustion_record = DailyUsage(
-                id=str(_uuid.uuid4()),
-                user_id=current_user.uid,
-                usage_date=date.today(),
-                chat_count=20,  # exhaust free-tier summary chats
-                deep_count=20,  # exhaust free-tier deep chats
-                scan_count_monthly=0,
+            # Exhaust the just-granted free credits (set remaining=0)
+            from sqlalchemy import update
+            from models.chat_credit import ChatCredit
+            await db.execute(
+                update(ChatCredit)
+                .where(ChatCredit.user_id == current_user.uid)
+                .values(remaining=0)
             )
-            db.add(exhaustion_record)
             await db.flush()
             logger.warning(
                 "Re-registration detected for email=%s (new uid=%s). "
-                "Free-tier chats exhausted.",
+                "Free-tier credits exhausted via Credit Ledger.",
                 current_user.email,
                 current_user.uid,
             )
