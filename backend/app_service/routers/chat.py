@@ -297,17 +297,34 @@ async def chat(
     tier = await _get_user_tier(db, uid, is_anonymous=current_user.is_anonymous)
 
     # 2. Guest users cannot use AI Chat (403)
+    #    TestFlight mode: allow anonymous users for testing.
     if tier == "guest":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail={
-                "error": {
-                    "code": "CHAT_REQUIRES_AUTH",
-                    "message": "AI Chat requires a registered account. Please sign up to continue.",
-                    "details": {},
-                }
-            },
-        )
+        from config import settings
+        if not settings.TESTFLIGHT_MODE:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={
+                    "error": {
+                        "code": "CHAT_REQUIRES_AUTH",
+                        "message": "AI Chat requires a registered account. Please sign up to continue.",
+                        "details": {},
+                    }
+                },
+            )
+        # TestFlight: treat guest as free tier for credit check
+        tier = "free"
+        # Auto-grant trial credits if anonymous user has none
+        from services.credits import get_balance, grant_credits
+        balance = await get_balance(db, uid)
+        if balance.total_remaining == 0:
+            await grant_credits(
+                db,
+                user_id=uid,
+                source="grant",
+                amount=5,
+                source_detail="testflight-trial",
+                expires_at=None,
+            )
 
     # 3. Check usage limit (and increment atomically if allowed)
     usage = await check_and_consume(db, uid, tier)

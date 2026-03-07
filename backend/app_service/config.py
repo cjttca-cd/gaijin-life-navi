@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     # AI Service URL (for internal moderation calls)
     AI_SERVICE_URL: str = "http://localhost:8001"
 
+    # TestFlight mode — unlocks all guides + allows anonymous AI Chat for testing.
+    # Set TESTFLIGHT_MODE=true in .env or environment. Disable before App Store release.
+    TESTFLIGHT_MODE: bool = False
+
     # CORS
     CORS_ORIGINS: str = "*"  # Comma-separated origins or "*"
 

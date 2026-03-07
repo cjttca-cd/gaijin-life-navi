@@ -22,6 +22,7 @@ import yaml
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
+from config import settings
 from schemas.common import ErrorResponse, SuccessResponse
 
 logger = logging.getLogger(__name__)
@@ -508,7 +509,8 @@ async def get_guide(
 
     # Plan C: any registered user can read all guides.
     # tier=None → guest (not logged in); tier!=None → registered user.
-    is_registered = tier is not None
+    # TestFlight mode: all guides visible to everyone (bypass access control).
+    is_registered = tier is not None or settings.TESTFLIGHT_MODE
 
     # free/public → full content for everyone
     if access in ("public", "free"):

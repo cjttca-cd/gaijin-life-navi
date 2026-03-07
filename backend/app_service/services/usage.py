@@ -112,6 +112,7 @@ async def check_and_consume(
     responsibility (handled by ``get_db`` dependency).
     """
     # ── Guest: no access ───────────────────────────────────────────────
+    #    TestFlight mode: guest is promoted to "free" in chat.py before reaching here.
     if tier == "guest":
         return UsageCheck(
             allowed=False, used=0, limit=0, tier=tier, period=None,
