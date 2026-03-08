@@ -3643,6 +3643,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your AI guide will provide personalized answers based on your information'**
   String get trialSetupSubtitle;
+
+  /// No description provided for @signInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in failed. Please check your network connection.'**
+  String get signInFailed;
 }
 
 class _AppLocalizationsDelegate

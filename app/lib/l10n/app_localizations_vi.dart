@@ -1887,4 +1887,8 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get trialSetupSubtitle =>
       'Hướng dẫn AI sẽ cung cấp câu trả lời phù hợp dựa trên thông tin của bạn';
+
+  @override
+  String get signInFailed =>
+      'Đăng nhập thất bại. Vui lòng kiểm tra kết nối mạng.';
 }

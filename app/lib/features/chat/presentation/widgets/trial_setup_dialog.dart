@@ -67,7 +67,7 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
         if (user == null) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('ログインに失敗しました。ネットワーク接続を確認してください。')),
+              SnackBar(content: Text(AppLocalizations.of(context).signInFailed)),
             );
           }
           return;

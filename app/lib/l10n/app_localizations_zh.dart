@@ -1834,4 +1834,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trialSetupSubtitle => 'AI向导将根据信息提供符合你情况的定制化回答';
+
+  @override
+  String get signInFailed => '登录失败，请检查网络连接。';
 }

@@ -649,5 +649,6 @@
   "testFlightChatSetupPrompt": "Configure seu perfil para iniciar sua experiência gratuita com o guia AI",
   "testFlightChatSetupButton": "Configurar e começar",
   "testFlightViewGuides": "Ver todos os guias",
-  "trialSetupSubtitle": "O guia AI fornecerá respostas personalizadas com base nas suas informações"
+  "trialSetupSubtitle": "O guia AI fornecerá respostas personalizadas com base nas suas informações",
+  "signInFailed": "Falha no login. Verifique sua conexão de rede."
 }

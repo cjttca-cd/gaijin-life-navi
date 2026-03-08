@@ -155,8 +155,8 @@ class _AnonymousSignInButtonState extends State<_AnonymousSignInButton> {
         setState(() => _loading = false);
         if (user == null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('ログインに失敗しました。ネットワーク接続を確認してください。'),
+            SnackBar(
+              content: Text(AppLocalizations.of(context).signInFailed),
               duration: Duration(seconds: 3),
             ),
           );

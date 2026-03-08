@@ -1845,4 +1845,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trialSetupSubtitle => 'AI 가이드가 정보를 바탕으로 맞춤형 답변을 제공합니다';
+
+  @override
+  String get signInFailed => '로그인에 실패했습니다. 네트워크 연결을 확인해주세요.';
 }

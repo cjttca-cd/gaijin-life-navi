@@ -1905,4 +1905,7 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get trialSetupSubtitle =>
       'O guia AI fornecerá respostas personalizadas com base nas suas informações';
+
+  @override
+  String get signInFailed => 'Falha no login. Verifique sua conexão de rede.';
 }

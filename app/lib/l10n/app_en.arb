@@ -805,5 +805,6 @@
   "testFlightChatSetupPrompt": "Set up your profile to start your free AI guide experience",
   "testFlightChatSetupButton": "Set up and start",
   "testFlightViewGuides": "View all guides",
-  "trialSetupSubtitle": "Your AI guide will provide personalized answers based on your information"
+  "trialSetupSubtitle": "Your AI guide will provide personalized answers based on your information",
+  "signInFailed": "Sign-in failed. Please check your network connection."
 }

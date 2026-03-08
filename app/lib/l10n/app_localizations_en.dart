@@ -1889,4 +1889,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get trialSetupSubtitle =>
       'Your AI guide will provide personalized answers based on your information';
+
+  @override
+  String get signInFailed =>
+      'Sign-in failed. Please check your network connection.';
 }

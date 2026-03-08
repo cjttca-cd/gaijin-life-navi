@@ -649,5 +649,6 @@
   "testFlightChatSetupPrompt": "Thiết lập hồ sơ để bắt đầu trải nghiệm AI miễn phí",
   "testFlightChatSetupButton": "Thiết lập và bắt đầu",
   "testFlightViewGuides": "Xem tất cả hướng dẫn",
-  "trialSetupSubtitle": "Hướng dẫn AI sẽ cung cấp câu trả lời phù hợp dựa trên thông tin của bạn"
+  "trialSetupSubtitle": "Hướng dẫn AI sẽ cung cấp câu trả lời phù hợp dựa trên thông tin của bạn",
+  "signInFailed": "Đăng nhập thất bại. Vui lòng kiểm tra kết nối mạng."
 }

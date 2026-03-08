@@ -649,5 +649,6 @@
   "testFlightChatSetupPrompt": "프로필을 설정하면 무료 AI 가이드를 이용할 수 있습니다",
   "testFlightChatSetupButton": "설정하고 시작",
   "testFlightViewGuides": "모든 가이드 보기",
-  "trialSetupSubtitle": "AI 가이드가 정보를 바탕으로 맞춤형 답변을 제공합니다"
+  "trialSetupSubtitle": "AI 가이드가 정보를 바탕으로 맞춤형 답변을 제공합니다",
+  "signInFailed": "로그인에 실패했습니다. 네트워크 연결을 확인해주세요."
 }
