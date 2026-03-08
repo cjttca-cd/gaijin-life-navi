@@ -1760,7 +1760,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get trialSetupTitle => '请告知您的AI向导一些关于你的信息';
+  String get trialSetupTitle => '请告知一些关于你的信息';
 
   @override
   String get trialSetupNationality => '国籍';
@@ -1833,5 +1833,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get testFlightViewGuides => '查看所有指南';
 
   @override
-  String get trialSetupSubtitle => 'AI向导将根据信息为你提供符合你情况的定制化回答';
+  String get trialSetupSubtitle => 'AI向导将根据信息提供符合你情况定制化回答';
 }

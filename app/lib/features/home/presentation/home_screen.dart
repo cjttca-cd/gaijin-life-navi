@@ -474,7 +474,10 @@ class _GuestCtaBanner extends StatelessWidget {
                       height: 44,
                       child: OutlinedButton(
                         onPressed: onSecondaryTap,
-                        child: Text(secondaryCta!),
+                        child: Text(
+                          secondaryCta!,
+                          style: const TextStyle(fontSize: 13),
+                        ),
                       ),
                     ),
                   ),
@@ -484,7 +487,10 @@ class _GuestCtaBanner extends StatelessWidget {
                       height: 44,
                       child: FilledButton(
                         onPressed: onTap,
-                        child: Text(cta),
+                        child: Text(
+                          cta,
+                          style: const TextStyle(fontSize: 13),
+                        ),
                       ),
                     ),
                   ),

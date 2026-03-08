@@ -612,7 +612,7 @@
       }
     }
   },
-  "trialSetupTitle": "请告知您的AI向导一些关于你的信息",
+  "trialSetupTitle": "请告知一些关于你的信息",
   "trialSetupNationality": "国籍",
   "trialSetupResidenceStatus": "在留资格",
   "trialSetupRegion": "居住地区",
@@ -649,5 +649,5 @@
   "testFlightChatSetupPrompt": "设置您的信息，即可免费体验AI向导",
   "testFlightChatSetupButton": "设置信息开始体验",
   "testFlightViewGuides": "查看所有指南",
-  "trialSetupSubtitle": "AI向导将根据信息为你提供符合你情况的定制化回答"
+  "trialSetupSubtitle": "AI向导将根据信息提供符合你情况定制化回答"
 }
