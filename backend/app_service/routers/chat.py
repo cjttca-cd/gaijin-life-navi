@@ -197,6 +197,81 @@ def _parse_tracker_lines(block: str) -> list[dict[str, str]]:
     return items
 
 
+
+# ── Out-of-scope friendly messages ─────────────────────────────────────
+
+_OUT_OF_SCOPE_MESSAGES = {
+    "zh": (
+        "我是你的在日生活向导，可以帮你解答以下方面的问题：\n\n"
+        "🏦 金融 — 银行开户、汇款、信用卡、保险\n"
+        "💰 税务 — 所得税、住民税、确定申告、年金\n"
+        "🛂 签证 — 在留资格、签证更新、永住权\n"
+        "🏥 医疗 — 看病就医、健康保险、急救\n"
+        "🏠 生活 — 租房、交通、手机、垃圾分类、行政手续\n"
+        "⚖️ 法律 — 劳动权益、交通事故、消费者保护\n\n"
+        "有什么关于在日本生活的问题，随时问我吧！"
+    ),
+    "en": (
+        "I'm your Japan life guide! I can help with:\n\n"
+        "🏦 Finance — Bank accounts, transfers, credit cards, insurance\n"
+        "💰 Tax — Income tax, resident tax, tax filing, pension\n"
+        "🛂 Visa — Residence status, visa renewal, permanent residency\n"
+        "🏥 Medical — Finding doctors, health insurance, emergencies\n"
+        "🏠 Life — Housing, transport, phone, garbage, admin procedures\n"
+        "⚖️ Legal — Labor rights, traffic accidents, consumer protection\n\n"
+        "Feel free to ask me anything about living in Japan!"
+    ),
+    "ko": (
+        "저는 일본 생활 가이드입니다! 다음과 같은 질문에 도움을 드릴 수 있어요:\n\n"
+        "🏦 금융 — 은행 계좌, 송금, 신용카드, 보험\n"
+        "💰 세금 — 소득세, 주민세, 확정신고, 연금\n"
+        "🛂 비자 — 체류자격, 비자 갱신, 영주권\n"
+        "🏥 의료 — 병원, 건강보험, 응급상황\n"
+        "🏠 생활 — 주거, 교통, 휴대폰, 쓰레기 분리, 행정 절차\n"
+        "⚖️ 법률 — 노동권, 교통사고, 소비자 보호\n\n"
+        "일본 생활에 관한 질문이 있으시면 언제든지 물어보세요!"
+    ),
+    "vi": (
+        "Tôi là hướng dẫn viên cuộc sống Nhật Bản! Tôi có thể giúp bạn về:\n\n"
+        "🏦 Tài chính — Tài khoản ngân hàng, chuyển tiền, thẻ tín dụng, bảo hiểm\n"
+        "💰 Thuế — Thuế thu nhập, thuế cư trú, khai thuế, lương hưu\n"
+        "🛂 Visa — Tư cách lưu trú, gia hạn visa, thường trú\n"
+        "🏥 Y tế — Bệnh viện, bảo hiểm sức khỏe, cấp cứu\n"
+        "🏠 Cuộc sống — Nhà ở, giao thông, điện thoại, phân loại rác, thủ tục hành chính\n"
+        "⚖️ Pháp luật — Quyền lao động, tai nạn giao thông, bảo vệ người tiêu dùng\n\n"
+        "Hãy hỏi tôi bất cứ điều gì về cuộc sống ở Nhật Bản!"
+    ),
+    "pt": (
+        "Sou seu guia de vida no Japão! Posso ajudar com:\n\n"
+        "🏦 Finanças — Contas bancárias, transferências, cartões de crédito, seguros\n"
+        "💰 Impostos — Imposto de renda, imposto residencial, declaração fiscal, pensão\n"
+        "🛂 Visto — Status de residência, renovação de visto, residência permanente\n"
+        "🏥 Saúde — Hospitais, seguro saúde, emergências\n"
+        "🏠 Vida — Moradia, transporte, celular, lixo, procedimentos administrativos\n"
+        "⚖️ Jurídico — Direitos trabalhistas, acidentes de trânsito, proteção ao consumidor\n\n"
+        "Pergunte qualquer coisa sobre a vida no Japão!"
+    ),
+}
+
+# Japanese fallback
+_OUT_OF_SCOPE_MESSAGES["ja"] = (
+    "私は日本生活ガイドです！以下のことについてお手伝いできます：\n\n"
+    "🏦 金融 — 銀行口座、送金、クレジットカード、保険\n"
+    "💰 税金 — 所得税、住民税、確定申告、年金\n"
+    "🛂 ビザ — 在留資格、ビザ更新、永住権\n"
+    "🏥 医療 — 病院、健康保険、救急\n"
+    "🏠 生活 — 住居、交通、携帯電話、ゴミ分別、行政手続き\n"
+    "⚖️ 法律 — 労働権、交通事故、消費者保護\n\n"
+    "日本での生活について何でも聞いてください！"
+)
+
+
+def _get_out_of_scope_message(locale: str | None) -> str:
+    """Return a localized out-of-scope guide message."""
+    lang = (locale or "ja")[:2]
+    return _OUT_OF_SCOPE_MESSAGES.get(lang, _OUT_OF_SCOPE_MESSAGES["ja"])
+
+
 def _extract_blocks(text: str) -> tuple[str, list[dict], list[dict], list[dict]]:
     """Extract tracker items (inline □) and SOURCES blocks from agent text.
 
@@ -432,6 +507,21 @@ async def chat(
         current_domain=body.domain,
         context=context_dicts,
     )
+
+    # 5b. Out-of-scope: return friendly guide message, no agent call, no credit consumed
+    if domain == "out_of_scope":
+        oos_reply = _get_out_of_scope_message(body.locale)
+        oos_usage = _usage_to_info(usage)
+        response = ChatResponse(
+            reply=oos_reply,
+            domain="life",
+            sources=[],
+            actions=[],
+            tracker_items=[],
+            usage=oos_usage,
+        )
+        return SuccessResponse(data=response.model_dump()).model_dump()
+
     agent_id = domain  # route_to_agent already returns "svc-xxx" format
     domain_short = domain.removeprefix("svc-")
 

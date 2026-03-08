@@ -482,7 +482,7 @@ async def route_to_agent(
         return "svc-medical"
 
     # 2. LLM classification via OpenClaw CLI (lightweight, fast).
-    valid_domains = {"finance", "tax", "visa", "medical", "life", "legal"}
+    valid_domains = {"finance", "tax", "visa", "medical", "life", "legal", "out_of_scope"}
     try:
         context_section = _build_routing_context(context)
         classify_msg = _CLASSIFY_PROMPT.format(
@@ -498,6 +498,13 @@ async def route_to_agent(
             domain = resp.text.strip().lower().rstrip(".")
             # Extract first word in case of extra text
             domain = domain.split()[0] if domain else ""
+            if domain == "out_of_scope":
+                logger.info(
+                    "LLM classified as out_of_scope (in %dms, context_turns=%d)",
+                    resp.duration_ms,
+                    len(context) if context else 0,
+                )
+                return "out_of_scope"
             if domain in valid_domains:
                 agent_id = f"svc-{domain}"
                 logger.info(
