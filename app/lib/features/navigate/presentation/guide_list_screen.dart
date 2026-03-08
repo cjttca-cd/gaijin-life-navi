@@ -20,14 +20,6 @@ class GuideListScreen extends ConsumerStatefulWidget {
 }
 
 class _GuideListScreenState extends ConsumerState<GuideListScreen> {
-  String _searchQuery = '';
-  final _searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,120 +48,18 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
     List<NavigatorGuide> guides,
     DomainColorSet colors,
   ) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-
-    // Filter guides by search query
-    final filteredGuides =
-        _searchQuery.isEmpty
-            ? guides
-            : guides
-                .where(
-                  (g) => g.title.toLowerCase().contains(
-                    _searchQuery.toLowerCase(),
-                  ),
-                )
-                .toList();
-
-    return Column(
-      children: [
-        // Search bar
-        Padding(
-          padding: const EdgeInsets.all(AppSpacing.screenPadding),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              hintText: l10n.guideSearchPlaceholder,
-              prefixIcon: const Icon(Icons.search, size: 20),
-              suffixIcon:
-                  _searchQuery.isNotEmpty
-                      ? IconButton(
-                        icon: const Icon(Icons.clear, size: 20),
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() => _searchQuery = '');
-                        },
-                      )
-                      : null,
-              filled: true,
-              fillColor: theme.colorScheme.surfaceContainerHighest,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999),
-                borderSide: BorderSide(color: theme.colorScheme.outline),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.spaceLg,
-                vertical: AppSpacing.spaceMd,
-              ),
-            ),
-            style: theme.textTheme.bodyMedium,
-            onChanged: (v) => setState(() => _searchQuery = v),
-          ),
-        ),
-
-        // Guide list
-        Expanded(
-          child:
-              filteredGuides.isEmpty
-                  ? _buildSearchEmpty(context)
-                  : ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.screenPadding,
-                    ),
-                    itemCount: filteredGuides.length,
-                    separatorBuilder:
-                        (_, __) => const SizedBox(height: AppSpacing.spaceSm),
-                    itemBuilder: (context, index) {
-                      final guide = filteredGuides[index];
-                      return _GuideCard(
-                        guide: guide,
-                        domain: widget.domain,
-                        accentColor: colors.accent,
-                      );
-                    },
-                  ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSearchEmpty(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.search_off,
-            size: 48,
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-          const SizedBox(height: AppSpacing.spaceLg),
-          Text(
-            l10n.guideSearchEmpty(_searchQuery),
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.spaceSm),
-          Text(
-            l10n.guideSearchTry,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
+    return ListView.separated(
+      padding: const EdgeInsets.all(AppSpacing.screenPadding),
+      itemCount: guides.length,
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.spaceSm),
+      itemBuilder: (context, index) {
+        final guide = guides[index];
+        return _GuideCard(
+          guide: guide,
+          domain: widget.domain,
+          accentColor: colors.accent,
+        );
+      },
     );
   }
 

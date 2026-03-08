@@ -44,54 +44,60 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "icon": "💰",
         "status": "active",
         "guides_path": _AGENTS_ROOT / "svc-finance" / "workspace" / "guides",
+        "description": {
+            "ja": "銀行口座・送金・保険・年金",
+            "zh": "银行开户・汇款・保险・年金",
+        },
     },
     "tax": {
         "label": "Tax & Social Insurance",
         "icon": "📊",
         "status": "active",
         "guides_path": _AGENTS_ROOT / "svc-tax" / "workspace" / "guides",
+        "description": {
+            "ja": "確定申告・源泉徴収・控除・住民税",
+            "zh": "报税・源泉税・扣除・住民税",
+        },
     },
     "visa": {
         "label": "Visa & Immigration",
         "icon": "🛂",
         "status": "active",
         "guides_path": _AGENTS_ROOT / "svc-visa" / "workspace" / "guides",
+        "description": {
+            "ja": "在留資格・更新・変更・永住",
+            "zh": "签证类型・更新・变更・永住",
+        },
     },
     "medical": {
         "label": "Medical & Health",
         "icon": "🏥",
         "status": "active",
         "guides_path": _AGENTS_ROOT / "svc-medical" / "workspace" / "guides",
+        "description": {
+            "ja": "健康保険・病院・薬局・救急",
+            "zh": "健康保险・就医・药店・急救",
+        },
     },
     "life": {
         "label": "Daily Life",
         "icon": "🌏",
         "status": "active",
         "guides_path": _AGENTS_ROOT / "svc-life" / "workspace" / "guides",
+        "description": {
+            "ja": "引越し・届出・運転免許・防災",
+            "zh": "搬家・行政手续・驾照・防災",
+        },
     },
     "legal": {
         "label": "Legal & Rights",
         "icon": "⚖️",
         "status": "active",
         "guides_path": _AGENTS_ROOT / "svc-legal" / "workspace" / "guides",
-    },
-    "housing": {
-        "label": "Housing & Utilities",
-        "icon": "🏠",
-        "status": "coming_soon",
-        "guides_path": None,
-    },
-    "employment": {
-        "label": "Employment & Tax",
-        "icon": "💼",
-        "status": "coming_soon",
-        "guides_path": None,
-    },
-    "education": {
-        "label": "Education & Childcare",
-        "icon": "🎓",
-        "status": "coming_soon",
-        "guides_path": None,
+        "description": {
+            "ja": "労働法・契約・相談窓口・権利",
+            "zh": "劳动法・合同・咨询窗口・权利",
+        },
     },
 }
 
@@ -366,6 +372,9 @@ async def list_domains(
                 parsed = _parse_md_file(fpath)
                 if parsed["access"] != "agent-only":
                     guide_count += 1
+        # Resolve description: ja/zh have specific values; others fall back to ja.
+        desc_map = cfg.get("description", {})
+        description = desc_map.get(lang) or desc_map.get(_FALLBACK_LANG, "")
         domains.append(
             {
                 "id": key,
@@ -373,6 +382,7 @@ async def list_domains(
                 "icon": cfg["icon"],
                 "status": cfg["status"],
                 "guide_count": guide_count,
+                "description": description,
             }
         )
     return SuccessResponse(data={"domains": domains}).model_dump()

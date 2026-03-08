@@ -416,35 +416,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Card(
               child: Column(
                 children: [
-                  ListTile(
-                    leading: const Text('⭐', style: TextStyle(fontSize: 20)),
-                    title: Text(
-                      l10n.settingsSubscription,
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Free',
-                          style: theme.textTheme.bodyMedium?.copyWith(
+                  if (!AppConfig.testFlightMode) ...[
+                    ListTile(
+                      leading: const Text('⭐', style: TextStyle(fontSize: 20)),
+                      title: Text(
+                        l10n.settingsSubscription,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Free',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.spaceXs),
+                          Icon(
+                            Icons.chevron_right,
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
-                        ),
-                        const SizedBox(width: AppSpacing.spaceXs),
-                        Icon(
-                          Icons.chevron_right,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ],
+                        ],
+                      ),
+                      onTap: () => context.push(AppRoutes.subscription),
                     ),
-                    onTap: () => context.push(AppRoutes.subscription),
-                  ),
-                  Divider(
-                    height: 1,
-                    color: theme.colorScheme.outlineVariant,
-                    indent: 56,
-                  ),
+                    Divider(
+                      height: 1,
+                      color: theme.colorScheme.outlineVariant,
+                      indent: 56,
+                    ),
+                  ],
                   ListTile(
                     leading: Icon(
                       Icons.logout,

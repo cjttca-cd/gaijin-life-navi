@@ -1773,4 +1773,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trialSetupSubmit => '开始使用';
+
+  @override
+  String get navAiSearchTitle => '用AI向导智能搜索';
+
+  @override
+  String get navAiSearchSubtitle => '根据您的情况提供个性化信息';
+
+  @override
+  String get navAiSearchButton => '立即体验';
 }

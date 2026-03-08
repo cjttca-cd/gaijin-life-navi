@@ -616,5 +616,8 @@
   "trialSetupNationality": "Quốc tịch",
   "trialSetupResidenceStatus": "Tư cách cư trú",
   "trialSetupRegion": "Khu vực",
-  "trialSetupSubmit": "Bắt đầu"
+  "trialSetupSubmit": "Bắt đầu",
+  "navAiSearchTitle": "Tìm kiếm thông minh với AI Guide",
+  "navAiSearchSubtitle": "Nhận thông tin cá nhân hóa phù hợp với hoàn cảnh của bạn",
+  "navAiSearchButton": "Thử ngay"
 }

@@ -6,18 +6,21 @@ class NavigatorDomain {
     this.icon,
     required this.status,
     this.guideCount = 0,
+    this.description,
   });
 
   final String id;
   final String label;
   final String? icon;
 
-  /// "active" or "coming_soon"
+  /// Domain status (e.g. "active").
   final String status;
   final int guideCount;
 
+  /// Short keyword description of the domain (language-aware).
+  final String? description;
+
   bool get isActive => status == 'active';
-  bool get isComingSoon => status == 'coming_soon';
 
   factory NavigatorDomain.fromJson(Map<String, dynamic> json) {
     return NavigatorDomain(
@@ -26,6 +29,7 @@ class NavigatorDomain {
       icon: json['icon'] as String?,
       status: json['status'] as String? ?? 'active',
       guideCount: json['guide_count'] as int? ?? 0,
+      description: json['description'] as String?,
     );
   }
 }

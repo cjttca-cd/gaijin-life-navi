@@ -1841,4 +1841,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get trialSetupSubmit => 'Começar';
+
+  @override
+  String get navAiSearchTitle => 'Busca inteligente com AI Guide';
+
+  @override
+  String get navAiSearchSubtitle =>
+      'Receba informações personalizadas para sua situação';
+
+  @override
+  String get navAiSearchButton => 'Experimente agora';
 }

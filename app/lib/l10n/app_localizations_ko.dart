@@ -1783,4 +1783,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trialSetupSubmit => '시작하기';
+
+  @override
+  String get navAiSearchTitle => 'AI 가이드로 스마트 검색';
+
+  @override
+  String get navAiSearchSubtitle => '당신의 상황에 맞는 맞춤 정보를 제공합니다';
+
+  @override
+  String get navAiSearchButton => '지금 사용해 보기';
 }

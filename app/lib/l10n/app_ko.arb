@@ -616,5 +616,8 @@
   "trialSetupNationality": "국적",
   "trialSetupResidenceStatus": "체류 자격",
   "trialSetupRegion": "거주 지역",
-  "trialSetupSubmit": "시작하기"
+  "trialSetupSubmit": "시작하기",
+  "navAiSearchTitle": "AI 가이드로 스마트 검색",
+  "navAiSearchSubtitle": "당신의 상황에 맞는 맞춤 정보를 제공합니다",
+  "navAiSearchButton": "지금 사용해 보기"
 }

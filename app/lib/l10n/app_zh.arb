@@ -616,5 +616,8 @@
   "trialSetupNationality": "国籍",
   "trialSetupResidenceStatus": "在留资格",
   "trialSetupRegion": "居住地区",
-  "trialSetupSubmit": "开始使用"
+  "trialSetupSubmit": "开始使用",
+  "navAiSearchTitle": "用AI向导智能搜索",
+  "navAiSearchSubtitle": "根据您的情况提供个性化信息",
+  "navAiSearchButton": "立即体验"
 }

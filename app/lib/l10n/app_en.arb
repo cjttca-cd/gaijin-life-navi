@@ -772,5 +772,8 @@
   "trialSetupNationality": "Nationality",
   "trialSetupResidenceStatus": "Residence Status",
   "trialSetupRegion": "Region",
-  "trialSetupSubmit": "Get Started"
+  "trialSetupSubmit": "Get Started",
+  "navAiSearchTitle": "Smart Search with AI Guide",
+  "navAiSearchSubtitle": "Get personalized information tailored to your situation",
+  "navAiSearchButton": "Try it now"
 }

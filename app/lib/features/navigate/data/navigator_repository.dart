@@ -40,7 +40,7 @@ class NavigatorRepository {
         .toList();
   }
 
-  /// Fetch the status of a domain (active / coming_soon).
+  /// Fetch the status of a domain.
   Future<String> getDomainStatus(String domain) async {
     final response = await apiClient.get('/navigator/$domain/guides');
     final data = response.data['data'] as Map<String, dynamic>?;

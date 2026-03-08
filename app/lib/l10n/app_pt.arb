@@ -616,5 +616,8 @@
   "trialSetupNationality": "Nacionalidade",
   "trialSetupResidenceStatus": "Status de Residência",
   "trialSetupRegion": "Região",
-  "trialSetupSubmit": "Começar"
+  "trialSetupSubmit": "Começar",
+  "navAiSearchTitle": "Busca inteligente com AI Guide",
+  "navAiSearchSubtitle": "Receba informações personalizadas para sua situação",
+  "navAiSearchButton": "Experimente agora"
 }

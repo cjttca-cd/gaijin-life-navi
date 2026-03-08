@@ -3529,6 +3529,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get Started'**
   String get trialSetupSubmit;
+
+  /// No description provided for @navAiSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Search with AI Guide'**
+  String get navAiSearchTitle;
+
+  /// No description provided for @navAiSearchSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get personalized information tailored to your situation'**
+  String get navAiSearchSubtitle;
+
+  /// No description provided for @navAiSearchButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Try it now'**
+  String get navAiSearchButton;
 }
 
 class _AppLocalizationsDelegate

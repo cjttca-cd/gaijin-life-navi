@@ -1823,4 +1823,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get trialSetupSubmit => 'Bắt đầu';
+
+  @override
+  String get navAiSearchTitle => 'Tìm kiếm thông minh với AI Guide';
+
+  @override
+  String get navAiSearchSubtitle =>
+      'Nhận thông tin cá nhân hóa phù hợp với hoàn cảnh của bạn';
+
+  @override
+  String get navAiSearchButton => 'Thử ngay';
 }
