@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../config/app_config.dart';
+import '../providers/auth_provider.dart';
 import '../providers/router_provider.dart';
 import '../theme/app_colors.dart';
 
@@ -11,7 +14,7 @@ import '../theme/app_colors.dart';
 /// Per DESIGN_SYSTEM.md §6.5.1 and §6.7:
 ///   - SOS tab icon is always [AppColors.error] (#DC2626).
 ///   - Active indicator uses [AppColors.primaryContainer].
-class MainShell extends StatelessWidget {
+class MainShell extends ConsumerWidget {
   const MainShell({super.key, required this.child});
 
   final Widget child;
@@ -31,7 +34,7 @@ class MainShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final currentIndex = _currentIndex(context);
 
@@ -49,6 +52,13 @@ class MainShell extends StatelessWidget {
           selectedIndex: currentIndex,
           onDestinationSelected: (index) {
             final target = _tabs[index];
+            // TestFlight guest: redirect profile tab to chat
+            if (target == AppRoutes.profile &&
+                AppConfig.testFlightMode &&
+                ref.read(authStateProvider).valueOrNull == null) {
+              context.go(AppRoutes.chat);
+              return;
+            }
             context.go(target);
           },
           destinations: [

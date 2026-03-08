@@ -89,21 +89,22 @@ class HomeScreen extends ConsumerWidget {
                 // ── Guest Registration CTA Banner ─────────────
                 if (isGuest) ...[
                   const SizedBox(height: AppSpacing.spaceLg),
-                  _GuestCtaBanner(
-                    text:
-                        AppConfig.testFlightMode
-                            ? l10n.testFlightHomeBannerText
-                            : l10n.homeGuestCtaText,
-                    cta:
-                        AppConfig.testFlightMode
-                            ? l10n.testFlightHomeBannerCta
-                            : l10n.homeGuestCtaButton,
-                    onTap:
-                        () =>
-                            AppConfig.testFlightMode
-                                ? context.go(AppRoutes.chat)
-                                : context.push(AppRoutes.register),
-                  ),
+                  if (AppConfig.testFlightMode) ...[
+                    // TestFlight guest: two CTA buttons
+                    _GuestCtaBanner(
+                      text: l10n.testFlightHomeBannerText,
+                      cta: l10n.testFlightHomeBannerCta,
+                      onTap: () => context.go(AppRoutes.chat),
+                      secondaryCta: l10n.tabGuide,
+                      onSecondaryTap: () => context.go(AppRoutes.navigate),
+                    ),
+                  ] else ...[
+                    _GuestCtaBanner(
+                      text: l10n.homeGuestCtaText,
+                      cta: l10n.homeGuestCtaButton,
+                      onTap: () => context.push(AppRoutes.register),
+                    ),
+                  ],
                 ],
 
                 const SizedBox(height: AppSpacing.space2xl),
@@ -422,11 +423,15 @@ class _GuestCtaBanner extends StatelessWidget {
     required this.text,
     required this.cta,
     required this.onTap,
+    this.secondaryCta,
+    this.onSecondaryTap,
   });
 
   final String text;
   final String cta;
   final VoidCallback onTap;
+  final String? secondaryCta;
+  final VoidCallback? onSecondaryTap;
 
   @override
   Widget build(BuildContext context) {
@@ -461,11 +466,37 @@ class _GuestCtaBanner extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppSpacing.spaceLg),
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: FilledButton(onPressed: onTap, child: Text(cta)),
-            ),
+            if (secondaryCta != null && onSecondaryTap != null) ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 44,
+                      child: OutlinedButton(
+                        onPressed: onSecondaryTap,
+                        child: Text(secondaryCta!),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.spaceMd),
+                  Expanded(
+                    child: SizedBox(
+                      height: 44,
+                      child: FilledButton(
+                        onPressed: onTap,
+                        child: Text(cta),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ] else ...[
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: FilledButton(onPressed: onTap, child: Text(cta)),
+              ),
+            ],
           ],
         ),
       ),
