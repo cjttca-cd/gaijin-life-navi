@@ -3607,6 +3607,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get trackerEditCancel;
+
+  /// No description provided for @testFlightHomeBannerText.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse all Japan life guides freely. Set up your profile to unlock 5 free AI guide sessions'**
+  String get testFlightHomeBannerText;
+
+  /// No description provided for @testFlightHomeBannerCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up to unlock'**
+  String get testFlightHomeBannerCta;
+
+  /// No description provided for @testFlightChatSetupPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up your profile to start your free AI guide experience'**
+  String get testFlightChatSetupPrompt;
+
+  /// No description provided for @testFlightChatSetupButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up and start'**
+  String get testFlightChatSetupButton;
 }
 
 class _AppLocalizationsDelegate

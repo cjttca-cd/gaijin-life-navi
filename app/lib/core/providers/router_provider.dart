@@ -8,6 +8,7 @@ import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/reset_password_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/chat/presentation/chat_conversation_screen.dart';
+import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import '../../features/chat/presentation/chat_guest_screen.dart';
 import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
@@ -108,12 +109,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         return AppRoutes.login;
       }
 
-      // Profile requires auth. Anonymous users (TestFlight) can access
-      // the simplified profile view, so only redirect if truly unauthenticated.
+      // Profile: unauthenticated → login (production) or /chat (TestFlight).
+      // Anonymous users (TestFlight) can access the simplified profile view.
       if (currentPath == AppRoutes.profile) {
         final user = authState.valueOrNull;
         if (user == null) {
-          return AppRoutes.login;
+          return AppConfig.testFlightMode ? AppRoutes.chat : AppRoutes.login;
         }
       }
 
@@ -341,11 +342,15 @@ class _AnonymousAuthGate extends ConsumerStatefulWidget {
 class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
   bool _signingIn = false;
   bool _failed = false;
+  bool _dialogShown = false;
 
   @override
   void initState() {
     super.initState();
-    _doAnonymousSignIn();
+    if (!AppConfig.testFlightMode) {
+      // Production: auto sign-in immediately
+      _doAnonymousSignIn();
+    }
   }
 
   Future<void> _doAnonymousSignIn() async {
@@ -366,6 +371,9 @@ class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     // If auth state has a user now (anonymous sign-in completed), show chat
     final user = ref.watch(authStateProvider).valueOrNull;
     if (user != null) {
@@ -373,11 +381,54 @@ class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
     }
 
     if (_failed) {
-      // Fallback: show the guest promotion screen
       return const ChatGuestScreen();
     }
 
-    // Loading state
+    // TestFlight: show setup prompt (don't auto sign-in)
+    if (AppConfig.testFlightMode) {
+      // Auto-show dialog once
+      if (!_dialogShown) {
+        _dialogShown = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _showSetupDialog();
+        });
+      }
+
+      return Scaffold(
+        appBar: AppBar(title: Text(l10n.chatTitle)),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.smart_toy_outlined, size: 64,
+                    color: theme.colorScheme.primary),
+                const SizedBox(height: 24),
+                Text(
+                  l10n.testFlightChatSetupPrompt,
+                  style: theme.textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                FilledButton.icon(
+                  onPressed: _showSetupDialog,
+                  icon: const Icon(Icons.tune),
+                  label: Text(l10n.testFlightChatSetupButton),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Production: loading state while auto sign-in
     return const Scaffold(body: Center(child: CircularProgressIndicator()));
+  }
+
+  void _showSetupDialog() {
+    TrialSetupDialog.show(context, signInFirst: true);
+    // After dialog, auth state may update → widget rebuilds
   }
 }

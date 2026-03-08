@@ -1867,4 +1867,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get trackerEditCancel => 'Hủy';
+
+  @override
+  String get testFlightHomeBannerText =>
+      'Xem tất cả hướng dẫn cuộc sống Nhật Bản. Thiết lập hồ sơ để mở khóa 5 lần trải nghiệm AI miễn phí';
+
+  @override
+  String get testFlightHomeBannerCta => 'Thiết lập để mở khóa';
+
+  @override
+  String get testFlightChatSetupPrompt =>
+      'Thiết lập hồ sơ để bắt đầu trải nghiệm AI miễn phí';
+
+  @override
+  String get testFlightChatSetupButton => 'Thiết lập và bắt đầu';
 }

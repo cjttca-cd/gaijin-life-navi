@@ -1868,4 +1868,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trackerEditCancel => 'Cancel';
+
+  @override
+  String get testFlightHomeBannerText =>
+      'Browse all Japan life guides freely. Set up your profile to unlock 5 free AI guide sessions';
+
+  @override
+  String get testFlightHomeBannerCta => 'Set up to unlock';
+
+  @override
+  String get testFlightChatSetupPrompt =>
+      'Set up your profile to start your free AI guide experience';
+
+  @override
+  String get testFlightChatSetupButton => 'Set up and start';
 }

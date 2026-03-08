@@ -92,16 +92,16 @@ class HomeScreen extends ConsumerWidget {
                   _GuestCtaBanner(
                     text:
                         AppConfig.testFlightMode
-                            ? l10n.chatGuestFreeOffer
+                            ? l10n.testFlightHomeBannerText
                             : l10n.homeGuestCtaText,
                     cta:
                         AppConfig.testFlightMode
-                            ? l10n.navAiSearchButton
+                            ? l10n.testFlightHomeBannerCta
                             : l10n.homeGuestCtaButton,
                     onTap:
                         () =>
                             AppConfig.testFlightMode
-                                ? context.push(AppRoutes.chat)
+                                ? context.go(AppRoutes.chat)
                                 : context.push(AppRoutes.register),
                   ),
                 ],
@@ -129,9 +129,8 @@ class HomeScreen extends ConsumerWidget {
                     },
                   ),
 
-                // ── Tracker Summary (above quick actions) ─────
-                // Tracker is SharedPreferences-based (local), visible to all including guests.
-                ...[
+                // ── Tracker Summary (hidden for TestFlight guests) ─────
+                if (!(isGuest && AppConfig.testFlightMode)) ...[
                   Text(
                     l10n.homeTrackerSummary.toUpperCase(),
                     style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
@@ -141,52 +140,52 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.space2xl),
                 ],
 
-                // ── Quick Actions (AI Chat + Tracker only) ───
-                Text(
-                  l10n.homeSectionQuickActions.toUpperCase(),
-                  style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
-                ),
-                const SizedBox(height: AppSpacing.spaceMd),
-                GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: AppSpacing.spaceMd,
-                  crossAxisSpacing: AppSpacing.spaceMd,
-                  childAspectRatio: 1.3,
-                  children: [
-                    if (!isGuest)
-                      _QuickActionCard(
-                        icon: Icons.chat_bubble_outline,
-                        iconBgColor: AppColors.primaryContainer,
-                        iconColor: AppColors.primaryDark,
-                        title: l10n.homeQaChatTitle,
-                        subtitle: l10n.homeQaChatSubtitle,
-                        onTap: () => _openChat(context),
-                      ),
-                    if (!isGuest)
-                      _QuickActionCard(
-                        icon: Icons.assignment_outlined,
-                        iconBgColor: AppColors.adminContainer,
-                        iconColor: AppColors.adminIcon,
-                        title: l10n.homeQaTrackerTitle,
-                        subtitle: l10n.homeQaTrackerSubtitle,
-                        onTap: () => context.push(AppRoutes.tracker),
-                      ),
-                    if (isGuest)
-                      _QuickActionCard(
-                        icon: Icons.local_hospital,
-                        iconBgColor: AppColors.medicalContainer,
-                        iconColor: AppColors.medicalIcon,
-                        title: l10n.homeQaMedicalTitle,
-                        subtitle: l10n.homeQaMedicalSubtitle,
-                        onTap:
-                            () => context.push('${AppRoutes.navigate}/medical'),
-                      ),
-                  ],
-                ),
-
-                const SizedBox(height: AppSpacing.space2xl),
+                // ── Quick Actions (hidden for TestFlight guests) ───
+                if (!(isGuest && AppConfig.testFlightMode)) ...[
+                  Text(
+                    l10n.homeSectionQuickActions.toUpperCase(),
+                    style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: AppSpacing.spaceMd),
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    mainAxisSpacing: AppSpacing.spaceMd,
+                    crossAxisSpacing: AppSpacing.spaceMd,
+                    childAspectRatio: 1.3,
+                    children: [
+                      if (!isGuest)
+                        _QuickActionCard(
+                          icon: Icons.chat_bubble_outline,
+                          iconBgColor: AppColors.primaryContainer,
+                          iconColor: AppColors.primaryDark,
+                          title: l10n.homeQaChatTitle,
+                          subtitle: l10n.homeQaChatSubtitle,
+                          onTap: () => _openChat(context),
+                        ),
+                      if (!isGuest)
+                        _QuickActionCard(
+                          icon: Icons.assignment_outlined,
+                          iconBgColor: AppColors.adminContainer,
+                          iconColor: AppColors.adminIcon,
+                          title: l10n.homeQaTrackerTitle,
+                          subtitle: l10n.homeQaTrackerSubtitle,
+                          onTap: () => context.push(AppRoutes.tracker),
+                        ),
+                      if (isGuest)
+                        _QuickActionCard(
+                          icon: Icons.local_hospital,
+                          iconBgColor: AppColors.medicalContainer,
+                          iconColor: AppColors.medicalIcon,
+                          title: l10n.homeQaMedicalTitle,
+                          subtitle: l10n.homeQaMedicalSubtitle,
+                          onTap: () => context.push('\${AppRoutes.navigate}/medical'),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.space2xl),
+                ],
 
                 // ── Popular Guides (list format) ─────────────
                 Text(

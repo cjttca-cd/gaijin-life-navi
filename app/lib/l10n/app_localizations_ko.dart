@@ -1826,4 +1826,17 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get trackerEditCancel => '취소';
+
+  @override
+  String get testFlightHomeBannerText =>
+      '일본 생활 가이드를 자유롭게 탐색하세요. 프로필을 설정하면 AI 가이드 5회 무료 체험';
+
+  @override
+  String get testFlightHomeBannerCta => '설정하고 체험하기';
+
+  @override
+  String get testFlightChatSetupPrompt => '프로필을 설정하면 무료 AI 가이드를 이용할 수 있습니다';
+
+  @override
+  String get testFlightChatSetupButton => '설정하고 시작';
 }

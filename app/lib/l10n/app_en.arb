@@ -799,5 +799,9 @@
   "trackerEditFieldMemo": "Memo (optional)",
   "trackerEditFieldDate": "Due Date (optional)",
   "trackerEditSave": "Save to Tracker",
-  "trackerEditCancel": "Cancel"
+  "trackerEditCancel": "Cancel",
+  "testFlightHomeBannerText": "Browse all Japan life guides freely. Set up your profile to unlock 5 free AI guide sessions",
+  "testFlightHomeBannerCta": "Set up to unlock",
+  "testFlightChatSetupPrompt": "Set up your profile to start your free AI guide experience",
+  "testFlightChatSetupButton": "Set up and start"
 }

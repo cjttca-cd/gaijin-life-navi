@@ -412,7 +412,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: AppSpacing.space2xl),
 
           // ── Anonymous: Create Account Banner ──
-          if (isAnonymous) ...[
+          if (isAnonymous && !AppConfig.testFlightMode) ...[
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.screenPadding,
@@ -447,7 +447,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           const SizedBox(height: AppSpacing.spaceLg),
 
-          // ── Section 2: Account Management ──
+          // ── Section 2: Account Management (hidden for anonymous TestFlight) ──
+          if (!(isAnonymous && AppConfig.testFlightMode))
           _SectionLabel(label: l10n.accountSectionManagement),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -506,7 +507,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
 
           // ── Section 3: Delete Account (hidden for anonymous) ──
-          if (!isAnonymous) ...[
+          if (!isAnonymous && !AppConfig.testFlightMode) ...[
             const SizedBox(height: AppSpacing.space2xl),
             Padding(
               padding: const EdgeInsets.symmetric(

@@ -1816,4 +1816,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get trackerEditCancel => '取消';
+
+  @override
+  String get testFlightHomeBannerText => '无限制查看所有日本生活指南精华贴，设置信息解锁5次个人智能AI向导体验';
+
+  @override
+  String get testFlightHomeBannerCta => '设置信息解锁体验';
+
+  @override
+  String get testFlightChatSetupPrompt => '设置您的信息，即可免费体验AI向导';
+
+  @override
+  String get testFlightChatSetupButton => '设置信息开始体验';
 }

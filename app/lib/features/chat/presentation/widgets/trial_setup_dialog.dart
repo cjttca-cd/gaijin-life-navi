@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/theme/app_spacing.dart';
 import 'package:intl/intl.dart';
 import '../../../../data/nationalities.dart';
@@ -15,16 +16,18 @@ import '../../../profile/presentation/providers/profile_providers.dart';
 /// anonymous users before they can access AI Chat.
 /// Users can dismiss this dialog to browse without chat access.
 class TrialSetupDialog extends ConsumerStatefulWidget {
-  const TrialSetupDialog({super.key});
+  const TrialSetupDialog({super.key, this.signInFirst = false});
+
+  final bool signInFirst;
 
   /// Show the trial setup dialog as a non-dismissible bottom sheet.
-  static Future<bool> show(BuildContext context) async {
+  static Future<bool> show(BuildContext context, {bool signInFirst = false}) async {
     final result = await showModalBottomSheet<bool>(
       context: context,
       isDismissible: true,
       enableDrag: true,
       isScrollControlled: true,
-      builder: (_) => const TrialSetupDialog(),
+      builder: (_) => TrialSetupDialog(signInFirst: signInFirst),
     );
     return result ?? false;
   }
@@ -53,9 +56,24 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
 
     setState(() => _isSubmitting = true);
 
+    final locale = Localizations.localeOf(context).languageCode;
+
     try {
+      // Sign in anonymously first if needed (guest flow)
+      if (widget.signInFirst) {
+        final auth = ref.read(firebaseAuthProvider);
+        final user = await signInAnonymously(auth);
+        if (user == null) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('ログインに失敗しました。ネットワーク接続を確認してください。')),
+            );
+          }
+          return;
+        }
+      }
+
       final repo = ref.read(profileRepositoryProvider);
-      final locale = Localizations.localeOf(context).languageCode;
       await repo.trialSetup(
         nationality: _selectedNationality!,
         residenceStatus: _selectedResidenceStatus!,

@@ -643,5 +643,9 @@
   "trackerEditFieldMemo": "Nota (opcional)",
   "trackerEditFieldDate": "Data de Vencimento (opcional)",
   "trackerEditSave": "Salvar no Rastreador",
-  "trackerEditCancel": "Cancelar"
+  "trackerEditCancel": "Cancelar",
+  "testFlightHomeBannerText": "Navegue por todos os guias de vida no Japão. Configure seu perfil para desbloquear 5 sessões gratuitas de AI",
+  "testFlightHomeBannerCta": "Configurar para desbloquear",
+  "testFlightChatSetupPrompt": "Configure seu perfil para iniciar sua experiência gratuita com o guia AI",
+  "testFlightChatSetupButton": "Configurar e começar"
 }

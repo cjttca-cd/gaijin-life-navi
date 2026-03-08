@@ -643,5 +643,9 @@
   "trackerEditFieldMemo": "Ghi chú (tùy chọn)",
   "trackerEditFieldDate": "Hạn chót (tùy chọn)",
   "trackerEditSave": "Lưu vào danh sách",
-  "trackerEditCancel": "Hủy"
+  "trackerEditCancel": "Hủy",
+  "testFlightHomeBannerText": "Xem tất cả hướng dẫn cuộc sống Nhật Bản. Thiết lập hồ sơ để mở khóa 5 lần trải nghiệm AI miễn phí",
+  "testFlightHomeBannerCta": "Thiết lập để mở khóa",
+  "testFlightChatSetupPrompt": "Thiết lập hồ sơ để bắt đầu trải nghiệm AI miễn phí",
+  "testFlightChatSetupButton": "Thiết lập và bắt đầu"
 }
