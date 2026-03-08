@@ -9,7 +9,7 @@ Dio createApiClient({FirebaseAuth? firebaseAuth}) {
     BaseOptions(
       baseUrl: '${AppConfig.apiBaseUrl}${AppConfig.apiVersion}',
       connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 90),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
