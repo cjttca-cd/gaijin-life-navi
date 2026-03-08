@@ -266,7 +266,7 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 
 #### `GET /api/v1/navigator/domains`
 
-- **説明**: 全ナビゲーションドメインの一覧取得（6 ドメイン、全 active）
+- **説明**: 全ナビゲーションドメインの一覧取得（6 ドメイン、全 active）。各ドメインには `description` フィールド（概要キーワード）を含む
 - **認証**: 不要（公開情報）
 
 **Response 200**:
@@ -279,7 +279,8 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
         "label": "Finance & Banking",
         "icon": "🏦",
         "status": "active",
-        "guide_count": 6
+        "guide_count": 6,
+        "description": "銀行開設・送金・保険・年金"
       },
       {
         "id": "tax",
