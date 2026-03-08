@@ -9,6 +9,7 @@ import '../../features/auth/presentation/reset_password_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/chat/presentation/chat_conversation_screen.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/chat/presentation/chat_guest_screen.dart';
 import '../../features/chat/presentation/chat_list_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
@@ -331,6 +332,13 @@ class _TrialSetupGateState extends ConsumerState<_TrialSetupGate> {
   }
 }
 
+/// Mark trial setup as completed (persists in SharedPreferences).
+/// Called from TrialSetupDialog after successful setup.
+Future<void> markTrialSetupComplete() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('trial_setup_done', true);
+}
+
 /// Automatically signs in anonymously then shows [_TrialSetupGate].
 class _AnonymousAuthGate extends ConsumerStatefulWidget {
   const _AnonymousAuthGate();
@@ -343,15 +351,42 @@ class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
   bool _signingIn = false;
   bool _failed = false;
   bool _dialogShown = false;
+  bool _checkingLocal = true; // checking SharedPreferences
+
+
 
   @override
   void initState() {
     super.initState();
-    if (!AppConfig.testFlightMode) {
+    if (AppConfig.testFlightMode) {
+      // TestFlight: check if user has completed trial setup before
+      _checkReturningUser();
+    } else {
       // Production: auto sign-in immediately
+      _checkingLocal = false;
       _doAnonymousSignIn();
     }
   }
+
+  /// Check SharedPreferences for returning anonymous users.
+  /// If trial was completed before → auto sign-in silently.
+  /// If first time → show dialog.
+  Future<void> _checkReturningUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasDoneTrial = prefs.getBool('trial_setup_done') ?? false;
+    if (!mounted) return;
+
+    if (hasDoneTrial) {
+      // Returning user → auto sign-in, no dialog
+      setState(() => _checkingLocal = false);
+      _doAnonymousSignIn();
+    } else {
+      // First time → show dialog
+      setState(() => _checkingLocal = false);
+    }
+  }
+
+
 
   Future<void> _doAnonymousSignIn() async {
     if (_signingIn) return;
@@ -380,13 +415,17 @@ class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
       return const _TrialSetupGate();
     }
 
+    // Still checking SharedPreferences or signing in
+    if (_checkingLocal || _signingIn) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     if (_failed) {
       return const ChatGuestScreen();
     }
 
-    // TestFlight: show setup prompt (don't auto sign-in)
+    // TestFlight first-time user: show setup prompt
     if (AppConfig.testFlightMode) {
-      // Auto-show dialog once
       if (!_dialogShown) {
         _dialogShown = true;
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -423,7 +462,7 @@ class _AnonymousAuthGateState extends ConsumerState<_AnonymousAuthGate> {
       );
     }
 
-    // Production: loading state while auto sign-in
+    // Production: loading state
     return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 

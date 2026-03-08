@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../../core/providers/auth_provider.dart';
+import '../../../../core/providers/router_provider.dart';
 import '../../../../core/theme/app_spacing.dart';
 import 'package:intl/intl.dart';
 import '../../../../data/nationalities.dart';
@@ -83,6 +84,8 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
       );
       // Invalidate profile cache so it picks up the new data.
       ref.invalidate(userProfileProvider);
+      // Mark trial setup done in SharedPreferences (for returning-user auto-login)
+      await markTrialSetupComplete();
       if (mounted) Navigator.of(context).pop(true);
     } catch (_) {
       if (mounted) {
