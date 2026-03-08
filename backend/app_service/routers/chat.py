@@ -88,83 +88,115 @@ class ChatResponse(BaseModel):
 
 # ── Response-text parsers ──────────────────────────────────────────────
 
-# Agent responses may embed structured blocks like:
-#   [SOURCES]
-#   - title: Some Page | url: https://...
-#   [/SOURCES]
+# Agent responses embed structured blocks in triple-dash format:
+#   ---TRACKER---
+#   □ Go to city hall (within 14 days)
+#   □ Apply for health insurance
+#   ---SOURCES---
+#   - knowledge/account-opening.md
+#   - https://example.com
 #
-#   [TRACKER]
-#   - type: deadline | title: Visa renewal | date: 2025-04-01
-#   [/TRACKER]
-
-_SOURCES_RE = re.compile(
-    r"\[SOURCES\]\s*\n(.*?)\n\s*\[/SOURCES\]", re.DOTALL | re.IGNORECASE,
-)
-_TRACKER_RE = re.compile(
-    r"(?:\[TRACKER\]|---\s*TRACKER\s*---)\s*\n(.*?)(?:\n\s*\[/TRACKER\]|\n\s*---\s*(?:END[_ ]?TRACKER|TRACKER)\s*---|\Z)",
-    re.DOTALL | re.IGNORECASE,
-)
-_ACTIONS_RE = re.compile(
-    r"\[ACTIONS\]\s*\n(.*?)\n\s*\[/ACTIONS\]", re.DOTALL | re.IGNORECASE,
-)
+# Legacy bracket format is also supported:
+#   [TRACKER] ... [/TRACKER]
+#   [SOURCES] ... [/SOURCES]
 
 
-def _parse_kv_lines(block: str) -> list[dict[str, str]]:
-    """Parse tracker lines in two formats:
+def _build_block_re(name: str) -> re.Pattern:
+    """Build regex matching both [NAME]...[/NAME] and ---NAME---...---NEXT--- formats."""
+    return re.compile(
+        r"(?:"
+        # Format A: [NAME] ... [/NAME]
+        rf"\[{name}\]\s*\n(.*?)\n\s*\[/{name}\]"
+        r"|"
+        # Format B: ---NAME--- ... (until next ---WORD--- block or end of string)
+        rf"---\s*{name}\s*---\s*\n(.*?)(?=\n\s*---[A-Z]|\Z)"
+        r")",
+        re.DOTALL | re.IGNORECASE,
+    )
 
-    KV format:  ``- type: deadline | title: Visa renewal | date: 2025-04-01``
-    Plain text: ``□ Go to city hall (within 14 days)``
 
-    Returns list[dict] with at least ``type`` and ``title`` keys.
-    """
-    import unicodedata
+_SOURCES_RE = _build_block_re("SOURCES")
+_TRACKER_RE = _build_block_re("TRACKER")
+_ACTIONS_RE = _build_block_re("ACTIONS")
 
+
+def _get_block_content(match: re.Match) -> str:
+    """Extract matched content from either capture group."""
+    return (match.group(1) or match.group(2) or "").strip()
+
+
+def _parse_source_lines(block: str) -> list[dict[str, str]]:
+    """Parse source/reference lines. Skips internal knowledge/ paths."""
+    items: list[dict[str, str]] = []
+    for line in block.strip().splitlines():
+        line = line.strip().lstrip("- •").strip()
+        if not line or len(line) < 3:
+            continue
+        # Skip internal file paths
+        if line.startswith("knowledge/") or line.startswith("guides/"):
+            continue
+        if re.match(r"^-{2,}$", line):
+            continue
+        # KV format: title: X | url: Y
+        if "|" in line and ":" in line:
+            pairs = {}
+            for seg in line.split("|"):
+                if ":" in seg:
+                    k, v = seg.split(":", 1)
+                    pairs[k.strip()] = v.strip()
+            if pairs:
+                items.append(pairs)
+                continue
+        # Bare URL
+        if line.startswith("http"):
+            items.append({"title": line, "url": line})
+            continue
+        # Title with URL in parens
+        m = re.match(r"(.+?)\s*[（(](https?://[^）)]+)[）)]", line)
+        if m:
+            items.append({"title": m.group(1).strip(), "url": m.group(2).strip()})
+    return items
+
+
+def _parse_tracker_lines(block: str) -> list[dict[str, str]]:
+    """Parse tracker/action-item lines. Filters noise (separators, disclaimers, paths)."""
     items: list[dict[str, str]] = []
     for line in block.strip().splitlines():
         line = line.strip()
         if not line:
             continue
-
-        # Strip leading bullet markers: □ ☐ ☑ ✅ - [ ] - [x] •  numbered (1. 2.)
+        # Strip bullet markers: □ ☐ ☑ ✅ • - [ ] numbered
         cleaned = re.sub(
             r"^(?:[□☐☑✅•]|\d+[.):]|[-*]\s*\[[ x]?\]|[-*])\s*",
-            "",
-            line,
+            "", line,
         ).strip()
-        if not cleaned:
+        if not cleaned or len(cleaned) < 3:
             continue
-
-        # Try KV format first (contains | separator with key: value pairs)
+        # Filter noise
+        if re.match(r"^-{2,}$", cleaned):
+            continue
+        if cleaned.startswith(("knowledge/", "guides/", "SOURCES", "TRACKER", "※", "＊")):
+            continue
+        # KV format
         if "|" in cleaned and ":" in cleaned:
-            pairs = [seg.strip() for seg in cleaned.split("|")]
-            item: dict[str, str] = {}
-            for pair in pairs:
-                if ":" in pair:
-                    k, v = pair.split(":", 1)
-                    item[k.strip()] = v.strip()
-            if item:
-                items.append(item)
+            pairs: dict[str, str] = {}
+            for seg in cleaned.split("|"):
+                if ":" in seg:
+                    k, v = seg.split(":", 1)
+                    pairs[k.strip()] = v.strip()
+            if pairs:
+                items.append(pairs)
                 continue
-
-        # Plain text format — extract date if present, rest is title
-        date_match = re.search(
-            r"[（(](.*?(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}).*?)[）)]",
-            cleaned,
-        )
+        # Plain text — try to extract date
         date_str = ""
-        if date_match:
-            # Extract just the date portion
-            inner = date_match.group(1)
-            d = re.search(r"\d{4}[-/]\d{1,2}[-/]\d{1,2}", inner)
-            if d:
-                date_str = d.group(0)
-
+        dm = re.search(r"[（(].*?(\d{4}[-/]\d{1,2}[-/]\d{1,2}).*?[）)]", cleaned)
+        if dm:
+            date_str = dm.group(1)
         items.append({
             "type": "task",
             "title": cleaned,
             **({"date": date_str} if date_str else {}),
         })
-
     return items
 
 
@@ -172,25 +204,29 @@ def _extract_blocks(text: str) -> tuple[str, list[dict], list[dict], list[dict]]
     """Extract SOURCES, ACTIONS, and TRACKER blocks from agent text.
 
     Returns (clean_reply, sources, actions, tracker_items).
-    The clean reply has the raw blocks stripped out.
     """
     sources: list[dict] = []
     actions: list[dict] = []
     tracker_items: list[dict] = []
 
     for match in _SOURCES_RE.finditer(text):
-        sources.extend(_parse_kv_lines(match.group(1)))
+        sources.extend(_parse_source_lines(_get_block_content(match)))
 
     for match in _ACTIONS_RE.finditer(text):
-        actions.extend(_parse_kv_lines(match.group(1)))
+        tracker_items.extend(_parse_tracker_lines(_get_block_content(match)))
 
     for match in _TRACKER_RE.finditer(text):
-        tracker_items.extend(_parse_kv_lines(match.group(1)))
+        tracker_items.extend(_parse_tracker_lines(_get_block_content(match)))
 
-    # Strip the raw blocks from the reply shown to the user
+    # Strip all structured blocks from user-visible reply
     clean = _SOURCES_RE.sub("", text)
     clean = _ACTIONS_RE.sub("", clean)
     clean = _TRACKER_RE.sub("", clean)
+    # Strip any remaining ---LABEL--- markers
+    clean = re.sub(r"\n?---\s*[A-Z]{2,}\s*---\s*", "", clean)
+    # Strip orphan --- separators and trailing disclaimer
+    clean = re.sub(r"\n---\s*\n", "\n", clean)
+    clean = re.sub(r"\n---\s*$", "", clean)
     clean = clean.strip()
 
     return clean, sources, actions, tracker_items
