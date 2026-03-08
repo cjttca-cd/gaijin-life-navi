@@ -220,6 +220,9 @@ Agent のテキストレスポンスから以下のブロックを解析:
 - knowledge/ は Agent 専用（経験則・判断ロジック）。Navigator API には公開しない
 - Navigator API は guides/ ディレクトリを直接走査して提供
 - .md ファイルの先頭 `# heading` がタイトル、最初の段落がサマリー
+- frontmatter の `tags` フィールドが Guide List / Guide Detail に表示される（最大 3 タグ）
+- Guide Detail では推定読了時間を表示（CJK: 500文字/分、Latin: 200語/分）
+- Guide Detail では同一ドメインの関連ガイドを最大 3 件表示（現在閲覧中のガイドを除く）
 
 ---
 

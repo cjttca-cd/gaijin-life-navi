@@ -338,21 +338,24 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
         "title": "Bank Account Opening Guide for Foreign Residents",
         "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident.",
         "access": "free",
-        "excerpt": "Step-by-step guide to opening a bank account..."
+        "excerpt": "Step-by-step guide to opening a bank account...",
+        "tags": ["銀行", "口座開設", "外国人"]
       },
       {
         "slug": "banks-overview",
         "title": "Major Banks Comparison",
         "summary": "Comparison of major banks in Japan for foreign residents.",
         "access": "premium",
-        "excerpt": "Compare major banks for foreign residents..."
+        "excerpt": "Compare major banks for foreign residents...",
+        "tags": ["銀行比較", "外国人"]
       },
       {
         "slug": "remittance",
         "title": "International Money Transfer Guide",
         "summary": "Compare remittance options: bank transfer, Wise, Western Union.",
         "access": "premium",
-        "excerpt": "Compare remittance options..."
+        "excerpt": "Compare remittance options...",
+        "tags": ["海外送金", "Wise", "外国人"]
       }
     ]
   }
@@ -374,7 +377,9 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
     "access": "free",
     "locked": false,
     "summary": "Step-by-step guide to opening a bank account in Japan as a foreign resident.",
-    "content": "# Bank Account Opening Guide for Foreign Residents\n\n## Required Documents\n\n1. **Residence Card** (在留カード)\n2. **Passport**\n3. **Proof of Address** (住民票)..."
+    "content": "# Bank Account Opening Guide for Foreign Residents\n\n## Required Documents\n\n1. **Residence Card** (在留カード)\n2. **Passport**\n3. **Proof of Address** (住民票)...",
+    "tags": ["銀行", "口座開設", "外国人"],
+    "reading_time_min": 3
   }
 }
 ```
