@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
-import '../config/app_config.dart';
-import '../providers/auth_provider.dart';
 import '../providers/router_provider.dart';
 import '../theme/app_colors.dart';
 
-/// Main shell with bottom navigation.
+/// Main shell with 5-tab BottomNavigationBar.
 ///
-/// Tabs: Home, Chat, Guide, SOS, (Profile — hidden for anonymous TestFlight)
+/// Tabs: Home, Chat, Guide, SOS, Profile
 /// Per DESIGN_SYSTEM.md §6.5.1 and §6.7:
 ///   - SOS tab icon is always [AppColors.error] (#DC2626).
 ///   - Active indicator uses [AppColors.primaryContainer].
-class MainShell extends ConsumerWidget {
+class MainShell extends StatelessWidget {
   const MainShell({super.key, required this.child});
 
   final Widget child;
 
-  static const _allTabs = [
+  static const _tabs = [
     AppRoutes.home,
     AppRoutes.chat,
     AppRoutes.navigate,
@@ -27,28 +24,16 @@ class MainShell extends ConsumerWidget {
     AppRoutes.profile,
   ];
 
-  /// In TestFlight mode, hide Profile tab for anonymous users.
-  List<String> _visibleTabs(bool hideProfile) {
-    if (hideProfile) {
-      return _allTabs.where((t) => t != AppRoutes.profile).toList();
-    }
-    return _allTabs;
-  }
-
-  int _currentIndex(BuildContext context, List<String> tabs) {
+  int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
-    final index = tabs.indexOf(location);
+    final index = _tabs.indexOf(location);
     return index >= 0 ? index : 0;
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final user = ref.watch(authStateProvider).valueOrNull;
-    final hideProfile =
-        AppConfig.testFlightMode && (user == null || user.isAnonymous);
-    final tabs = _visibleTabs(hideProfile);
-    final currentIndex = _currentIndex(context, tabs);
+    final currentIndex = _currentIndex(context);
 
     return Scaffold(
       body: child,
@@ -63,7 +48,7 @@ class MainShell extends ConsumerWidget {
         child: NavigationBar(
           selectedIndex: currentIndex,
           onDestinationSelected: (index) {
-            final target = tabs[index];
+            final target = _tabs[index];
             context.go(target);
           },
           destinations: [
@@ -90,12 +75,11 @@ class MainShell extends ConsumerWidget {
               selectedIcon: const Icon(Icons.emergency, color: AppColors.error),
               label: l10n.tabSOS,
             ),
-            if (!hideProfile)
-              NavigationDestination(
-                icon: const Icon(Icons.person_outline),
-                selectedIcon: const Icon(Icons.person),
-                label: l10n.tabAccount,
-              ),
+            NavigationDestination(
+              icon: const Icon(Icons.person_outline),
+              selectedIcon: const Icon(Icons.person),
+              label: l10n.tabAccount,
+            ),
           ],
         ),
       ),
