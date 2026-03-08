@@ -391,7 +391,7 @@ class _GuideCard extends StatelessWidget {
                       if (guide.summary != null) ...[
                         const SizedBox(height: AppSpacing.spaceXs),
                         Text(
-                          guide.summary!,
+                          _stripMarkdown(guide.summary!),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -512,4 +512,15 @@ class _TagChips extends StatelessWidget {
       }).toList(),
     );
   }
+}
+
+
+/// Strip markdown bold/italic markers for plain-text display.
+String _stripMarkdown(String text) {
+  // Order matters: strip ** before *, __ before _
+  var result = text.replaceAll(RegExp(r'\*\*(.+?)\*\*'), r'$1');
+  result = result.replaceAll(RegExp(r'__(.+?)__'), r'$1');
+  result = result.replaceAll(RegExp(r'\*(.+?)\*'), r'$1');
+  result = result.replaceAll(RegExp(r'_(.+?)_'), r'$1');
+  return result;
 }
