@@ -409,7 +409,7 @@ class _CheckboxActionRow extends StatelessWidget {
             constraints: const BoxConstraints(),
             iconSize: 20,
             icon: Icon(
-              Icons.bookmark_add_outlined,
+              Icons.add_task,
               size: 20,
               color: cs.primary,
             ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import '../../../core/config/app_config.dart';
 
 import '../../../core/analytics/analytics_service.dart';
 import '../../../core/providers/auth_provider.dart';
@@ -97,7 +98,7 @@ class HomeScreen extends ConsumerWidget {
                   Consumer(
                     builder: (context, ref, _) {
                       final tier = ref.watch(userTierProvider);
-                      if (tier != 'free') return const SizedBox.shrink();
+                      if (tier != 'free' || AppConfig.testFlightMode) return const SizedBox.shrink();
                       return Padding(
                         padding: const EdgeInsets.only(
                           bottom: AppSpacing.space2xl,
