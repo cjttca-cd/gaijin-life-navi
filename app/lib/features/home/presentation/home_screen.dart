@@ -472,7 +472,7 @@ class _GuestCtaBanner extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                       height: 44,
-                      child: OutlinedButton(
+                      child: FilledButton(
                         onPressed: onSecondaryTap,
                         child: Text(
                           secondaryCta!,

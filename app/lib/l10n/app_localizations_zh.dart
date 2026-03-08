@@ -1833,5 +1833,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get testFlightViewGuides => '查看所有指南';
 
   @override
-  String get trialSetupSubtitle => 'AI向导将根据信息提供符合你情况定制化回答';
+  String get trialSetupSubtitle => 'AI向导将根据信息提供符合你情况的定制化回答';
 }
