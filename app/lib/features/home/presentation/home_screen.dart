@@ -74,8 +74,11 @@ class HomeScreen extends ConsumerWidget {
                       if (usage == null || usage.isUnlimited) {
                         return const SizedBox.shrink();
                       }
+                      final label = usage.limit > 0
+                          ? l10n.homeUsageFree(usage.remaining, usage.limit)
+                          : l10n.chatCreditsRemaining(usage.remaining);
                       return Text(
-                        l10n.homeUsageFree(usage.remaining, usage.limit),
+                        label,
                         style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
                       );
                     },
@@ -162,7 +165,7 @@ class HomeScreen extends ConsumerWidget {
                         iconColor: AppColors.medicalIcon,
                         title: l10n.homeQaMedicalTitle,
                         subtitle: l10n.homeQaMedicalSubtitle,
-                        onTap: () => context.push(AppRoutes.emergency),
+                        onTap: () => context.push('${AppRoutes.navigate}/medical'),
                       ),
                   ],
                 ),
@@ -193,7 +196,7 @@ class HomeScreen extends ConsumerWidget {
                   title: l10n.homeQaMedicalTitle,
                   subtitle: l10n.homeQaMedicalSubtitle,
                   accentColor: DomainColors.medical.accent,
-                  onTap: () => context.push(AppRoutes.emergency),
+                  onTap: () => context.push('${AppRoutes.navigate}/medical'),
                 ),
 
                 const SizedBox(height: AppSpacing.space3xl),
