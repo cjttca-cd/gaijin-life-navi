@@ -227,6 +227,46 @@ def _extract_blocks(text: str) -> tuple[str, list[dict], list[dict], list[dict]]
     # Strip orphan --- separators and trailing disclaimer
     clean = re.sub(r"\n---\s*\n", "\n", clean)
     clean = re.sub(r"\n---\s*$", "", clean)
+
+    # ── Fallback: detect □ items even without ---TRACKER--- markers ──
+    if not tracker_items:
+        # Look for code blocks containing □ items
+        code_block_re = re.compile(r"```[^\n]*\n(.*?)```", re.DOTALL)
+        for m in code_block_re.finditer(clean):
+            block_text = m.group(1)
+            checkbox_lines = [l for l in block_text.splitlines() if re.match(r"\s*[□☐]", l)]
+            if len(checkbox_lines) >= 2:
+                tracker_items.extend(_parse_tracker_lines(block_text))
+                clean = clean.replace(m.group(0), "")
+                break
+
+        # Also try: □ items NOT in code blocks (consecutive □ lines)
+        if not tracker_items:
+            lines = clean.splitlines()
+            checkbox_run = []
+            checkbox_start = -1
+            for i, line in enumerate(lines):
+                if re.match(r"\s*[□☐]", line):
+                    if not checkbox_run:
+                        checkbox_start = i
+                    checkbox_run.append(line)
+                else:
+                    if len(checkbox_run) >= 2:
+                        break
+                    checkbox_run = []
+            if len(checkbox_run) >= 2:
+                tracker_items.extend(_parse_tracker_lines("\n".join(checkbox_run)))
+                # Remove these lines from clean
+                for run_line in checkbox_run:
+                    clean = clean.replace(run_line + "\n", "", 1)
+
+    # ── Fallback: remove leaked knowledge/ references ──
+    clean = re.sub(r"^\s*[•\-\*]\s*knowledge/[^\n]*$", "", clean, flags=re.MULTILINE)
+    clean = re.sub(r"^\s*[•\-\*]\s*guides/[^\n]*$", "", clean, flags=re.MULTILINE)
+    # Remove trailing ※ disclaimer if present
+    clean = re.sub(r"\n※[^\n]*$", "", clean)
+    # Clean up multiple blank lines
+    clean = re.sub(r"\n{3,}", "\n\n", clean)
     clean = clean.strip()
 
     return clean, sources, actions, tracker_items
@@ -496,7 +536,9 @@ async def chat(
         )
 
     # 10. Parse structured blocks from agent response
+    logger.info("Agent raw text (first 500): %s", agent_resp.text[:500])
     reply, sources, actions, tracker_items = _extract_blocks(agent_resp.text)
+    logger.info("Parsed: %d sources, %d tracker_items", len(sources), len(tracker_items))
 
     # 11. Build response
     response = ChatResponse(
