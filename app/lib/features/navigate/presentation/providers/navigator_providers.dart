@@ -26,7 +26,7 @@ final emergencyRepositoryProvider = Provider<EmergencyRepository>((ref) {
 
 /// Resolve the guide language from the user's locale selection.
 /// Falls back to ``ja`` when no locale is explicitly set.
-String _guideLang(ProviderRef ref) {
+String _guideLang(Ref ref) {
   final locale = ref.watch(localeProvider);
   return locale?.languageCode ?? 'ja';
 }
