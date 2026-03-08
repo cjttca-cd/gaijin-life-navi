@@ -98,10 +98,13 @@ async def _get_or_create_profile(user: FirebaseUser, db: AsyncSession) -> Profil
     if profile is not None and profile.deleted_at is None:
         return profile
 
-    # Auto-create profile on first access
+    # Auto-create profile on first access.
+    # Anonymous users have empty email — use a unique placeholder to
+    # satisfy the UNIQUE constraint on profiles.email.
+    email = user.email if user.email else f"anon-{user.uid}@testflight.local"
     profile = Profile(
         id=user.uid,
-        email=user.email,
+        email=email,
         display_name=user.name or "",
         preferred_language="en",
     )
