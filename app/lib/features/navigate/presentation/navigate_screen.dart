@@ -181,13 +181,22 @@ class _AiBanner extends StatelessWidget {
                         color: theme.colorScheme.onPrimaryContainer,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.spaceSm),
-                    FilledButton.tonal(
-                      onPressed: () => context.push(AppRoutes.chat),
-                      child: Text(l10n.navAiSearchButton),
-                    ),
                   ],
                 ),
+              ),
+              const SizedBox(width: AppSpacing.spaceSm),
+              FilledButton.tonal(
+                onPressed: () => context.push(AppRoutes.chat),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  textStyle: theme.textTheme.labelSmall,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(l10n.navAiSearchButton),
               ),
             ],
           ),
