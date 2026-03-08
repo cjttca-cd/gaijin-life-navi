@@ -784,5 +784,14 @@
       }
     }
   },
-  "guideFreeLabel": "FREE"
+  "guideFreeLabel": "FREE",
+  "guideReadingTime": "{min} min read",
+  "@guideReadingTime": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "guideRelatedTitle": "Other guides in this domain"
 }

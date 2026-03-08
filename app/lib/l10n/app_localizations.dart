@@ -3559,6 +3559,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'FREE'**
   String get guideFreeLabel;
+
+  /// No description provided for @guideReadingTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{min} min read'**
+  String guideReadingTime(int min);
+
+  /// No description provided for @guideRelatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Other guides in this domain'**
+  String get guideRelatedTitle;
 }
 
 class _AppLocalizationsDelegate

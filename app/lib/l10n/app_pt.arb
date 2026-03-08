@@ -628,5 +628,14 @@
       }
     }
   },
-  "guideFreeLabel": "GRÁTIS"
+  "guideFreeLabel": "GRÁTIS",
+  "guideReadingTime": "{min} min de leitura",
+  "@guideReadingTime": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "guideRelatedTitle": "Outros guias neste domínio"
 }

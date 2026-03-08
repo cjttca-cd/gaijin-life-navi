@@ -10,6 +10,7 @@ import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/domain_colors.dart';
 import '../../chat/presentation/providers/chat_providers.dart';
 import '../domain/navigator_domain.dart';
 import 'providers/navigator_providers.dart';
@@ -90,21 +91,28 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
             return _buildLockedView(context, detail, l10n, theme);
           }
 
+          final colors = DomainColors.forDomain(domain);
+
           return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-              vertical: AppSpacing.spaceLg,
-            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Guide title
-                Text(detail.title, style: theme.textTheme.headlineLarge),
+                // Hero header
+                _HeroHeader(
+                  detail: detail,
+                  domain: domain,
+                  colors: colors,
+                  l10n: l10n,
+                ),
                 const SizedBox(height: AppSpacing.spaceLg),
 
-                // Divider
-                Divider(color: theme.colorScheme.outlineVariant, height: 1),
-                const SizedBox(height: AppSpacing.spaceLg),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenPadding,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
                 // Markdown content (full or truncated)
                 MarkdownBody(
@@ -153,6 +161,15 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
                 ),
                 const SizedBox(height: AppSpacing.space2xl),
 
+                // Related Guides section
+                _RelatedGuides(
+                  domain: domain,
+                  currentSlug: slug,
+                  l10n: l10n,
+                ),
+
+                const SizedBox(height: AppSpacing.spaceLg),
+
                 // Ask AI button
                 SizedBox(
                   width: double.infinity,
@@ -170,6 +187,9 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
                 ),
 
                 const SizedBox(height: AppSpacing.space2xl),
+                ],
+              ),
+            ), // end Padding
               ],
             ),
           );
@@ -643,6 +663,301 @@ class _PremiumContentGateState extends ConsumerState<_PremiumContentGate> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+/// Hero header for guide detail with domain badge, title, reading time, and tags.
+class _HeroHeader extends StatelessWidget {
+  const _HeroHeader({
+    required this.detail,
+    required this.domain,
+    required this.colors,
+    required this.l10n,
+  });
+
+  final NavigatorGuideDetail detail;
+  final String domain;
+  final DomainColorSet colors;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screenPadding,
+        vertical: AppSpacing.spaceLg,
+      ),
+      decoration: BoxDecoration(
+        color: colors.container,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Domain badge
+          Row(
+            children: [
+              Icon(
+                DomainColors.iconForDomain(domain),
+                size: 16,
+                color: colors.icon,
+              ),
+              const SizedBox(width: AppSpacing.spaceXs),
+              Text(
+                _getDomainLabel(domain),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colors.icon,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.spaceMd),
+
+          // Title
+          Text(detail.title, style: theme.textTheme.headlineLarge),
+          const SizedBox(height: AppSpacing.spaceMd),
+
+          // Reading time
+          if (detail.readingTimeMin > 0) ...[
+            Row(
+              children: [
+                Icon(
+                  Icons.menu_book,
+                  size: 14,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: AppSpacing.spaceXs),
+                Text(
+                  l10n.guideReadingTime(detail.readingTimeMin),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.spaceSm),
+          ],
+
+          // Tags
+          if (detail.tags.isNotEmpty)
+            Wrap(
+              spacing: AppSpacing.spaceXs,
+              runSpacing: AppSpacing.spaceXs,
+              children: detail.tags.map((tag) {
+                return Container(
+                  height: 24,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.spaceSm,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colors.icon.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    tag,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: colors.icon,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  String _getDomainLabel(String domainId) {
+    switch (domainId) {
+      case 'finance':
+        return l10n.domainFinance;
+      case 'tax':
+        return l10n.domainTax;
+      case 'visa':
+        return l10n.domainVisa;
+      case 'medical':
+        return l10n.domainMedical;
+      case 'life':
+        return l10n.domainLife;
+      case 'legal':
+        return l10n.domainLegal;
+      default:
+        return domainId;
+    }
+  }
+}
+
+/// Related guides section — shows up to 3 guides from the same domain.
+class _RelatedGuides extends ConsumerWidget {
+  const _RelatedGuides({
+    required this.domain,
+    required this.currentSlug,
+    required this.l10n,
+  });
+
+  final String domain;
+  final String currentSlug;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final guidesAsync = ref.watch(domainGuidesProvider(domain));
+
+    return guidesAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+      data: (guides) {
+        final related = guides
+            .where((g) => g.slug != currentSlug)
+            .take(3)
+            .toList();
+
+        if (related.isEmpty) return const SizedBox.shrink();
+
+        final theme = Theme.of(context);
+        final colors = DomainColors.forDomain(domain);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: AppSpacing.spaceLg),
+            Divider(color: theme.colorScheme.outlineVariant, height: 1),
+            const SizedBox(height: AppSpacing.spaceLg),
+
+            // Section title
+            Row(
+              children: [
+                Icon(
+                  Icons.library_books,
+                  size: 18,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: AppSpacing.spaceSm),
+                Text(
+                  l10n.guideRelatedTitle,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.spaceMd),
+
+            // Related guide cards
+            ...related.map((guide) => Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.spaceSm),
+              child: _RelatedGuideCard(
+                guide: guide,
+                domain: domain,
+                accentColor: colors.accent,
+              ),
+            )),
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// Compact guide card for related guides (no tags).
+class _RelatedGuideCard extends StatelessWidget {
+  const _RelatedGuideCard({
+    required this.guide,
+    required this.domain,
+    required this.accentColor,
+  });
+
+  final NavigatorGuide guide;
+  final String domain;
+  final Color accentColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          context.push('${AppRoutes.navigate}/$domain/${guide.slug}');
+        },
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              Container(width: 4, color: accentColor),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              guide.title,
+                              style: theme.textTheme.titleSmall,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            if (guide.summary != null) ...[
+                              const SizedBox(height: AppSpacing.spaceXs),
+                              Text(
+                                guide.summary!,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.spaceXs),
+                      if (guide.isFree)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.spaceSm,
+                            vertical: AppSpacing.space2xs,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.successContainer,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            l10n.guideFreeLabel,
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: AppColors.success,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        )
+                      else if (guide.isPremium)
+                        Icon(
+                          Icons.lock,
+                          size: 16,
+                          color: theme.colorScheme.outlineVariant,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

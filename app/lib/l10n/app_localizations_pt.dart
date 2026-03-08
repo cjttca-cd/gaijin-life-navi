@@ -1859,4 +1859,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get guideFreeLabel => 'GRÁTIS';
+
+  @override
+  String guideReadingTime(int min) {
+    return '$min min de leitura';
+  }
+
+  @override
+  String get guideRelatedTitle => 'Outros guias neste domínio';
 }

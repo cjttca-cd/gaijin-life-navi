@@ -628,5 +628,14 @@
       }
     }
   },
-  "guideFreeLabel": "免费"
+  "guideFreeLabel": "免费",
+  "guideReadingTime": "约{min}分钟",
+  "@guideReadingTime": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "guideRelatedTitle": "同领域其他指南"
 }

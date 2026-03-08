@@ -1800,4 +1800,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get guideFreeLabel => '무료';
+
+  @override
+  String guideReadingTime(int min) {
+    return '약 $min분 소요';
+  }
+
+  @override
+  String get guideRelatedTitle => '이 도메인의 다른 가이드';
 }

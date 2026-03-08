@@ -1790,4 +1790,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get guideFreeLabel => '免费';
+
+  @override
+  String guideReadingTime(int min) {
+    return '约$min分钟';
+  }
+
+  @override
+  String get guideRelatedTitle => '同领域其他指南';
 }

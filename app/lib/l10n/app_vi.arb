@@ -628,5 +628,14 @@
       }
     }
   },
-  "guideFreeLabel": "MIỄN PHÍ"
+  "guideFreeLabel": "MIỄN PHÍ",
+  "guideReadingTime": "Đọc khoảng {min} phút",
+  "@guideReadingTime": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "guideRelatedTitle": "Các hướng dẫn khác trong lĩnh vực này"
 }

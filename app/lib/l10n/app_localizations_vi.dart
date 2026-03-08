@@ -1841,4 +1841,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get guideFreeLabel => 'MIỄN PHÍ';
+
+  @override
+  String guideReadingTime(int min) {
+    return 'Đọc khoảng $min phút';
+  }
+
+  @override
+  String get guideRelatedTitle => 'Các hướng dẫn khác trong lĩnh vực này';
 }

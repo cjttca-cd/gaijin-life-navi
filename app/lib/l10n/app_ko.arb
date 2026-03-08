@@ -628,5 +628,14 @@
       }
     }
   },
-  "guideFreeLabel": "무료"
+  "guideFreeLabel": "무료",
+  "guideReadingTime": "약 {min}분 소요",
+  "@guideReadingTime": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "guideRelatedTitle": "이 도메인의 다른 가이드"
 }
