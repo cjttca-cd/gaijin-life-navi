@@ -523,7 +523,9 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 {
   "nationality": "CN",
   "residence_status": "engineer_specialist",
-  "residence_region": "13",
+  "residence_region": "Tokyo Shinjuku",
+  "visa_expiry": "2027-03-15",
+  "preferred_language": "zh",
   "preferred_language": "zh"
 }
 ```
@@ -776,7 +778,7 @@ Chat レスポンスの `usage` オブジェクトに Credit Ledger フィール
 
 #### `POST /api/v1/profile/trial-setup`
 
-- **説明**: TestFlight モードの匿名ユーザー向けプロフィール初期設定。AI Chat 利用前に nationality / residence_status / residence_region の 3 フィールドを収集・保存する。`TESTFLIGHT_MODE=false` の場合は 404 を返す。
+- **説明**: TestFlight モードの匿名ユーザー向けプロフィール初期設定。AI Chat 利用前に nationality / residence_status / residence_region の 3 必須フィールドと visa_expiry / preferred_language の 2 任意フィールドを収集・保存する。`TESTFLIGHT_MODE=false` の場合は 404 を返す。
 - **認証**: 必要（Firebase Anonymous Auth の ID Token）
 - **条件**: `TESTFLIGHT_MODE=true` の場合のみ有効
 
@@ -785,7 +787,9 @@ Chat レスポンスの `usage` オブジェクトに Credit Ledger フィール
 {
   "nationality": "CN",
   "residence_status": "engineer_specialist",
-  "residence_region": "13"
+  "residence_region": "Tokyo Shinjuku",
+  "visa_expiry": "2027-03-15",
+  "preferred_language": "zh"
 }
 ```
 
@@ -793,7 +797,9 @@ Chat レスポンスの `usage` オブジェクトに Credit Ledger フィール
 |-----------|------|------|------|
 | nationality | string | ✅ | ISO 3166-1 alpha-2（例: CN, VN, KR） |
 | residence_status | string | ✅ | 在留資格コード（DATA_MODEL.md §1 の許容値参照） |
-| residence_region | string | ✅ | 都道府県コード（例: '13' = 東京） |
+| residence_region | string | ✅ | "PrefectureEn CityEn" 形式（例: "Tokyo Shinjuku"） |
+| visa_expiry | string | - | "YYYY-MM-DD" 形式。在留期限 |
+| preferred_language | string | - | ISO 639-1（例: zh, ja, en）。app locale から自動送信 |
 
 **処理フロー**:
 1. `TESTFLIGHT_MODE` チェック → false なら 404
@@ -811,7 +817,9 @@ Chat レスポンスの `usage` オブジェクトに Credit Ledger フィール
     "display_name": "",
     "nationality": "CN",
     "residence_status": "engineer_specialist",
-    "residence_region": "13",
+    "residence_region": "Tokyo Shinjuku",
+    "visa_expiry": "2027-03-15",
+    "preferred_language": "zh",
     "subscription_tier": "free",
     "onboarding_completed": false,
     "created_at": "2026-03-07T10:00:00Z"
