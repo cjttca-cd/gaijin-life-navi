@@ -246,6 +246,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final profileAsync = ref.watch(userProfileProvider);
+    final isAnonymous = ref.watch(isAnonymousProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -267,22 +268,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     )
                   : Text(l10n.profileSave),
             ),
-          IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            tooltip: l10n.settingsTitle,
-            onPressed: () => context.push(AppRoutes.settings),
-          ),
+          if (!isAnonymous)
+            IconButton(
+              icon: const Icon(Icons.settings_outlined),
+              tooltip: l10n.settingsTitle,
+              onPressed: () => context.push(AppRoutes.settings),
+            ),
         ],
       ),
       body: profileAsync.when(
         loading: () => _buildSkeleton(context),
         error: (_, __) => _buildError(context, ref),
-        data: (profile) => _buildBody(context, profile),
+        data: (profile) => _buildBody(context, profile, isAnonymous: isAnonymous),
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context, UserProfile profile) {
+  Widget _buildBody(BuildContext context, UserProfile profile, {bool isAnonymous = false}) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -324,17 +326,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Card(
               child: Column(
                 children: [
-                  // Display name.
-                  _ProfileRow(
-                    label: l10n.profileDisplayName,
-                    value: _effectiveValue(profile, 'display_name'),
-                    notSetLabel: l10n.profileNotSet,
-                    onTap: () => _showDisplayNameSheet(
-                      context,
-                      _effectiveValue(profile, 'display_name'),
+                  // Display name (hidden for anonymous users).
+                  if (!isAnonymous) ...[
+                    _ProfileRow(
+                      label: l10n.profileDisplayName,
+                      value: _effectiveValue(profile, 'display_name'),
+                      notSetLabel: l10n.profileNotSet,
+                      onTap: () => _showDisplayNameSheet(
+                        context,
+                        _effectiveValue(profile, 'display_name'),
+                      ),
                     ),
-                  ),
-                  _divider(theme),
+                    _divider(theme),
+                  ],
 
                   // Nationality.
                   _ProfileRow(
@@ -407,6 +411,42 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           const SizedBox(height: AppSpacing.space2xl),
 
+          // ── Anonymous: Create Account Banner ──
+          if (isAnonymous) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenPadding,
+              ),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                  child: Column(
+                    children: [
+                      Text(
+                        l10n.chatGuestFreeOffer,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceMd),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton.icon(
+                          onPressed: () => context.push(AppRoutes.register),
+                          icon: const Icon(Icons.person_add_outlined),
+                          label: Text(l10n.registerButton),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+
+          const SizedBox(height: AppSpacing.spaceLg),
+
           // ── Section 2: Account Management ──
           _SectionLabel(label: l10n.accountSectionManagement),
           Padding(
@@ -416,7 +456,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Card(
               child: Column(
                 children: [
-                  if (!AppConfig.testFlightMode) ...[
+                  if (!isAnonymous && !AppConfig.testFlightMode) ...[
                     ListTile(
                       leading: const Text('⭐', style: TextStyle(fontSize: 20)),
                       title: Text(
@@ -465,30 +505,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             ),
           ),
 
-          const SizedBox(height: AppSpacing.space2xl),
-
-          // ── Section 3: Delete Account (no header) ──
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Card(
-              child: ListTile(
-                leading: Icon(
-                  Icons.delete_outline,
-                  color: theme.colorScheme.error,
-                ),
-                title: Text(
-                  l10n.settingsDeleteAccount,
-                  style: theme.textTheme.titleSmall?.copyWith(
+          // ── Section 3: Delete Account (hidden for anonymous) ──
+          if (!isAnonymous) ...[
+            const SizedBox(height: AppSpacing.space2xl),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenPadding,
+              ),
+              child: Card(
+                child: ListTile(
+                  leading: Icon(
+                    Icons.delete_outline,
                     color: theme.colorScheme.error,
                   ),
+                  title: Text(
+                    l10n.settingsDeleteAccount,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                  enabled: !_isDeleting,
+                  onTap: _deleteAccount,
                 ),
-                enabled: !_isDeleting,
-                onTap: _deleteAccount,
               ),
             ),
-          ),
+          ],
 
           const SizedBox(height: AppSpacing.space3xl),
         ],

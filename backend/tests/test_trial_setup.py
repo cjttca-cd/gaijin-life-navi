@@ -125,3 +125,124 @@ async def test_trial_setup_grants_credits(db_session, monkeypatch) -> None:
     balance_after = await get_balance(db_session, uid)
     assert balance_after.total_remaining == 5
     assert balance_after.grant_remaining == 5
+
+
+
+@pytest.mark.asyncio
+async def test_trial_setup_with_visa_expiry(db_session, monkeypatch) -> None:
+    """Trial-setup saves visa_expiry when provided."""
+    from config import settings
+    monkeypatch.setattr(settings, "TESTFLIGHT_MODE", True)
+
+    uid = "anon-tf-user-5"
+    body = TrialSetupRequest(
+        nationality="CN",
+        residence_status="engineer_specialist",
+        residence_region="Tokyo Shinjuku",
+        visa_expiry="2027-03-15",
+    )
+    current_user = FirebaseUser(uid=uid, email=None, is_anonymous=True)
+
+    response = await trial_setup(body=body, current_user=current_user, db=db_session)
+    data = response["data"]
+
+    assert data["nationality"] == "CN"
+    assert data["visa_expiry"] == "2027-03-15"
+
+    # Verify in DB
+    profile = await db_session.get(Profile, uid)
+    assert profile is not None
+    from datetime import date
+    assert profile.visa_expiry == date(2027, 3, 15)
+
+
+@pytest.mark.asyncio
+async def test_trial_setup_with_preferred_language(db_session, monkeypatch) -> None:
+    """Trial-setup saves preferred_language when provided."""
+    from config import settings
+    monkeypatch.setattr(settings, "TESTFLIGHT_MODE", True)
+
+    uid = "anon-tf-user-6"
+    body = TrialSetupRequest(
+        nationality="VN",
+        residence_status="student",
+        residence_region="Osaka Namba",
+        preferred_language="vi",
+    )
+    current_user = FirebaseUser(uid=uid, email=None, is_anonymous=True)
+
+    response = await trial_setup(body=body, current_user=current_user, db=db_session)
+    data = response["data"]
+
+    assert data["nationality"] == "VN"
+
+    # Verify preferred_language in DB
+    profile = await db_session.get(Profile, uid)
+    assert profile is not None
+    assert profile.preferred_language == "vi"
+
+
+@pytest.mark.asyncio
+async def test_trial_setup_without_optional_fields(db_session, monkeypatch) -> None:
+    """Trial-setup works without visa_expiry and preferred_language (backward compat)."""
+    from config import settings
+    monkeypatch.setattr(settings, "TESTFLIGHT_MODE", True)
+
+    uid = "anon-tf-user-7"
+    body = TrialSetupRequest(
+        nationality="KR",
+        residence_status="student",
+        residence_region="Fukuoka Hakata",
+    )
+    current_user = FirebaseUser(uid=uid, email=None, is_anonymous=True)
+
+    response = await trial_setup(body=body, current_user=current_user, db=db_session)
+    data = response["data"]
+
+    assert data["nationality"] == "KR"
+    assert data["visa_expiry"] is None
+
+    # Verify default preferred_language
+    profile = await db_session.get(Profile, uid)
+    assert profile is not None
+    assert profile.preferred_language == "en"  # default
+
+
+@pytest.mark.asyncio
+async def test_trial_setup_visa_expiry_and_language_on_existing_profile(db_session, monkeypatch) -> None:
+    """Trial-setup saves visa_expiry + preferred_language on existing profile without nationality."""
+    from config import settings
+    monkeypatch.setattr(settings, "TESTFLIGHT_MODE", True)
+
+    uid = "anon-tf-user-8"
+
+    # Pre-create a profile without nationality
+    profile = Profile(
+        id=uid,
+        email=f"anon-{uid}@testflight.local",
+        display_name="",
+        preferred_language="en",
+    )
+    db_session.add(profile)
+    await db_session.flush()
+
+    body = TrialSetupRequest(
+        nationality="BR",
+        residence_status="designated_activities",
+        residence_region="Nagoya Chikusa",
+        visa_expiry="2028-06-30",
+        preferred_language="pt",
+    )
+    current_user = FirebaseUser(uid=uid, email=None, is_anonymous=True)
+
+    response = await trial_setup(body=body, current_user=current_user, db=db_session)
+    data = response["data"]
+
+    assert data["nationality"] == "BR"
+    assert data["visa_expiry"] == "2028-06-30"
+
+    # Verify in DB
+    updated = await db_session.get(Profile, uid)
+    assert updated.preferred_language == "pt"
+    from datetime import date
+    assert updated.visa_expiry == date(2028, 6, 30)

@@ -43,6 +43,8 @@ class TrialSetupRequest(BaseModel):
     nationality: str
     residence_status: str
     residence_region: str
+    visa_expiry: str | None = None          # YYYY-MM-DD (optional)
+    preferred_language: str | None = None   # app locale (auto-sent)
 
 
 class ProfileOut(BaseModel):
@@ -259,18 +261,32 @@ async def trial_setup(
         profile.nationality = body.nationality
         profile.residence_status = body.residence_status
         profile.residence_region = body.residence_region
+        if body.visa_expiry:
+            try:
+                profile.visa_expiry = date.fromisoformat(body.visa_expiry)
+            except ValueError:
+                pass  # silently ignore invalid date
+        if body.preferred_language:
+            profile.preferred_language = body.preferred_language
         profile.updated_at = datetime.now(timezone.utc)
         await db.flush()
     else:
         # 4. Create new profile with placeholder email
+        visa_expiry_date = None
+        if body.visa_expiry:
+            try:
+                visa_expiry_date = date.fromisoformat(body.visa_expiry)
+            except ValueError:
+                pass  # silently ignore invalid date
         profile = Profile(
             id=uid,
             email=f"anon-{uid}@testflight.local",
             display_name="",
-            preferred_language="en",
+            preferred_language=body.preferred_language or "en",
             nationality=body.nationality,
             residence_status=body.residence_status,
             residence_region=body.residence_region,
+            visa_expiry=visa_expiry_date,
         )
         db.add(profile)
         await db.flush()

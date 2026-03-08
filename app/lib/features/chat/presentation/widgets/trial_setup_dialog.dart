@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../../core/theme/app_spacing.dart';
+import 'package:intl/intl.dart';
 import '../../../../data/nationalities.dart';
 import '../../../../data/regions.dart';
 import '../../../../data/residence_statuses.dart';
@@ -37,6 +38,7 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
   String? _selectedResidenceStatus;
   Prefecture? _selectedPrefecture;
   City? _selectedCity;
+  DateTime? _selectedVisaExpiry;
   bool _isSubmitting = false;
 
   bool get _canSubmit =>
@@ -53,10 +55,13 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
 
     try {
       final repo = ref.read(profileRepositoryProvider);
+      final locale = Localizations.localeOf(context).languageCode;
       await repo.trialSetup(
         nationality: _selectedNationality!,
         residenceStatus: _selectedResidenceStatus!,
         residenceRegion: '${_selectedPrefecture!.nameEn} ${_selectedCity!.nameEn}',
+        visaExpiry: _selectedVisaExpiry?.toIso8601String().split('T').first,
+        preferredLanguage: locale,
       );
       // Invalidate profile cache so it picks up the new data.
       ref.invalidate(userProfileProvider);
@@ -132,6 +137,16 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
               value: _regionLabel(),
               onTap: () => _showRegionPicker(context),
             ),
+            const SizedBox(height: AppSpacing.spaceMd),
+
+            // Visa expiry selector (optional).
+            _SelectorTile(
+              label: l10n.profileVisaExpiry,
+              value: _selectedVisaExpiry != null
+                  ? DateFormat.yMd().format(_selectedVisaExpiry!)
+                  : null,
+              onTap: () => _showVisaExpiryPicker(context),
+            ),
             const SizedBox(height: AppSpacing.space2xl),
 
             // Submit button.
@@ -159,6 +174,22 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
   }
 
   // ── Pickers ──────────────────────────────────────────────
+
+  void _showVisaExpiryPicker(BuildContext context) {
+    final now = DateTime.now();
+    final initial = _selectedVisaExpiry ?? now.add(const Duration(days: 365));
+
+    showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365 * 10)),
+    ).then((picked) {
+      if (picked != null) {
+        setState(() => _selectedVisaExpiry = picked);
+      }
+    });
+  }
 
   void _showNationalityPicker(BuildContext context) {
     final l10n = AppLocalizations.of(context);

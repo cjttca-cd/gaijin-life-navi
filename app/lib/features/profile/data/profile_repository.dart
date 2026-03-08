@@ -41,6 +41,8 @@ class ProfileRepository {
     required String nationality,
     required String residenceStatus,
     required String residenceRegion,
+    String? visaExpiry,
+    String? preferredLanguage,
   }) async {
     final response = await _client.post<Map<String, dynamic>>(
       '/profile/trial-setup',
@@ -48,6 +50,8 @@ class ProfileRepository {
         'nationality': nationality,
         'residence_status': residenceStatus,
         'residence_region': residenceRegion,
+        if (visaExpiry != null) 'visa_expiry': visaExpiry,
+        if (preferredLanguage != null) 'preferred_language': preferredLanguage,
       },
     );
     final data = response.data!['data'] as Map<String, dynamic>;
