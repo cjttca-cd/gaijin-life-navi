@@ -8,9 +8,10 @@ import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../domain/chat_message.dart';
+import '../../domain/chat_response.dart';
 import 'disclaimer_banner.dart';
 import 'source_citation.dart';
-import 'tracker_item_card.dart';
+import 'tracker_edit_sheet.dart';
 
 /// Chat bubble — handoff-chat.md §3 (User & AI bubbles).
 ///
@@ -86,15 +87,15 @@ class _UserBubble extends StatelessWidget {
                         base64Decode(message.imageBase64!),
                         width: 180,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const Icon(
-                          Icons.broken_image,
-                          size: 48,
-                          color: Colors.white54,
-                        ),
+                        errorBuilder:
+                            (_, __, ___) => const Icon(
+                              Icons.broken_image,
+                              size: 48,
+                              color: Colors.white54,
+                            ),
                       ),
                     ),
-                    if (message.content.isNotEmpty)
-                      const SizedBox(height: 6),
+                    if (message.content.isNotEmpty) const SizedBox(height: 6),
                   ],
                   if (message.content.isNotEmpty)
                     Text(
@@ -182,13 +183,9 @@ class _AiBubble extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Markdown-rendered content.
+                    // Markdown-rendered content with inline tracker buttons.
                     if (message.content.isNotEmpty)
-                      MarkdownBody(
-                        data: message.content,
-                        selectable: true,
-                        styleSheet: _markdownStyleSheet(context),
-                      )
+                      _buildContentWithInlineTrackers(context)
                     else if (isStreaming)
                       Text('...', style: tt.bodyLarge),
 
@@ -201,11 +198,6 @@ class _AiBubble extends StatelessWidget {
                       ),
                       SourceCitationWidget(sources: message.sources!),
                     ],
-
-                    // Tracker items section.
-                    if (message.trackerItems != null &&
-                        message.trackerItems!.isNotEmpty)
-                      TrackerItemCards(items: message.trackerItems!),
 
                     // Timestamp.
                     Padding(
@@ -253,6 +245,42 @@ class _AiBubble extends StatelessWidget {
     );
   }
 
+  /// Builds the content area, replacing □ lines with inline save buttons.
+  Widget _buildContentWithInlineTrackers(BuildContext context) {
+    final segments = _splitByCheckboxLines(
+      message.content,
+      message.trackerItems,
+    );
+
+    final hasCheckbox = segments.any((s) => s.isCheckbox);
+    if (!hasCheckbox) {
+      return MarkdownBody(
+        data: message.content,
+        selectable: true,
+        styleSheet: _markdownStyleSheet(context),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:
+          segments.map((seg) {
+            if (seg.isCheckbox) {
+              return _CheckboxActionRow(
+                text: seg.text,
+                trackerItem: seg.matchedItem!,
+              );
+            } else {
+              return MarkdownBody(
+                data: seg.text,
+                selectable: true,
+                styleSheet: _markdownStyleSheet(context),
+              );
+            }
+          }).toList(),
+    );
+  }
+
   MarkdownStyleSheet _markdownStyleSheet(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
@@ -282,9 +310,126 @@ class _AiBubble extends StatelessWidget {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Inline tracker helpers
+// ---------------------------------------------------------------------------
 
+/// A segment of message content — either normal markdown text or a □ line.
+class _ContentSegment {
+  const _ContentSegment({
+    required this.text,
+    required this.isCheckbox,
+    this.matchedItem,
+  });
 
+  final String text;
+  final bool isCheckbox;
+  final ChatTrackerItem? matchedItem;
+}
 
+/// Splits [content] into segments of contiguous normal-text lines and
+/// individual □ (checkbox) lines.
+///
+/// Consecutive normal lines are merged into a single segment so that
+/// [MarkdownBody] can render them as one block.
+List<_ContentSegment> _splitByCheckboxLines(
+  String content,
+  List<ChatTrackerItem>? trackerItems,
+) {
+  final lines = content.split('\n');
+  final segments = <_ContentSegment>[];
+  final buffer = StringBuffer();
+  final checkboxRegex = RegExp(r'^\s*□');
+
+  void flushBuffer() {
+    if (buffer.isNotEmpty) {
+      segments.add(_ContentSegment(text: buffer.toString(), isCheckbox: false));
+      buffer.clear();
+    }
+  }
+
+  for (final line in lines) {
+    if (checkboxRegex.hasMatch(line)) {
+      flushBuffer();
+
+      final lineText = line.trim();
+      final cleanText = lineText.replaceFirst(RegExp(r'^□\s*'), '');
+
+      // Find a matching tracker item by title containment.
+      ChatTrackerItem? matched;
+      if (trackerItems != null) {
+        for (final item in trackerItems) {
+          if (cleanText.contains(item.title) ||
+              item.title.contains(cleanText)) {
+            matched = item;
+            break;
+          }
+        }
+      }
+      matched ??= ChatTrackerItem(type: 'task', title: cleanText);
+
+      segments.add(
+        _ContentSegment(text: lineText, isCheckbox: true, matchedItem: matched),
+      );
+    } else {
+      if (buffer.isNotEmpty) buffer.writeln();
+      buffer.write(line);
+    }
+  }
+
+  flushBuffer();
+  return segments;
+}
+
+/// Renders a single □ line with a save button on the right.
+class _CheckboxActionRow extends StatelessWidget {
+  const _CheckboxActionRow({required this.text, required this.trackerItem});
+
+  final String text;
+  final ChatTrackerItem trackerItem;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerHighest.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: Text(text, style: tt.bodyMedium)),
+          const SizedBox(width: 8),
+          IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            iconSize: 20,
+            icon: Icon(
+              Icons.bookmark_add_outlined,
+              size: 20,
+              color: cs.primary,
+            ),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (_) => TrackerEditSheet(item: trackerItem),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Utilities
+// ---------------------------------------------------------------------------
 
 String _formatTime(DateTime dt) {
   final h = dt.hour.toString().padLeft(2, '0');
