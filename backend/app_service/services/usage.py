@@ -92,27 +92,25 @@ async def _increment_deep_count(
 # ── Public API ─────────────────────────────────────────────────────────
 
 
-async def check_and_consume(
+async def check_balance(
     db: AsyncSession,
     user_id: str,
     tier: str,
 ) -> UsageCheck:
-    """Check the user's credit balance and consume 1 credit if allowed.
+    """Pre-flight check: verify the user has credits available WITHOUT consuming.
 
-    Flow (design doc §3.2):
-      1. guest → 403 (CHAT_REQUIRES_AUTH)
-      2. premium/premium_plus → unlimited (no credit consumed)
-      3. Try to consume 1 credit from ledger
-         → Found → allowed=True
-         → Not found → Try re-engagement → allowed or 429
-      4. Always increment deep_count for analytics
+    Used before agent call to reject early if no credits remain.
+    Actual consumption happens via ``consume_after_success()`` after the
+    agent call succeeds.
 
-    The consume happens *only* when the check passes (``allowed=True``).
-    All DB work uses the caller's session — commit/rollback is the caller's
-    responsibility (handled by ``get_db`` dependency).
+    Flow:
+      1. guest → 403
+      2. premium/premium_plus → unlimited
+      3. Check credit balance (+ try re-engagement if exhausted)
+         → Has credits → allowed=True
+         → No credits → 429
     """
     # ── Guest: no access ───────────────────────────────────────────────
-    #    TestFlight mode: guest is promoted to "free" in chat.py before reaching here.
     if tier == "guest":
         return UsageCheck(
             allowed=False, used=0, limit=0, tier=tier, period=None,
@@ -128,50 +126,39 @@ async def check_and_consume(
 
     # ── Unlimited (premium / premium_plus) ─────────────────────────────
     if tier in ("premium", "premium_plus"):
-        # Increment analytics counter but don't consume credits
-        await _increment_deep_count(db, user_id)
         return UsageCheck(
             allowed=True, used=0, limit=None, tier=tier, period=None,
             credit_used_from=None, total_remaining=0,
         )
 
     # ── Credit-based tiers (free / standard) ───────────────────────────
+    balance = await get_balance(db, user_id)
 
-    # Try to consume 1 credit
-    consume_result = await consume_credit(db, user_id)
-
-    if consume_result.consumed:
-        # Success — also increment analytics counter
-        await _increment_deep_count(db, user_id)
+    if balance.total_remaining > 0:
         return UsageCheck(
             allowed=True,
-            used=0,  # Not meaningful in credit system
-            limit=None,  # Will be overridden by total_remaining in API
+            used=0,
+            limit=None,
             tier=tier,
             period=None,
-            credit_used_from=consume_result.source,
-            total_remaining=consume_result.total_remaining,
+            total_remaining=balance.total_remaining,
         )
 
-    # No credits available — try re-engagement
+    # No credits — try re-engagement
     reengage_credit = await check_reengagement(db, user_id, tier)
     if reengage_credit is not None:
-        # Re-engagement granted — now consume from it
-        consume_result = await consume_credit(db, user_id)
-        if consume_result.consumed:
-            await _increment_deep_count(db, user_id)
+        balance = await get_balance(db, user_id)
+        if balance.total_remaining > 0:
             return UsageCheck(
                 allowed=True,
                 used=0,
                 limit=None,
                 tier=tier,
                 period=None,
-                credit_used_from=consume_result.source,
-                total_remaining=consume_result.total_remaining,
+                total_remaining=balance.total_remaining,
             )
 
     # Truly exhausted — 429
-    balance = await get_balance(db, user_id)
     return UsageCheck(
         allowed=False,
         used=0,
@@ -180,6 +167,75 @@ async def check_and_consume(
         period=None,
         total_remaining=balance.total_remaining,
     )
+
+
+async def consume_after_success(
+    db: AsyncSession,
+    user_id: str,
+    tier: str,
+) -> UsageCheck:
+    """Post-success consumption: deduct 1 credit AFTER agent call succeeds.
+
+    Called only when the agent call completed successfully. Handles the
+    atomic credit consumption and analytics increment.
+
+    If consume fails (race condition: credits exhausted between check and
+    consume), the response is still returned to the user — the credit is
+    treated as a freebie rather than failing the already-completed request.
+    """
+    # ── Unlimited tiers: just increment analytics ──────────────────────
+    if tier in ("premium", "premium_plus"):
+        await _increment_deep_count(db, user_id)
+        return UsageCheck(
+            allowed=True, used=0, limit=None, tier=tier, period=None,
+            credit_used_from=None, total_remaining=0,
+        )
+
+    # ── Credit-based tiers: consume 1 credit ──────────────────────────
+    consume_result = await consume_credit(db, user_id)
+    await _increment_deep_count(db, user_id)
+
+    if consume_result.consumed:
+        return UsageCheck(
+            allowed=True,
+            used=0,
+            limit=None,
+            tier=tier,
+            period=None,
+            credit_used_from=consume_result.source,
+            total_remaining=consume_result.total_remaining,
+        )
+
+    # Race condition: credits exhausted between check_balance and here.
+    # Agent already succeeded — log warning but don't fail the response.
+    logger.warning(
+        "Credit consume failed after successful agent call for user %s "
+        "(race condition — treating as free). tier=%s",
+        user_id, tier,
+    )
+    balance = await get_balance(db, user_id)
+    return UsageCheck(
+        allowed=True,
+        used=0,
+        limit=None,
+        tier=tier,
+        period=None,
+        credit_used_from=None,
+        total_remaining=balance.total_remaining,
+    )
+
+
+async def check_and_consume(
+    db: AsyncSession,
+    user_id: str,
+    tier: str,
+) -> UsageCheck:
+    """Legacy wrapper — calls check_balance only (no consumption).
+
+    Kept for backward compatibility. New code should use check_balance()
+    + consume_after_success() separately.
+    """
+    return await check_balance(db, user_id, tier)
 
 
 # ── Backward compatibility alias ──────────────────────────────────────

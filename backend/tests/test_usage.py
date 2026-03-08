@@ -1,6 +1,6 @@
 """Usage service tests — Credit Ledger based.
 
-Tests verify the check_and_consume function works correctly with the
+Tests verify the check_balance function works correctly with the
 Credit Ledger system for all tier scenarios.
 """
 
@@ -14,7 +14,7 @@ import pytest
 from models.chat_credit import ChatCredit
 from models.daily_usage import DailyUsage
 from models.profile import Profile
-from services.usage import check_and_consume
+from services.usage import check_balance, consume_after_success
 
 
 def _now() -> datetime:
@@ -69,7 +69,7 @@ async def _seed_credits(
         ("unknown_tier", False, False),
     ],
 )
-async def test_check_and_consume_tier_scenarios(
+async def test_check_balance_tier_scenarios(
     db_session,
     tier: str,
     has_credits: bool,
@@ -84,7 +84,7 @@ async def test_check_and_consume_tier_scenarios(
     if has_credits:
         await _seed_credits(db_session, user_id, amount=5)
 
-    result = await check_and_consume(db_session, user_id=user_id, tier=tier)
+    result = await check_balance(db_session, user_id=user_id, tier=tier)
     assert result.allowed is expected_allowed
 
 
@@ -95,7 +95,7 @@ async def test_premium_does_not_consume_credits(db_session) -> None:
     await _seed_profile(db_session, uid, tier="premium")
     await _seed_credits(db_session, uid, amount=10)
 
-    result = await check_and_consume(db_session, uid, "premium")
+    result = await check_balance(db_session, uid, "premium")
     assert result.allowed is True
     assert result.credit_used_from is None
     assert result.limit is None
@@ -108,10 +108,14 @@ async def test_deep_count_incremented_on_consume(db_session) -> None:
     await _seed_profile(db_session, uid, tier="free")
     await _seed_credits(db_session, uid, amount=5)
 
-    result = await check_and_consume(db_session, uid, "free")
+    result = await check_balance(db_session, uid, "free")
     assert result.allowed is True
 
-    # Verify deep_count was incremented
+    # check_balance does NOT increment deep_count — consume_after_success does
+    consume = await consume_after_success(db_session, uid, "free")
+    assert consume.allowed is True
+
+    # Verify deep_count was incremented by consume_after_success
     from datetime import date
     from sqlalchemy import select
 
@@ -126,7 +130,7 @@ async def test_deep_count_incremented_on_consume(db_session) -> None:
 
 @pytest.mark.asyncio
 async def test_credit_used_from_in_result(db_session) -> None:
-    """check_and_consume should return which source was consumed."""
+    """check_balance should return which source was consumed."""
     uid = "u_source_tracking"
     await _seed_profile(db_session, uid, tier="standard")
     await _seed_credits(
@@ -134,7 +138,12 @@ async def test_credit_used_from_in_result(db_session) -> None:
         expires_at=_now() + timedelta(days=30),
     )
 
-    result = await check_and_consume(db_session, uid, "standard")
+    result = await check_balance(db_session, uid, "standard")
     assert result.allowed is True
-    assert result.credit_used_from == "subscription"
-    assert result.total_remaining == 299
+    # check_balance doesn't consume — credit_used_from is None
+    assert result.total_remaining == 300
+
+    # consume_after_success returns the source
+    consume = await consume_after_success(db_session, uid, "standard")
+    assert consume.credit_used_from == "subscription"
+    assert consume.total_remaining == 299

@@ -30,7 +30,7 @@ from database import get_db
 from models.profile import Profile
 from schemas.common import SuccessResponse
 from services.auth import FirebaseUser, get_current_user
-from services.usage import UsageCheck, check_and_consume
+from services.usage import UsageCheck, check_balance, consume_after_success
 
 logger = logging.getLogger(__name__)
 
@@ -402,8 +402,8 @@ async def chat(
                 expires_at=None,
             )
 
-    # 3. Check usage limit (and increment atomically if allowed)
-    usage = await check_and_consume(db, uid, tier)
+    # 3. Pre-flight credit check (no consumption yet)
+    usage = await check_balance(db, uid, tier)
     if not usage.allowed:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
@@ -493,12 +493,15 @@ async def chat(
             },
         )
 
-    # 10. Parse structured blocks from agent response
+    # 10. Consume credit AFTER successful agent call
+    usage = await consume_after_success(db, uid, tier)
+
+    # 11. Parse structured blocks from agent response
     logger.info("Agent raw text (first 500): %s", agent_resp.text[:500])
     reply, sources, actions, tracker_items = _extract_blocks(agent_resp.text)
     logger.info("Parsed: %d sources, %d tracker_items", len(sources), len(tracker_items))
 
-    # 11. Build response
+    # 12. Build response
     response = ChatResponse(
         reply=reply,
         domain=domain_short,

@@ -34,7 +34,7 @@ from services.credits import (
     get_balance,
     grant_credits,
 )
-from services.usage import check_and_consume
+from services.usage import check_balance, consume_after_success
 
 
 # ── Helpers ────────────────────────────────────────────────────────────
@@ -251,7 +251,7 @@ async def test_premium_unlimited(db_session) -> None:
     uid = "u_premium"
     await _seed_profile(db_session, uid, tier="premium")
 
-    result = await check_and_consume(db_session, uid, "premium")
+    result = await check_balance(db_session, uid, "premium")
     assert result.allowed is True
     assert result.limit is None
     assert result.credit_used_from is None
@@ -260,7 +260,7 @@ async def test_premium_unlimited(db_session) -> None:
 # 9. Guest: 403
 @pytest.mark.asyncio
 async def test_guest_blocked(db_session) -> None:
-    result = await check_and_consume(db_session, "guest_user", "guest")
+    result = await check_balance(db_session, "guest_user", "guest")
     assert result.allowed is False
     assert result.limit == 0
     assert result.tier == "guest"
@@ -312,20 +312,22 @@ async def test_integration_free_user_lifecycle(db_session) -> None:
         amount=5, source_detail="migration-free-5",
     )
 
-    # Use all 5 credits
+    # Use all 5 credits (check + consume)
     for i in range(5):
-        result = await check_and_consume(db_session, uid, "free")
+        result = await check_balance(db_session, uid, "free")
         assert result.allowed is True, f"Should be allowed on use {i+1}"
+        consume = await consume_after_success(db_session, uid, "free")
+        assert consume.credit_used_from is not None
 
-    # 6th use → should be blocked
-    result = await check_and_consume(db_session, uid, "free")
+    # 6th use → check_balance triggers re-engagement
+    result = await check_balance(db_session, uid, "free")
     # Re-engagement should kick in for free tier
-    # After re-engagement, the user gets 1 more credit
     assert result.allowed is True  # Re-engagement auto-granted
-    assert result.credit_used_from == "grant"
+    consume = await consume_after_success(db_session, uid, "free")
+    assert consume.credit_used_from == "grant"
 
     # Now truly exhausted (re-engagement cooldown prevents another grant)
-    result = await check_and_consume(db_session, uid, "free")
+    result = await check_balance(db_session, uid, "free")
     assert result.allowed is False
 
 
@@ -351,20 +353,24 @@ async def test_integration_standard_consumption_order(db_session) -> None:
     )
 
     # First consume — should use grant (expires sooner)
-    result = await check_and_consume(db_session, uid, "standard")
+    result = await check_balance(db_session, uid, "standard")
     assert result.allowed is True
-    assert result.credit_used_from == "grant"
+    consume = await consume_after_success(db_session, uid, "standard")
+    assert consume.credit_used_from == "grant"
 
     # Continue consuming grants
-    result = await check_and_consume(db_session, uid, "standard")
-    assert result.credit_used_from == "grant"
-    result = await check_and_consume(db_session, uid, "standard")
-    assert result.credit_used_from == "grant"
+    await check_balance(db_session, uid, "standard")
+    consume = await consume_after_success(db_session, uid, "standard")
+    assert consume.credit_used_from == "grant"
+    await check_balance(db_session, uid, "standard")
+    consume = await consume_after_success(db_session, uid, "standard")
+    assert consume.credit_used_from == "grant"
 
     # Grants exhausted, now uses subscription
-    result = await check_and_consume(db_session, uid, "standard")
+    result = await check_balance(db_session, uid, "standard")
     assert result.allowed is True
-    assert result.credit_used_from == "subscription"
+    consume = await consume_after_success(db_session, uid, "standard")
+    assert consume.credit_used_from == "subscription"
 
 
 # 13. Migration: daily_usage → chat_credits conversion accuracy
@@ -431,3 +437,66 @@ async def test_integration_migration_conversion(db_session) -> None:
     # Now exhausted
     consume_result = await consume_credit(db_session, uid)
     assert consume_result.consumed is False
+
+
+# 15. Agent failure should NOT consume credits
+@pytest.mark.asyncio
+async def test_agent_failure_no_credit_consumed(db_session) -> None:
+    """When agent call fails (502), only check_balance is called.
+    consume_after_success is NOT called, so no credit is deducted."""
+    uid = "u_agent_fail"
+    await _seed_profile(db_session, uid, tier="free")
+    await grant_credits(
+        db_session, user_id=uid, source="grant",
+        amount=5, source_detail="migration-free-5",
+    )
+
+    # Step 1: check_balance (pre-flight) — does NOT consume
+    result = await check_balance(db_session, uid, "free")
+    assert result.allowed is True
+    assert result.total_remaining == 5  # Still 5 — nothing consumed
+
+    # Step 2: Agent call fails (simulated) — consume_after_success is NOT called
+    # Verify credits remain intact
+    balance = await get_balance(db_session, uid)
+    assert balance.total_remaining == 5  # Still 5!
+
+    # Step 3: User retries, this time agent succeeds
+    result = await check_balance(db_session, uid, "free")
+    assert result.allowed is True
+    consume = await consume_after_success(db_session, uid, "free")
+    assert consume.credit_used_from == "grant"
+    assert consume.total_remaining == 4  # Now 4 — consumed only after success
+
+
+# 16. Race condition: consume_after_success with zero credits
+@pytest.mark.asyncio
+async def test_consume_after_success_race_condition(db_session) -> None:
+    """If credits are exhausted between check_balance and consume_after_success
+    (e.g., concurrent request), consume_after_success still returns allowed=True
+    to avoid failing an already-completed agent response."""
+    uid = "u_race"
+    await _seed_profile(db_session, uid, tier="free")
+    await grant_credits(
+        db_session, user_id=uid, source="grant",
+        amount=1, source_detail="single-credit",
+    )
+
+    # Request A: check_balance passes
+    result_a = await check_balance(db_session, uid, "free")
+    assert result_a.allowed is True
+
+    # Request B: also passes check (concurrent)
+    result_b = await check_balance(db_session, uid, "free")
+    assert result_b.allowed is True
+
+    # Request A: agent succeeds, consumes the last credit
+    consume_a = await consume_after_success(db_session, uid, "free")
+    assert consume_a.credit_used_from == "grant"
+    assert consume_a.total_remaining == 0
+
+    # Request B: agent also succeeds, but no credits left
+    # Should still return allowed=True (don't fail the response)
+    consume_b = await consume_after_success(db_session, uid, "free")
+    assert consume_b.allowed is True  # Graceful — treated as free
+    assert consume_b.credit_used_from is None  # No credit consumed
