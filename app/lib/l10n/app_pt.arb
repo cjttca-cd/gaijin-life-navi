@@ -637,5 +637,11 @@
       }
     }
   },
-  "guideRelatedTitle": "Outros guias neste domínio"
+  "guideRelatedTitle": "Outros guias neste domínio",
+  "trackerEditTitle": "Adicionar ao Rastreador",
+  "trackerEditFieldTitle": "Título",
+  "trackerEditFieldMemo": "Nota (opcional)",
+  "trackerEditFieldDate": "Data de Vencimento (opcional)",
+  "trackerEditSave": "Salvar no Rastreador",
+  "trackerEditCancel": "Cancelar"
 }

@@ -637,5 +637,11 @@
       }
     }
   },
-  "guideRelatedTitle": "Các hướng dẫn khác trong lĩnh vực này"
+  "guideRelatedTitle": "Các hướng dẫn khác trong lĩnh vực này",
+  "trackerEditTitle": "Thêm vào danh sách",
+  "trackerEditFieldTitle": "Tiêu đề",
+  "trackerEditFieldMemo": "Ghi chú (tùy chọn)",
+  "trackerEditFieldDate": "Hạn chót (tùy chọn)",
+  "trackerEditSave": "Lưu vào danh sách",
+  "trackerEditCancel": "Hủy"
 }

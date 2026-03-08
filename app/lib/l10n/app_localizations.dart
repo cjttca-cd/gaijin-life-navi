@@ -3571,6 +3571,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other guides in this domain'**
   String get guideRelatedTitle;
+
+  /// No description provided for @trackerEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Tracker'**
+  String get trackerEditTitle;
+
+  /// No description provided for @trackerEditFieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get trackerEditFieldTitle;
+
+  /// No description provided for @trackerEditFieldMemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Memo (optional)'**
+  String get trackerEditFieldMemo;
+
+  /// No description provided for @trackerEditFieldDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date (optional)'**
+  String get trackerEditFieldDate;
+
+  /// No description provided for @trackerEditSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to Tracker'**
+  String get trackerEditSave;
+
+  /// No description provided for @trackerEditCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get trackerEditCancel;
 }
 
 class _AppLocalizationsDelegate

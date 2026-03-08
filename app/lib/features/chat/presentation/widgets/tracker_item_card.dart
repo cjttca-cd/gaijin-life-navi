@@ -8,6 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../tracker/presentation/providers/tracker_providers.dart';
 import '../../domain/chat_response.dart';
+import 'tracker_edit_sheet.dart';
 
 /// Displays AI-suggested tracker items inside the AI chat bubble.
 ///
@@ -207,19 +208,12 @@ class _SaveButton extends ConsumerWidget {
       return;
     }
 
-    final notifier = ref.read(trackerItemsProvider.notifier);
-    final success = await notifier.saveFromChat(
-      title: item.title,
-      dateString: item.date,
-    );
-
+    // Open BottomSheet for confirmation/editing instead of direct save.
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            success ? l10n.trackerItemSaved : l10n.trackerAlreadyTracking,
-          ),
-        ),
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => TrackerEditSheet(item: item),
       );
     }
   }

@@ -637,5 +637,11 @@
       }
     }
   },
-  "guideRelatedTitle": "이 도메인의 다른 가이드"
+  "guideRelatedTitle": "이 도메인의 다른 가이드",
+  "trackerEditTitle": "트래커에 추가",
+  "trackerEditFieldTitle": "제목",
+  "trackerEditFieldMemo": "메모 (선택사항)",
+  "trackerEditFieldDate": "마감일 (선택사항)",
+  "trackerEditSave": "트래커에 저장",
+  "trackerEditCancel": "취소"
 }

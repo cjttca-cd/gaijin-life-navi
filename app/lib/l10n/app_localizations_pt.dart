@@ -1867,4 +1867,22 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get guideRelatedTitle => 'Outros guias neste domínio';
+
+  @override
+  String get trackerEditTitle => 'Adicionar ao Rastreador';
+
+  @override
+  String get trackerEditFieldTitle => 'Título';
+
+  @override
+  String get trackerEditFieldMemo => 'Nota (opcional)';
+
+  @override
+  String get trackerEditFieldDate => 'Data de Vencimento (opcional)';
+
+  @override
+  String get trackerEditSave => 'Salvar no Rastreador';
+
+  @override
+  String get trackerEditCancel => 'Cancelar';
 }

@@ -1849,4 +1849,22 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get guideRelatedTitle => 'Các hướng dẫn khác trong lĩnh vực này';
+
+  @override
+  String get trackerEditTitle => 'Thêm vào danh sách';
+
+  @override
+  String get trackerEditFieldTitle => 'Tiêu đề';
+
+  @override
+  String get trackerEditFieldMemo => 'Ghi chú (tùy chọn)';
+
+  @override
+  String get trackerEditFieldDate => 'Hạn chót (tùy chọn)';
+
+  @override
+  String get trackerEditSave => 'Lưu vào danh sách';
+
+  @override
+  String get trackerEditCancel => 'Hủy';
 }

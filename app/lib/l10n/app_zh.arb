@@ -637,5 +637,11 @@
       }
     }
   },
-  "guideRelatedTitle": "同领域其他指南"
+  "guideRelatedTitle": "同领域其他指南",
+  "trackerEditTitle": "添加到待办",
+  "trackerEditFieldTitle": "标题",
+  "trackerEditFieldMemo": "备注（可选）",
+  "trackerEditFieldDate": "截止日期（可选）",
+  "trackerEditSave": "保存到待办",
+  "trackerEditCancel": "取消"
 }

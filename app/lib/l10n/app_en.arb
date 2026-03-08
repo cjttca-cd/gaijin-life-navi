@@ -793,5 +793,11 @@
       }
     }
   },
-  "guideRelatedTitle": "Other guides in this domain"
+  "guideRelatedTitle": "Other guides in this domain",
+  "trackerEditTitle": "Add to Tracker",
+  "trackerEditFieldTitle": "Title",
+  "trackerEditFieldMemo": "Memo (optional)",
+  "trackerEditFieldDate": "Due Date (optional)",
+  "trackerEditSave": "Save to Tracker",
+  "trackerEditCancel": "Cancel"
 }

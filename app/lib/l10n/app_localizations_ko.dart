@@ -1808,4 +1808,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get guideRelatedTitle => '이 도메인의 다른 가이드';
+
+  @override
+  String get trackerEditTitle => '트래커에 추가';
+
+  @override
+  String get trackerEditFieldTitle => '제목';
+
+  @override
+  String get trackerEditFieldMemo => '메모 (선택사항)';
+
+  @override
+  String get trackerEditFieldDate => '마감일 (선택사항)';
+
+  @override
+  String get trackerEditSave => '트래커에 저장';
+
+  @override
+  String get trackerEditCancel => '취소';
 }

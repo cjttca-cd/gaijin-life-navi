@@ -1850,4 +1850,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideRelatedTitle => 'Other guides in this domain';
+
+  @override
+  String get trackerEditTitle => 'Add to Tracker';
+
+  @override
+  String get trackerEditFieldTitle => 'Title';
+
+  @override
+  String get trackerEditFieldMemo => 'Memo (optional)';
+
+  @override
+  String get trackerEditFieldDate => 'Due Date (optional)';
+
+  @override
+  String get trackerEditSave => 'Save to Tracker';
+
+  @override
+  String get trackerEditCancel => 'Cancel';
 }

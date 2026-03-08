@@ -1798,4 +1798,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get guideRelatedTitle => '同领域其他指南';
+
+  @override
+  String get trackerEditTitle => '添加到待办';
+
+  @override
+  String get trackerEditFieldTitle => '标题';
+
+  @override
+  String get trackerEditFieldMemo => '备注（可选）';
+
+  @override
+  String get trackerEditFieldDate => '截止日期（可选）';
+
+  @override
+  String get trackerEditSave => '保存到待办';
+
+  @override
+  String get trackerEditCancel => '取消';
 }
