@@ -101,7 +101,8 @@ _SOURCES_RE = re.compile(
     r"\[SOURCES\]\s*\n(.*?)\n\s*\[/SOURCES\]", re.DOTALL | re.IGNORECASE,
 )
 _TRACKER_RE = re.compile(
-    r"\[TRACKER\]\s*\n(.*?)\n\s*\[/TRACKER\]", re.DOTALL | re.IGNORECASE,
+    r"(?:\[TRACKER\]|---\s*TRACKER\s*---)\s*\n(.*?)(?:\n\s*\[/TRACKER\]|\n\s*---\s*(?:END[_ ]?TRACKER|TRACKER)\s*---|\Z)",
+    re.DOTALL | re.IGNORECASE,
 )
 _ACTIONS_RE = re.compile(
     r"\[ACTIONS\]\s*\n(.*?)\n\s*\[/ACTIONS\]", re.DOTALL | re.IGNORECASE,
@@ -109,20 +110,61 @@ _ACTIONS_RE = re.compile(
 
 
 def _parse_kv_lines(block: str) -> list[dict[str, str]]:
-    """Parse lines like ``- key: val | key2: val2`` into list[dict]."""
+    """Parse tracker lines in two formats:
+
+    KV format:  ``- type: deadline | title: Visa renewal | date: 2025-04-01``
+    Plain text: ``□ Go to city hall (within 14 days)``
+
+    Returns list[dict] with at least ``type`` and ``title`` keys.
+    """
+    import unicodedata
+
     items: list[dict[str, str]] = []
     for line in block.strip().splitlines():
-        line = line.strip().lstrip("- ").strip()
+        line = line.strip()
         if not line:
             continue
-        pairs = [seg.strip() for seg in line.split("|")]
-        item: dict[str, str] = {}
-        for pair in pairs:
-            if ":" in pair:
-                k, v = pair.split(":", 1)
-                item[k.strip()] = v.strip()
-        if item:
-            items.append(item)
+
+        # Strip leading bullet markers: □ ☐ ☑ ✅ - [ ] - [x] •  numbered (1. 2.)
+        cleaned = re.sub(
+            r"^(?:[□☐☑✅•]|\d+[.):]|[-*]\s*\[[ x]?\]|[-*])\s*",
+            "",
+            line,
+        ).strip()
+        if not cleaned:
+            continue
+
+        # Try KV format first (contains | separator with key: value pairs)
+        if "|" in cleaned and ":" in cleaned:
+            pairs = [seg.strip() for seg in cleaned.split("|")]
+            item: dict[str, str] = {}
+            for pair in pairs:
+                if ":" in pair:
+                    k, v = pair.split(":", 1)
+                    item[k.strip()] = v.strip()
+            if item:
+                items.append(item)
+                continue
+
+        # Plain text format — extract date if present, rest is title
+        date_match = re.search(
+            r"[（(](.*?(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}).*?)[）)]",
+            cleaned,
+        )
+        date_str = ""
+        if date_match:
+            # Extract just the date portion
+            inner = date_match.group(1)
+            d = re.search(r"\d{4}[-/]\d{1,2}[-/]\d{1,2}", inner)
+            if d:
+                date_str = d.group(0)
+
+        items.append({
+            "type": "task",
+            "title": cleaned,
+            **({"date": date_str} if date_str else {}),
+        })
+
     return items
 
 
