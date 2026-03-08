@@ -81,7 +81,7 @@ async def call_agent(
     context: list[dict] | None = None,
     image_path: str | None = None,
     user_profile: dict | None = None,
-    timeout: int = 60,
+    timeout: int = 90,
 ) -> AgentResponse:
     """Invoke an OpenClaw agent statelessly and return a structured response.
 
