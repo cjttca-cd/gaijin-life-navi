@@ -1770,7 +1770,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get trialSetupTitle => '시작하기 전에 몇 가지 알려주세요';
+  String get trialSetupTitle => 'AI 가이드에게 자신에 대해 알려주세요';
 
   @override
   String get trialSetupNationality => '국적';
@@ -1832,11 +1832,17 @@ class AppLocalizationsKo extends AppLocalizations {
       '일본 생활 가이드를 자유롭게 탐색하세요. 프로필을 설정하면 AI 가이드 5회 무료 체험';
 
   @override
-  String get testFlightHomeBannerCta => '설정하고 체험하기';
+  String get testFlightHomeBannerCta => '설정하고 시작';
 
   @override
   String get testFlightChatSetupPrompt => '프로필을 설정하면 무료 AI 가이드를 이용할 수 있습니다';
 
   @override
   String get testFlightChatSetupButton => '설정하고 시작';
+
+  @override
+  String get testFlightViewGuides => '모든 가이드 보기';
+
+  @override
+  String get trialSetupSubtitle => 'AI 가이드가 정보를 바탕으로 맞춤형 답변을 제공합니다';
 }

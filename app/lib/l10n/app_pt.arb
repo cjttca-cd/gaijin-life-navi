@@ -612,7 +612,7 @@
       }
     }
   },
-  "trialSetupTitle": "Antes de começar, conte-nos um pouco sobre você",
+  "trialSetupTitle": "Conte ao seu guia AI um pouco sobre você",
   "trialSetupNationality": "Nacionalidade",
   "trialSetupResidenceStatus": "Status de Residência",
   "trialSetupRegion": "Região",
@@ -645,7 +645,9 @@
   "trackerEditSave": "Salvar no Rastreador",
   "trackerEditCancel": "Cancelar",
   "testFlightHomeBannerText": "Navegue por todos os guias de vida no Japão. Configure seu perfil para desbloquear 5 sessões gratuitas de AI",
-  "testFlightHomeBannerCta": "Configurar para desbloquear",
+  "testFlightHomeBannerCta": "Configurar e começar",
   "testFlightChatSetupPrompt": "Configure seu perfil para iniciar sua experiência gratuita com o guia AI",
-  "testFlightChatSetupButton": "Configurar e começar"
+  "testFlightChatSetupButton": "Configurar e começar",
+  "testFlightViewGuides": "Ver todos os guias",
+  "trialSetupSubtitle": "O guia AI fornecerá respostas personalizadas com base nas suas informações"
 }

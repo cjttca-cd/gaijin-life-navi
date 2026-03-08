@@ -1827,8 +1827,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get trialSetupTitle =>
-      'Antes de começar, conte-nos um pouco sobre você';
+  String get trialSetupTitle => 'Conte ao seu guia AI um pouco sobre você';
 
   @override
   String get trialSetupNationality => 'Nacionalidade';
@@ -1891,7 +1890,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Navegue por todos os guias de vida no Japão. Configure seu perfil para desbloquear 5 sessões gratuitas de AI';
 
   @override
-  String get testFlightHomeBannerCta => 'Configurar para desbloquear';
+  String get testFlightHomeBannerCta => 'Configurar e começar';
 
   @override
   String get testFlightChatSetupPrompt =>
@@ -1899,4 +1898,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get testFlightChatSetupButton => 'Configurar e começar';
+
+  @override
+  String get testFlightViewGuides => 'Ver todos os guias';
+
+  @override
+  String get trialSetupSubtitle =>
+      'O guia AI fornecerá respostas personalizadas com base nas suas informações';
 }

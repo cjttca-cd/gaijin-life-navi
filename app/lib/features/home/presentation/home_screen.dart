@@ -95,7 +95,7 @@ class HomeScreen extends ConsumerWidget {
                       text: l10n.testFlightHomeBannerText,
                       cta: l10n.testFlightHomeBannerCta,
                       onTap: () => context.go(AppRoutes.chat),
-                      secondaryCta: l10n.tabGuide,
+                      secondaryCta: l10n.testFlightViewGuides,
                       onSecondaryTap: () => context.go(AppRoutes.navigate),
                     ),
                   ] else ...[

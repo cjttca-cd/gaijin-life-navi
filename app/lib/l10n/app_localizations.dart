@@ -3503,7 +3503,7 @@ abstract class AppLocalizations {
   /// No description provided for @trialSetupTitle.
   ///
   /// In en, this message translates to:
-  /// **'Before we start, tell us a bit about yourself'**
+  /// **'Tell your AI guide a bit about yourself'**
   String get trialSetupTitle;
 
   /// No description provided for @trialSetupNationality.
@@ -3617,7 +3617,7 @@ abstract class AppLocalizations {
   /// No description provided for @testFlightHomeBannerCta.
   ///
   /// In en, this message translates to:
-  /// **'Set up to unlock'**
+  /// **'Set up to start'**
   String get testFlightHomeBannerCta;
 
   /// No description provided for @testFlightChatSetupPrompt.
@@ -3631,6 +3631,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set up and start'**
   String get testFlightChatSetupButton;
+
+  /// No description provided for @testFlightViewGuides.
+  ///
+  /// In en, this message translates to:
+  /// **'View all guides'**
+  String get testFlightViewGuides;
+
+  /// No description provided for @trialSetupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI guide will provide personalized answers based on your information'**
+  String get trialSetupSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -1760,7 +1760,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get trialSetupTitle => '开始之前，请告诉我们一些关于你的信息';
+  String get trialSetupTitle => '请告知您的AI向导一些关于你的信息';
 
   @override
   String get trialSetupNationality => '国籍';
@@ -1821,11 +1821,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get testFlightHomeBannerText => '无限制查看所有日本生活指南精华贴，设置信息解锁5次个人智能AI向导体验';
 
   @override
-  String get testFlightHomeBannerCta => '设置信息解锁体验';
+  String get testFlightHomeBannerCta => '设置信息开始体验';
 
   @override
   String get testFlightChatSetupPrompt => '设置您的信息，即可免费体验AI向导';
 
   @override
   String get testFlightChatSetupButton => '设置信息开始体验';
+
+  @override
+  String get testFlightViewGuides => '查看所有指南';
+
+  @override
+  String get trialSetupSubtitle => 'AI向导将根据信息为你提供符合你情况的定制化回答';
 }

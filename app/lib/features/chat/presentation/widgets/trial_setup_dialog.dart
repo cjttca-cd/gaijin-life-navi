@@ -134,6 +134,15 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
               style: theme.textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: AppSpacing.spaceMd),
+            // Subtitle.
+            Text(
+              l10n.trialSetupSubtitle,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: AppSpacing.space2xl),
 
             // Nationality selector.

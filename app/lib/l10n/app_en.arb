@@ -768,7 +768,7 @@
       }
     }
   },
-  "trialSetupTitle": "Before we start, tell us a bit about yourself",
+  "trialSetupTitle": "Tell your AI guide a bit about yourself",
   "trialSetupNationality": "Nationality",
   "trialSetupResidenceStatus": "Residence Status",
   "trialSetupRegion": "Region",
@@ -801,7 +801,9 @@
   "trackerEditSave": "Save to Tracker",
   "trackerEditCancel": "Cancel",
   "testFlightHomeBannerText": "Browse all Japan life guides freely. Set up your profile to unlock 5 free AI guide sessions",
-  "testFlightHomeBannerCta": "Set up to unlock",
+  "testFlightHomeBannerCta": "Set up to start",
   "testFlightChatSetupPrompt": "Set up your profile to start your free AI guide experience",
-  "testFlightChatSetupButton": "Set up and start"
+  "testFlightChatSetupButton": "Set up and start",
+  "testFlightViewGuides": "View all guides",
+  "trialSetupSubtitle": "Your AI guide will provide personalized answers based on your information"
 }

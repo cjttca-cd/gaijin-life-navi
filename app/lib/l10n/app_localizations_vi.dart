@@ -1809,8 +1809,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get trialSetupTitle =>
-      'Trước khi bắt đầu, hãy cho chúng tôi biết đôi chút về bạn';
+  String get trialSetupTitle => 'Hãy cho hướng dẫn AI biết về bạn';
 
   @override
   String get trialSetupNationality => 'Quốc tịch';
@@ -1873,7 +1872,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Xem tất cả hướng dẫn cuộc sống Nhật Bản. Thiết lập hồ sơ để mở khóa 5 lần trải nghiệm AI miễn phí';
 
   @override
-  String get testFlightHomeBannerCta => 'Thiết lập để mở khóa';
+  String get testFlightHomeBannerCta => 'Thiết lập để bắt đầu';
 
   @override
   String get testFlightChatSetupPrompt =>
@@ -1881,4 +1880,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get testFlightChatSetupButton => 'Thiết lập và bắt đầu';
+
+  @override
+  String get testFlightViewGuides => 'Xem tất cả hướng dẫn';
+
+  @override
+  String get trialSetupSubtitle =>
+      'Hướng dẫn AI sẽ cung cấp câu trả lời phù hợp dựa trên thông tin của bạn';
 }
