@@ -88,17 +88,16 @@ class ChatResponse(BaseModel):
 
 # ── Response-text parsers ──────────────────────────────────────────────
 
-# Agent responses embed structured blocks in triple-dash format:
-#   ---TRACKER---
+# Agent responses may contain:
+#   1. □ inline items anywhere in the text → extracted as tracker_items
+#   2. ---SOURCES--- block → extracted and removed from reply
+#
+# Example:
+#   Here's what you need to do:
 #   □ Go to city hall (within 14 days)
 #   □ Apply for health insurance
 #   ---SOURCES---
-#   - knowledge/account-opening.md
 #   - https://example.com
-#
-# Legacy bracket format is also supported:
-#   [TRACKER] ... [/TRACKER]
-#   [SOURCES] ... [/SOURCES]
 
 
 def _build_block_re(name: str) -> re.Pattern:
@@ -116,8 +115,6 @@ def _build_block_re(name: str) -> re.Pattern:
 
 
 _SOURCES_RE = _build_block_re("SOURCES")
-_TRACKER_RE = _build_block_re("TRACKER")
-_ACTIONS_RE = _build_block_re("ACTIONS")
 
 
 def _get_block_content(match: re.Match) -> str:
@@ -201,71 +198,32 @@ def _parse_tracker_lines(block: str) -> list[dict[str, str]]:
 
 
 def _extract_blocks(text: str) -> tuple[str, list[dict], list[dict], list[dict]]:
-    """Extract SOURCES, ACTIONS, and TRACKER blocks from agent text.
+    """Extract tracker items (inline □) and SOURCES blocks from agent text.
 
     Returns (clean_reply, sources, actions, tracker_items).
+    - tracker_items: extracted from any line matching ^\s*□ (kept in reply)
+    - sources: extracted from ---SOURCES--- blocks (removed from reply)
+    - actions: always empty (deprecated)
     """
     sources: list[dict] = []
-    actions: list[dict] = []
+    actions: list[dict] = []  # Deprecated — always empty
     tracker_items: list[dict] = []
 
+    # 1. SOURCES block extraction (unchanged)
     for match in _SOURCES_RE.finditer(text):
         sources.extend(_parse_source_lines(_get_block_content(match)))
 
-    for match in _ACTIONS_RE.finditer(text):
-        tracker_items.extend(_parse_tracker_lines(_get_block_content(match)))
+    # 2. Inline □ extraction (new: scan all lines)
+    for line in text.splitlines():
+        if re.match(r"\s*□", line):
+            parsed = _parse_tracker_lines(line)
+            tracker_items.extend(parsed)
 
-    for match in _TRACKER_RE.finditer(text):
-        tracker_items.extend(_parse_tracker_lines(_get_block_content(match)))
-
-    # Strip all structured blocks from user-visible reply
+    # 3. Clean reply: remove SOURCES blocks, keep □ lines
     clean = _SOURCES_RE.sub("", text)
-    clean = _ACTIONS_RE.sub("", clean)
-    clean = _TRACKER_RE.sub("", clean)
-    # Strip any remaining ---LABEL--- markers
+    # Remove orphan block markers (---TRACKER---, ---ACTIONS---, etc.)
     clean = re.sub(r"\n?---\s*[A-Z]{2,}\s*---\s*", "", clean)
-    # Strip orphan --- separators and trailing disclaimer
-    clean = re.sub(r"\n---\s*\n", "\n", clean)
-    clean = re.sub(r"\n---\s*$", "", clean)
-
-    # ── Fallback: detect □ items even without ---TRACKER--- markers ──
-    if not tracker_items:
-        # Look for code blocks containing □ items
-        code_block_re = re.compile(r"```[^\n]*\n(.*?)```", re.DOTALL)
-        for m in code_block_re.finditer(clean):
-            block_text = m.group(1)
-            checkbox_lines = [l for l in block_text.splitlines() if re.match(r"\s*[□☐]", l)]
-            if len(checkbox_lines) >= 2:
-                tracker_items.extend(_parse_tracker_lines(block_text))
-                clean = clean.replace(m.group(0), "")
-                break
-
-        # Also try: □ items NOT in code blocks (consecutive □ lines)
-        if not tracker_items:
-            lines = clean.splitlines()
-            checkbox_run = []
-            checkbox_start = -1
-            for i, line in enumerate(lines):
-                if re.match(r"\s*[□☐]", line):
-                    if not checkbox_run:
-                        checkbox_start = i
-                    checkbox_run.append(line)
-                else:
-                    if len(checkbox_run) >= 2:
-                        break
-                    checkbox_run = []
-            if len(checkbox_run) >= 2:
-                tracker_items.extend(_parse_tracker_lines("\n".join(checkbox_run)))
-                # Remove these lines from clean
-                for run_line in checkbox_run:
-                    clean = clean.replace(run_line + "\n", "", 1)
-
-    # ── Fallback: remove leaked knowledge/ references ──
-    clean = re.sub(r"^\s*[•\-\*]\s*knowledge/[^\n]*$", "", clean, flags=re.MULTILINE)
-    clean = re.sub(r"^\s*[•\-\*]\s*guides/[^\n]*$", "", clean, flags=re.MULTILINE)
-    # Remove trailing ※ disclaimer if present
-    clean = re.sub(r"\n※[^\n]*$", "", clean)
-    # Clean up multiple blank lines
+    # Collapse excessive blank lines
     clean = re.sub(r"\n{3,}", "\n\n", clean)
     clean = clean.strip()
 
