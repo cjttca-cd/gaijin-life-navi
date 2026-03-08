@@ -448,63 +448,64 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: AppSpacing.spaceLg),
 
           // ── Section 2: Account Management (hidden for anonymous TestFlight) ──
-          if (!(isAnonymous && AppConfig.testFlightMode))
-          _SectionLabel(label: l10n.accountSectionManagement),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Card(
-              child: Column(
-                children: [
-                  if (!isAnonymous && !AppConfig.testFlightMode) ...[
-                    ListTile(
-                      leading: const Text('⭐', style: TextStyle(fontSize: 20)),
-                      title: Text(
-                        l10n.settingsSubscription,
-                        style: theme.textTheme.titleSmall,
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Free',
-                            style: theme.textTheme.bodyMedium?.copyWith(
+          if (!(isAnonymous && AppConfig.testFlightMode)) ...[
+            _SectionLabel(label: l10n.accountSectionManagement),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenPadding,
+              ),
+              child: Card(
+                child: Column(
+                  children: [
+                    if (!AppConfig.testFlightMode) ...[
+                      ListTile(
+                        leading: const Text('⭐', style: TextStyle(fontSize: 20)),
+                        title: Text(
+                          l10n.settingsSubscription,
+                          style: theme.textTheme.titleSmall,
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Free',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.spaceXs),
+                            Icon(
+                              Icons.chevron_right,
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
-                          ),
-                          const SizedBox(width: AppSpacing.spaceXs),
-                          Icon(
-                            Icons.chevron_right,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ],
+                          ],
+                        ),
+                        onTap: () => context.push(AppRoutes.subscription),
                       ),
-                      onTap: () => context.push(AppRoutes.subscription),
-                    ),
-                    Divider(
-                      height: 1,
-                      color: theme.colorScheme.outlineVariant,
-                      indent: 56,
+                      Divider(
+                        height: 1,
+                        color: theme.colorScheme.outlineVariant,
+                        indent: 56,
+                      ),
+                    ],
+                    ListTile(
+                      leading: Icon(
+                        Icons.logout,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      title: Text(
+                        l10n.settingsLogout,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: theme.colorScheme.error,
+                        ),
+                      ),
+                      onTap: _logout,
                     ),
                   ],
-                  ListTile(
-                    leading: Icon(
-                      Icons.logout,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    title: Text(
-                      l10n.settingsLogout,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: theme.colorScheme.error,
-                      ),
-                    ),
-                    onTap: _logout,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
 
           // ── Section 3: Delete Account (hidden for anonymous) ──
           if (!isAnonymous && !AppConfig.testFlightMode) ...[
