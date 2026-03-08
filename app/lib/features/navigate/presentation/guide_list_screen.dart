@@ -50,9 +50,15 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
     DomainColorSet colors,
     AppLocalizations l10n,
   ) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.screenPadding),
-      itemCount: guides.length + 1, // +1 for domain header
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(domainGuidesProvider(widget.domain));
+        ref.invalidate(navigatorDomainsProvider);
+      },
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppSpacing.screenPadding),
+        itemCount: guides.length + 1, // +1 for domain header
       separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.spaceSm),
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -80,6 +86,7 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
           domainColors: colors,
         );
       },
+      ),
     );
   }
 

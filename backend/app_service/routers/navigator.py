@@ -321,7 +321,7 @@ def _parse_md_file(file_path: Path) -> dict[str, Any]:
         "access": access,
         "excerpt": excerpt,
         "lang": meta.get("lang"),
-        "tags": meta.get("tags", []),
+        "tags": [str(t) for t in meta.get("tags", [])],
     }
 
 

@@ -93,11 +93,16 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
 
           final colors = DomainColors.forDomain(domain);
 
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Hero header
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(guideDetailProvider((domain: domain, slug: slug)));
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Hero header
                 _HeroHeader(
                   detail: detail,
                   domain: domain,
@@ -191,6 +196,7 @@ class _GuideDetailScreenState extends ConsumerState<GuideDetailScreen> {
               ),
             ), // end Padding
               ],
+            ),
             ),
           );
         },
@@ -757,13 +763,13 @@ class _HeroHeader extends StatelessWidget {
                 return Container(
                   height: 24,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.spaceSm,
+                    horizontal: AppSpacing.spaceMd,
+                    vertical: AppSpacing.spaceXs,
                   ),
                   decoration: BoxDecoration(
                     color: colors.icon.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  alignment: Alignment.center,
                   child: Text(
                     tag,
                     style: theme.textTheme.labelSmall?.copyWith(
