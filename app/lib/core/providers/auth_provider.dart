@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,11 +25,14 @@ final isAnonymousProvider = Provider<bool>((ref) {
 });
 
 /// Sign in anonymously (for guest chat access).
+/// Returns the [User] on success, or null on failure (with error logged).
 Future<User?> signInAnonymously(FirebaseAuth auth) async {
   try {
     final credential = await auth.signInAnonymously();
+    debugPrint('[Auth] Anonymous sign-in succeeded: uid=\${credential.user?.uid}');
     return credential.user;
   } catch (e) {
+    debugPrint('[Auth] Anonymous sign-in failed: \$e\n\$st');
     return null;
   }
 }

@@ -113,27 +113,7 @@ class ChatGuestScreen extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.space3xl),
 
                 // ── Primary CTA: Register or Retry anonymous ─
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: FilledButton(
-                    onPressed: () async {
-                      if (AppConfig.testFlightMode) {
-                        // TestFlight: retry anonymous sign-in.
-                        final auth = ref.read(firebaseAuthProvider);
-                        await signInAnonymously(auth);
-                        // authStateProvider auto-updates → router navigates.
-                      } else {
-                        context.push(AppRoutes.register);
-                      }
-                    },
-                    child: Text(
-                      AppConfig.testFlightMode
-                          ? l10n.chatGuestFreeOffer
-                          : l10n.chatGuestSignUp,
-                    ),
-                  ),
-                ),
+                _AnonymousSignInButton(l10n: l10n, ref: ref),
 
                 const SizedBox(height: AppSpacing.spaceMd),
 
@@ -148,6 +128,66 @@ class ChatGuestScreen extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AnonymousSignInButton extends StatefulWidget {
+  const _AnonymousSignInButton({required this.l10n, required this.ref});
+
+  final AppLocalizations l10n;
+  final WidgetRef ref;
+
+  @override
+  State<_AnonymousSignInButton> createState() => _AnonymousSignInButtonState();
+}
+
+class _AnonymousSignInButtonState extends State<_AnonymousSignInButton> {
+  bool _loading = false;
+
+  Future<void> _onPressed() async {
+    if (AppConfig.testFlightMode) {
+      setState(() => _loading = true);
+      final auth = widget.ref.read(firebaseAuthProvider);
+      final user = await signInAnonymously(auth);
+      if (mounted) {
+        setState(() => _loading = false);
+        if (user == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('ログインに失敗しました。ネットワーク接続を確認してください。'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      }
+    } else {
+      GoRouter.of(context).push(AppRoutes.register);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: FilledButton(
+        onPressed: _loading ? null : _onPressed,
+        child: _loading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : Text(
+                AppConfig.testFlightMode
+                    ? widget.l10n.chatGuestFreeOffer
+                    : widget.l10n.chatGuestSignUp,
+              ),
       ),
     );
   }
