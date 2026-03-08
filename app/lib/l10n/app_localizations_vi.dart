@@ -1833,4 +1833,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get navAiSearchButton => 'Thử ngay';
+
+  @override
+  String guideCount(int count) {
+    return '$count bài hướng dẫn';
+  }
+
+  @override
+  String get guideFreeLabel => 'MIỄN PHÍ';
 }

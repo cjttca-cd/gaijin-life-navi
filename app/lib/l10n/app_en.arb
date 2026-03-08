@@ -775,5 +775,14 @@
   "trialSetupSubmit": "Get Started",
   "navAiSearchTitle": "Smart Search with AI Guide",
   "navAiSearchSubtitle": "Get personalized information tailored to your situation",
-  "navAiSearchButton": "Try it now"
+  "navAiSearchButton": "Try it now",
+  "guideCount": "{count} guides",
+  "@guideCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "guideFreeLabel": "FREE"
 }

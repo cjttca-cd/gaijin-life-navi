@@ -619,5 +619,14 @@
   "trialSetupSubmit": "开始使用",
   "navAiSearchTitle": "用AI向导智能搜索",
   "navAiSearchSubtitle": "根据您的情况提供个性化信息",
-  "navAiSearchButton": "立即体验"
+  "navAiSearchButton": "立即体验",
+  "guideCount": "{count}篇指南",
+  "@guideCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "guideFreeLabel": "免费"
 }

@@ -1792,4 +1792,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get navAiSearchButton => '지금 사용해 보기';
+
+  @override
+  String guideCount(int count) {
+    return '$count개 가이드';
+  }
+
+  @override
+  String get guideFreeLabel => '무료';
 }

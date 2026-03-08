@@ -619,5 +619,14 @@
   "trialSetupSubmit": "Bắt đầu",
   "navAiSearchTitle": "Tìm kiếm thông minh với AI Guide",
   "navAiSearchSubtitle": "Nhận thông tin cá nhân hóa phù hợp với hoàn cảnh của bạn",
-  "navAiSearchButton": "Thử ngay"
+  "navAiSearchButton": "Thử ngay",
+  "guideCount": "{count} bài hướng dẫn",
+  "@guideCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "guideFreeLabel": "MIỄN PHÍ"
 }

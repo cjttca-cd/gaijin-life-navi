@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
 import '../../../core/providers/router_provider.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/domain_colors.dart';
 import '../domain/navigator_domain.dart';
@@ -37,7 +38,7 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
           if (guides.isEmpty) {
             return _buildComingSoon(context, widget.domain, colors);
           }
-          return _buildGuideList(context, guides, colors);
+          return _buildGuideList(context, guides, colors, l10n);
         },
       ),
     );
@@ -47,17 +48,27 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
     BuildContext context,
     List<NavigatorGuide> guides,
     DomainColorSet colors,
+    AppLocalizations l10n,
   ) {
     return ListView.separated(
       padding: const EdgeInsets.all(AppSpacing.screenPadding),
-      itemCount: guides.length,
+      itemCount: guides.length + 1, // +1 for domain header
       separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.spaceSm),
       itemBuilder: (context, index) {
-        final guide = guides[index];
+        if (index == 0) {
+          return _DomainHeader(
+            domain: widget.domain,
+            colors: colors,
+            guideCount: guides.length,
+            l10n: l10n,
+          );
+        }
+        final guide = guides[index - 1];
         return _GuideCard(
           guide: guide,
           domain: widget.domain,
           accentColor: colors.accent,
+          domainColors: colors,
         );
       },
     );
@@ -222,21 +233,100 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
   }
 }
 
-/// Guide card with left accent bar.
+/// Domain header with icon, label, and guide count.
+class _DomainHeader extends StatelessWidget {
+  const _DomainHeader({
+    required this.domain,
+    required this.colors,
+    required this.guideCount,
+    required this.l10n,
+  });
+
+  final String domain;
+  final DomainColorSet colors;
+  final int guideCount;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final icon = DomainColors.iconForDomain(domain);
+    final domainLabel = _getDomainLabel(domain);
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.spaceLg),
+      decoration: BoxDecoration(
+        color: colors.container,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 28, color: colors.icon),
+          const SizedBox(width: AppSpacing.spaceMd),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  domainLabel,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: colors.icon,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.space2xs),
+                Text(
+                  l10n.guideCount(guideCount),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colors.icon,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getDomainLabel(String domainId) {
+    switch (domainId) {
+      case 'finance':
+        return l10n.domainFinance;
+      case 'tax':
+        return l10n.domainTax;
+      case 'visa':
+        return l10n.domainVisa;
+      case 'medical':
+        return l10n.domainMedical;
+      case 'life':
+        return l10n.domainLife;
+      case 'legal':
+        return l10n.domainLegal;
+      default:
+        return domainId;
+    }
+  }
+}
+
+/// Guide card with left accent bar, access badge, and tags.
 class _GuideCard extends StatelessWidget {
   const _GuideCard({
     required this.guide,
     required this.domain,
     required this.accentColor,
+    required this.domainColors,
   });
 
   final NavigatorGuide guide;
   final String domain;
   final Color accentColor;
+  final DomainColorSet domainColors;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -267,14 +357,8 @@ class _GuideCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if (guide.isPremium) ...[
-                            const SizedBox(width: AppSpacing.spaceXs),
-                            Icon(
-                              Icons.lock,
-                              size: 16,
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ],
+                          const SizedBox(width: AppSpacing.spaceXs),
+                          _AccessBadge(guide: guide, l10n: l10n),
                         ],
                       ),
                       if (guide.summary != null) ...[
@@ -288,6 +372,13 @@ class _GuideCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ],
+                      if (guide.tags.isNotEmpty) ...[
+                        const SizedBox(height: AppSpacing.spaceSm),
+                        _TagChips(
+                          tags: guide.tags,
+                          domainColors: domainColors,
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -296,6 +387,102 @@ class _GuideCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Access badge: FREE (green) or 🔒 (outline).
+class _AccessBadge extends StatelessWidget {
+  const _AccessBadge({required this.guide, required this.l10n});
+
+  final NavigatorGuide guide;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    if (guide.isFree) {
+      return Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.spaceSm,
+          vertical: AppSpacing.space2xs,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.successContainer,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          l10n.guideFreeLabel,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: AppColors.success,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    }
+
+    // Premium / registered — lock badge
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.spaceSm,
+        vertical: AppSpacing.space2xs,
+      ),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.lock,
+            size: 12,
+            color: theme.colorScheme.outlineVariant,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Tag chips row — max 3 tags displayed.
+class _TagChips extends StatelessWidget {
+  const _TagChips({
+    required this.tags,
+    required this.domainColors,
+  });
+
+  final List<String> tags;
+  final DomainColorSet domainColors;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final displayTags = tags.length > 3 ? tags.sublist(0, 3) : tags;
+
+    return Wrap(
+      spacing: AppSpacing.spaceXs,
+      runSpacing: AppSpacing.spaceXs,
+      children: displayTags.map((tag) {
+        return Container(
+          height: 24,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.spaceSm,
+          ),
+          decoration: BoxDecoration(
+            color: domainColors.container,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            tag,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: domainColors.icon,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

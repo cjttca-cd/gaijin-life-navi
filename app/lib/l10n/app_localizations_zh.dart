@@ -1782,4 +1782,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get navAiSearchButton => '立即体验';
+
+  @override
+  String guideCount(int count) {
+    return '$count篇指南';
+  }
+
+  @override
+  String get guideFreeLabel => '免费';
 }

@@ -3547,6 +3547,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try it now'**
   String get navAiSearchButton;
+
+  /// No description provided for @guideCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} guides'**
+  String guideCount(int count);
+
+  /// No description provided for @guideFreeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'FREE'**
+  String get guideFreeLabel;
 }
 
 class _AppLocalizationsDelegate

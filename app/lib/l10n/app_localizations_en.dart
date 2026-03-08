@@ -1834,4 +1834,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navAiSearchButton => 'Try it now';
+
+  @override
+  String guideCount(int count) {
+    return '$count guides';
+  }
+
+  @override
+  String get guideFreeLabel => 'FREE';
 }
