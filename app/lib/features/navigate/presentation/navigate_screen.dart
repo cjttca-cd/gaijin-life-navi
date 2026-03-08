@@ -43,10 +43,6 @@ class NavigateScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // AI Guide banner
-          _AiBanner(),
-          const SizedBox(height: AppSpacing.spaceLg),
-
           // Subtitle
           Text(
             l10n.navSubtitle,
@@ -58,6 +54,11 @@ class NavigateScreen extends ConsumerWidget {
 
           // Domain grid (all active)
           _DomainGrid(domains: domains),
+
+          const SizedBox(height: AppSpacing.spaceLg),
+
+          // AI Guide banner (bottom — after browsing guides)
+          _AiBanner(),
         ],
       ),
     );
