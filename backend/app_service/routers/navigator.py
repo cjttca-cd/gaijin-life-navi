@@ -262,6 +262,22 @@ def _generate_excerpt(body: str, max_chars: int = 300) -> str:
     return cleaned
 
 
+def _estimate_reading_time(body: str) -> int:
+    """Estimate reading time in minutes.
+
+    CJK-heavy text (≥30% ideographic chars): ~500 chars/min.
+    Latin text: ~200 words/min.
+    Always returns at least 1.
+    """
+    import unicodedata
+
+    cjk_count = sum(1 for c in body if unicodedata.category(c).startswith("Lo"))
+    if cjk_count > len(body) * 0.3:  # Primarily CJK text
+        return max(1, cjk_count // 500)
+    else:
+        return max(1, len(body.split()) // 200)
+
+
 def _parse_md_file(file_path: Path) -> dict[str, Any]:
     """Parse a markdown file — extract frontmatter, title, summary, excerpt, and content."""
     try:
@@ -305,6 +321,7 @@ def _parse_md_file(file_path: Path) -> dict[str, Any]:
         "access": access,
         "excerpt": excerpt,
         "lang": meta.get("lang"),
+        "tags": meta.get("tags", []),
     }
 
 
@@ -446,6 +463,7 @@ async def list_guides(
                 "access": parsed["access"],
                 "excerpt": parsed["excerpt"],
                 "lang": served_lang,
+                "tags": parsed["tags"],
             }
         )
 
@@ -534,6 +552,8 @@ async def get_guide(
                 "locked": False,
                 "summary": parsed["summary"],
                 "content": parsed["body"],
+                "tags": parsed["tags"],
+                "reading_time_min": _estimate_reading_time(parsed["body"]),
             }
         ).model_dump()
 
@@ -552,6 +572,8 @@ async def get_guide(
                     "locked": False,
                     "summary": parsed["summary"],
                     "content": parsed["body"],
+                    "tags": parsed["tags"],
+                    "reading_time_min": _estimate_reading_time(parsed["body"]),
                 }
             ).model_dump()
 
@@ -567,6 +589,8 @@ async def get_guide(
                 "locked": True,
                 "excerpt": excerpt,
                 "register_cta": True,
+                "tags": parsed["tags"],
+                "reading_time_min": _estimate_reading_time(parsed["body"]),
             }
         ).model_dump()
 
@@ -586,6 +610,8 @@ async def get_guide(
                 "locked": False,
                 "summary": parsed["summary"],
                 "content": parsed["body"],
+                "tags": parsed["tags"],
+                "reading_time_min": _estimate_reading_time(parsed["body"]),
             }
         ).model_dump()
 
@@ -600,6 +626,8 @@ async def get_guide(
             "locked": True,
             "excerpt": excerpt,
             "register_cta": True,
+            "tags": parsed["tags"],
+            "reading_time_min": _estimate_reading_time(parsed["body"]),
         }
     ).model_dump()
 
