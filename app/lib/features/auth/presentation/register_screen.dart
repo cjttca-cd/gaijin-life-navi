@@ -34,6 +34,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   NationalityItem? _selectedNationality;
   ResidenceStatusItem? _selectedResidenceStatus;
   Prefecture? _selectedPrefecture;
+  City? _selectedCity;
 
   @override
   void dispose() {
@@ -73,7 +74,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               'preferred_language': 'en',
               'nationality': _selectedNationality!.code,
               'residence_status': _selectedResidenceStatus!.id,
-              'residence_region': _selectedPrefecture!.nameEn,
+              'residence_region':
+                  '${_selectedPrefecture!.nameEn} ${_selectedCity!.nameEn}',
             },
           );
         } on DioException {
@@ -150,8 +152,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   Future<void> _selectResidenceStatus() async {
     final l10n = AppLocalizations.of(context);
-    final commonStatuses =
-        residenceStatuses.where((s) => s.common).toList();
+    final commonStatuses = residenceStatuses.where((s) => s.common).toList();
     final result = await _showSearchableBottomSheet<ResidenceStatusItem>(
       title: l10n.registerResidenceStatusLabel,
       searchHint: l10n.registerSearchHint,
@@ -167,16 +168,137 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   Future<void> _selectResidenceRegion() async {
     final l10n = AppLocalizations.of(context);
-    final result = await _showSearchableBottomSheet<Prefecture>(
-      title: l10n.registerResidenceRegionLabel,
-      searchHint: l10n.registerSearchHint,
-      items: prefectures,
-      labelBuilder: (item) => item.nameEn,
-      subtitleBuilder: (item) => item.nameJa,
+
+    // Step 1: Select prefecture.
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.7,
+          maxChildSize: 0.9,
+          minChildSize: 0.4,
+          builder: (ctx, scrollController) {
+            return SafeArea(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          ctx,
+                        ).colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                    child: Text(
+                      l10n.profileSelectPrefecture,
+                      style: Theme.of(ctx).textTheme.titleMedium,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: prefectures.length,
+                      itemBuilder: (ctx, index) {
+                        final pref = prefectures[index];
+                        return ListTile(
+                          title: Text(pref.nameJa),
+                          subtitle: Text(pref.nameEn),
+                          onTap: () {
+                            Navigator.pop(ctx);
+                            // Step 2: Select city within prefecture.
+                            _showCitySheet(pref);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
-    if (result != null) {
-      setState(() => _selectedPrefecture = result);
-    }
+  }
+
+  void _showCitySheet(Prefecture prefecture) {
+    final l10n = AppLocalizations.of(context);
+
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.7,
+          maxChildSize: 0.9,
+          minChildSize: 0.4,
+          builder: (ctx, scrollController) {
+            return SafeArea(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          ctx,
+                        ).colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                    child: Text(
+                      l10n.profileSelectCity,
+                      style: Theme.of(ctx).textTheme.titleMedium,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: prefecture.cities.length,
+                      itemBuilder: (ctx, index) {
+                        final city = prefecture.cities[index];
+                        return ListTile(
+                          title: Text(city.nameJa),
+                          subtitle: Text(city.nameEn),
+                          onTap: () {
+                            setState(() {
+                              _selectedPrefecture = prefecture;
+                              _selectedCity = city;
+                            });
+                            Navigator.pop(ctx);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -324,9 +446,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       labelText: l10n.registerNationalityLabel,
                       hintText: l10n.registerNationalityHint,
                       icon: Icons.flag_outlined,
-                      value: _selectedNationality != null
-                          ? '${_selectedNationality!.name} (${_selectedNationality!.code})'
-                          : null,
+                      value:
+                          _selectedNationality != null
+                              ? '${_selectedNationality!.name} (${_selectedNationality!.code})'
+                              : null,
                       onTap: _selectNationality,
                       validator: (_) {
                         if (_selectedNationality == null) {
@@ -358,12 +481,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       labelText: l10n.registerResidenceRegionLabel,
                       hintText: l10n.registerResidenceRegionHint,
                       icon: Icons.location_on_outlined,
-                      value: _selectedPrefecture != null
-                          ? '${_selectedPrefecture!.nameEn} (${_selectedPrefecture!.nameJa})'
-                          : null,
+                      value:
+                          (_selectedPrefecture != null && _selectedCity != null)
+                              ? '${_selectedCity!.nameJa}, ${_selectedPrefecture!.nameJa}'
+                              : null,
                       onTap: _selectResidenceRegion,
                       validator: (_) {
-                        if (_selectedPrefecture == null) {
+                        if (_selectedPrefecture == null ||
+                            _selectedCity == null) {
                           return l10n.registerResidenceRegionHint;
                         }
                         return null;
@@ -475,46 +600,46 @@ class _SelectableFormField extends FormField<String> {
     required VoidCallback onTap,
     required FormFieldValidator<String> validator,
   }) : super(
-          initialValue: value,
-          validator: validator,
-          builder: (FormFieldState<String> state) {
-            final context = state.context;
-            final cs = Theme.of(context).colorScheme;
-            final tt = Theme.of(context).textTheme;
+         initialValue: value,
+         validator: validator,
+         builder: (FormFieldState<String> state) {
+           final context = state.context;
+           final cs = Theme.of(context).colorScheme;
+           final tt = Theme.of(context).textTheme;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: onTap,
-                  borderRadius: BorderRadius.circular(12),
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: labelText,
-                      hintText: hintText,
-                      prefixIcon: Icon(icon),
-                      suffixIcon:
-                          const Icon(Icons.arrow_drop_down),
-                      errorText: state.errorText,
-                    ),
-                    child: value != null
-                        ? Text(
-                            value,
-                            style: tt.bodyLarge,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        : Text(
-                            hintText,
-                            style: tt.bodyLarge?.copyWith(
-                              color: cs.onSurfaceVariant,
-                            ),
-                          ),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
+           return Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               InkWell(
+                 onTap: onTap,
+                 borderRadius: BorderRadius.circular(12),
+                 child: InputDecorator(
+                   decoration: InputDecoration(
+                     labelText: labelText,
+                     hintText: hintText,
+                     prefixIcon: Icon(icon),
+                     suffixIcon: const Icon(Icons.arrow_drop_down),
+                     errorText: state.errorText,
+                   ),
+                   child:
+                       value != null
+                           ? Text(
+                             value,
+                             style: tt.bodyLarge,
+                             overflow: TextOverflow.ellipsis,
+                           )
+                           : Text(
+                             hintText,
+                             style: tt.bodyLarge?.copyWith(
+                               color: cs.onSurfaceVariant,
+                             ),
+                           ),
+                 ),
+               ),
+             ],
+           );
+         },
+       );
 }
 
 /// Searchable bottom sheet list used for nationality / status / region pickers.
@@ -568,12 +693,13 @@ class _SearchableListState<T> extends State<_SearchableList<T>> {
       return;
     }
     setState(() {
-      _filteredItems = widget.items.where((item) {
-        final label = widget.labelBuilder(item).toLowerCase();
-        final subtitle =
-            widget.subtitleBuilder?.call(item).toLowerCase() ?? '';
-        return label.contains(query) || subtitle.contains(query);
-      }).toList();
+      _filteredItems =
+          widget.items.where((item) {
+            final label = widget.labelBuilder(item).toLowerCase();
+            final subtitle =
+                widget.subtitleBuilder?.call(item).toLowerCase() ?? '';
+            return label.contains(query) || subtitle.contains(query);
+          }).toList();
     });
   }
 
@@ -614,10 +740,7 @@ class _SearchableListState<T> extends State<_SearchableList<T>> {
               // Title.
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(
-                  widget.title,
-                  style: tt.titleMedium,
-                ),
+                child: Text(widget.title, style: tt.titleMedium),
               ),
               // Search field.
               Padding(

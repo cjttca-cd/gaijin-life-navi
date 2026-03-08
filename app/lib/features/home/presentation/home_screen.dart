@@ -36,15 +36,14 @@ class HomeScreen extends ConsumerWidget {
     // Determine greeting based on time.
     // Display name priority: backend Profile → Firebase Auth → email fallback.
     final hour = DateTime.now().hour;
-    final profileName = isGuest
-        ? null
-        : ref.watch(userProfileProvider).valueOrNull?.displayName;
+    final profileName =
+        isGuest
+            ? null
+            : ref.watch(userProfileProvider).valueOrNull?.displayName;
     final firebaseName = user?.displayName;
     final emailName = user?.email?.split('@').first;
-    final name = _nonEmpty(profileName) ??
-        _nonEmpty(firebaseName) ??
-        emailName ??
-        '';
+    final name =
+        _nonEmpty(profileName) ?? _nonEmpty(firebaseName) ?? emailName ?? '';
     final greeting = _greeting(l10n, hour, name);
 
     return Scaffold(
@@ -74,12 +73,15 @@ class HomeScreen extends ConsumerWidget {
                       if (usage == null || usage.isUnlimited) {
                         return const SizedBox.shrink();
                       }
-                      final label = usage.limit > 0
-                          ? l10n.homeUsageFree(usage.remaining, usage.limit)
-                          : l10n.chatCreditsRemaining(usage.remaining);
+                      final label =
+                          usage.limit > 0
+                              ? l10n.homeUsageFree(usage.remaining, usage.limit)
+                              : l10n.chatCreditsRemaining(usage.remaining);
                       return Text(
                         label,
-                        style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+                        style: tt.bodySmall?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
                       );
                     },
                   ),
@@ -88,9 +90,19 @@ class HomeScreen extends ConsumerWidget {
                 if (isGuest) ...[
                   const SizedBox(height: AppSpacing.spaceLg),
                   _GuestCtaBanner(
-                    text: l10n.homeGuestCtaText,
-                    cta: l10n.homeGuestCtaButton,
-                    onTap: () => context.push(AppRoutes.register),
+                    text:
+                        AppConfig.testFlightMode
+                            ? l10n.chatGuestFreeOffer
+                            : l10n.homeGuestCtaText,
+                    cta:
+                        AppConfig.testFlightMode
+                            ? l10n.navAiSearchButton
+                            : l10n.homeGuestCtaButton,
+                    onTap:
+                        () =>
+                            AppConfig.testFlightMode
+                                ? context.push(AppRoutes.chat)
+                                : context.push(AppRoutes.register),
                   ),
                 ],
 
@@ -101,7 +113,9 @@ class HomeScreen extends ConsumerWidget {
                   Consumer(
                     builder: (context, ref, _) {
                       final tier = ref.watch(userTierProvider);
-                      if (tier != 'free' || AppConfig.testFlightMode) return const SizedBox.shrink();
+                      if (tier != 'free' || AppConfig.testFlightMode) {
+                        return const SizedBox.shrink();
+                      }
                       return Padding(
                         padding: const EdgeInsets.only(
                           bottom: AppSpacing.space2xl,
@@ -116,7 +130,8 @@ class HomeScreen extends ConsumerWidget {
                   ),
 
                 // ── Tracker Summary (above quick actions) ─────
-                if (!isGuest) ...[
+                // Tracker is SharedPreferences-based (local), visible to all including guests.
+                ...[
                   Text(
                     l10n.homeTrackerSummary.toUpperCase(),
                     style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
@@ -165,7 +180,8 @@ class HomeScreen extends ConsumerWidget {
                         iconColor: AppColors.medicalIcon,
                         title: l10n.homeQaMedicalTitle,
                         subtitle: l10n.homeQaMedicalSubtitle,
-                        onTap: () => context.push('${AppRoutes.navigate}/medical'),
+                        onTap:
+                            () => context.push('${AppRoutes.navigate}/medical'),
                       ),
                   ],
                 ),
@@ -252,9 +268,10 @@ class _TrackerSummaryCard extends ConsumerWidget {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: cs.outlineVariant),
           ),
-          child: preview.isEmpty
-              ? _buildEmpty(context, l10n, cs, tt)
-              : _buildList(context, l10n, cs, tt, preview),
+          child:
+              preview.isEmpty
+                  ? _buildEmpty(context, l10n, cs, tt)
+                  : _buildList(context, l10n, cs, tt, preview),
         ),
       ),
     );
@@ -268,10 +285,7 @@ class _TrackerSummaryCard extends ConsumerWidget {
   ) {
     return Row(
       children: [
-        Icon(
-          Icons.add_task,
-          color: cs.onSurfaceVariant.withValues(alpha: 0.5),
-        ),
+        Icon(Icons.add_task, color: cs.onSurfaceVariant.withValues(alpha: 0.5)),
         const SizedBox(width: AppSpacing.spaceMd),
         Expanded(
           child: Text(
@@ -299,11 +313,7 @@ class _TrackerSummaryCard extends ConsumerWidget {
             padding: const EdgeInsets.only(bottom: AppSpacing.spaceSm),
             child: Row(
               children: [
-                Icon(
-                  Icons.radio_button_unchecked,
-                  size: 18,
-                  color: cs.primary,
-                ),
+                Icon(Icons.radio_button_unchecked, size: 18, color: cs.primary),
                 const SizedBox(width: AppSpacing.spaceSm),
                 Expanded(
                   child: Text(
@@ -317,9 +327,7 @@ class _TrackerSummaryCard extends ConsumerWidget {
                   const SizedBox(width: AppSpacing.spaceSm),
                   Text(
                     DateFormat.MMMd().format(item.dueDate!),
-                    style: tt.labelSmall?.copyWith(
-                      color: cs.onSurfaceVariant,
-                    ),
+                    style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
                   ),
                 ],
               ],

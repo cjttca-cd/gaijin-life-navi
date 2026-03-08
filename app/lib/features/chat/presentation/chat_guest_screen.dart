@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
 
+import '../../../core/config/app_config.dart';
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -16,11 +19,11 @@ import '../../../core/theme/app_spacing.dart';
 ///   - Primary Button: §6.1.1 (Get started free)
 ///   - Text Button: §6.1.4 (Log in)
 ///   - Spacing: §3 tokens
-class ChatGuestScreen extends StatelessWidget {
+class ChatGuestScreen extends ConsumerWidget {
   const ChatGuestScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
@@ -109,13 +112,26 @@ class ChatGuestScreen extends StatelessWidget {
 
                 const SizedBox(height: AppSpacing.space3xl),
 
-                // ── Primary CTA: Register ────────────────────
+                // ── Primary CTA: Register or Retry anonymous ─
                 SizedBox(
                   width: double.infinity,
                   height: 48,
                   child: FilledButton(
-                    onPressed: () => context.push(AppRoutes.register),
-                    child: Text(l10n.chatGuestSignUp),
+                    onPressed: () async {
+                      if (AppConfig.testFlightMode) {
+                        // TestFlight: retry anonymous sign-in.
+                        final auth = ref.read(firebaseAuthProvider);
+                        await signInAnonymously(auth);
+                        // authStateProvider auto-updates → router navigates.
+                      } else {
+                        context.push(AppRoutes.register);
+                      }
+                    },
+                    child: Text(
+                      AppConfig.testFlightMode
+                          ? l10n.chatGuestFreeOffer
+                          : l10n.chatGuestSignUp,
+                    ),
                   ),
                 ),
 
