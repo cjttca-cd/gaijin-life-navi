@@ -64,16 +64,27 @@ JWT からユーザー ID 取得
   ↓
 profiles.subscription_tier 取得
   ↓
+【Pre-flight チェック: check_balance()】
 tier == 'guest' の場合:
   └── 403 CHAT_REQUIRES_AUTH（AI Chat 利用不可 → 登録案内）
 tier == 'premium' / 'premium_plus' の場合:
   └── 無制限通過（Credit 不使用）
 tier == 'free' / 'standard' の場合:
-  └── chat_credits テーブルから有効クレジットを消費
-  └── 消費優先順位: expires_at ASC NULLS LAST → source tiebreaker (grant→subscription→purchase) → created_at ASC
+  └── chat_credits テーブルの残高を確認（この時点では消費しない）
   └── 残高ゼロ → Re-engagement 判定（free のみ） → 条件充足なら自動 Grant → 429 USAGE_LIMIT_EXCEEDED
+  ↓
+Agent 呼出（svc-{domain}）
+  ↓
+【成功後消費: consume_after_success()】
+Agent 成功 → 有効クレジットを 1 消費
+  └── 消費優先順位: expires_at ASC NULLS LAST → source tiebreaker (grant→subscription→purchase) → created_at ASC
+Agent 失敗（502/タイムアウト） → クレジット消費しない（ユーザー損失なし）
+  ↓
 daily_usage.deep_count は全ティアで +1（analytics 用、課金判定には使用しない）
 ```
+
+> **Note**: 競合状態（check_balance と consume 間にクレジット枯渇）の場合、
+> Agent 応答は正常返却し、warning ログを記録する（1 回分は無料扱い）。
 
 ### カウント管理（Credit Ledger）
 

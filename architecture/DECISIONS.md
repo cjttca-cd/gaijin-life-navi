@@ -238,3 +238,40 @@
 - 2026-02-17: Phase 0 アーキテクチャピボット反映（OC Runtime / memory_search / LLM routing / 課金体系更新）
 - 2026-02-20: ADR-008 追加（knowledge/guides 分離）
 - 2026-02-21: ADR-009 追加（6 Agent 体系 + Concierge 廃止 + 軽量ルーター）
+- 2026-03-08: ADR-010 追加（Credit 消費タイミング — Agent 成功後消費）
+
+---
+
+## ADR-010: Credit 消費タイミング — Agent 成功後消費（Plan B）
+
+**日付**: 2026-03-08
+**ステータス**: Accepted
+
+### 背景
+
+従来の実装では `check_and_consume()` が Agent 呼出前にクレジットを消費していた。
+Agent 呼出が失敗（502/タイムアウト）した場合、ユーザーのクレジットが無駄に消費される問題があった。
+
+### 検討した選択肢
+
+- **Plan A**: 成功後に消費（消費は Agent 成功後のみ）
+  - リスク: ユーザーが接続を切断して逃単する可能性
+- **Plan B**: 事前消費 + 失敗時自動返却（先に確認、成功後のみ消費）
+  - 実装: `check_balance()`（事前確認）+ `consume_after_success()`（成功後消費）
+  - 競合状態は graceful に処理（Agent 応答は返却、1 回分は無料扱い）
+
+### 決定
+
+**Plan B** を採用。
+
+- `check_and_consume()` → `check_balance()` + `consume_after_success()` に分離
+- Agent 呼出前: 残高確認のみ（消費しない）
+- Agent 呼出成功後: 1 credit 消費
+- Agent 呼出失敗: 消費なし（ユーザー損失ゼロ）
+- 競合状態: warning ログ + 無料扱い（Agent 応答は正常返却）
+
+### 影響
+
+- `services/usage.py`: 2 関数に分離
+- `routers/chat.py`: Step 3 → check_balance、Step 10 → consume_after_success
+- テスト: 55 件全通過（新規 2 件: agent 失敗テスト + 競合状態テスト）

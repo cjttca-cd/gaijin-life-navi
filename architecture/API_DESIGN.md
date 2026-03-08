@@ -223,11 +223,12 @@ Phase 0 は同期レスポンス（SSE ストリーミングなし）。
 1. Firebase JWT 検証 → user_id 取得
 2. profiles.subscription_tier 取得
 3. context 構築 — 前端から送信された会話履歴を dict リストに変換
-4. daily_usage チェック + インクリメント（制限超過なら 429）
+4. `check_balance()` でクレジット残高を事前チェック（消費しない。制限超過なら 429）
 5. Emergency keyword 検出 → svc-medical / LLM 軽量分類（**context 含む**）→ 6 ドメイン判定 (finance/tax/visa/medical/life/legal)
 6. `openclaw agent --agent svc-{domain}` 呼び出し（`/reset` stateless モード。profile + context + 新メッセージを拼接）
-7. Response text から □ 行（tracker_items）を抽出 + `---SOURCES---` ブロック解析。`[TRACKER]` `[ACTIONS]` ブロック形式は廃止
-8. 構造化 ChatResponse を返却
+7. Agent 呼出成功 → `consume_after_success()` で 1 credit 消費（失敗時は消費しない）
+8. Response text から □ 行（tracker_items）を抽出 + `---SOURCES---` ブロック解析。`[TRACKER]` `[ACTIONS]` ブロック形式は廃止
+9. 構造化 ChatResponse を返却
 
 **Agent への入力構造** (call_agent が構築):
 
