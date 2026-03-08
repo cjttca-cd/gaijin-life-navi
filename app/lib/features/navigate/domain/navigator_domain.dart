@@ -95,7 +95,7 @@ class NavigatorGuide {
       access: json['access'] as String? ?? 'public',
       excerpt: json['excerpt'] as String?,
       lang: json['lang'] as String?,
-      tags: (json['tags'] as List<dynamic>?)?.cast<String>() ?? const [],
+      tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const [],
     );
   }
 }
@@ -160,7 +160,7 @@ class NavigatorGuideDetail {
       upgradeCta: json['upgrade_cta'] as bool? ?? false,
       registerCta: json['register_cta'] as bool? ?? false,
       lang: json['lang'] as String?,
-      tags: (json['tags'] as List<dynamic>?)?.cast<String>() ?? const [],
+      tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? const [],
       readingTimeMin: json['reading_time_min'] as int? ?? 0,
     );
   }
