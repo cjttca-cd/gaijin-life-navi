@@ -12,7 +12,7 @@ import '../../../profile/presentation/providers/profile_providers.dart';
 ///
 /// Collects nationality, residence status, and residence region from
 /// anonymous users before they can access AI Chat.
-/// This dialog is not dismissible — users must complete the setup.
+/// Users can dismiss this dialog to browse without chat access.
 class TrialSetupDialog extends ConsumerStatefulWidget {
   const TrialSetupDialog({super.key});
 
@@ -20,8 +20,8 @@ class TrialSetupDialog extends ConsumerStatefulWidget {
   static Future<bool> show(BuildContext context) async {
     final result = await showModalBottomSheet<bool>(
       context: context,
-      isDismissible: false,
-      enableDrag: false,
+      isDismissible: true,
+      enableDrag: true,
       isScrollControlled: true,
       builder: (_) => const TrialSetupDialog(),
     );
@@ -35,13 +35,15 @@ class TrialSetupDialog extends ConsumerStatefulWidget {
 class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
   String? _selectedNationality;
   String? _selectedResidenceStatus;
-  String? _selectedRegion;
+  Prefecture? _selectedPrefecture;
+  City? _selectedCity;
   bool _isSubmitting = false;
 
   bool get _canSubmit =>
       _selectedNationality != null &&
       _selectedResidenceStatus != null &&
-      _selectedRegion != null &&
+      _selectedPrefecture != null &&
+      _selectedCity != null &&
       !_isSubmitting;
 
   Future<void> _submit() async {
@@ -54,7 +56,7 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
       await repo.trialSetup(
         nationality: _selectedNationality!,
         residenceStatus: _selectedResidenceStatus!,
-        residenceRegion: _selectedRegion!,
+        residenceRegion: '${_selectedPrefecture!.nameEn} ${_selectedCity!.nameEn}',
       );
       // Invalidate profile cache so it picks up the new data.
       ref.invalidate(userProfileProvider);
@@ -127,7 +129,7 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
             // Region selector.
             _SelectorTile(
               label: l10n.trialSetupRegion,
-              value: _regionLabel(_selectedRegion),
+              value: _regionLabel(),
               onTap: () => _showRegionPicker(context),
             ),
             const SizedBox(height: AppSpacing.space2xl),
@@ -258,6 +260,7 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
   void _showRegionPicker(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
+    // Step 1: Select prefecture
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -288,12 +291,60 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
                         return ListTile(
                           title: Text(pref.nameJa),
                           subtitle: Text(pref.nameEn),
-                          trailing: pref.code == _selectedRegion
-                              ? Icon(Icons.check,
-                                  color: Theme.of(ctx).colorScheme.primary)
-                              : null,
                           onTap: () {
-                            setState(() => _selectedRegion = pref.code);
+                            Navigator.pop(ctx);
+                            _showCityPicker(context, pref);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // Step 2: Select city within prefecture
+  void _showCityPicker(BuildContext context, Prefecture prefecture) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.7,
+          maxChildSize: 0.9,
+          minChildSize: 0.4,
+          builder: (ctx, scrollController) {
+            return SafeArea(
+              child: Column(
+                children: [
+                  _dragHandle(ctx),
+                  Padding(
+                    padding: const EdgeInsets.all(AppSpacing.spaceLg),
+                    child: Text(
+                      '${prefecture.nameJa} (${prefecture.nameEn})',
+                      style: Theme.of(ctx).textTheme.titleMedium,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: prefecture.cities.length,
+                      itemBuilder: (ctx, index) {
+                        final city = prefecture.cities[index];
+                        return ListTile(
+                          title: Text(city.nameJa),
+                          subtitle: Text(city.nameEn),
+                          onTap: () {
+                            setState(() {
+                              _selectedPrefecture = prefecture;
+                              _selectedCity = city;
+                            });
                             Navigator.pop(ctx);
                           },
                         );
@@ -342,14 +393,9 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
     }
   }
 
-  String? _regionLabel(String? code) {
-    if (code == null) return null;
-    try {
-      final pref = prefectures.firstWhere((p) => p.code == code);
-      return '${pref.nameJa} (${pref.nameEn})';
-    } catch (_) {
-      return code;
-    }
+  String? _regionLabel() {
+    if (_selectedPrefecture == null || _selectedCity == null) return null;
+    return '${_selectedCity!.nameJa}, ${_selectedPrefecture!.nameJa}';
   }
 }
 

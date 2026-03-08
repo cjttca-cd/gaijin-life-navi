@@ -108,11 +108,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         return AppRoutes.login;
       }
 
-      // Profile requires real auth (not anonymous)
+      // Profile requires real auth (not anonymous).
+      // In TestFlight, redirect to /home; in production, redirect to /login.
       if (currentPath == AppRoutes.profile) {
         final user = authState.valueOrNull;
         if (user == null || user.isAnonymous) {
-          return AppRoutes.login;
+          return AppConfig.testFlightMode ? AppRoutes.home : AppRoutes.login;
         }
       }
 
