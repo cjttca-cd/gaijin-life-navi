@@ -518,9 +518,9 @@ class _TagChips extends StatelessWidget {
 /// Strip markdown bold/italic markers for plain-text display.
 String _stripMarkdown(String text) {
   // Order matters: strip ** before *, __ before _
-  var result = text.replaceAll(RegExp(r'\*\*(.+?)\*\*'), r'$1');
-  result = result.replaceAll(RegExp(r'__(.+?)__'), r'$1');
-  result = result.replaceAll(RegExp(r'\*(.+?)\*'), r'$1');
-  result = result.replaceAll(RegExp(r'_(.+?)_'), r'$1');
+  var result = text.replaceAll(RegExp(r'\*\*(.+?)\*\*'), '\$1');
+  result = result.replaceAll(RegExp(r'__(.+?)__'), '\$1');
+  result = result.replaceAll(RegExp(r'\*(.+?)\*'), '\$1');
+  result = result.replaceAll(RegExp(r'_(.+?)_'), '\$1');
   return result;
 }
