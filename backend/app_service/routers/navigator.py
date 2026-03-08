@@ -467,6 +467,12 @@ async def list_guides(
             }
         )
 
+    # Sort: free/public guides first, then by title
+    def _access_sort_key(g: dict) -> tuple:
+        return (0 if g["access"] in ("free", "public") else 1, g["title"])
+
+    guides.sort(key=_access_sort_key)
+
     return SuccessResponse(
         data={"domain": domain, "lang": lang, "guides": guides}
     ).model_dump()

@@ -56,11 +56,20 @@ class _GuideListScreenState extends ConsumerState<GuideListScreen> {
       separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.spaceSm),
       itemBuilder: (context, index) {
         if (index == 0) {
+          // Get domain description from domains provider
+          final domainsAsync = ref.watch(navigatorDomainsProvider);
+          final domainDesc = domainsAsync.whenOrNull(
+            data: (domains) => domains
+                .where((d) => d.id == widget.domain)
+                .firstOrNull
+                ?.description,
+          );
           return _DomainHeader(
             domain: widget.domain,
             colors: colors,
             guideCount: guides.length,
             l10n: l10n,
+            description: domainDesc,
           );
         }
         final guide = guides[index - 1];
@@ -240,12 +249,14 @@ class _DomainHeader extends StatelessWidget {
     required this.colors,
     required this.guideCount,
     required this.l10n,
+    this.description,
   });
 
   final String domain;
   final DomainColorSet colors;
   final int guideCount;
   final AppLocalizations l10n;
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
@@ -281,6 +292,15 @@ class _DomainHeader extends StatelessWidget {
                     color: colors.icon,
                   ),
                 ),
+                if (description != null && description!.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.spaceXs),
+                  Text(
+                    description!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colors.icon.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -468,13 +488,13 @@ class _TagChips extends StatelessWidget {
         return Container(
           height: 24,
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.spaceSm,
+            horizontal: AppSpacing.spaceMd,
+            vertical: AppSpacing.spaceXs,
           ),
           decoration: BoxDecoration(
             color: domainColors.container,
             borderRadius: BorderRadius.circular(999),
           ),
-          alignment: Alignment.center,
           child: Text(
             tag,
             style: theme.textTheme.labelSmall?.copyWith(
