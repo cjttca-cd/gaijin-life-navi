@@ -44,6 +44,7 @@ class NavigatorGuide {
     this.access = 'public',
     this.excerpt,
     this.lang,
+    this.tags = const [],
   });
 
   final String slug;
@@ -62,6 +63,9 @@ class NavigatorGuide {
   /// Language code of the served guide (may differ from requested if fallback).
   final String? lang;
 
+  /// Tags from frontmatter (e.g. ["banking", "foreigner"]).
+  final List<String> tags;
+
   /// Whether this guide requires registration / subscription.
   bool get isPremium => access == 'premium' || access == 'registered';
 
@@ -78,6 +82,7 @@ class NavigatorGuide {
       access: access,
       excerpt: excerpt,
       lang: lang,
+      tags: tags,
     );
   }
 
@@ -90,6 +95,7 @@ class NavigatorGuide {
       access: json['access'] as String? ?? 'public',
       excerpt: json['excerpt'] as String?,
       lang: json['lang'] as String?,
+      tags: (json['tags'] as List<dynamic>?)?.cast<String>() ?? const [],
     );
   }
 }
@@ -107,6 +113,8 @@ class NavigatorGuideDetail {
     this.upgradeCta = false,
     this.registerCta = false,
     this.lang,
+    this.tags = const [],
+    this.readingTimeMin = 0,
   });
 
   final String title;
@@ -134,6 +142,12 @@ class NavigatorGuideDetail {
   /// Language code of the served guide.
   final String? lang;
 
+  /// Tags from frontmatter (e.g. ["banking", "foreigner"]).
+  final List<String> tags;
+
+  /// Estimated reading time in minutes.
+  final int readingTimeMin;
+
   factory NavigatorGuideDetail.fromJson(Map<String, dynamic> json) {
     return NavigatorGuideDetail(
       title: json['title'] as String? ?? '',
@@ -146,6 +160,8 @@ class NavigatorGuideDetail {
       upgradeCta: json['upgrade_cta'] as bool? ?? false,
       registerCta: json['register_cta'] as bool? ?? false,
       lang: json['lang'] as String?,
+      tags: (json['tags'] as List<dynamic>?)?.cast<String>() ?? const [],
+      readingTimeMin: json['reading_time_min'] as int? ?? 0,
     );
   }
 }
