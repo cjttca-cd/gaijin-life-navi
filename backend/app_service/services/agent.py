@@ -138,7 +138,8 @@ def _load_domain_knowledge(domain: str) -> str:
 _SKIP_SECTIONS = frozenset([
     "初手",           # Tells agent to read files via tools — we inject directly
     "Guide 生成",     # Guide generation task instructions — not for chat
-    "情報アクセス制御",  # OpenClaw-specific access control rules
+    "情報アクセス制御",  # OpenClaw tool-based access control (directory structure, web_search rules)
+    "Conversation Context",  # Generic context instructions — handled via API messages
 ])
 
 
