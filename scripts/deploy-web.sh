@@ -29,6 +29,11 @@ rm -rf "$DEPLOY_DIR"/*
 # Copy build output
 cp -r "$APP_DIR/build/web/"* "$DEPLOY_DIR/"
 
+# Copy static pages (terms, privacy, etc.)
+if [ -d "$PROJECT_DIR/static" ]; then
+  cp "$PROJECT_DIR/static/"*.html "$DEPLOY_DIR/" 2>/dev/null || true
+fi
+
 # Add useLocalCanvasKit to buildConfig
 sed -i 's/"engineRevision"/"useLocalCanvasKit":true,"engineRevision"/' \
   "$DEPLOY_DIR/flutter_bootstrap.js"
