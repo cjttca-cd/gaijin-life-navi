@@ -826,7 +826,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         final city = prefecture.cities[index];
                         return ListTile(
                           title: Text(city.nameJa),
-                          subtitle: Text(city.nameEn),
                           onTap: () {
                             final region =
                                 '${prefecture.nameJa} ${city.nameJa}';

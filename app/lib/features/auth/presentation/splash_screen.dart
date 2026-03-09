@@ -26,8 +26,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   Future<void> _navigate() async {
-    // Wait at least 2 seconds (handoff-auth S01 spec).
-    await Future<void>.delayed(const Duration(seconds: 2));
+    // Wait for locale restoration from SharedPreferences + minimum 2s splash.
+    await Future.wait([
+      ref.read(localeProvider.notifier).ready,
+      Future<void>.delayed(const Duration(seconds: 2)),
+    ]);
     if (!mounted) return;
 
     ref.read(authStateProvider);

@@ -78,7 +78,7 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
       await repo.trialSetup(
         nationality: _selectedNationality!,
         residenceStatus: _selectedResidenceStatus!,
-        residenceRegion: '${_selectedPrefecture!.nameEn} ${_selectedCity!.nameEn}',
+        residenceRegion: '${_selectedPrefecture!.nameJa} ${_selectedCity!.nameJa}',
         visaExpiry: _selectedVisaExpiry?.toIso8601String().split('T').first,
         preferredLanguage: locale,
       );
@@ -400,7 +400,6 @@ class _TrialSetupDialogState extends ConsumerState<TrialSetupDialog> {
                         final city = prefecture.cities[index];
                         return ListTile(
                           title: Text(city.nameJa),
-                          subtitle: Text(city.nameEn),
                           onTap: () {
                             setState(() {
                               _selectedPrefecture = prefecture;

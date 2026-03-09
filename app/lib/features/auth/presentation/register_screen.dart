@@ -75,7 +75,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               'nationality': _selectedNationality!.code,
               'residence_status': _selectedResidenceStatus!.id,
               'residence_region':
-                  '${_selectedPrefecture!.nameEn} ${_selectedCity!.nameEn}',
+                  '${_selectedPrefecture!.nameJa} ${_selectedCity!.nameJa}',
             },
           );
         } on DioException {
@@ -280,7 +280,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         final city = prefecture.cities[index];
                         return ListTile(
                           title: Text(city.nameJa),
-                          subtitle: Text(city.nameEn),
                           onTap: () {
                             setState(() {
                               _selectedPrefecture = prefecture;
