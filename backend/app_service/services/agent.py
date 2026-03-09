@@ -137,15 +137,47 @@ def _load_domain_knowledge(domain: str) -> str:
     )
 
 
-def _load_agent_instructions(agent_id: str) -> str:
-    """Load the Response Format section from the agent's AGENTS.md.
+# Sections in svc-* AGENTS.md that are only for OpenClaw agent mode
+# (tool-based file reading, guide generation tasks, etc.) and irrelevant
+# when we inject knowledge directly via system prompt.
+_SKIP_SECTIONS = frozenset([
+    "初手",           # Tells agent to read files via tools — we inject directly
+    "Guide 生成",     # Guide generation task instructions — not for chat
+    "情報アクセス制御",  # OpenClaw-specific access control rules
+])
 
-    For the router agent, loads the entire AGENTS.md (it's the full
-    system prompt).  For domain agents, loads the whole AGENTS.md
-    which contains role, guidelines, and response format.
+
+def _load_agent_instructions(agent_id: str) -> str:
+    """Load chat-relevant instructions from the agent's AGENTS.md.
+
+    For the router agent (svc-router), loads the entire AGENTS.md
+    (it IS the system prompt and is small).
+
+    For domain agents, filters out OpenClaw-specific sections
+    (tool-based file reading, guide generation) that are irrelevant
+    when knowledge is injected directly via system prompt.
     """
     agents_md = _AGENTS_ROOT / agent_id / "workspace" / "AGENTS.md"
-    return _read_file_cached(agents_md)
+    full_text = _read_file_cached(agents_md)
+
+    # Router: return as-is (small, self-contained classification prompt)
+    if agent_id == "svc-router":
+        return full_text
+
+    # Domain agents: filter out irrelevant OpenClaw-mode sections
+    import re as _re
+    sections = _re.split(r"\n(?=## )", full_text)
+    filtered = []
+    for section in sections:
+        first_line = section.split("\n")[0]
+        skip = False
+        for kw in _SKIP_SECTIONS:
+            if kw in first_line:
+                skip = True
+                break
+        if not skip:
+            filtered.append(section)
+    return "\n".join(filtered)
 
 
 # ---------------------------------------------------------------------------
