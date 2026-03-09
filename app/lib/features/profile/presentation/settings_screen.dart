@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gaijin_life_navi/l10n/app_localizations.dart';
@@ -70,33 +71,35 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                     onTap: () => _showLanguageSheet(context, currentLang),
                   ),
-                  Divider(
-                    height: 1,
-                    color: theme.colorScheme.outlineVariant,
-                    indent: 56,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.notifications_outlined,
-                      color: theme.colorScheme.onSurfaceVariant,
+                  if (!kIsWeb)
+                    Divider(
+                      height: 1,
+                      color: theme.colorScheme.outlineVariant,
+                      indent: 56,
                     ),
-                    title: Text(
-                      l10n.settingsNotifications,
-                      style: theme.textTheme.titleSmall,
+                  if (!kIsWeb)
+                    ListTile(
+                      leading: Icon(
+                        Icons.notifications_outlined,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      title: Text(
+                        l10n.settingsNotifications,
+                        style: theme.textTheme.titleSmall,
+                      ),
+                      trailing: Icon(
+                        Icons.chevron_right,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) =>
+                                const NotificationSettingsScreen(),
+                          ),
+                        );
+                      },
                     ),
-                    trailing: Icon(
-                      Icons.chevron_right,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) =>
-                              const NotificationSettingsScreen(),
-                        ),
-                      );
-                    },
-                  ),
                 ],
               ),
             ),
@@ -147,7 +150,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Icons.chevron_right,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    onTap: () => _openUrl('https://gaijinlifenavi.com/terms'),
+                    onTap: () => _openUrl('https://japan-life-navi.nebulainfinity.com/terms.html'),
                   ),
                   Divider(
                     height: 1,
@@ -167,7 +170,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Icons.chevron_right,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    onTap: () => _openUrl('https://gaijinlifenavi.com/privacy'),
+                    onTap: () => _openUrl('https://japan-life-navi.nebulainfinity.com/privacy.html'),
                   ),
                   Divider(
                     height: 1,
@@ -187,7 +190,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Icons.chevron_right,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    onTap: () => _openUrl('mailto:support@gaijinlifenavi.com'),
+                    onTap: () => _openUrl('mailto:japan-life-navi@nebulainfinity.com'),
                   ),
                 ],
               ),
