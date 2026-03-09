@@ -36,8 +36,14 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-_AGENTS_ROOT = Path("/root/.openclaw/agents")
-"""Root directory for OpenClaw agent workspaces (read-only for knowledge)."""
+_BACKEND_DIR = Path(__file__).resolve().parent.parent
+"""Backend app_service directory (contains prompts/ and knowledge/)."""
+
+_PROMPTS_DIR = _BACKEND_DIR / "prompts"
+"""System prompt files for each domain agent."""
+
+_KNOWLEDGE_DIR = _BACKEND_DIR / "knowledge"
+"""Domain knowledge files (migrated from OpenClaw agent workspaces)."""
 
 # ---------------------------------------------------------------------------
 # Response dataclass  (unchanged — interface contract)
@@ -97,31 +103,21 @@ def _read_file_cached(path: Path) -> str:
 
 
 def _load_domain_knowledge(domain: str) -> str:
-    """Load all knowledge and guide files for a domain.
+    """Load all knowledge files for a domain from the backend knowledge dir.
 
-    Reads:
-      - workspace/knowledge/*.md (excluding _index.md)
-      - workspace/guides/*.zh.md
+    Reads: knowledge/{domain_short}/*.md
 
     Returns a formatted string block for system prompt injection.
     """
-    agent_id = domain  # already "svc-xxx" format
-    workspace = _AGENTS_ROOT / agent_id / "workspace"
+    domain_short = domain.removeprefix("svc-")
+    knowledge_dir = _KNOWLEDGE_DIR / domain_short
 
     sections: list[str] = []
-
-    # Knowledge files
-    knowledge_dir = workspace / "knowledge"
     if knowledge_dir.is_dir():
         for md_file in sorted(knowledge_dir.glob("*.md")):
-            if md_file.name == "_index.md":
-                continue
-            content = _read_file_cached(md_file)
-            if content:
-                sections.append(f"### knowledge/{md_file.name}\n{content}")
-
-    # Guide files are NOT injected — they are user-facing Navigator content.
-    # Knowledge files alone provide sufficient context for chat responses.
+            file_content = _read_file_cached(md_file)
+            if file_content:
+                sections.append(f"### {md_file.name}\n{file_content}")
 
     if not sections:
         return ""
@@ -135,45 +131,18 @@ def _load_domain_knowledge(domain: str) -> str:
 # Sections in svc-* AGENTS.md that are only for OpenClaw agent mode
 # (tool-based file reading, guide generation tasks, etc.) and irrelevant
 # when we inject knowledge directly via system prompt.
-_SKIP_SECTIONS = frozenset([
-    "初手",           # Tells agent to read files via tools — we inject directly
-    "Guide 生成",     # Guide generation task instructions — not for chat
-    "情報アクセス制御",  # OpenClaw tool-based access control (directory structure, web_search rules)
-    "Conversation Context",  # Generic context instructions — handled via API messages
-])
-
-
 def _load_agent_instructions(agent_id: str) -> str:
-    """Load chat-relevant instructions from the agent's AGENTS.md.
+    """Load the system prompt for an agent from the backend prompts dir.
 
-    For the router agent (svc-router), loads the entire AGENTS.md
-    (it IS the system prompt and is small).
-
-    For domain agents, filters out OpenClaw-specific sections
-    (tool-based file reading, guide generation) that are irrelevant
-    when knowledge is injected directly via system prompt.
+    Each domain has a pre-cleaned prompt file (prompts/{domain}.md)
+    containing only chat-relevant instructions.
     """
-    agents_md = _AGENTS_ROOT / agent_id / "workspace" / "AGENTS.md"
-    full_text = _read_file_cached(agents_md)
-
-    # Router: return as-is (small, self-contained classification prompt)
     if agent_id == "svc-router":
-        return full_text
-
-    # Domain agents: filter out irrelevant OpenClaw-mode sections
-    import re as _re
-    sections = _re.split(r"\n(?=## )", full_text)
-    filtered = []
-    for section in sections:
-        first_line = section.split("\n")[0]
-        skip = False
-        for kw in _SKIP_SECTIONS:
-            if kw in first_line:
-                skip = True
-                break
-        if not skip:
-            filtered.append(section)
-    return "\n".join(filtered)
+        prompt_file = _PROMPTS_DIR / "router.md"
+    else:
+        domain_short = agent_id.removeprefix("svc-")
+        prompt_file = _PROMPTS_DIR / f"{domain_short}.md"
+    return _read_file_cached(prompt_file)
 
 
 # ---------------------------------------------------------------------------
