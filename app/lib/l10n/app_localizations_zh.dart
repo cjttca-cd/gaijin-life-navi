@@ -1838,3 +1838,1838 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get signInFailed => '登录失败，请检查网络连接。';
 }
+
+/// The translations for Chinese, using the Han script (`zh_Hant`).
+class AppLocalizationsZhHant extends AppLocalizationsZh {
+  AppLocalizationsZhHant() : super('zh_Hant');
+
+  @override
+  String get appTitle => 'Japan Life Navigator';
+
+  @override
+  String get langTitle => '選擇你的語言';
+
+  @override
+  String get langContinue => '繼續';
+
+  @override
+  String get langEn => 'English';
+
+  @override
+  String get langZh => '中文';
+
+  @override
+  String get langVi => 'Tiếng Việt';
+
+  @override
+  String get langKo => '한국어';
+
+  @override
+  String get langPt => 'Português';
+
+  @override
+  String get loginWelcome => '登入你的帳號';
+
+  @override
+  String get loginSubtitle => '';
+
+  @override
+  String get loginEmailLabel => '信箱';
+
+  @override
+  String get loginEmailHint => 'your@email.com';
+
+  @override
+  String get loginPasswordLabel => '密碼';
+
+  @override
+  String get loginPasswordHint => '請輸入密碼';
+
+  @override
+  String get loginForgotPassword => '忘記密碼？';
+
+  @override
+  String get loginButton => '登入';
+
+  @override
+  String get loginNoAccount => '還沒有帳號？';
+
+  @override
+  String get loginSignUp => '註冊';
+
+  @override
+  String get loginErrorInvalidEmail => '請輸入有效的電子郵件地址。';
+
+  @override
+  String get loginErrorInvalidCredentials => '信箱或密碼不正確，請再試一次。';
+
+  @override
+  String get loginErrorNetwork => '無法連線，請檢查網路。';
+
+  @override
+  String get loginErrorTooManyAttempts => '嘗試次數過多，請稍後再試。';
+
+  @override
+  String get registerTitle => '建立你的帳號';
+
+  @override
+  String get registerSubtitle => '開始你的日本生活之旅';
+
+  @override
+  String get registerEmailLabel => '信箱';
+
+  @override
+  String get registerEmailHint => 'your@email.com';
+
+  @override
+  String get registerPasswordLabel => '密碼';
+
+  @override
+  String get registerPasswordHint => '建立密碼';
+
+  @override
+  String get registerPasswordHelper => '8個字元以上';
+
+  @override
+  String get registerConfirmLabel => '確認密碼';
+
+  @override
+  String get registerConfirmHint => '再次輸入密碼';
+
+  @override
+  String get registerTermsAgree => '我同意';
+
+  @override
+  String get registerTermsLink => '服務條款';
+
+  @override
+  String get registerPrivacyAnd => '和';
+
+  @override
+  String get registerPrivacyLink => '隱私權政策';
+
+  @override
+  String get registerButton => '建立帳號';
+
+  @override
+  String get registerHasAccount => '已有帳號？';
+
+  @override
+  String get registerSignIn => '登入';
+
+  @override
+  String get registerErrorEmailInvalid => '請輸入有效的電子郵件地址。';
+
+  @override
+  String get registerErrorEmailInUse => '此信箱已註冊，請直接登入。';
+
+  @override
+  String get registerErrorPasswordShort => '密碼至少需要8個字元。';
+
+  @override
+  String get registerErrorPasswordMismatch => '兩次密碼不一致。';
+
+  @override
+  String get registerErrorTermsRequired => '請同意服務條款。';
+
+  @override
+  String get resetTitle => '重設密碼';
+
+  @override
+  String get resetSubtitle => '輸入你的信箱，我們將寄送重設連結。';
+
+  @override
+  String get resetEmailLabel => '信箱';
+
+  @override
+  String get resetEmailHint => 'your@email.com';
+
+  @override
+  String get resetButton => '寄送重設連結';
+
+  @override
+  String get resetBackToLogin => '返回登入';
+
+  @override
+  String get resetSuccessTitle => '檢查你的信箱';
+
+  @override
+  String resetSuccessSubtitle(String email) {
+    return '我們已向 $email 寄送了重設連結';
+  }
+
+  @override
+  String get resetResend => '沒收到？重新寄送';
+
+  @override
+  String get resetErrorEmailInvalid => '請輸入有效的電子郵件地址。';
+
+  @override
+  String get onboardingSkip => '跳過';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingGetStarted => '開始使用';
+
+  @override
+  String onboardingStepOf(int current, int total) {
+    return '第$current步，共$total步';
+  }
+
+  @override
+  String get onboardingS1Title => '你的國籍是什麼？';
+
+  @override
+  String get onboardingS1Subtitle => '這有助於我們提供相關資訊。';
+
+  @override
+  String get onboardingS2Title => '你的在留資格是什麼？';
+
+  @override
+  String get onboardingS2Subtitle => '我們可以為你客製化簽證相關資訊。';
+
+  @override
+  String get onboardingS3Title => '你住在日本哪裡？';
+
+  @override
+  String get onboardingS3Subtitle => '用於提供在地化指南。';
+
+  @override
+  String get onboardingS4Title => '你什麼時候來日本的？';
+
+  @override
+  String get onboardingS4Subtitle => '我們會提醒你需要完成的具時效性任務。';
+
+  @override
+  String get onboardingS4Placeholder => '選擇日期';
+
+  @override
+  String get onboardingS4NotYet => '我還沒來日本';
+
+  @override
+  String get onboardingChangeDate => '更改日期';
+
+  @override
+  String get onboardingErrorSave => '無法儲存資訊，請再試一次。';
+
+  @override
+  String get statusEngineer => '技術·人文知識·國際業務';
+
+  @override
+  String get statusStudent => '留學';
+
+  @override
+  String get statusDependent => '家族滯在';
+
+  @override
+  String get statusPermanent => '永住者';
+
+  @override
+  String get statusSpouse => '日本人配偶者';
+
+  @override
+  String get statusWorkingHoliday => '打工度假';
+
+  @override
+  String get statusSpecifiedSkilled => '特定技能';
+
+  @override
+  String get statusOther => '其他';
+
+  @override
+  String get tabHome => '首頁';
+
+  @override
+  String get tabChat => 'AI 嚮導';
+
+  @override
+  String get tabGuide => '指南';
+
+  @override
+  String get tabSOS => '緊急';
+
+  @override
+  String get tabProfile => '我的';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return '早安，$name 👋';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return '午安，$name 👋';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return '晚安，$name 👋';
+  }
+
+  @override
+  String homeGreetingDefault(String name) {
+    return '哈囉，$name 👋';
+  }
+
+  @override
+  String get homeGreetingNoName => '歡迎！👋';
+
+  @override
+  String homeUsageFree(int remaining, int limit) {
+    return '免費版 • 剩餘 $remaining/$limit 次對話';
+  }
+
+  @override
+  String get homeSectionQuickActions => '快速操作';
+
+  @override
+  String get homeSectionExplore => '探索';
+
+  @override
+  String get homeTrackerSummary => '我的待辦事項';
+
+  @override
+  String get homePopularGuides => '查看熱門指南';
+
+  @override
+  String get homeTrackerNoItems => '暫無待辦事項，點擊新增';
+
+  @override
+  String get homeQaChatTitle => '與 AI 嚮導對話';
+
+  @override
+  String get homeQaChatSubtitle => '關於日本生活的任何問題';
+
+  @override
+  String get homeQaBankingTitle => '銀行';
+
+  @override
+  String get homeQaBankingSubtitle => '開戶、轉帳等';
+
+  @override
+  String get homeQaVisaTitle => '簽證';
+
+  @override
+  String get homeQaVisaSubtitle => '入境指南與手續';
+
+  @override
+  String get homeQaMedicalTitle => '醫療';
+
+  @override
+  String get homeQaMedicalSubtitle => '健康指南與急救資訊';
+
+  @override
+  String get homeExploreGuides => '瀏覽所有指南';
+
+  @override
+  String get homeExploreEmergency => '緊急聯絡方式';
+
+  @override
+  String get homeUpgradeTitle => '從 AI 助手獲得更多協助';
+
+  @override
+  String get homeUpgradeCta => '立即升級';
+
+  @override
+  String get chatTitle => 'AI 嚮導';
+
+  @override
+  String get chatInputPlaceholder => '輸入你的訊息...';
+
+  @override
+  String get chatEmptyTitle => '有什麼想問的嗎？';
+
+  @override
+  String get chatEmptySubtitle => '我可以幫你解答銀行、簽證、醫療等日本生活問題。';
+
+  @override
+  String get chatSuggestBank => '如何開設銀行帳戶？';
+
+  @override
+  String get chatSuggestVisa => '如何續簽簽證？';
+
+  @override
+  String get chatSuggestMedical => '如何就醫？';
+
+  @override
+  String get chatSuggestGeneral => '來日本後需要做什麼？';
+
+  @override
+  String get chatSourcesHeader => '參考來源';
+
+  @override
+  String get chatDisclaimer => '以上為一般性資訊，不構成法律建議。請向相關機構確認。';
+
+  @override
+  String chatLimitRemaining(int remaining, int limit) {
+    return '剩餘 $remaining/$limit 次免費對話。';
+  }
+
+  @override
+  String get chatLimitUpgrade => '升級';
+
+  @override
+  String get chatLimitExhausted => '免費對話次數已用完。';
+
+  @override
+  String get chatErrorSend => '無法傳送訊息，請重試。';
+
+  @override
+  String get chatErrorRetry => '重試';
+
+  @override
+  String get chatDateToday => '今天';
+
+  @override
+  String get chatDateYesterday => '昨天';
+
+  @override
+  String get chatNewSession => '新對話';
+
+  @override
+  String get chatUntitledSession => '新對話';
+
+  @override
+  String get chatDeleteTitle => '刪除對話';
+
+  @override
+  String get chatDeleteConfirm => '確定要刪除這個對話嗎？';
+
+  @override
+  String get chatDeleteCancel => '取消';
+
+  @override
+  String get chatDeleteAction => '刪除';
+
+  @override
+  String get chatRetry => '重試';
+
+  @override
+  String get countryCN => '中國';
+
+  @override
+  String get countryVN => '越南';
+
+  @override
+  String get countryKR => '韓國';
+
+  @override
+  String get countryPH => '菲律賓';
+
+  @override
+  String get countryBR => '巴西';
+
+  @override
+  String get countryNP => '尼泊爾';
+
+  @override
+  String get countryID => '印尼';
+
+  @override
+  String get countryUS => '美國';
+
+  @override
+  String get countryTH => '泰國';
+
+  @override
+  String get countryIN => '印度';
+
+  @override
+  String get countryMM => '緬甸';
+
+  @override
+  String get countryTW => '台灣';
+
+  @override
+  String get countryPE => '秘魯';
+
+  @override
+  String get countryGB => '英國';
+
+  @override
+  String get countryPK => '巴基斯坦';
+
+  @override
+  String get countryBD => '孟加拉國';
+
+  @override
+  String get countryLK => '斯里蘭卡';
+
+  @override
+  String get countryFR => '法國';
+
+  @override
+  String get countryDE => '德國';
+
+  @override
+  String get countryOther => '其他';
+
+  @override
+  String get regionTokyo => '東京';
+
+  @override
+  String get regionOsaka => '大阪';
+
+  @override
+  String get regionNagoya => '名古屋';
+
+  @override
+  String get regionYokohama => '橫濱';
+
+  @override
+  String get regionFukuoka => '福岡';
+
+  @override
+  String get regionSapporo => '札幌';
+
+  @override
+  String get regionKobe => '神戶';
+
+  @override
+  String get regionKyoto => '京都';
+
+  @override
+  String get regionSendai => '仙台';
+
+  @override
+  String get regionHiroshima => '廣島';
+
+  @override
+  String get regionOther => '其他';
+
+  @override
+  String get genericError => '發生了一些問題，請重試。';
+
+  @override
+  String get networkError => '網路錯誤，請檢查連線。';
+
+  @override
+  String get logout => '登出';
+
+  @override
+  String get bankingTitle => '銀行導覽';
+
+  @override
+  String get bankingFriendlyScore => '外籍人士友善度';
+
+  @override
+  String get bankingEmpty => '未找到銀行';
+
+  @override
+  String get bankingRecommendButton => '推薦';
+
+  @override
+  String get bankingRecommendTitle => '銀行推薦';
+
+  @override
+  String get bankingSelectPriorities => '選擇您的優先項目';
+
+  @override
+  String get bankingPriorityMultilingual => '多國語言支援';
+
+  @override
+  String get bankingPriorityLowFee => '低費用';
+
+  @override
+  String get bankingPriorityAtm => 'ATM 網路';
+
+  @override
+  String get bankingPriorityOnline => '網路銀行';
+
+  @override
+  String get bankingGetRecommendations => '取得推薦';
+
+  @override
+  String get bankingRecommendHint => '選擇優先項目並點擊取得推薦';
+
+  @override
+  String get bankingNoRecommendations => '未找到推薦';
+
+  @override
+  String get bankingViewGuide => '查看指南';
+
+  @override
+  String get bankingGuideTitle => '開戶指南';
+
+  @override
+  String get bankingRequiredDocs => '所需文件';
+
+  @override
+  String get bankingConversationTemplates => '銀行常用短語';
+
+  @override
+  String get bankingTroubleshooting => '常見問題';
+
+  @override
+  String get bankingSource => '來源';
+
+  @override
+  String get visaTitle => '簽證導航';
+
+  @override
+  String get visaEmpty => '未找到手續';
+
+  @override
+  String get visaFilterAll => '全部';
+
+  @override
+  String get visaDetailTitle => '手續詳情';
+
+  @override
+  String get visaSteps => '步驟';
+
+  @override
+  String get visaRequiredDocuments => '所需文件';
+
+  @override
+  String get visaFees => '費用';
+
+  @override
+  String get visaProcessingTime => '處理時間';
+
+  @override
+  String get visaDisclaimer => '重要：以上是簽證手續的一般資訊，不構成移民建議。';
+
+  @override
+  String get trackerTitle => '待辦事項';
+
+  @override
+  String get trackerAddItem => '新增待辦';
+
+  @override
+  String get trackerNoItems => '暫無待辦事項';
+
+  @override
+  String get trackerNoItemsHint => '點擊 + 新增您的第一個待辦';
+
+  @override
+  String get trackerAddTitle => '標題';
+
+  @override
+  String get trackerAddMemo => '備註（選填）';
+
+  @override
+  String get trackerAddDueDate => '截止日期（選填）';
+
+  @override
+  String get trackerDueToday => '今天到期';
+
+  @override
+  String get trackerOverdue => '已逾期';
+
+  @override
+  String get trackerViewAll => '查看全部 →';
+
+  @override
+  String get trackerDeleteTitle => '刪除待辦';
+
+  @override
+  String get trackerDeleteConfirm => '確定要刪除此待辦事項嗎？';
+
+  @override
+  String get trackerLimitReached => '免費版最多 3 條待辦，升級解鎖無限';
+
+  @override
+  String get trackerAlreadyTracking => '此項目已在待辦清單中';
+
+  @override
+  String get scannerTitle => '文件掃描';
+
+  @override
+  String get scannerDescription => '掃描日語文件以取得即時翻譯和說明';
+
+  @override
+  String get scannerFromCamera => '拍照掃描';
+
+  @override
+  String get scannerFromGallery => '從相簿選擇';
+
+  @override
+  String get scannerHistory => '歷史';
+
+  @override
+  String get scannerHistoryTitle => '掃描歷史';
+
+  @override
+  String get scannerHistoryEmpty => '暫無掃描';
+
+  @override
+  String get scannerUnknownType => '未知文件';
+
+  @override
+  String get scannerResultTitle => '掃描結果';
+
+  @override
+  String get scannerOriginalText => '原文（日語）';
+
+  @override
+  String get scannerTranslation => '翻譯';
+
+  @override
+  String get scannerExplanation => '意義說明';
+
+  @override
+  String get scannerProcessing => '正在處理中...';
+
+  @override
+  String get scannerRefresh => '重新整理';
+
+  @override
+  String get scannerFailed => '掃描失敗，請重新嘗試。';
+
+  @override
+  String get scannerFreeLimitInfo => '免費版：每月 3 次掃描。升級以取得更多。';
+
+  @override
+  String get scannerLimitReached => '每月掃描次數已用完。升級以取得更多。';
+
+  @override
+  String get medicalTitle => '醫療指南';
+
+  @override
+  String get medicalTabEmergency => '急救';
+
+  @override
+  String get medicalTabPhrases => '常用語';
+
+  @override
+  String get medicalEmergencyNumber => '急救電話';
+
+  @override
+  String get medicalHowToCall => '如何撥打';
+
+  @override
+  String get medicalWhatToPrepare => '準備事項';
+
+  @override
+  String get medicalUsefulPhrases => '常用短語';
+
+  @override
+  String get medicalCategoryAll => '全部';
+
+  @override
+  String get medicalCategoryEmergency => '急救';
+
+  @override
+  String get medicalCategorySymptom => '症狀';
+
+  @override
+  String get medicalCategoryInsurance => '保險';
+
+  @override
+  String get medicalCategoryGeneral => '一般';
+
+  @override
+  String get medicalNoPhrases => '未找到短語';
+
+  @override
+  String get medicalDisclaimer => '本指南提供一般健康資訊，不能替代專業醫療建議。緊急情況請立即撥打 119。';
+
+  @override
+  String get navigateBanking => '銀行';
+
+  @override
+  String get navigateBankingDesc => '尋找對外國人友善的銀行';
+
+  @override
+  String get navigateVisa => '簽證';
+
+  @override
+  String get navigateVisaDesc => '簽證手續和文件';
+
+  @override
+  String get navigateScanner => '掃描';
+
+  @override
+  String get navigateScannerDesc => '翻譯日語文件';
+
+  @override
+  String get navigateMedical => '醫療';
+
+  @override
+  String get navigateMedicalDesc => '急救指南和常用語';
+
+  @override
+  String get navigateCommunity => '社群';
+
+  @override
+  String get navigateCommunityDesc => '與其他外國人交流';
+
+  @override
+  String get upgradeToPremium => '升級到進階版';
+
+  @override
+  String get communityTitle => '社群問答';
+
+  @override
+  String get communityEmpty => '暫無貼文';
+
+  @override
+  String get communityNewPost => '發文';
+
+  @override
+  String get communityDetailTitle => '貼文詳情';
+
+  @override
+  String get communityAnswered => '已回答';
+
+  @override
+  String get communityBestAnswer => '最佳回答';
+
+  @override
+  String get communityFilterAll => '全部';
+
+  @override
+  String get communitySortNewest => '最新';
+
+  @override
+  String get communitySortPopular => '熱門';
+
+  @override
+  String get communityCategoryVisa => '簽證';
+
+  @override
+  String get communityCategoryHousing => '住房';
+
+  @override
+  String get communityCategoryBanking => '銀行';
+
+  @override
+  String get communityCategoryWork => '工作';
+
+  @override
+  String get communityCategoryDailyLife => '日常生活';
+
+  @override
+  String get communityCategoryMedical => '醫療';
+
+  @override
+  String get communityCategoryEducation => '教育';
+
+  @override
+  String get communityCategoryTax => '稅務';
+
+  @override
+  String get communityCategoryOther => '其他';
+
+  @override
+  String communityReplies(int count) {
+    return '$count 則回覆';
+  }
+
+  @override
+  String get communityNoReplies => '暫無回覆。成為第一個回答者！';
+
+  @override
+  String get communityReplyHint => '撰寫回覆...';
+
+  @override
+  String get communityReplyPremiumOnly => '發文和回覆需要進階版訂閱。';
+
+  @override
+  String communityVoteCount(int count) {
+    return '$count 票';
+  }
+
+  @override
+  String get communityModerationPending => '審核中';
+
+  @override
+  String get communityModerationFlagged => '已標記待審核';
+
+  @override
+  String get communityModerationNotice => '你的貼文將由 AI 審核系統審核後對其他人可見。';
+
+  @override
+  String get communityChannelLabel => '語言頻道';
+
+  @override
+  String get communityCategoryLabel => '分類';
+
+  @override
+  String get communityTitleLabel => '標題';
+
+  @override
+  String get communityTitleHint => '你的問題是什麼？';
+
+  @override
+  String get communityTitleMinLength => '標題至少5個字元';
+
+  @override
+  String get communityContentLabel => '詳情';
+
+  @override
+  String get communityContentHint => '詳細描述你的問題或情況...';
+
+  @override
+  String get communityContentMinLength => '內容至少10個字元';
+
+  @override
+  String get communitySubmit => '發文';
+
+  @override
+  String communityTimeAgoDays(int days) {
+    return '$days 天前';
+  }
+
+  @override
+  String communityTimeAgoHours(int hours) {
+    return '$hours 小時前';
+  }
+
+  @override
+  String communityTimeAgoMinutes(int minutes) {
+    return '$minutes 分鐘前';
+  }
+
+  @override
+  String get subscriptionTitle => '訂閱';
+
+  @override
+  String get subscriptionPlansTitle => '選擇你的方案';
+
+  @override
+  String get subscriptionPlansSubtitle => '解鎖 Japan Life Navigator 的全部潛力';
+
+  @override
+  String get subscriptionCurrentPlan => '目前方案';
+
+  @override
+  String get subscriptionCurrentPlanBadge => '目前方案';
+
+  @override
+  String get subscriptionTierFree => '免費';
+
+  @override
+  String get subscriptionTierPremium => '進階';
+
+  @override
+  String get subscriptionTierPremiumPlus => '進階+';
+
+  @override
+  String get subscriptionFreePrice => '¥0';
+
+  @override
+  String subscriptionPricePerMonth(int price) {
+    return '¥$price/月';
+  }
+
+  @override
+  String get subscriptionCheckout => '立即訂閱';
+
+  @override
+  String get subscriptionRecommended => '推薦';
+
+  @override
+  String get subscriptionCancelling => '正在取消...';
+
+  @override
+  String subscriptionCancellingAt(String date) {
+    return '你的方案將於 $date 結束';
+  }
+
+  @override
+  String get subscriptionFeatureFreeChat => '10 次免費 AI 對話（終身）';
+
+  @override
+  String get subscriptionFeatureFreeScans => '每月 3 次文件掃描';
+
+  @override
+  String get subscriptionFeatureFreeTracker => '追蹤最多 3 個手續';
+
+  @override
+  String get subscriptionFeatureFreeCommunityRead => '閱讀社群貼文';
+
+  @override
+  String get subscriptionFeatureCommunityPost => '在社群發文和回覆';
+
+  @override
+  String get subscriptionFeatureUnlimitedChat => '無限 AI 對話';
+
+  @override
+  String get profileTitle => '帳戶';
+
+  @override
+  String get profileEditTitle => '編輯資料';
+
+  @override
+  String get profileEdit => '編輯資料';
+
+  @override
+  String get profileEmail => '電子郵件';
+
+  @override
+  String get profileNationality => '國籍';
+
+  @override
+  String get profileResidenceStatus => '在留資格';
+
+  @override
+  String get profileRegion => '地區';
+
+  @override
+  String get profileLanguage => '語言';
+
+  @override
+  String get profileArrivalDate => '抵達日期';
+
+  @override
+  String get profileDisplayName => '顯示名稱';
+
+  @override
+  String get profileNoName => '未設定';
+
+  @override
+  String get profileNameTooLong => '名稱不能超過 100 個字元';
+
+  @override
+  String get profileSaved => '資料已儲存';
+
+  @override
+  String get profileSaveButton => '儲存';
+
+  @override
+  String get profileSaveError => '儲存失敗';
+
+  @override
+  String get profileLoadError => '載入失敗';
+
+  @override
+  String get settingsTitle => '設定';
+
+  @override
+  String get settingsLanguageSection => '語言';
+
+  @override
+  String get settingsAccountSection => '帳號';
+
+  @override
+  String get settingsAboutSection => '關於';
+
+  @override
+  String get settingsLogout => '退出登录';
+
+  @override
+  String get settingsDeleteAccount => '删除账号';
+
+  @override
+  String get settingsDeleteAccountSubtitle => '此操作无法撤消';
+
+  @override
+  String get settingsVersion => '版本';
+
+  @override
+  String get settingsLogoutConfirmTitle => '退出登录';
+
+  @override
+  String get settingsLogoutConfirmMessage => '確定要登出嗎？';
+
+  @override
+  String get settingsDeleteConfirmTitle => '删除账号';
+
+  @override
+  String get settingsDeleteConfirmMessage => '確定要刪除帳號嗎？此操作無法復原。所有資料將被永久刪除。';
+
+  @override
+  String get settingsDeleteError => '删除失败';
+
+  @override
+  String get settingsCancel => '取消';
+
+  @override
+  String get settingsDelete => '删除';
+
+  @override
+  String get settingsConfirm => '確認';
+
+  @override
+  String get navTitle => '指南';
+
+  @override
+  String get navSubtitle => '探索各種主題，協助您在日本生活。';
+
+  @override
+  String navGuideCount(int count) {
+    return '$count 篇指南';
+  }
+
+  @override
+  String get navGuideCountOne => '1 篇指南';
+
+  @override
+  String get navComingSoon => '即将上线';
+
+  @override
+  String get navComingSoonSnackbar => '即将上线！我们正在准备中。';
+
+  @override
+  String get navErrorLoad => '无法加载指南。';
+
+  @override
+  String get navErrorRetry => '点击重试';
+
+  @override
+  String get domainFinance => '金融服务';
+
+  @override
+  String get domainVisa => '簽證與入境';
+
+  @override
+  String get domainMedical => '医疗与健康';
+
+  @override
+  String get domainLife => '日常生活';
+
+  @override
+  String get domainHousing => '住房与公共事业';
+
+  @override
+  String get domainTax => '税务与社保';
+
+  @override
+  String get domainEducation => '教育与育儿';
+
+  @override
+  String get domainLegal => '法律与权益';
+
+  @override
+  String get guideSearchPlaceholder => '搜尋指南...';
+
+  @override
+  String get guideComingSoonTitle => '即将上线';
+
+  @override
+  String guideComingSoonSubtitle(String domain) {
+    return '我們正在準備$domain指南，請稍後查看！';
+  }
+
+  @override
+  String guideComingSoonAskAi(String domain) {
+    return '向 AI 询问$domain相关问题';
+  }
+
+  @override
+  String guideSearchEmpty(String query) {
+    return '未找到与\"$query\"相关的指南。';
+  }
+
+  @override
+  String get guideSearchTry => '嘗試其他搜尋關鍵字。';
+
+  @override
+  String get guideErrorLoad => '无法加载该类别的指南。';
+
+  @override
+  String get guideAskAi => '與 AI 助理對話 (獲取詳細資訊)';
+
+  @override
+  String get guideDisclaimer => '以上為一般性資訊，不構成法律建議。請向相關機構確認。';
+
+  @override
+  String get guideShare => '分享';
+
+  @override
+  String get guideErrorNotFound => '此指南已無法使用。';
+
+  @override
+  String get guideErrorLoadDetail => '無法載入此指南，請重試。';
+
+  @override
+  String get guideErrorRetryBack => '返回';
+
+  @override
+  String get emergencyTitle => '紧急情况';
+
+  @override
+  String get emergencyWarning => '如果您處於緊急危險中，請立即撥打110（警察）或119（消防/救護車）。';
+
+  @override
+  String get emergencySectionContacts => '紧急联系方式';
+
+  @override
+  String get emergencySectionAmbulance => '如何叫救护车';
+
+  @override
+  String get emergencySectionMoreHelp => '需要更多帮助？';
+
+  @override
+  String get emergencyPoliceName => '警察';
+
+  @override
+  String get emergencyPoliceNumber => '110';
+
+  @override
+  String get emergencyFireName => '消防/救护车';
+
+  @override
+  String get emergencyFireNumber => '119';
+
+  @override
+  String get emergencyMedicalName => '医疗咨询';
+
+  @override
+  String get emergencyMedicalNumber => '#7119';
+
+  @override
+  String get emergencyMedicalNote => '非紧急医疗咨询';
+
+  @override
+  String get emergencyTellName => 'TELL Japan（心理健康）';
+
+  @override
+  String get emergencyTellNumber => '03-5774-0992';
+
+  @override
+  String get emergencyTellNote => '英语心理咨询';
+
+  @override
+  String get emergencyHelplineName => 'Japan Helpline';
+
+  @override
+  String get emergencyHelplineNumber => '0570-064-211';
+
+  @override
+  String get emergencyHelplineNote => '24小时，多语言';
+
+  @override
+  String get emergencyStep1 => '拨打119';
+
+  @override
+  String get emergencyStep2 => '说\"Kyuukyuu desu\"（救急です——这是紧急情况）';
+
+  @override
+  String get emergencyStep3 => '說明您的位置（地址、附近的標誌性建築）';
+
+  @override
+  String get emergencyStep4 => '描述情況（發生了什麼、症狀）';
+
+  @override
+  String get emergencyStep5 => '在您的建築入口處等待救護車';
+
+  @override
+  String get emergencyPhraseEmergencyHelp => '这是紧急情况';
+
+  @override
+  String get emergencyPhraseHelpHelp => '請幫忙';
+
+  @override
+  String get emergencyPhraseAmbulanceHelp => '請叫救護車';
+
+  @override
+  String get emergencyPhraseAddressHelp => '地址是○○';
+
+  @override
+  String get emergencyAskAi => '与 AI 聊聊紧急情况';
+
+  @override
+  String get emergencyDisclaimer => '本指南提供一般健康資訊，不能替代專業醫療建議。緊急情況請立即撥打119。';
+
+  @override
+  String get emergencyCallButton => '拨打';
+
+  @override
+  String get emergencyOffline => '無法載入更多資訊。如需協助請撥打110或119。';
+
+  @override
+  String get subTitle => '订阅';
+
+  @override
+  String get subSectionCurrent => '当前方案';
+
+  @override
+  String get subSectionChoose => '選擇方案';
+
+  @override
+  String get subSectionCharge => '需要更多对话次数？';
+
+  @override
+  String get subSectionFaq => '常见问题';
+
+  @override
+  String get subCurrentFree => '免费方案';
+
+  @override
+  String get subCurrentStandard => '标准方案';
+
+  @override
+  String get subCurrentPremium => '高级方案';
+
+  @override
+  String get subUpgradeNow => '立即升级';
+
+  @override
+  String get subPlanFree => '免费';
+
+  @override
+  String get subPlanStandard => '标准';
+
+  @override
+  String get subPlanPremium => '高级';
+
+  @override
+  String get subPriceFree => '¥0';
+
+  @override
+  String get subPriceStandard => '¥720';
+
+  @override
+  String get subPricePremium => '¥1,360';
+
+  @override
+  String get subPriceInterval => '/月';
+
+  @override
+  String get subRecommended => '推荐';
+
+  @override
+  String get subFeatureChatFree => '10 次终身 AI 向导对话';
+
+  @override
+  String get subFeatureChatStandard => '每月 300 次 AI 向导对话';
+
+  @override
+  String get subFeatureChatPremium => '无限 AI 向导对话';
+
+  @override
+  String get subFeatureTrackerFree => '最多 3 个待办事项';
+
+  @override
+  String get subFeatureTrackerPaid => '无限待办事项';
+
+  @override
+  String get subFeatureAdsYes => '包含广告';
+
+  @override
+  String get subFeatureAdsNo => '无广告';
+
+  @override
+  String get subFeatureGuideFree => '参阅部分指南';
+
+  @override
+  String get subFeatureGuidePaid => '参阅所有指南';
+
+  @override
+  String get subFeatureImageNo => 'AI 图片分析（向导对话中）';
+
+  @override
+  String get subFeatureImageYes => 'AI 图片分析（向导对话中）';
+
+  @override
+  String get subButtonCurrent => '当前方案';
+
+  @override
+  String subButtonChoose(String plan) {
+    return '選擇$plan';
+  }
+
+  @override
+  String get subCharge100 => '100次对话包';
+
+  @override
+  String get subCharge50 => '50次对话包';
+
+  @override
+  String get subCharge100Price => '¥360（¥3.6/次）';
+
+  @override
+  String get subCharge50Price => '¥180（¥3.6/次）';
+
+  @override
+  String get subChargeDescription => '額外的對話次數，永不過期。在方案用量用完後使用。';
+
+  @override
+  String get subFaqBillingQ => '如何计费？';
+
+  @override
+  String get subFaqBillingA =>
+      '訂閱透過 App Store 或 Google Play 每月計費。您可以在裝置設定中管理訂閱。';
+
+  @override
+  String get subFaqCancelQ => '可以随时取消吗？';
+
+  @override
+  String get subFaqCancelA => '当然！你可以随时取消。你的方案将在计费周期结束前保持有效。';
+
+  @override
+  String get subFaqDowngradeQ => '降级后会怎样？';
+
+  @override
+  String get subFaqDowngradeA => '降级后，你将保留当前方案权益直到计费周期结束，然后切换到新级别。';
+
+  @override
+  String get subFooter => '订阅通过 App Store / Google Play 管理';
+
+  @override
+  String subPurchaseSuccess(String plan) {
+    return '歡迎使用$plan！升級已生效。';
+  }
+
+  @override
+  String get subPurchaseError => '無法完成購買，請重試。';
+
+  @override
+  String get subErrorLoad => '无法加载订阅方案。';
+
+  @override
+  String get subErrorRetry => '点击重试';
+
+  @override
+  String get profileSectionInfo => '你的資訊';
+
+  @override
+  String get profileSectionStats => '使用統計';
+
+  @override
+  String get profileChatsToday => '今日对话';
+
+  @override
+  String get profileMemberSince => '加入時間';
+
+  @override
+  String get profileManageSubscription => '管理订阅';
+
+  @override
+  String get profileNotSet => '未設定';
+
+  @override
+  String get editTitle => '编辑资料';
+
+  @override
+  String get editSave => '保存';
+
+  @override
+  String get editNameLabel => '顯示名稱';
+
+  @override
+  String get editNameHint => '輸入你的名字';
+
+  @override
+  String get editNationalityLabel => '国籍';
+
+  @override
+  String get editNationalityHint => '選擇你的國籍';
+
+  @override
+  String get editStatusLabel => '在留资格';
+
+  @override
+  String get editStatusHint => '選擇在留資格';
+
+  @override
+  String get editRegionLabel => '地区';
+
+  @override
+  String get editRegionHint => '選擇地區';
+
+  @override
+  String get editLanguageLabel => '偏好語言';
+
+  @override
+  String get editChangePhoto => '更换照片';
+
+  @override
+  String get editSuccess => '资料更新成功。';
+
+  @override
+  String get editError => '無法更新個人資料，請再試一次。';
+
+  @override
+  String get editUnsavedTitle => '未保存的更改';
+
+  @override
+  String get editUnsavedMessage => '你有未保存的更改，要放弃吗？';
+
+  @override
+  String get editUnsavedDiscard => '放弃';
+
+  @override
+  String get editUnsavedKeep => '继续编辑';
+
+  @override
+  String get settingsSectionGeneral => '一般';
+
+  @override
+  String get settingsSectionAccount => '账号';
+
+  @override
+  String get settingsSectionDanger => '危险操作';
+
+  @override
+  String get settingsSectionAbout => '关于';
+
+  @override
+  String get settingsLanguage => '语言';
+
+  @override
+  String get settingsNotifications => '通知';
+
+  @override
+  String get settingsSubscription => '订阅';
+
+  @override
+  String get settingsTerms => '服务条款';
+
+  @override
+  String get settingsPrivacy => '隐私政策';
+
+  @override
+  String get settingsContact => '联系我们';
+
+  @override
+  String get settingsFooter => '用 ❤️ 為每一位在日本生活的人打造';
+
+  @override
+  String get settingsLogoutTitle => '退出登录';
+
+  @override
+  String get settingsLogoutMessage => '確定要登出嗎？';
+
+  @override
+  String get settingsLogoutConfirm => '退出';
+
+  @override
+  String get settingsLogoutCancel => '取消';
+
+  @override
+  String get settingsDeleteTitle => '删除账号';
+
+  @override
+  String get settingsDeleteMessage => '此操作無法復原。你的所有資料將被永久刪除。確定嗎？';
+
+  @override
+  String get settingsDeleteConfirmAction => '删除我的账号';
+
+  @override
+  String get settingsDeleteCancel => '取消';
+
+  @override
+  String get settingsDeleteSuccess => '你的账号已删除。';
+
+  @override
+  String get settingsLanguageTitle => '選擇語言';
+
+  @override
+  String get settingsErrorLogout => '無法退出登入，請重試。';
+
+  @override
+  String get settingsErrorDelete => '無法刪除帳號，請重試。';
+
+  @override
+  String get chatGuestTitle => 'AI 帮你解答日本生活的一切问题';
+
+  @override
+  String get chatGuestFeature1 => '如何開設銀行帳戶';
+
+  @override
+  String get chatGuestFeature2 => '签证续签手续';
+
+  @override
+  String get chatGuestFeature3 => '如何去医院看病';
+
+  @override
+  String get chatGuestFeature4 => '其他任何问题';
+
+  @override
+  String get chatGuestFreeOffer => '免註冊，免費體驗 5 次對話';
+
+  @override
+  String get chatGuestSignUp => '免费开始';
+
+  @override
+  String get chatGuestLogin => '已有账号？登录';
+
+  @override
+  String get guestRegisterCta => '免費註冊即可使用 AI 對話';
+
+  @override
+  String get guideReadMore => '註冊查看全文';
+
+  @override
+  String get guideAskAI => '向 AI 详细咨询';
+
+  @override
+  String get guideGuestCtaButton => '免费创建账号';
+
+  @override
+  String get homeGuestCtaText => '免費註冊，解鎖 AI 對話和個人化指南';
+
+  @override
+  String get homeGuestCtaButton => '開始使用';
+
+  @override
+  String get chatUpgradeBanner => '升级到高级版，享受无限对话';
+
+  @override
+  String get chatUpgradeButton => '查看方案';
+
+  @override
+  String get guidePremiumCta => '此内容需要高级订阅';
+
+  @override
+  String get guidePremiumCtaButton => '查看方案';
+
+  @override
+  String get guideTierLimitError => '升级以查看完整指南内容';
+
+  @override
+  String get trackerSave => '保存';
+
+  @override
+  String get trackerSaved => '已保存';
+
+  @override
+  String get trackerItemSaved => '已添加到待办列表';
+
+  @override
+  String get homeQaTrackerTitle => '待办事项';
+
+  @override
+  String get homeQaTrackerSubtitle => '管理待办事项';
+
+  @override
+  String get chatAttachPhoto => '拍照';
+
+  @override
+  String get chatAttachGallery => '從相簿選擇';
+
+  @override
+  String get chatAttachCancel => '取消';
+
+  @override
+  String get chatImageTooLarge => '图片太大（最大 5MB）';
+
+  @override
+  String get profilePersonalizationHint => 'AI向导会根据完善后的个人资料提供为你更精准的建议';
+
+  @override
+  String get profileVisaExpiry => '在留期限';
+
+  @override
+  String get profileResidenceRegion => '居住地域';
+
+  @override
+  String get profilePreferredLanguage => '偏好語言';
+
+  @override
+  String get profileSelectNationality => '選擇國籍';
+
+  @override
+  String get profileSelectResidenceStatus => '選擇居留資格';
+
+  @override
+  String get profileSelectPrefecture => '選擇都道府縣';
+
+  @override
+  String get profileSelectCity => '選擇市區町村';
+
+  @override
+  String get profileSelectLanguage => '選擇語言';
+
+  @override
+  String get profileCommonStatuses => '常用';
+
+  @override
+  String get profileOtherStatuses => '其他';
+
+  @override
+  String get profileSearchNationality => '搜尋國籍';
+
+  @override
+  String get visaRenewalPrepTitle => '簽證續簽申請準備';
+
+  @override
+  String get visaRenewalDeadlineTitle => '签证续签截止日期';
+
+  @override
+  String get profileSave => '保存';
+
+  @override
+  String get profileUsageStats => '使用統計';
+
+  @override
+  String get profileLogout => '退出登录';
+
+  @override
+  String get profileDeleteAccount => '删除账号';
+
+  @override
+  String get subUsageTitle => '使用情況';
+
+  @override
+  String subUsageCount(int used, int limit) {
+    return '已使用 $used / $limit 次';
+  }
+
+  @override
+  String get subUsageUnlimited => '无限次对话';
+
+  @override
+  String get tabAccount => '帳戶';
+
+  @override
+  String get accountSectionProfile => '个人资料';
+
+  @override
+  String get accountSectionManagement => '帳戶管理';
+
+  @override
+  String get accountSectionDanger => '危险操作';
+
+  @override
+  String get notificationSettingsTitle => '通知設置';
+
+  @override
+  String get notificationTodoReminder => '待办提醒';
+
+  @override
+  String get notificationReminderTime => '提醒时间';
+
+  @override
+  String get notificationEnabled => '已开启';
+
+  @override
+  String get notificationDisabled => '已关闭';
+
+  @override
+  String get guideLocked => '註冊即可閱讀完整指南';
+
+  @override
+  String get guideUpgradePrompt => '免費註冊，解鎖全部 45 篇指南';
+
+  @override
+  String get guideUpgradeButton => '免费创建账号';
+
+  @override
+  String chatGuestUsageHint(int remaining) {
+    return '還有 $remaining 次免費對話可探索';
+  }
+
+  @override
+  String get chatGuestExhausted => '註冊繼續聊天 — 再獲得 10 次免費對話';
+
+  @override
+  String get chatFreeExhausted => '升级到 Standard，每月 300 次对话';
+
+  @override
+  String usageLifetimeRemaining(int remaining, int limit) {
+    return '剩余 $remaining/$limit 次对话';
+  }
+
+  @override
+  String get chatGuestWelcome => '关于日本生活的任何问题都可以问';
+
+  @override
+  String get registerNationalityLabel => '国籍';
+
+  @override
+  String get registerNationalityHint => '選擇你的國籍';
+
+  @override
+  String get registerResidenceStatusLabel => '在留资格';
+
+  @override
+  String get registerResidenceStatusHint => '選擇你的在留資格';
+
+  @override
+  String get registerResidenceRegionLabel => '居住地域';
+
+  @override
+  String get registerResidenceRegionHint => '選擇你的居住地區';
+
+  @override
+  String get registerSearchHint => '搜尋...';
+
+  @override
+  String get chatDepthLevelDeep => '深度回答';
+
+  @override
+  String chatUsageDeepRemaining(int remaining, int limit) {
+    return '深度: $remaining/$limit';
+  }
+
+  @override
+  String chatCreditsRemaining(int remaining) {
+    return '剩余 $remaining 次对话';
+  }
+
+  @override
+  String get trialSetupTitle => '請告知一些關於你的資訊';
+
+  @override
+  String get trialSetupNationality => '国籍';
+
+  @override
+  String get trialSetupResidenceStatus => '在留资格';
+
+  @override
+  String get trialSetupRegion => '居住地区';
+
+  @override
+  String get trialSetupSubmit => '開始使用';
+
+  @override
+  String get navAiSearchTitle => '用AI向導智能搜尋';
+
+  @override
+  String get navAiSearchSubtitle => '根據您的情況提供個性化資訊';
+
+  @override
+  String get navAiSearchButton => '立即體驗';
+
+  @override
+  String guideCount(int count) {
+    return '$count篇指南';
+  }
+
+  @override
+  String get guideFreeLabel => '免费';
+
+  @override
+  String guideReadingTime(int min) {
+    return '约$min分钟';
+  }
+
+  @override
+  String get guideRelatedTitle => '同领域其他指南';
+
+  @override
+  String get trackerEditTitle => '添加到待办';
+
+  @override
+  String get trackerEditFieldTitle => '标题';
+
+  @override
+  String get trackerEditFieldMemo => '備註（可選）';
+
+  @override
+  String get trackerEditFieldDate => '截止日期（可選）';
+
+  @override
+  String get trackerEditSave => '保存到待办';
+
+  @override
+  String get trackerEditCancel => '取消';
+
+  @override
+  String get testFlightHomeBannerText => '無限制查看所有日本生活指南精華貼，設置資訊解鎖5次個人智能AI向導體驗';
+
+  @override
+  String get testFlightHomeBannerCta => '設置資訊開始體驗';
+
+  @override
+  String get testFlightChatSetupPrompt => '設置您的資訊，即可免費體驗AI向導';
+
+  @override
+  String get testFlightChatSetupButton => '設置資訊開始體驗';
+
+  @override
+  String get testFlightViewGuides => '查看所有指南';
+
+  @override
+  String get trialSetupSubtitle => 'AI向導將根據資訊提供符合你情況的客製化回答';
+
+  @override
+  String get signInFailed => '登入失敗，請檢查網路連線。';
+}

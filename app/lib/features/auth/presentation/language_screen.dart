@@ -22,7 +22,9 @@ class _LanguageOption {
 
 const _languages = [
   _LanguageOption(code: 'en', nativeName: 'English', flag: '🇺🇸'),
-  _LanguageOption(code: 'zh', nativeName: '中文', flag: '🇨🇳'),
+  _LanguageOption(code: 'zh', nativeName: '简体中文', flag: '🇨🇳'),
+  _LanguageOption(code: 'zh_Hant', nativeName: '繁體中文', flag: '🇹🇼'),
+  _LanguageOption(code: 'ja', nativeName: '日本語', flag: '🇯🇵'),
   _LanguageOption(code: 'vi', nativeName: 'Tiếng Việt', flag: '🇻🇳'),
   _LanguageOption(code: 'ko', nativeName: '한국어', flag: '🇰🇷'),
   _LanguageOption(code: 'pt', nativeName: 'Português', flag: '🇧🇷'),

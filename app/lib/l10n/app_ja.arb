@@ -1,0 +1,810 @@
+{
+  "@@locale": "ja",
+  "appTitle": "日本生活ナビゲーター",
+  "langTitle": "言語を選択",
+  "langContinue": "続行",
+  "langEn": "英語",
+  "langZh": "中国語",
+  "langVi": "ベトナム語",
+  "langKo": "韓国語",
+  "langPt": "ポルトガル語",
+  "loginWelcome": "アカウントにログイン",
+  "loginSubtitle": "ログインして続行",
+  "loginEmailLabel": "メールアドレス",
+  "loginEmailHint": "your@email.com",
+  "loginPasswordLabel": "パスワード",
+  "loginPasswordHint": "パスワードを入力",
+  "loginForgotPassword": "パスワードをお忘れですか？",
+  "loginButton": "ログイン",
+  "loginNoAccount": "アカウントをお持ちでないですか？",
+  "loginSignUp": "新規登録",
+  "loginErrorInvalidEmail": "有効なメールアドレスを入力してください。",
+  "loginErrorInvalidCredentials": "メールアドレスまたはパスワードが正しくありません。再度お試しください。",
+  "loginErrorNetwork": "接続できません。インターネット接続を確認してください。",
+  "loginErrorTooManyAttempts": "試行回数が多すぎます。後でもう一度お試しください。",
+  "registerTitle": "アカウントを作成",
+  "registerSubtitle": "日本での生活を始めましょう",
+  "registerEmailLabel": "メールアドレス",
+  "registerEmailHint": "your@email.com",
+  "registerPasswordLabel": "パスワード",
+  "registerPasswordHint": "パスワードを作成",
+  "registerPasswordHelper": "8文字以上",
+  "registerConfirmLabel": "パスワードを確認",
+  "registerConfirmHint": "パスワードを再入力",
+  "registerTermsAgree": "に同意する",
+  "registerTermsLink": "利用規約",
+  "registerPrivacyAnd": "と",
+  "registerPrivacyLink": "プライバシーポリシー",
+  "registerButton": "アカウントを作成",
+  "registerHasAccount": "すでにアカウントをお持ちですか？",
+  "registerSignIn": "ログイン",
+  "registerErrorEmailInvalid": "有効なメールアドレスを入力してください。",
+  "registerErrorEmailInUse": "このメールアドレスはすでに登録されています。ログインをお試しください。",
+  "registerErrorPasswordShort": "パスワードは8文字以上である必要があります。",
+  "registerErrorPasswordMismatch": "パスワードが一致しません。",
+  "registerErrorTermsRequired": "利用規約に同意してください。",
+  "resetTitle": "パスワードをリセット",
+  "resetSubtitle": "メールアドレスを入力してください。リセットリンクをお送りします。",
+  "resetEmailLabel": "メールアドレス",
+  "resetEmailHint": "your@email.com",
+  "resetButton": "リセットリンクを送信",
+  "resetBackToLogin": "ログイン画面に戻る",
+  "resetSuccessTitle": "メールを確認してください",
+  "resetSuccessSubtitle": "{email}にリセットリンクを送信しました",
+  "resetResend": "届きませんか？再送信",
+  "resetErrorEmailInvalid": "有効なメールアドレスを入力してください。",
+  "onboardingSkip": "スキップ",
+  "onboardingNext": "次へ",
+  "onboardingGetStarted": "始める",
+  "onboardingStepOf": "{total}ステップ中 {current}",
+  "onboardingS1Title": "国籍は何ですか？",
+  "onboardingS1Subtitle": "関連情報を提供するために使用します。",
+  "onboardingS2Title": "在留資格は何ですか？",
+  "onboardingS2Subtitle": "ビザ関連情報をパーソナライズします。",
+  "onboardingS3Title": "日本のどこにお住まいですか？",
+  "onboardingS3Subtitle": "地域別のガイドを提供します。",
+  "onboardingS4Title": "日本への入国日を教えてください。",
+  "onboardingS4Subtitle": "時期に応じた手続きをお知らせします。",
+  "onboardingS4Placeholder": "日付を選択",
+  "onboardingS4NotYet": "まだ入国していません",
+  "onboardingChangeDate": "日付を変更",
+  "onboardingErrorSave": "情報の保存に失敗しました。もう一度お試しください。",
+  "statusEngineer": "技術・人文知識・国際業務",
+  "statusStudent": "留学",
+  "statusDependent": "家族滞在",
+  "statusPermanent": "永住者",
+  "statusSpouse": "日本人の配偶者等",
+  "statusWorkingHoliday": "特定活動（ワーキング・ホリデー）",
+  "statusSpecifiedSkilled": "特定技能",
+  "statusOther": "その他",
+  "tabHome": "ホーム",
+  "tabChat": "AIガイド",
+  "tabGuide": "ガイド",
+  "tabSOS": "緊急連絡",
+  "tabProfile": "プロフィール",
+  "homeGreetingMorning": "おはようございます、{name}さん 👋",
+  "homeGreetingAfternoon": "こんにちは、{name}さん 👋",
+  "homeGreetingEvening": "こんばんは、{name}さん 👋",
+  "homeGreetingDefault": "こんにちは、{name}さん 👋",
+  "homeGreetingNoName": "ようこそ！👋",
+  "homeUsageFree": "無料 • 残り{remaining}/{limit}回",
+  "homeSectionQuickActions": "クイックアクション",
+  "homeSectionExplore": "探す",
+  "homeTrackerSummary": "マイタスク",
+  "homePopularGuides": "人気のガイド",
+  "homeTrackerNoItems": "まだタスクはありません。タップして追加しましょう。",
+  "homeQaChatTitle": "AIガイドと話す",
+  "homeQaChatSubtitle": "日本での生活について何でも質問",
+  "homeQaBankingTitle": "銀行",
+  "homeQaBankingSubtitle": "口座開設、送金など",
+  "homeQaVisaTitle": "ビザ",
+  "homeQaVisaSubtitle": "在留資格ガイド、手続き",
+  "homeQaMedicalTitle": "医療",
+  "homeQaMedicalSubtitle": "医療ガイド、緊急情報",
+  "homeExploreGuides": "全てのガイドを見る",
+  "homeExploreEmergency": "緊急連絡先",
+  "homeUpgradeTitle": "AIアシスタントをもっと活用",
+  "homeUpgradeCta": "今すぐアップグレード",
+  "chatTitle": "AIガイド",
+  "chatInputPlaceholder": "メッセージを入力...",
+  "chatEmptyTitle": "何でも聞いてください！",
+  "chatEmptySubtitle": "銀行、ビザ、医療など、日本での生活に関する質問にお答えします。",
+  "chatSuggestBank": "銀行口座の開設方法は？",
+  "chatSuggestVisa": "ビザの更新方法は？",
+  "chatSuggestMedical": "病院に行くには？",
+  "chatSuggestGeneral": "入国後に必要なことは？",
+  "chatSourcesHeader": "情報源",
+  "chatDisclaimer": "これは一般的な情報であり、法的助言ではありません。必ず関係機関にご確認ください。",
+  "chatLimitRemaining": "無料チャット残り{remaining}/{limit}回",
+  "chatLimitUpgrade": "アップグレード",
+  "chatLimitExhausted": "無料チャットを使い切りました。",
+  "chatErrorSend": "メッセージを送信できませんでした。もう一度お試しください。",
+  "chatErrorRetry": "再試行",
+  "chatDateToday": "今日",
+  "chatDateYesterday": "昨日",
+  "chatNewSession": "新規チャット",
+  "chatUntitledSession": "新規会話",
+  "chatDeleteTitle": "チャットを削除",
+  "chatDeleteConfirm": "このチャットを削除しますか？",
+  "chatDeleteCancel": "キャンセル",
+  "chatDeleteAction": "削除",
+  "chatRetry": "再試行",
+  "countryCN": "中国",
+  "countryVN": "ベトナム",
+  "countryKR": "韓国",
+  "countryPH": "フィリピン",
+  "countryBR": "ブラジル",
+  "countryNP": "ネパール",
+  "countryID": "インドネシア",
+  "countryUS": "アメリカ",
+  "countryTH": "タイ",
+  "countryIN": "インド",
+  "countryMM": "ミャンマー",
+  "countryTW": "台湾",
+  "countryPE": "ペルー",
+  "countryGB": "イギリス",
+  "countryPK": "パキスタン",
+  "countryBD": "バングラデシュ",
+  "countryLK": "スリランカ",
+  "countryFR": "フランス",
+  "countryDE": "ドイツ",
+  "countryOther": "その他",
+  "regionTokyo": "東京",
+  "regionOsaka": "大阪",
+  "regionNagoya": "名古屋",
+  "regionYokohama": "横浜",
+  "regionFukuoka": "福岡",
+  "regionSapporo": "札幌",
+  "regionKobe": "神戸",
+  "regionKyoto": "京都",
+  "regionSendai": "仙台",
+  "regionHiroshima": "広島",
+  "regionOther": "その他",
+  "genericError": "エラーが発生しました。もう一度お試しください。",
+  "networkError": "ネットワークエラー。接続を確認してください。",
+  "logout": "ログアウト",
+  "bankingTitle": "銀行ナビ",
+  "bankingFriendlyScore": "外国人向けスコア",
+  "bankingEmpty": "銀行が見つかりません",
+  "bankingRecommendButton": "おすすめ",
+  "bankingRecommendTitle": "おすすめ銀行",
+  "bankingSelectPriorities": "優先事項を選択",
+  "bankingPriorityMultilingual": "多言語サポート",
+  "bankingPriorityLowFee": "手数料が安い",
+  "bankingPriorityAtm": "ATM網",
+  "bankingPriorityOnline": "オンラインバンキング",
+  "bankingGetRecommendations": "おすすめを見る",
+  "bankingRecommendHint": "優先事項を選択し、「おすすめを見る」をタップしてください",
+  "bankingNoRecommendations": "おすすめが見つかりません",
+  "bankingViewGuide": "ガイドを見る",
+  "bankingGuideTitle": "口座開設ガイド",
+  "bankingRequiredDocs": "必要書類",
+  "bankingConversationTemplates": "銀行での便利なフレーズ",
+  "bankingTroubleshooting": "困った時のヒント",
+  "bankingSource": "出典",
+  "visaTitle": "在留資格ナビ",
+  "visaEmpty": "手続きが見つかりませんでした",
+  "visaFilterAll": "全て",
+  "visaDetailTitle": "手続きの詳細",
+  "visaSteps": "手順",
+  "visaRequiredDocuments": "必要書類",
+  "visaFees": "費用",
+  "visaProcessingTime": "審査期間",
+  "visaDisclaimer": "重要：これは在留資格手続きに関する一般的な情報であり、法的助言ではありません。",
+  "trackerTitle": "ToDo",
+  "trackerAddItem": "新しいToDo",
+  "trackerNoItems": "まだToDoはありません",
+  "trackerNoItemsHint": "＋をタップして最初のToDoを追加しましょう",
+  "trackerAddTitle": "タイトル",
+  "trackerAddMemo": "メモ (任意)",
+  "trackerAddDueDate": "期限 (任意)",
+  "trackerDueToday": "本日期限",
+  "trackerOverdue": "期限切れ",
+  "trackerViewAll": "全て表示 →",
+  "trackerDeleteTitle": "ToDoを削除",
+  "trackerDeleteConfirm": "このToDoを削除しますか？",
+  "trackerLimitReached": "フリープランではToDoを3つまで作成できます。無制限にするにはアップグレードしてください。",
+  "trackerAlreadyTracking": "この項目はすでにToDoリストにあります",
+  "scannerTitle": "書類スキャナー",
+  "scannerDescription": "日本語の書類をスキャンして、即座に翻訳と説明を入手できます。",
+  "scannerFromCamera": "カメラでスキャン",
+  "scannerFromGallery": "ギャラリーから選択",
+  "scannerHistory": "履歴",
+  "scannerHistoryTitle": "スキャン履歴",
+  "scannerHistoryEmpty": "まだスキャン履歴はありません",
+  "scannerUnknownType": "不明な書類",
+  "scannerResultTitle": "スキャン結果",
+  "scannerOriginalText": "原文 (日本語)",
+  "scannerTranslation": "翻訳",
+  "scannerExplanation": "意味",
+  "scannerProcessing": "書類を処理中...",
+  "scannerRefresh": "更新",
+  "scannerFailed": "スキャンに失敗しました。もう一度お試しください。",
+  "scannerFreeLimitInfo": "フリープラン：月3回までスキャン可能。追加スキャンにはアップグレードが必要です。",
+  "scannerLimitReached": "月間スキャン上限に達しました。追加スキャンにはプレミアムにアップグレードしてください。",
+  "medicalTitle": "医療ガイド",
+  "medicalTabEmergency": "緊急時",
+  "medicalTabPhrases": "役立つフレーズ",
+  "medicalEmergencyNumber": "緊急連絡先",
+  "medicalHowToCall": "かけ方",
+  "medicalWhatToPrepare": "準備するもの",
+  "medicalUsefulPhrases": "役立つフレーズ",
+  "medicalCategoryAll": "全て",
+  "medicalCategoryEmergency": "緊急時",
+  "medicalCategorySymptom": "症状",
+  "medicalCategoryInsurance": "保険",
+  "medicalCategoryGeneral": "一般",
+  "medicalNoPhrases": "フレーズが見つかりませんでした",
+  "medicalDisclaimer": "このガイドは一般的な健康情報を提供するものであり、専門的な医療アドバイスに代わるものではありません。緊急時には直ちに119番に電話してください。",
+  "navigateBanking": "銀行",
+  "navigateBankingDesc": "外国人向けの銀行を探す",
+  "navigateVisa": "在留資格",
+  "navigateVisaDesc": "在留資格の手続きと書類",
+  "navigateScanner": "スキャナー",
+  "navigateScannerDesc": "日本語文書を翻訳",
+  "navigateMedical": "医療",
+  "navigateMedicalDesc": "緊急ガイド＆フレーズ",
+  "navigateCommunity": "コミュニティ",
+  "navigateCommunityDesc": "他の外国人とのQ&A",
+  "upgradeToPremium": "プレミアムにアップグレード",
+  "communityTitle": "コミュニティQ&A",
+  "communityEmpty": "まだ投稿はありません",
+  "communityNewPost": "新規投稿",
+  "communityDetailTitle": "投稿詳細",
+  "communityAnswered": "回答済み",
+  "communityBestAnswer": "ベストアンサー",
+  "communityFilterAll": "全て",
+  "communitySortNewest": "新着順",
+  "communitySortPopular": "人気順",
+  "communityCategoryVisa": "ビザ",
+  "communityCategoryHousing": "住居",
+  "communityCategoryBanking": "銀行",
+  "communityCategoryWork": "仕事",
+  "communityCategoryDailyLife": "日常生活",
+  "communityCategoryMedical": "医療",
+  "communityCategoryEducation": "教育",
+  "communityCategoryTax": "税金",
+  "communityCategoryOther": "その他",
+  "communityReplies": "{count}件の返信",
+  "communityNoReplies": "まだ返信がありません。最初に回答しましょう！",
+  "communityReplyHint": "返信を書き込む...",
+  "communityReplyPremiumOnly": "投稿と返信にはプレミアム登録が必要です。",
+  "communityVoteCount": "{count}票",
+  "communityModerationPending": "審査中",
+  "communityModerationFlagged": "審査のために報告されました",
+  "communityModerationNotice": "投稿はAIモデレーションシステムによって審査された後、他のユーザーに表示されます。",
+  "communityChannelLabel": "言語チャンネル",
+  "communityCategoryLabel": "カテゴリー",
+  "communityTitleLabel": "タイトル",
+  "communityTitleHint": "質問内容は何ですか？",
+  "communityTitleMinLength": "タイトルは5文字以上入力してください",
+  "communityContentLabel": "詳細",
+  "communityContentHint": "質問や状況を詳しく記述してください...",
+  "communityContentMinLength": "内容は10文字以上入力してください",
+  "communitySubmit": "投稿する",
+  "communityTimeAgoDays": "{days}日前",
+  "communityTimeAgoHours": "{hours}時間前",
+  "communityTimeAgoMinutes": "{minutes}分前",
+  "subscriptionTitle": "サブスクリプション",
+  "subscriptionPlansTitle": "プランを選択",
+  "subscriptionPlansSubtitle": "日本生活ナビゲーターの全機能を解放しましょう",
+  "subscriptionCurrentPlan": "現在のプラン",
+  "subscriptionCurrentPlanBadge": "現在のプラン",
+  "subscriptionTierFree": "無料",
+  "subscriptionTierPremium": "プレミアム",
+  "subscriptionTierPremiumPlus": "プレミアムプラス",
+  "subscriptionFreePrice": "¥0",
+  "subscriptionPricePerMonth": "¥{price}/月",
+  "subscriptionCheckout": "今すぐ登録",
+  "subscriptionRecommended": "おすすめ",
+  "subscriptionCancelling": "解約手続き中...",
+  "subscriptionCancellingAt": "プランは{date}に終了します",
+  "subscriptionFeatureFreeChat": "AIチャット10回無料（永続）",
+  "subscriptionFeatureFreeScans": "月3回までの書類スキャン",
+  "subscriptionFeatureFreeTracker": "手続きを3件まで追跡",
+  "subscriptionFeatureFreeCommunityRead": "コミュニティ投稿を閲覧",
+  "subscriptionFeatureCommunityPost": "コミュニティで投稿・返信",
+  "subscriptionFeatureUnlimitedChat": "AIチャット無制限",
+  "profileTitle": "アカウント",
+  "profileEditTitle": "プロフィール編集",
+  "profileEdit": "プロフィール編集",
+  "profileEmail": "メールアドレス",
+  "profileNationality": "国籍",
+  "profileResidenceStatus": "在留資格",
+  "profileRegion": "地域",
+  "profileLanguage": "言語",
+  "profileArrivalDate": "来日日",
+  "profileDisplayName": "表示名",
+  "profileNoName": "名無し",
+  "profileNameTooLong": "名前は100文字以内で入力してください",
+  "profileSaved": "プロフィールを保存しました",
+  "profileSaveButton": "保存する",
+  "profileSaveError": "プロフィールの保存に失敗しました",
+  "profileLoadError": "プロフィールの読み込みに失敗しました",
+  "settingsTitle": "設定",
+  "settingsLanguageSection": "言語",
+  "settingsAccountSection": "アカウント",
+  "settingsAboutSection": "アプリについて",
+  "settingsLogout": "ログアウト",
+  "settingsDeleteAccount": "アカウント削除",
+  "settingsDeleteAccountSubtitle": "この操作は取り消せません",
+  "settingsVersion": "バージョン",
+  "settingsLogoutConfirmTitle": "ログアウト",
+  "settingsLogoutConfirmMessage": "ログアウトしますか？",
+  "settingsDeleteConfirmTitle": "アカウント削除",
+  "settingsDeleteConfirmMessage": "アカウントを削除しますか？この操作は取り消せません。すべてのデータが完全に削除されます。",
+  "settingsDeleteError": "アカウントの削除に失敗しました",
+  "settingsCancel": "キャンセル",
+  "settingsDelete": "削除する",
+  "settingsConfirm": "確定",
+  "navTitle": "ガイド",
+  "navSubtitle": "日本での生活をナビゲートするためのトピックを探しましょう。",
+  "navGuideCount": "{count}件のガイド",
+  "navGuideCountOne": "1件のガイド",
+  "navComingSoon": "近日公開",
+  "navComingSoonSnackbar": "近日公開予定です。お楽しみに！",
+  "navErrorLoad": "ガイドを読み込めませんでした。",
+  "navErrorRetry": "タップして再試行",
+  "domainFinance": "金融・銀行",
+  "domainVisa": "ビザ・入国管理",
+  "domainMedical": "医療・健康",
+  "domainLife": "日常生活",
+  "domainHousing": "住居・公共料金",
+  "domainTax": "税金・社会保険",
+  "domainEducation": "教育・育児",
+  "domainLegal": "法律・権利",
+  "guideSearchPlaceholder": "ガイドを検索...",
+  "guideComingSoonTitle": "近日公開",
+  "guideComingSoonSubtitle": "{domain}のガイドを準備中です。もうしばらくお待ちください！",
+  "guideComingSoonAskAi": "AIに{domain}について質問する",
+  "guideSearchEmpty": "「{query}」のガイドは見つかりませんでした。",
+  "guideSearchTry": "別の検索ワードをお試しください。",
+  "guideErrorLoad": "このカテゴリのガイドを読み込めませんでした。",
+  "guideAskAi": "AIガイドとチャット（詳細を見る）",
+  "guideDisclaimer": "一般的な情報であり、法的助言ではありません。関連機関にご確認ください。",
+  "guideShare": "共有",
+  "guideErrorNotFound": "このガイドは利用できません。",
+  "guideErrorLoadDetail": "このガイドを読み込めません。もう一度お試しください。",
+  "guideErrorRetryBack": "戻る",
+  "emergencyTitle": "緊急時",
+  "emergencyWarning": "緊急の危険がある場合は、すぐに110番（警察）または119番（消防・救急）に電話してください。",
+  "emergencySectionContacts": "緊急連絡先",
+  "emergencySectionAmbulance": "救急車の呼び方",
+  "emergencySectionMoreHelp": "さらにヘルプが必要ですか？",
+  "emergencyPoliceName": "警察",
+  "emergencyPoliceNumber": "110",
+  "emergencyFireName": "消防・救急",
+  "emergencyFireNumber": "119",
+  "emergencyMedicalName": "医療相談",
+  "emergencyMedicalNumber": "#7119",
+  "emergencyMedicalNote": "緊急性のない医療相談",
+  "emergencyTellName": "TELL Japan（心の健康）",
+  "emergencyTellNumber": "03-5774-0992",
+  "emergencyTellNote": "英語でのカウンセリング",
+  "emergencyHelplineName": "ジャパン・ヘルプライン",
+  "emergencyHelplineNumber": "0570-064-211",
+  "emergencyHelplineNote": "24時間対応、多言語",
+  "emergencyStep1": "119番に電話する",
+  "emergencyStep2": "「救急です」と言う",
+  "emergencyStep3": "場所を説明する（住所、目印など）",
+  "emergencyStep4": "状況を説明する（何が起こったか、症状など）",
+  "emergencyStep5": "建物の入り口で救急車を待つ",
+  "emergencyPhraseEmergencyHelp": "救急です",
+  "emergencyPhraseHelpHelp": "助けてください",
+  "emergencyPhraseAmbulanceHelp": "救急車をお願いします",
+  "emergencyPhraseAddressHelp": "住所は○○です",
+  "emergencyAskAi": "AIに緊急時についてチャットで相談する",
+  "emergencyDisclaimer": "このガイドは一般的な健康情報を提供するものであり、専門的な医療アドバイスに代わるものではありません。緊急時には、すぐに119番に電話してください。",
+  "emergencyCallButton": "電話をかける",
+  "emergencyOffline": "追加情報を読み込めません。助けが必要な場合は、110番または119番に電話してください。",
+  "subTitle": "サブスクリプション",
+  "subSectionCurrent": "現在のプラン",
+  "subSectionChoose": "プランを選択",
+  "subSectionCharge": "もっとチャットが必要ですか？",
+  "subSectionFaq": "FAQ",
+  "subCurrentFree": "無料プラン",
+  "subCurrentStandard": "スタンダードプラン",
+  "subCurrentPremium": "プレミアムプラン",
+  "subUpgradeNow": "今すぐアップグレード",
+  "subPlanFree": "無料",
+  "subPlanStandard": "スタンダード",
+  "subPlanPremium": "プレミアム",
+  "subPriceFree": "¥0",
+  "subPriceStandard": "¥720",
+  "subPricePremium": "¥1,360",
+  "subPriceInterval": "/月",
+  "subRecommended": "おすすめ",
+  "subFeatureChatFree": "AIガイドチャット 10回（生涯）",
+  "subFeatureChatStandard": "AIガイドチャット 300回/月",
+  "subFeatureChatPremium": "AIガイドチャット 無制限",
+  "subFeatureTrackerFree": "トラッカーアイテム 3件まで",
+  "subFeatureTrackerPaid": "トラッカーアイテム 無制限",
+  "subFeatureAdsYes": "広告あり",
+  "subFeatureAdsNo": "広告なし",
+  "subFeatureGuideFree": "一部ガイドを閲覧",
+  "subFeatureGuidePaid": "全ガイドを閲覧",
+  "subFeatureImageNo": "AI画像分析 (チャット内)",
+  "subFeatureImageYes": "AI画像分析 (チャット内)",
+  "subButtonCurrent": "現在のプラン",
+  "subButtonChoose": "{plan}を選択",
+  "subCharge100": "100チャットパック",
+  "subCharge50": "50チャットパック",
+  "subCharge100Price": "¥360 (1チャットあたり¥3.6)",
+  "subCharge50Price": "¥180 (1チャットあたり¥3.6)",
+  "subChargeDescription": "有効期限なしの追加チャット。プランの上限を超えた後に使用されます。",
+  "subFaqBillingQ": "請求について",
+  "subFaqBillingA": "サブスクリプションはApp StoreまたはGoogle Playを通じて毎月請求されます。購読の管理はデバイスの設定から行えます。",
+  "subFaqCancelQ": "いつでも解約できますか？",
+  "subFaqCancelA": "はい、いつでも解約可能です。プランは請求期間の終了まで有効です。",
+  "subFaqDowngradeQ": "ダウングレードした場合どうなりますか？",
+  "subFaqDowngradeA": "ダウングレードした場合、現在のプラン特典は請求期間の終了まで保持されます。その後、新しいティアのプランに切り替わります。",
+  "subFooter": "App Store / Google Playで購読を管理",
+  "subPurchaseSuccess": "{plan}へようこそ！アップグレードが完了しました。",
+  "subPurchaseError": "購入を完了できませんでした。もう一度お試しください。",
+  "subErrorLoad": "購読プランを読み込めませんでした。",
+  "subErrorRetry": "タップして再試行",
+  "profileSectionInfo": "お客様情報",
+  "profileSectionStats": "利用統計",
+  "profileChatsToday": "今日のチャット数",
+  "profileMemberSince": "登録日",
+  "profileManageSubscription": "購読の管理",
+  "profileNotSet": "未設定",
+  "editTitle": "プロフィールを編集",
+  "editSave": "保存する",
+  "editNameLabel": "表示名",
+  "editNameHint": "名前を入力",
+  "editNationalityLabel": "国籍",
+  "editNationalityHint": "国籍を選択",
+  "editStatusLabel": "在留資格",
+  "editStatusHint": "在留資格を選択",
+  "editRegionLabel": "地域",
+  "editRegionHint": "地域を選択",
+  "editLanguageLabel": "希望言語",
+  "editChangePhoto": "写真変更",
+  "editSuccess": "プロフィールを更新しました。",
+  "editError": "プロフィールを更新できませんでした。もう一度お試しください。",
+  "editUnsavedTitle": "未保存の変更があります",
+  "editUnsavedMessage": "未保存の変更があります。破棄しますか？",
+  "editUnsavedDiscard": "破棄",
+  "editUnsavedKeep": "編集を続ける",
+  "settingsSectionGeneral": "一般",
+  "settingsSectionAccount": "アカウント",
+  "settingsSectionDanger": "危険な設定",
+  "settingsSectionAbout": "このアプリについて",
+  "settingsLanguage": "言語",
+  "settingsNotifications": "通知",
+  "settingsSubscription": "購読",
+  "settingsTerms": "利用規約",
+  "settingsPrivacy": "プライバシーポリシー",
+  "settingsContact": "お問い合わせ",
+  "settingsFooter": "日本での生活をナビゲートする全ての人へ❤️を込めて",
+  "settingsLogoutTitle": "ログアウト",
+  "settingsLogoutMessage": "ログアウトしますか？",
+  "settingsLogoutConfirm": "ログアウト",
+  "settingsLogoutCancel": "キャンセル",
+  "settingsDeleteTitle": "アカウントを削除",
+  "settingsDeleteMessage": "この操作は元に戻せません。すべてのデータが完全に削除されます。続行しますか？",
+  "settingsDeleteConfirmAction": "アカウントを削除する",
+  "settingsDeleteCancel": "キャンセル",
+  "settingsDeleteSuccess": "アカウントが削除されました。",
+  "settingsLanguageTitle": "言語を選択",
+  "settingsErrorLogout": "ログアウトできませんでした。もう一度お試しください。",
+  "settingsErrorDelete": "アカウントを削除できませんでした。もう一度お試しください。",
+  "chatGuestTitle": "日本の生活についてAIに質問する",
+  "chatGuestFeature1": "銀行口座の開設方法",
+  "chatGuestFeature2": "ビザ更新の手続き",
+  "chatGuestFeature3": "病院の受診方法",
+  "chatGuestFeature4": "その他なんでも",
+  "chatGuestFreeOffer": "無料チャットを5回お試しください（登録不要）",
+  "chatGuestSignUp": "無料で始める",
+  "chatGuestLogin": "すでにアカウントをお持ちの方はこちらからログイン",
+  "guestRegisterCta": "AIチャットを無料で利用するには新規登録",
+  "guideReadMore": "全文を読むには新規登録",
+  "guideAskAI": "AIに詳細を質問する",
+  "guideGuestCtaButton": "無料アカウントを作成",
+  "homeGuestCtaText": "無料アカウントを作成して、AIチャットとパーソナライズされたガイドを解除しましょう",
+  "homeGuestCtaButton": "始める",
+  "chatUpgradeBanner": "プレミアムにアップグレードしてチャット無制限",
+  "chatUpgradeButton": "プランを見る",
+  "guidePremiumCta": "このコンテンツはプレミアムプランでご利用いただけます",
+  "guidePremiumCtaButton": "プランを見る",
+  "guideTierLimitError": "全文ガイドにアクセスするにはアップグレードしてください",
+  "trackerSave": "保存",
+  "trackerSaved": "保存しました",
+  "trackerItemSaved": "やることリストに追加しました",
+  "homeQaTrackerTitle": "やることリスト",
+  "homeQaTrackerSubtitle": "やることリストを管理する",
+  "chatAttachPhoto": "写真を撮る",
+  "chatAttachGallery": "ギャラリーから選択",
+  "chatAttachCancel": "キャンセル",
+  "chatImageTooLarge": "画像が大きすぎます（最大5MB）",
+  "profilePersonalizationHint": "プロファイルを完了すると、AIガイドがよりパーソナライズされたアドバイスを提供します",
+  "profileVisaExpiry": "ビザ有効期限",
+  "profileResidenceRegion": "居住地",
+  "profilePreferredLanguage": "使用言語",
+  "profileSelectNationality": "国籍を選択",
+  "profileSelectResidenceStatus": "在留資格を選択",
+  "profileSelectPrefecture": "都道府県を選択",
+  "profileSelectCity": "市区町村を選択",
+  "profileSelectLanguage": "言語を選択",
+  "profileCommonStatuses": "一般",
+  "profileOtherStatuses": "その他",
+  "profileSearchNationality": "国籍を検索",
+  "visaRenewalPrepTitle": "ビザ更新申請の準備",
+  "visaRenewalDeadlineTitle": "ビザ更新期限",
+  "profileSave": "保存",
+  "profileUsageStats": "利用状況",
+  "profileLogout": "ログアウト",
+  "profileDeleteAccount": "アカウントを削除",
+  "subUsageTitle": "利用状況",
+  "subUsageCount": "{used} / {limit} チャット使用済み",
+  "subUsageUnlimited": "チャット無制限",
+  "tabAccount": "アカウント",
+  "accountSectionProfile": "プロフィール",
+  "accountSectionManagement": "アカウント",
+  "accountSectionDanger": "危険な設定",
+  "notificationSettingsTitle": "通知設定",
+  "notificationTodoReminder": "Todoリマインダー",
+  "notificationReminderTime": "通知時刻",
+  "notificationEnabled": "有効",
+  "notificationDisabled": "無効",
+  "guideLocked": "全ガイドを読むには登録してください",
+  "guideUpgradePrompt": "全45ガイドを見るには無料アカウントを作成",
+  "guideUpgradeButton": "無料アカウントを作成する",
+  "chatGuestUsageHint": "残り{remaining}回無料でチャットできます",
+  "chatGuestExhausted": "チャットを続けるには登録してください — さらに10回無料",
+  "chatFreeExhausted": "スタンダードプランで月300回チャット",
+  "usageLifetimeRemaining": "残り{limit}回中{remaining}回",
+  "chatGuestWelcome": "日本での生活について何でも質問してください",
+  "registerNationalityLabel": "国籍",
+  "registerNationalityHint": "国籍を選択してください",
+  "registerResidenceStatusLabel": "在留資格",
+  "registerResidenceStatusHint": "在留資格を選択してください",
+  "registerResidenceRegionLabel": "居住地",
+  "registerResidenceRegionHint": "居住地を選択してください",
+  "registerSearchHint": "検索...",
+  "chatDepthLevelDeep": "詳細な回答",
+  "chatUsageDeepRemaining": "詳細: {remaining}/{limit}",
+  "chatCreditsRemaining": "残りチャット回数: {remaining}回",
+  "trialSetupTitle": "AIガイドにあなたのことを教えてください",
+  "trialSetupNationality": "国籍",
+  "trialSetupResidenceStatus": "在留資格",
+  "trialSetupRegion": "居住地",
+  "trialSetupSubmit": "開始する",
+  "navAiSearchTitle": "AIガイドでスマート検索",
+  "navAiSearchSubtitle": "あなたの状況に合わせた個別情報をお届けします",
+  "navAiSearchButton": "今すぐ試す",
+  "guideCount": "{count}件のガイド",
+  "guideFreeLabel": "無料",
+  "guideReadingTime": "{min}分で読めます",
+  "guideRelatedTitle": "この分野の他のガイド",
+  "trackerEditTitle": "トラッカーに追加",
+  "trackerEditFieldTitle": "タイトル",
+  "trackerEditFieldMemo": "メモ（任意）",
+  "trackerEditFieldDate": "期限日（任意）",
+  "trackerEditSave": "トラッカーに保存する",
+  "trackerEditCancel": "キャンセル",
+  "testFlightHomeBannerText": "日本生活ガイドをすべて無料で閲覧。プロフィールを設定してAIガイドの無料セッションを5回解放しましょう",
+  "testFlightHomeBannerCta": "設定して開始する",
+  "testFlightChatSetupPrompt": "無料AIガイドを始めるにはプロフィールを設定してください",
+  "testFlightChatSetupButton": "設定して始める",
+  "testFlightViewGuides": "全てのガイドを見る",
+  "trialSetupSubtitle": "あなたの情報に基づき、AIガイドがパーソナルな回答を提供します",
+  "signInFailed": "サインインに失敗しました。ネットワーク接続を確認してください。",
+  "@resetSuccessSubtitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "@onboardingStepOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeGreetingDefault": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeUsageFree": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatLimitRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "@communityReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@communityVoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@communityTimeAgoDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@communityTimeAgoHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "@communityTimeAgoMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@subscriptionPricePerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "int"
+      }
+    }
+  },
+  "@subscriptionCancellingAt": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@navGuideCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@guideComingSoonSubtitle": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      }
+    }
+  },
+  "@guideComingSoonAskAi": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      }
+    }
+  },
+  "@guideSearchEmpty": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "@subButtonChoose": {
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
+  },
+  "@subPurchaseSuccess": {
+    "placeholders": {
+      "plan": {
+        "type": "String"
+      }
+    }
+  },
+  "@subUsageCount": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatGuestUsageHint": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "@usageLifetimeRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatUsageDeepRemaining": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "@chatCreditsRemaining": {
+    "description": "Shows remaining chat credits",
+    "placeholders": {
+      "remaining": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "@guideCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@guideReadingTime": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  }
+}
