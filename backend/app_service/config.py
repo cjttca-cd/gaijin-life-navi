@@ -45,6 +45,11 @@ class Settings(BaseSettings):
     LLM_AGENT_FALLBACK_MODEL: str = "gemini-2.5-flash"
     LLM_TIMEOUT: int = 30  # seconds per API call
 
+    # Gemini Direct API (for Google Search Grounding — not via proxy)
+    GEMINI_API_KEY: str = ""  # Gemini direct API key
+    SEARCH_MODEL: str = "gemini-2.5-flash-lite"  # Model for search grounding
+    SEARCH_ENABLED: bool = True  # Kill switch for search feature
+
     # TestFlight mode — unlocks all guides + allows anonymous AI Chat for testing.
     # Set TESTFLIGHT_MODE=true in .env or environment. Disable before App Store release.
     TESTFLIGHT_MODE: bool = False

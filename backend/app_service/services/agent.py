@@ -20,6 +20,8 @@ Usage::
 
 from __future__ import annotations
 
+import asyncio
+import json
 import logging
 import re
 import time
@@ -73,6 +75,19 @@ class AgentResponse:
     cache_read_tokens: int
     status: str  # "ok" | "error"
     error: str | None = field(default=None)
+
+
+@dataclass(frozen=True, slots=True)
+class RoutingResult:
+    """Result of message routing: domain agent + optional search query.
+
+    Attributes:
+        agent_id: The agent identifier (e.g. ``"svc-finance"``, ``"out_of_scope"``).
+        search_query: Search query for Gemini Grounding, or None if no search needed.
+    """
+
+    agent_id: str
+    search_query: str | None = field(default=None)
 
 
 # ---------------------------------------------------------------------------
@@ -242,7 +257,81 @@ async def _chat_completion_with_fallback(
 
 
 # ---------------------------------------------------------------------------
-# Core agent caller  (signature unchanged — interface contract)
+# Gemini Grounding search (Google Search via direct API)
+# ---------------------------------------------------------------------------
+
+_genai_client = None  # Lazy-initialized google.genai.Client
+
+
+def _get_genai_client():
+    """Return (or create) a module-level google.genai Client."""
+    global _genai_client
+    if _genai_client is None:
+        from google import genai
+        _genai_client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    return _genai_client
+
+
+_SEARCH_PROMPT = (
+    "以下のトピックについてウェブ検索し、見つかった事実情報を箇条書きで簡潔に返してください。"
+    "解説や推測は不要です。検索で見つかった具体的な数字・条件・日付のみ列挙してください。"
+    "\n\n検索トピック: {query}"
+)
+
+
+async def _execute_search(query: str) -> str | None:
+    """Execute web search via Gemini Grounding and return fact summary.
+
+    Uses Gemini Direct API (not the proxy) with Google Search tool.
+    Returns formatted text for injection into agent prompt, or None on failure.
+    """
+    if not settings.GEMINI_API_KEY:
+        logger.warning("GEMINI_API_KEY not set, skipping search")
+        return None
+
+    try:
+        from google.genai import types
+
+        client = _get_genai_client()
+        prompt = _SEARCH_PROMPT.format(query=query)
+
+        # Run the synchronous genai call in a thread to avoid blocking the event loop
+        loop = asyncio.get_event_loop()
+        response = await asyncio.wait_for(
+            loop.run_in_executor(
+                None,
+                lambda: client.models.generate_content(
+                    model=settings.SEARCH_MODEL,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        tools=[types.Tool(google_search=types.GoogleSearch())],
+                        max_output_tokens=400,
+                    ),
+                ),
+            ),
+            timeout=10.0,
+        )
+
+        if response and response.text:
+            logger.info(
+                "Search completed for query=%s, result_len=%d",
+                query[:80], len(response.text),
+            )
+            return response.text
+        else:
+            logger.warning("Search returned empty response for query=%s", query[:80])
+            return None
+
+    except asyncio.TimeoutError:
+        logger.warning("Search timed out (10s) for query=%s", query[:80])
+        return None
+    except Exception:
+        logger.exception("Search failed for query=%s", query[:80])
+        return None
+
+
+# ---------------------------------------------------------------------------
+# Core agent caller  (signature updated — search_results parameter added)
 # ---------------------------------------------------------------------------
 
 
@@ -252,6 +341,7 @@ async def call_agent(
     context: list[dict] | None = None,
     image_path: str | None = None,
     user_profile: dict | None = None,
+    search_results: str | None = None,
     timeout: int = 90,
 ) -> AgentResponse:
     """Invoke an LLM agent via direct API call and return a structured response.
@@ -266,6 +356,7 @@ async def call_agent(
             with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
         image_path: Optional filesystem path to an uploaded image.
         user_profile: Optional dict with user profile fields.
+        search_results: Optional web search results to inject into the prompt.
         timeout: Maximum seconds to wait for the agent.
 
     Returns:
@@ -318,6 +409,13 @@ async def call_agent(
     if image_path:
         user_message_parts.append(
             "(User attached an image — image analysis not yet supported in this mode)"
+        )
+
+    # Search results injection (before the user's question)
+    if search_results:
+        user_message_parts.append(
+            "【ウェブ検索結果（参考情報 — 数字や日付はこの検索結果を優先すること）】\n"
+            f"{search_results}"
         )
 
     # The actual current question
@@ -436,7 +534,7 @@ async def call_agent(
 
 
 # ---------------------------------------------------------------------------
-# Message routing  (signature unchanged — interface contract)
+# Message routing  (returns RoutingResult with agent_id + search_query)
 # ---------------------------------------------------------------------------
 
 # Keyword patterns compiled once at module load.
@@ -489,11 +587,45 @@ def _build_routing_context(context: list[dict] | None) -> str:
     return "\n".join(lines)
 
 
+def _parse_router_response(raw_text: str) -> tuple[str, str | None]:
+    """Parse the router's JSON response into (domain, search_query).
+
+    The router outputs JSON like: {"domain":"finance","search":"query text"}
+    Flash-lite sometimes wraps output in ```json ... ``` code blocks.
+    Falls back to single-word parsing if JSON parsing fails.
+
+    Returns (domain, search_query) where search_query may be None.
+    """
+    text = raw_text.strip()
+
+    # Strip markdown code block wrapper if present
+    code_block_match = re.match(r"```(?:json)?\s*\n?(.*?)\n?\s*```", text, re.DOTALL)
+    if code_block_match:
+        text = code_block_match.group(1).strip()
+
+    # Try JSON parse
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed, dict):
+            domain = str(parsed.get("domain", "")).strip().lower()
+            search = parsed.get("search")
+            search_query = str(search).strip() if search and str(search).strip().lower() != "null" else None
+            return domain, search_query
+    except (json.JSONDecodeError, ValueError):
+        pass
+
+    # Fallback: single-word parse (backward compat)
+    domain = text.strip().lower().rstrip(".")
+    domain = domain.split()[0] if domain else ""
+    logger.warning("Router JSON parse failed, falling back to word parse: domain=%s", domain)
+    return domain, None
+
+
 async def route_to_agent(
     message: str,
     current_domain: str | None = None,
     context: list[dict] | None = None,
-) -> str:
+) -> RoutingResult:
     """Determine which domain agent should handle *message*.
 
     Uses a three-layer approach:
@@ -509,15 +641,15 @@ async def route_to_agent(
             with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
 
     Returns:
-        Agent identifier string (e.g. ``"svc-medical"``).
+        A :class:`RoutingResult` with agent_id and optional search_query.
     """
     if not message or not message.strip():
-        return current_domain or "svc-life"
+        return RoutingResult(agent_id=current_domain or "svc-life")
 
     # 1. Emergency — instant keyword detection, no LLM needed.
     if _EMERGENCY_PATTERN.search(message):
         logger.info("Routing to svc-medical (emergency detected)")
-        return "svc-medical"
+        return RoutingResult(agent_id="svc-medical")
 
     # 2. LLM classification via direct API call (lightweight, fast).
     valid_domains = {"finance", "tax", "visa", "medical", "life", "legal", "out_of_scope"}
@@ -541,18 +673,18 @@ async def route_to_agent(
             primary_model=settings.LLM_ROUTER_MODEL,
             fallback_model=settings.LLM_ROUTER_FALLBACK_MODEL,
             timeout=15.0,
-            max_tokens=10,  # Classification needs only 1 word
+            max_tokens=100,  # JSON output needs more tokens
         )
 
         choices = result.get("choices", [])
         if choices:
             raw_text = choices[0].get("message", {}).get("content", "")
-            domain = raw_text.strip().lower().rstrip(".")
-            # Extract first word in case of extra text
-            domain = domain.split()[0] if domain else ""
 
             usage = result.get("usage", {})
             duration_info = f"tokens_in={usage.get('prompt_tokens', 0)} tokens_out={usage.get('completion_tokens', 0)}"
+
+            # Parse JSON response (with code-block strip + fallback)
+            domain, search_query = _parse_router_response(raw_text)
 
             if domain == "out_of_scope":
                 logger.info(
@@ -560,15 +692,15 @@ async def route_to_agent(
                     model_used, duration_info,
                     len(context) if context else 0,
                 )
-                return "out_of_scope"
+                return RoutingResult(agent_id="out_of_scope")
             if domain in valid_domains:
                 agent_id = f"svc-{domain}"
                 logger.info(
-                    "LLM routing to %s (model=%s, %s, context_turns=%d)",
-                    agent_id, model_used, duration_info,
+                    "LLM routing to %s search=%s (model=%s, %s, context_turns=%d)",
+                    agent_id, search_query, model_used, duration_info,
                     len(context) if context else 0,
                 )
-                return agent_id
+                return RoutingResult(agent_id=agent_id, search_query=search_query)
             else:
                 logger.warning(
                     "LLM returned invalid domain '%s', falling back", domain,
@@ -579,7 +711,7 @@ async def route_to_agent(
     # 3. Fallback — sticky domain or life.
     if current_domain:
         logger.debug("Classification fallback; staying on %s", current_domain)
-        return current_domain
+        return RoutingResult(agent_id=current_domain)
 
     logger.debug("Classification fallback; routing to svc-life")
-    return "svc-life"
+    return RoutingResult(agent_id="svc-life")

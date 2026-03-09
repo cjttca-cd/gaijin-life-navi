@@ -35,7 +35,7 @@
 - **三井住友プロパー / MUFG カード** — 銀行系は全般的に流通系より厳しい
 
 ### Secured Card（信用記録ゼロの最終手段）
-- **Life Card Deposit**: 無需就業、年会費あり（web_search で確認）(Reddit 2024)
+- **Life Card Deposit**: 無需就業、年会費あり（検索結果を参照（検索結果がない場合は「最新情報はウェブで直接ご確認ください」と案内））(Reddit 2024)
 - **Nexus Card**: 要就業、年会費あり（Life Card より安い）(Reddit 2024)
 
 ### 海外クレジット歴がある場合

@@ -11,7 +11,7 @@ from fastapi import HTTPException
 
 from models.profile import Profile
 from routers import chat as chat_router
-from services.agent import AgentResponse
+from services.agent import AgentResponse, RoutingResult
 from services.auth import FirebaseUser
 from services.usage import UsageCheck
 
@@ -51,7 +51,7 @@ async def test_chat_deep_mode_includes_full_profile(
         )
 
     async def fake_route_to_agent(message: str, current_domain=None, context=None):  # noqa: ANN001
-        return "svc-life"
+        return RoutingResult(agent_id="svc-life")
 
     async def fake_call_agent(**kwargs):  # noqa: ANN003
         captured["user_profile"] = kwargs.get("user_profile")
@@ -72,6 +72,7 @@ async def test_chat_deep_mode_includes_full_profile(
 
     monkeypatch.setattr(agent_service, "route_to_agent", fake_route_to_agent)
     monkeypatch.setattr(agent_service, "call_agent", fake_call_agent)
+    monkeypatch.setattr(agent_service, "_execute_search", lambda q: None)
 
     body = chat_router.ChatRequest(message="教えてください", locale="ja")
     current_user = FirebaseUser(uid=uid, email="chat-user-1@example.com", is_anonymous=False)

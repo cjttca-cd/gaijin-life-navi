@@ -428,7 +428,7 @@ async def chat(
     """
     # Late imports — agent service may not exist yet during early dev
     try:
-        from services.agent import call_agent, route_to_agent
+        from services.agent import call_agent, route_to_agent, _execute_search
     except ImportError:
         logger.warning("services.agent not available — returning stub response")
         raise HTTPException(
@@ -502,14 +502,14 @@ async def chat(
         context_dicts = [{"role": m.role, "text": m.text} for m in body.context]
 
     # 5. Route to agent domain (LLM-based classification with conversation context)
-    domain = await route_to_agent(
+    routing = await route_to_agent(
         body.message,
         current_domain=body.domain,
         context=context_dicts,
     )
 
     # 5b. Out-of-scope: return friendly guide message, no agent call, no credit consumed
-    if domain == "out_of_scope":
+    if routing.agent_id == "out_of_scope":
         oos_reply = _get_out_of_scope_message(body.locale)
         oos_usage = _usage_to_info(usage)
         response = ChatResponse(
@@ -522,8 +522,8 @@ async def chat(
         )
         return SuccessResponse(data=response.model_dump()).model_dump()
 
-    agent_id = domain  # route_to_agent already returns "svc-xxx" format
-    domain_short = domain.removeprefix("svc-")
+    agent_id = routing.agent_id  # RoutingResult.agent_id is "svc-xxx" format
+    domain_short = routing.agent_id.removeprefix("svc-")
 
     # 6. Build message with locale hint
     agent_message = body.message
@@ -558,6 +558,13 @@ async def chat(
     if user_profile is None:
         user_profile = {"subscription_tier": tier}
 
+    # 8b. Execute web search if router requested it
+    search_results = None
+    if routing.search_query:
+        from config import settings as app_settings
+        if app_settings.SEARCH_ENABLED:
+            search_results = await _execute_search(routing.search_query)
+
     # 9. Call agent (stateless with /reset, context already built in step 3)
     agent_resp = await call_agent(
         agent_id=agent_id,
@@ -565,12 +572,13 @@ async def chat(
         context=context_dicts,
         image_path=image_path,
         user_profile=user_profile,
+        search_results=search_results,
     )
 
     if agent_resp.status != "ok":
         logger.error(
             "Agent call failed: user=%s domain=%s error=%s",
-            uid, domain, agent_resp.error,
+            uid, routing.agent_id, agent_resp.error,
         )
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
