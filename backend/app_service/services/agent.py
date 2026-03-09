@@ -120,13 +120,8 @@ def _load_domain_knowledge(domain: str) -> str:
             if content:
                 sections.append(f"### knowledge/{md_file.name}\n{content}")
 
-    # Guide files (Chinese = authoritative)
-    guides_dir = workspace / "guides"
-    if guides_dir.is_dir():
-        for zh_file in sorted(guides_dir.glob("*.zh.md")):
-            content = _read_file_cached(zh_file)
-            if content:
-                sections.append(f"### guides/{zh_file.name}\n{content}")
+    # Guide files are NOT injected — they are user-facing Navigator content.
+    # Knowledge files alone provide sufficient context for chat responses.
 
     if not sections:
         return ""
