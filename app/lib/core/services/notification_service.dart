@@ -133,7 +133,7 @@ class NotificationService {
 
     await _plugin.zonedSchedule(
       item.id.hashCode,
-      'Gaijin Life Navi',
+      'Japan Life Navigator',
       item.title,
       scheduledDate,
       details,

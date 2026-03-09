@@ -71,7 +71,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             const SizedBox(height: AppSpacing.spaceLg),
             // App name — displayLarge, white.
             Text(
-              'Gaijin Life Navi',
+              'Japan Life Navigator',
               style: tt.displayLarge?.copyWith(color: cs.onPrimary),
             ),
             const Spacer(flex: 2),

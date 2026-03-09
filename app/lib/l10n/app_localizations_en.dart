@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Gaijin Life Navi';
+  String get appTitle => 'Japan Life Navigator';
 
   @override
   String get langTitle => 'Choose your language';
@@ -923,7 +923,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get subscriptionPlansSubtitle =>
-      'Unlock the full potential of Gaijin Life Navi';
+      'Unlock the full potential of Japan Life Navigator';
 
   @override
   String get subscriptionCurrentPlan => 'Current Plan';

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Gaijin Life Navi",
+  "appTitle": "Japan Life Navigator",
   "langTitle": "Choose your language",
   "langContinue": "Continue",
   "langEn": "English",
@@ -387,7 +387,7 @@
   },
   "subscriptionTitle": "Subscription",
   "subscriptionPlansTitle": "Choose Your Plan",
-  "subscriptionPlansSubtitle": "Unlock the full potential of Gaijin Life Navi",
+  "subscriptionPlansSubtitle": "Unlock the full potential of Japan Life Navigator",
   "subscriptionCurrentPlan": "Current Plan",
   "subscriptionCurrentPlanBadge": "Current Plan",
   "subscriptionTierFree": "Free",

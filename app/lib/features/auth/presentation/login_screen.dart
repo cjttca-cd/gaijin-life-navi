@@ -125,7 +125,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const SizedBox(height: AppSpacing.spaceSm),
                     // App name.
                     Text(
-                      'Gaijin Life Navi',
+                      'Japan Life Navigator',
                       style: tt.titleLarge,
                       textAlign: TextAlign.center,
                     ),

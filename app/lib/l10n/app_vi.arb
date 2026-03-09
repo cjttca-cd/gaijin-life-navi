@@ -1,6 +1,6 @@
 {
   "@@locale": "vi",
-  "appTitle": "Gaijin Life Navi",
+  "appTitle": "Japan Life Navigator",
   "langTitle": "Chọn ngôn ngữ của bạn",
   "langContinue": "Tiếp tục",
   "loginWelcome": "Đăng nhập tài khoản",
@@ -282,7 +282,7 @@
   "communityTimeAgoMinutes": "{minutes} phút trước",
   "subscriptionTitle": "Đăng ký",
   "subscriptionPlansTitle": "Chọn gói của bạn",
-  "subscriptionPlansSubtitle": "Mở khóa toàn bộ tiềm năng của Gaijin Life Navi",
+  "subscriptionPlansSubtitle": "Mở khóa toàn bộ tiềm năng của Japan Life Navigator",
   "subscriptionCurrentPlan": "Gói hiện tại",
   "subscriptionCurrentPlanBadge": "Gói hiện tại",
   "subscriptionTierFree": "Miễn phí",

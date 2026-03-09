@@ -1,11 +1,11 @@
 {
-    "name": "gaijin_life_navi",
-    "short_name": "gaijin_life_navi",
+    "name": "Japan Life Navigator",
+    "short_name": "Life Navi",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#1a1a2e",
+    "theme_color": "#6c63ff",
+    "description": "在日外国人生活指南 - 签证、税务、医疗、金融、法律、日常生活一站式AI导航",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

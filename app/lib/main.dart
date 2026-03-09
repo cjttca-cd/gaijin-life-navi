@@ -39,7 +39,7 @@ class GaijinLifeNaviApp extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
 
     return MaterialApp.router(
-      title: 'Gaijin Life Navi',
+      title: 'Japan Life Navigator',
       debugShowCheckedModeBanner: false,
       // Phase 0: Light theme only (DESIGN_SYSTEM.md §1.8).
       theme: AppTheme.light,

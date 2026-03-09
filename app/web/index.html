@@ -1,46 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Japan Life Navigator - 在日外国人生活指南">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="gaijin_life_navi">
+  <meta name="apple-mobile-web-app-title" content="Japan Life Navi">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>gaijin_life_navi</title>
+  <title>Japan Life Navigator</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    body { margin: 0; background: #1a1a2e; }
+    #loading {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #e0e0e0;
+    }
+    #loading .spinner {
+      width: 40px; height: 40px; border: 3px solid #333;
+      border-top-color: #6c63ff; border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    #loading p { margin-top: 16px; font-size: 14px; opacity: 0.7; }
+    #error { color: #ff6b6b; margin-top: 12px; font-size: 12px; max-width: 80%; text-align: center; display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+    <div id="error"></div>
+  </div>
+  <script>
+    window.addEventListener('error', function(e) {
+      var el = document.getElementById('error');
+      if (el) { el.style.display = 'block'; el.textContent = 'Error: ' + (e.message || e.filename || e); }
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      var el = document.getElementById('error');
+      if (el) { el.style.display = 'block'; el.textContent = 'Error: ' + (e.reason || e); }
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

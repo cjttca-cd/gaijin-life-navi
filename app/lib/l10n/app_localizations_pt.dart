@@ -9,7 +9,7 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get appTitle => 'Gaijin Life Navi';
+  String get appTitle => 'Japan Life Navigator';
 
   @override
   String get langTitle => 'Escolha seu idioma';
@@ -935,7 +935,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get subscriptionPlansSubtitle =>
-      'Desbloqueie todo o potencial do Gaijin Life Navi';
+      'Desbloqueie todo o potencial do Japan Life Navigator';
 
   @override
   String get subscriptionCurrentPlan => 'Plano Atual';

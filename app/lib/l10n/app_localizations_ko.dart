@@ -9,7 +9,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => 'Gaijin Life Navi';
+  String get appTitle => 'Japan Life Navigator';
 
   @override
   String get langTitle => '언어를 선택하세요';
@@ -899,7 +899,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get subscriptionPlansTitle => '요금제를 선택하세요';
 
   @override
-  String get subscriptionPlansSubtitle => 'Gaijin Life Navi의 모든 기능을 활용하세요';
+  String get subscriptionPlansSubtitle => 'Japan Life Navigator의 모든 기능을 활용하세요';
 
   @override
   String get subscriptionCurrentPlan => '현재 요금제';

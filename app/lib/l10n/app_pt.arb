@@ -1,6 +1,6 @@
 {
   "@@locale": "pt",
-  "appTitle": "Gaijin Life Navi",
+  "appTitle": "Japan Life Navigator",
   "langTitle": "Escolha seu idioma",
   "langContinue": "Continuar",
   "loginWelcome": "Entre na sua conta",
@@ -282,7 +282,7 @@
   "communityTimeAgoMinutes": "há {minutes}m",
   "subscriptionTitle": "Assinatura",
   "subscriptionPlansTitle": "Escolha seu Plano",
-  "subscriptionPlansSubtitle": "Desbloqueie todo o potencial do Gaijin Life Navi",
+  "subscriptionPlansSubtitle": "Desbloqueie todo o potencial do Japan Life Navigator",
   "subscriptionCurrentPlan": "Plano Atual",
   "subscriptionCurrentPlanBadge": "Plano Atual",
   "subscriptionTierFree": "Grátis",

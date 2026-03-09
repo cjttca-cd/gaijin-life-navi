@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Gaijin Life Navi'**
+  /// **'Japan Life Navigator'**
   String get appTitle;
 
   /// No description provided for @langTitle.
@@ -1829,7 +1829,7 @@ abstract class AppLocalizations {
   /// No description provided for @subscriptionPlansSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Unlock the full potential of Gaijin Life Navi'**
+  /// **'Unlock the full potential of Japan Life Navigator'**
   String get subscriptionPlansSubtitle;
 
   /// No description provided for @subscriptionCurrentPlan.

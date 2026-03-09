@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "appTitle": "Gaijin Life Navi",
+  "appTitle": "Japan Life Navigator",
   "langTitle": "选择你的语言",
   "langContinue": "继续",
   "loginWelcome": "登录你的账号",
@@ -282,7 +282,7 @@
   "communityTimeAgoMinutes": "{minutes}分钟前",
   "subscriptionTitle": "订阅",
   "subscriptionPlansTitle": "选择你的计划",
-  "subscriptionPlansSubtitle": "解锁 Gaijin Life Navi 的全部潜力",
+  "subscriptionPlansSubtitle": "解锁 Japan Life Navigator 的全部潜力",
   "subscriptionCurrentPlan": "当前计划",
   "subscriptionCurrentPlanBadge": "当前计划",
   "subscriptionTierFree": "免费",

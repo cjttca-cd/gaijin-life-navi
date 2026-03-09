@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get appTitle => 'Gaijin Life Navi';
+  String get appTitle => 'Japan Life Navigator';
 
   @override
   String get langTitle => 'Chọn ngôn ngữ của bạn';
@@ -919,7 +919,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get subscriptionPlansSubtitle =>
-      'Mở khóa toàn bộ tiềm năng của Gaijin Life Navi';
+      'Mở khóa toàn bộ tiềm năng của Japan Life Navigator';
 
   @override
   String get subscriptionCurrentPlan => 'Gói hiện tại';

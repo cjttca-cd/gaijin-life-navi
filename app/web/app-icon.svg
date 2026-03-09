@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="256" fill="#2979FF"/>
+  <g transform="translate(256,256) scale(10.5)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="20" fill="none" stroke="white" stroke-width="2"/>
+    <!-- Compass diamond rotated 45 degrees (pointing to ~1:30 and ~7:30) -->
+    <g transform="rotate(45)">
+      <!-- Solid white triangles -->
+      <polygon points="0,-14 5.5,0 0,0" fill="white"/>
+      <polygon points="0,0 0,14 -5.5,0" fill="white"/>
+      <!-- Semi-transparent triangles -->
+      <polygon points="0,0 5.5,0 0,14" fill="white" opacity="0.5"/>
+      <polygon points="0,-14 -5.5,0 0,0" fill="white" opacity="0.5"/>
+    </g>
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="2.2" fill="white"/>
+  </g>
+</svg>

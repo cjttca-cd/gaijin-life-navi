@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'Gaijin Life Navi';
+  String get appTitle => 'Japan Life Navigator';
 
   @override
   String get langTitle => '选择你的语言';
@@ -896,7 +896,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get subscriptionPlansTitle => '选择你的计划';
 
   @override
-  String get subscriptionPlansSubtitle => '解锁 Gaijin Life Navi 的全部潜力';
+  String get subscriptionPlansSubtitle => '解锁 Japan Life Navigator 的全部潜力';
 
   @override
   String get subscriptionCurrentPlan => '当前计划';
