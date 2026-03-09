@@ -10,6 +10,7 @@ import '../../../core/analytics/analytics_service.dart';
 import '../../../core/providers/router_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
+import '../../../core/config/app_config.dart';
 import '../data/image_helper.dart';
 import 'providers/chat_providers.dart';
 import 'widgets/message_bubble.dart';
@@ -504,6 +505,7 @@ class _ChatUpgradeBannerState extends ConsumerState<_ChatUpgradeBanner> {
   @override
   Widget build(BuildContext context) {
     final usage = ref.watch(chatUsageProvider);
+    if (AppConfig.testFlightMode) return const SizedBox.shrink();
     if (usage == null || usage.isUnlimited) return const SizedBox.shrink();
     if (usage.remaining > 1) return const SizedBox.shrink();
 

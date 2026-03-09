@@ -7,6 +7,7 @@ import '../../../../core/providers/auth_provider.dart';
 import '../../../../core/providers/router_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../providers/chat_providers.dart';
+import '../../../../core/config/app_config.dart';
 
 /// Usage limit banner — shows remaining credits for non-unlimited tiers.
 ///
@@ -25,6 +26,9 @@ class UsageCounter extends ConsumerWidget {
 
     final tt = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context);
+
+    // Hide in TestFlight mode — no payment prompts during testing.
+    if (AppConfig.testFlightMode) return const SizedBox.shrink();
 
     // Don't show for unlimited (premium) users.
     if (usage.isUnlimited) return const SizedBox.shrink();
