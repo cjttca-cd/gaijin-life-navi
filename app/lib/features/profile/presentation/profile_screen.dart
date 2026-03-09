@@ -268,8 +268,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     )
                   : Text(l10n.profileSave),
             ),
-          if (!isAnonymous)
-            IconButton(
+          IconButton(
               icon: const Icon(Icons.settings_outlined),
               tooltip: l10n.settingsTitle,
               onPressed: () => context.push(AppRoutes.settings),
