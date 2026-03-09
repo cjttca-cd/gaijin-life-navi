@@ -15,14 +15,17 @@ Flow:
 from __future__ import annotations
 
 import base64
+import json as _json
 import logging
 import re
 import time
 import uuid
 from pathlib import Path
+from collections.abc import AsyncGenerator
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -610,3 +613,234 @@ async def chat(
     )
 
     return SuccessResponse(data=response.model_dump()).model_dump()
+
+
+# ── SSE Streaming Endpoint ─────────────────────────────────────────────
+
+
+async def _stream_generator(
+    body: ChatRequest,
+    uid: str,
+    tier: str,
+    usage: UsageCheck,
+    db: AsyncSession,
+) -> AsyncGenerator[str, None]:
+    """SSE event generator for streaming chat.
+
+    Orchestrates: routing → (searching) → agent stream → done/error.
+    Credit consumption happens AFTER stream completes.
+    """
+    from services.agent import call_agent_stream, route_to_agent, _execute_search
+
+    # 1. Build context
+    context_dicts = None
+    if body.context:
+        context_dicts = [{"role": m.role, "text": m.text} for m in body.context]
+
+    # 2. Route to agent domain
+    routing = await route_to_agent(
+        body.message,
+        current_domain=body.domain,
+        context=context_dicts,
+    )
+
+    domain_short = routing.agent_id.removeprefix("svc-")
+
+    # Emit routing event
+    yield f"event: routing\ndata: {_json.dumps({'domain': domain_short, 'search_query': routing.search_query}, ensure_ascii=False)}\n\n"
+
+    # 3. Out-of-scope → immediate done with guide message
+    if routing.agent_id == "out_of_scope":
+        oos_reply = _get_out_of_scope_message(body.locale)
+        oos_usage = _usage_to_info(usage)
+        done_data = {
+            "text": oos_reply,
+            "domain": "life",
+            "sources": [],
+            "tracker_items": [],
+            "usage": oos_usage.model_dump(),
+        }
+        yield f"event: done\ndata: {_json.dumps(done_data, ensure_ascii=False)}\n\n"
+        return
+
+    agent_id = routing.agent_id
+
+    # 4. Build message with locale hint
+    agent_message = body.message
+    if body.locale and body.locale != "en":
+        agent_message = f"[User language: {body.locale}] {body.message}"
+
+    # 5. Handle image upload
+    image_path: str | None = None
+    if body.image:
+        image_path = _save_image_to_workspace(agent_id, body.image)
+        _cleanup_old_uploads(agent_id)
+
+    # 6. Fetch user profile
+    from models.profile import Profile as _Profile
+    profile = await db.get(_Profile, uid)
+    user_profile: dict | None = None
+    if profile and profile.deleted_at is None:
+        user_profile = {
+            "display_name": profile.display_name or None,
+            "subscription_tier": profile.subscription_tier or "free",
+            "nationality": profile.nationality,
+            "residence_status": profile.residence_status,
+            "visa_expiry": str(profile.visa_expiry) if profile.visa_expiry else None,
+            "residence_region": profile.residence_region,
+            "preferred_language": profile.preferred_language,
+        }
+        if not any(user_profile.values()):
+            user_profile = None
+
+    if user_profile is None:
+        user_profile = {"subscription_tier": tier}
+
+    # 7. Execute web search if router requested it
+    search_results = None
+    if routing.search_query:
+        from config import settings as app_settings
+        if app_settings.SEARCH_ENABLED:
+            yield "event: searching\ndata: {}\n\n"
+            search_results = await _execute_search(routing.search_query)
+
+    # 8. Stream agent response
+    full_text = ""
+    meta_info: dict = {}
+
+    try:
+        async for chunk in call_agent_stream(
+            agent_id=agent_id,
+            message=agent_message,
+            context=context_dicts,
+            image_path=image_path,
+            user_profile=user_profile,
+            search_results=search_results,
+        ):
+            # Internal __meta__ event — intercept, don't forward
+            if chunk.startswith("event: __meta__"):
+                try:
+                    data_line = chunk.split("data: ", 1)[1].strip()
+                    meta_info = _json.loads(data_line)
+                except (IndexError, _json.JSONDecodeError):
+                    pass
+                continue
+
+            # Error events — forward directly and stop
+            if chunk.startswith("event: error"):
+                yield chunk
+                return
+
+            # Token events — forward and accumulate
+            if chunk.startswith("event: token"):
+                yield chunk
+                try:
+                    data_line = chunk.split("data: ", 1)[1].strip()
+                    token_data = _json.loads(data_line)
+                    full_text += token_data.get("text", "")
+                except (IndexError, _json.JSONDecodeError):
+                    pass
+                continue
+
+    except Exception as exc:
+        logger.exception("Stream generator error for user=%s agent=%s", uid, agent_id)
+        yield f"event: error\ndata: {_json.dumps({'message': str(exc)})}\n\n"
+        return
+
+    # 9. Post-stream: parse trackers and sources
+    reply, sources, actions, tracker_items = _extract_blocks(full_text)
+
+    # 10. Consume credit AFTER stream completes
+    try:
+        post_usage = await consume_after_success(db, uid, tier)
+    except Exception:
+        logger.exception("Credit consumption failed for user=%s", uid)
+        post_usage = usage  # Fallback to pre-check usage
+
+    # 11. Emit done event
+    done_data = {
+        "text": reply,
+        "domain": domain_short,
+        "sources": sources,
+        "tracker_items": tracker_items,
+        "usage": _usage_to_info(post_usage).model_dump(),
+        "model": meta_info.get("model", ""),
+        "duration_ms": meta_info.get("duration_ms", 0),
+        "input_tokens": meta_info.get("input_tokens", 0),
+        "output_tokens": meta_info.get("output_tokens", 0),
+    }
+    yield f"event: done\ndata: {_json.dumps(done_data, ensure_ascii=False)}\n\n"
+
+
+@router.post("/chat/stream")
+async def chat_stream(
+    body: ChatRequest,
+    current_user: FirebaseUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> StreamingResponse:
+    """SSE streaming chat endpoint.
+
+    Same authentication and credit logic as /chat, but returns
+    Server-Sent Events for real-time token streaming.
+    """
+    uid = current_user.uid
+
+    # 1. Get user tier (same as /chat)
+    tier = await _get_user_tier(db, uid, is_anonymous=current_user.is_anonymous)
+
+    # 2. Guest check (same as /chat)
+    if tier == "guest":
+        from config import settings as _settings
+        if not _settings.TESTFLIGHT_MODE:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={
+                    "error": {
+                        "code": "CHAT_REQUIRES_AUTH",
+                        "message": "AI Chat requires a registered account. Please sign up to continue.",
+                        "details": {},
+                    }
+                },
+            )
+        tier = "free"
+        from services.credits import get_balance, grant_credits
+        balance = await get_balance(db, uid)
+        if balance.total_remaining == 0:
+            await grant_credits(
+                db,
+                user_id=uid,
+                source="grant",
+                amount=5,
+                source_detail="testflight-trial",
+                expires_at=None,
+            )
+
+    # 3. Pre-flight credit check
+    usage = await check_balance(db, uid, tier)
+    if not usage.allowed:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail={
+                "error": {
+                    "code": "USAGE_LIMIT_EXCEEDED",
+                    "message": (
+                        f"Chat limit reached for your {tier} plan. "
+                        f"Used {usage.used}/{usage.limit} chats."
+                    ),
+                    "details": {
+                        "usage": _usage_to_info(usage).model_dump(),
+                    },
+                }
+            },
+        )
+
+    # 4. Return SSE stream
+    return StreamingResponse(
+        _stream_generator(body, uid, tier, usage, db),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )

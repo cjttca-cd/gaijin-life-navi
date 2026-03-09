@@ -5,6 +5,7 @@ import '../../../../core/network/api_client.dart';
 import '../../data/chat_repository.dart';
 import '../../domain/chat_message.dart';
 import '../../domain/chat_response.dart';
+import '../../domain/chat_stream_event.dart';
 import '../../domain/conversation.dart';
 
 // ─── DI ──────────────────────────────────────────────────────
@@ -112,6 +113,54 @@ class AllMessagesNotifier extends Notifier<Map<String, List<ChatMessage>>> {
     newState.remove(conversationId);
     state = newState;
   }
+
+  /// Update the content of a specific message (used during streaming).
+  void updateMessageContent(
+    String conversationId,
+    String messageId,
+    String newContent,
+  ) {
+    final current = state[conversationId];
+    if (current == null) return;
+
+    final updated = current.map((msg) {
+      if (msg.id == messageId) {
+        return msg.copyWith(content: newContent);
+      }
+      return msg;
+    }).toList();
+
+    state = {...state, conversationId: updated};
+  }
+
+  /// Finalize a streaming message with full parsed data.
+  void finalizeMessage(
+    String conversationId,
+    String messageId, {
+    required String content,
+    List<ChatSource>? sources,
+    List<ChatTrackerItem>? trackerItems,
+    String? domain,
+    ChatUsageInfo? usage,
+  }) {
+    final current = state[conversationId];
+    if (current == null) return;
+
+    final updated = current.map((msg) {
+      if (msg.id == messageId) {
+        return msg.copyWith(
+          content: content,
+          sources: sources,
+          trackerItems: trackerItems,
+          domain: domain,
+          usage: usage,
+        );
+      }
+      return msg;
+    }).toList();
+
+    state = {...state, conversationId: updated};
+  }
 }
 
 /// Messages for the active conversation.
@@ -159,6 +208,14 @@ final userTierProvider = Provider<String>((ref) {
 
 /// Whether the chat is currently waiting for a response.
 final isChatLoadingProvider = StateProvider<bool>((ref) => false);
+
+// ─── Streaming state ─────────────────────────────────────────
+
+/// The message ID currently being streamed (null when not streaming).
+final streamingMessageIdProvider = StateProvider<String?>((ref) => null);
+
+/// Accumulated streaming text for the current assistant message.
+final streamingTextProvider = StateProvider<String>((ref) => '');
 
 // ─── Send message controller ─────────────────────────────────
 
@@ -291,6 +348,146 @@ class ChatSendController {
       rethrow;
     } finally {
       _ref.read(isChatLoadingProvider.notifier).state = false;
+    }
+  }
+
+  /// Send a message using SSE streaming for real-time token display.
+  Future<void> sendMessageStream(
+    String content, {
+    String? domain,
+    String? imageBase64,
+  }) async {
+    final activeId = _ref.read(activeConversationIdProvider);
+    if (activeId == null) return;
+
+    final repo = _ref.read(chatRepositoryProvider);
+    final allMsgs = _ref.read(allMessagesProvider.notifier);
+    final convs = _ref.read(conversationsProvider.notifier);
+
+    // Collect context BEFORE adding the new message.
+    final currentMessages = _ref.read(allMessagesProvider)[activeId] ?? [];
+    final context = _buildContext(currentMessages);
+
+    // Add user message optimistically.
+    final userMessage = ChatMessage(
+      id: 'user_\${DateTime.now().millisecondsSinceEpoch}',
+      role: 'user',
+      content: content,
+      imageBase64: imageBase64,
+      createdAt: DateTime.now(),
+    );
+    allMsgs.addMessage(activeId, userMessage);
+
+    // Update conversation metadata.
+    final msgCount = (_ref.read(allMessagesProvider)[activeId] ?? []).length;
+    convs.updateConversation(
+      activeId,
+      lastMessage: content,
+      messageCount: msgCount,
+      title:
+          msgCount <= 1
+              ? (content.length > 30
+                  ? '\${content.substring(0, 30)}...'
+                  : content)
+              : null,
+    );
+
+    // Create placeholder assistant message.
+    final assistantId = 'assistant_\${DateTime.now().millisecondsSinceEpoch}';
+    final placeholderMessage = ChatMessage(
+      id: assistantId,
+      role: 'assistant',
+      content: '',
+      createdAt: DateTime.now(),
+    );
+    allMsgs.addMessage(activeId, placeholderMessage);
+
+    // Set streaming state.
+    _ref.read(isChatLoadingProvider.notifier).state = true;
+    _ref.read(streamingMessageIdProvider.notifier).state = assistantId;
+    _ref.read(streamingTextProvider.notifier).state = '';
+
+    String accumulatedText = '';
+
+    try {
+      final stream = repo.sendMessageStream(
+        message: content,
+        domain: domain,
+        imageBase64: imageBase64,
+        context: context.isNotEmpty ? context : null,
+      );
+
+      await for (final event in stream) {
+        switch (event) {
+          case RoutingEvent():
+            // Domain routed — could update UI state if needed.
+            break;
+          case SearchingEvent():
+            // Backend is searching — loading indicator continues.
+            break;
+          case TokenEvent():
+            // Append token to accumulated text and update streaming text.
+            accumulatedText += event.text;
+            _ref.read(streamingTextProvider.notifier).state = accumulatedText;
+
+            // Update the message content in-place.
+            allMsgs.updateMessageContent(activeId, assistantId, accumulatedText);
+            break;
+          case DoneEvent():
+            // Stream complete — finalize with parsed response.
+            final response = event.response;
+            allMsgs.finalizeMessage(
+              activeId,
+              assistantId,
+              content: response.reply,
+              sources: response.sources,
+              trackerItems:
+                  response.trackerItems.isNotEmpty ? response.trackerItems : null,
+              domain: response.domain,
+              usage: response.usage,
+            );
+
+            // Update conversation metadata.
+            final newCount =
+                (_ref.read(allMessagesProvider)[activeId] ?? []).length;
+            convs.updateConversation(
+              activeId,
+              lastMessage:
+                  response.reply.length > 60
+                      ? '\${response.reply.substring(0, 60)}...'
+                      : response.reply,
+              messageCount: newCount,
+            );
+
+            // Update usage.
+            _ref.read(chatUsageProvider.notifier).state = response.usage;
+            break;
+          case ErrorEvent():
+            // Error during streaming.
+            allMsgs.updateMessageContent(
+              activeId,
+              assistantId,
+              accumulatedText.isEmpty
+                  ? 'An error occurred. Please try again.'
+                  : accumulatedText,
+            );
+            break;
+        }
+      }
+    } catch (error) {
+      // Network error — update placeholder with error.
+      if (accumulatedText.isEmpty) {
+        allMsgs.updateMessageContent(
+          activeId,
+          assistantId,
+          '',
+        );
+      }
+      rethrow;
+    } finally {
+      _ref.read(isChatLoadingProvider.notifier).state = false;
+      _ref.read(streamingMessageIdProvider.notifier).state = null;
+      _ref.read(streamingTextProvider.notifier).state = '';
     }
   }
 }

@@ -185,9 +185,11 @@ class _AiBubble extends StatelessWidget {
                   children: [
                     // Markdown-rendered content with inline tracker buttons.
                     if (message.content.isNotEmpty)
-                      _buildContentWithInlineTrackers(context)
+                      isStreaming
+                          ? _buildStreamingContent(context)
+                          : _buildContentWithInlineTrackers(context)
                     else if (isStreaming)
-                      Text('...', style: tt.bodyLarge),
+                      Text('▌', style: tt.bodyLarge?.copyWith(color: cs.primary)),
 
                     // Sources section.
                     if (message.sources != null &&
@@ -242,6 +244,16 @@ class _AiBubble extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+
+  /// Builds streaming content with cursor indicator.
+  /// During streaming, shows raw text + blinking cursor (no tracker parsing).
+  Widget _buildStreamingContent(BuildContext context) {
+    return MarkdownBody(
+      data: '${message.content}▌',
+      selectable: false,
+      styleSheet: _markdownStyleSheet(context),
     );
   }
 

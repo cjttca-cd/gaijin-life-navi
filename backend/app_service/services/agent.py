@@ -21,6 +21,7 @@ Usage::
 from __future__ import annotations
 
 import asyncio
+from collections.abc import AsyncGenerator
 import json
 import logging
 import re
@@ -715,3 +716,252 @@ async def route_to_agent(
 
     logger.debug("Classification fallback; routing to svc-life")
     return RoutingResult(agent_id="svc-life")
+
+
+# ---------------------------------------------------------------------------
+# Streaming chat completion  (SSE streaming support)
+# ---------------------------------------------------------------------------
+
+
+async def _chat_completion_stream(
+    messages: list[dict],
+    model: str,
+    timeout: float | None = None,
+) -> httpx.Response:
+    """Start a streaming chat completion request.
+
+    Returns the raw httpx Response with stream open. The caller must
+    iterate ``response.aiter_lines()`` to consume the SSE data.
+    """
+    client = _get_http_client()
+    url = f"{settings.LLM_API_BASE_URL}/chat/completions"
+
+    payload: dict = {
+        "model": model,
+        "messages": messages,
+        "stream": True,
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+    }
+    if settings.LLM_API_KEY:
+        headers["Authorization"] = f"Bearer {settings.LLM_API_KEY}"
+
+    effective_timeout = timeout or float(settings.LLM_TIMEOUT)
+
+    req = client.build_request("POST", url, json=payload, headers=headers)
+    response = await client.send(
+        req,
+        stream=True,
+        timeout=httpx.Timeout(
+            connect=10.0,
+            read=effective_timeout,
+            write=10.0,
+            pool=10.0,
+        ),
+    )
+    response.raise_for_status()
+    return response
+
+
+async def _chat_completion_stream_with_fallback(
+    messages: list[dict],
+    primary_model: str,
+    fallback_model: str,
+    timeout: float | None = None,
+) -> tuple[httpx.Response, str]:
+    """Try streaming with primary model, fall back on failure.
+
+    Returns (response, model_used).
+    """
+    for model in (primary_model, fallback_model):
+        try:
+            resp = await _chat_completion_stream(
+                messages=messages,
+                model=model,
+                timeout=timeout,
+            )
+            return resp, model
+        except Exception as exc:
+            if model == primary_model:
+                logger.warning(
+                    "Primary model %s stream failed (%s), trying fallback %s",
+                    model, exc, fallback_model,
+                )
+                continue
+            else:
+                raise
+
+
+async def call_agent_stream(
+    agent_id: str,
+    message: str,
+    context: list[dict] | None = None,
+    image_path: str | None = None,
+    user_profile: dict | None = None,
+    search_results: str | None = None,
+    timeout: int = 90,
+) -> AsyncGenerator[str, None]:
+    """Stream agent response as SSE events.
+
+    Yields SSE-formatted strings:
+      event: token\\ndata: {"text": "..."}\\n\\n
+
+    At the end, yields:
+      event: done\\ndata: {usage info}\\n\\n
+
+    On error yields:
+      event: error\\ndata: {"message": "..."}\\n\\n
+
+    The caller wraps these in StreamingResponse.
+    """
+
+    start = time.monotonic()
+
+    # ---- Build system prompt: same as call_agent() ----
+    agent_instructions = _load_agent_instructions(agent_id)
+    domain_knowledge = _load_domain_knowledge(agent_id)
+
+    system_prompt = agent_instructions
+    if domain_knowledge:
+        system_prompt += "\n\n" + domain_knowledge
+
+    # ---- Build user message (same as call_agent()) ----
+    user_message_parts: list[str] = []
+
+    if user_profile:
+        profile_lines = ["【ユーザープロフィール】"]
+        field_map = {
+            "display_name": "表示名",
+            "subscription_tier": "会員プラン",
+            "nationality": "国籍",
+            "residence_status": "在留資格",
+            "visa_expiry": "在留期限",
+            "residence_region": "居住地域",
+            "preferred_language": "首選語言",
+        }
+        for key, label in field_map.items():
+            value = user_profile.get(key)
+            if value:
+                profile_lines.append(f"{label}: {value}")
+        profile_lines.append("回答深度: 深度級")
+        user_message_parts.append("\n".join(profile_lines))
+
+    if context:
+        history_lines = ["以下は過去の会話履歴です。この文脈を踏まえて回答してください。"]
+        for msg in context:
+            role_label = "User" if msg["role"] == "user" else "Assistant"
+            text = msg["text"][:2000]
+            history_lines.append(f"\n{role_label}: {text}")
+        history_lines.append("\n---")
+        user_message_parts.append("\n".join(history_lines))
+
+    if image_path:
+        user_message_parts.append(
+            "(User attached an image — image analysis not yet supported in this mode)"
+        )
+
+    if search_results:
+        user_message_parts.append(
+            "【ウェブ検索結果（参考情報 — 数字や日付はこの検索結果を優先すること）】\n"
+            f"{search_results}"
+        )
+
+    user_message_parts.append(f"【現在のユーザーの質問】\n{message}")
+
+    full_user_message = "\n\n".join(user_message_parts)
+
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": full_user_message},
+    ]
+
+    logger.info(
+        "Streaming agent=%s timeout=%ds message_len=%d context_len=%d",
+        agent_id,
+        timeout,
+        len(full_user_message),
+        len(context) if context else 0,
+    )
+
+    response = None
+    model_used = ""
+    input_tokens = 0
+    output_tokens = 0
+
+    try:
+        response, model_used = await _chat_completion_stream_with_fallback(
+            messages=messages,
+            primary_model=settings.LLM_AGENT_MODEL,
+            fallback_model=settings.LLM_AGENT_FALLBACK_MODEL,
+            timeout=float(timeout),
+        )
+
+        # Parse SSE stream from OpenAI-compatible API
+        async for raw_line in response.aiter_lines():
+            line = raw_line.strip()
+            if not line:
+                continue
+            if not line.startswith("data: "):
+                continue
+            data_str = line[6:]  # strip "data: "
+            if data_str == "[DONE]":
+                break
+
+            try:
+                chunk = json.loads(data_str)
+            except json.JSONDecodeError:
+                continue
+
+            # Extract delta content
+            choices = chunk.get("choices", [])
+            if not choices:
+                continue
+            delta = choices[0].get("delta", {})
+            content = delta.get("content")
+            if content:
+                yield f"event: token\ndata: {json.dumps({'text': content}, ensure_ascii=False)}\n\n"
+
+            # Extract usage from final chunk if present
+            usage = chunk.get("usage")
+            if usage:
+                input_tokens = usage.get("prompt_tokens", 0)
+                output_tokens = usage.get("completion_tokens", 0)
+
+    except httpx.TimeoutException:
+        elapsed_ms = int((time.monotonic() - start) * 1000)
+        logger.error("Agent stream timed out after %dms (agent=%s)", elapsed_ms, agent_id)
+        yield f"event: error\ndata: {json.dumps({'message': f'Agent timed out after {timeout}s'})}\n\n"
+        return
+    except httpx.HTTPStatusError as exc:
+        elapsed_ms = int((time.monotonic() - start) * 1000)
+        logger.error(
+            "Agent stream HTTP error %d (agent=%s): %s",
+            exc.response.status_code, agent_id, str(exc)[:300],
+        )
+        yield f"event: error\ndata: {json.dumps({'message': f'LLM API error: {exc.response.status_code}'})}\n\n"
+        return
+    except Exception as exc:
+        elapsed_ms = int((time.monotonic() - start) * 1000)
+        logger.exception("Unexpected error streaming agent %s", agent_id)
+        yield f"event: error\ndata: {json.dumps({'message': f'Unexpected error: {exc}'})}\n\n"
+        return
+    finally:
+        if response is not None:
+            await response.aclose()
+
+    elapsed_ms = int((time.monotonic() - start) * 1000)
+    logger.info(
+        "Agent stream done: model=%s tokens_in=%d tokens_out=%d duration=%dms",
+        model_used, input_tokens, output_tokens, elapsed_ms,
+    )
+
+    # Yield a __meta__ event (internal — the router will use this for the done event)
+    meta = {
+        "model": model_used,
+        "duration_ms": elapsed_ms,
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+    }
+    yield f"event: __meta__\ndata: {json.dumps(meta)}\n\n"

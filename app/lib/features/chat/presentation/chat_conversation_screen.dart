@@ -109,7 +109,7 @@ class _ChatConversationScreenState
 
     try {
       final controller = ref.read(chatSendControllerProvider);
-      await controller.sendMessage(
+      await controller.sendMessageStream(
         messageText,
         imageBase64: imageBase64,
       );
@@ -233,9 +233,9 @@ class _ChatConversationScreenState
                     : ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.only(top: 8, bottom: 8),
-                      itemCount: messages.length + (isLoading ? 1 : 0),
+                      itemCount: messages.length + (isLoading && ref.watch(streamingMessageIdProvider) == null ? 1 : 0),
                       itemBuilder: (context, index) {
-                        if (index == messages.length && isLoading) {
+                        if (index == messages.length && isLoading && ref.watch(streamingMessageIdProvider) == null) {
                           return const TypingIndicator();
                         }
 
@@ -246,9 +246,16 @@ class _ChatConversationScreenState
                             index == 0 ||
                             messages[index - 1].isUser != message.isUser;
 
+                        // Check if this message is currently streaming.
+                        final streamingId =
+                            ref.watch(streamingMessageIdProvider);
+                        final isStreamingMsg =
+                            streamingId != null &&
+                            message.id == streamingId;
+
                         return MessageBubble(
                           message: message,
-                          isStreaming: false,
+                          isStreaming: isStreamingMsg,
                           showAvatar: showAvatar && message.isAssistant,
                         );
                       },
