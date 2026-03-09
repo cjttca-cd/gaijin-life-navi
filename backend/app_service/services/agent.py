@@ -1,17 +1,17 @@
-"""OpenClaw agent calling service.
+"""LLM direct API agent calling service.
 
-Provides async functions to invoke OpenClaw CLI agents and route messages
-to the appropriate domain agent.
+Replaces the OpenClaw subprocess approach with direct HTTP calls to a local
+LLM proxy (OpenAI-compatible API).  Domain knowledge files are loaded from
+disk and injected into the system prompt.
 
-Every call is stateless: the /reset prefix forces OpenClaw to create a fresh
-session. The frontend manages conversation history and sends prior context
-with each request.
+Every call is stateless.  The frontend manages conversation history and
+sends prior context with each request.
 
 Usage::
 
     from services.agent import call_agent, route_to_agent
 
-    domain = route_to_agent(user_message)
+    domain = await route_to_agent(user_message)
     response = await call_agent(agent_id=domain, message=user_message, context=ctx)
 
     if response.status == "ok":
@@ -20,12 +20,15 @@ Usage::
 
 from __future__ import annotations
 
-import asyncio
-import json
 import logging
 import re
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
+
+import httpx
+
+from config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -33,25 +36,21 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-_OPENCLAW_WORKDIR = "/root/.openclaw"
-"""Working directory for OpenClaw subprocess calls."""
-
-_OPENCLAW_BIN = "openclaw"
-"""Binary name — expected to be on ``$PATH``."""
-
+_AGENTS_ROOT = Path("/root/.openclaw/agents")
+"""Root directory for OpenClaw agent workspaces (read-only for knowledge)."""
 
 # ---------------------------------------------------------------------------
-# Response dataclass
+# Response dataclass  (unchanged — interface contract)
 # ---------------------------------------------------------------------------
 
 
 @dataclass(frozen=True, slots=True)
 class AgentResponse:
-    """Structured response from an OpenClaw agent invocation.
+    """Structured response from an LLM agent invocation.
 
     Attributes:
         text: The agent's reply text.
-        model: Model identifier (e.g. ``"claude-sonnet-4-5"``).
+        model: Model identifier (e.g. ``"gemini-3-flash"``).
         duration_ms: Wall-clock response time in milliseconds.
         input_tokens: Prompt tokens consumed.
         output_tokens: Completion tokens generated.
@@ -71,7 +70,182 @@ class AgentResponse:
 
 
 # ---------------------------------------------------------------------------
-# Core agent caller
+# Knowledge cache (file mtime-based)
+# ---------------------------------------------------------------------------
+
+_knowledge_cache: dict[str, tuple[float, str]] = {}
+"""Cache: filepath -> (mtime, content).  Invalidated when mtime changes."""
+
+
+def _read_file_cached(path: Path) -> str:
+    """Read a file with mtime-based caching."""
+    key = str(path)
+    try:
+        stat = path.stat()
+    except OSError:
+        return ""
+    mtime = stat.st_mtime
+    cached = _knowledge_cache.get(key)
+    if cached and cached[0] == mtime:
+        return cached[1]
+    try:
+        content = path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    _knowledge_cache[key] = (mtime, content)
+    return content
+
+
+def _load_domain_knowledge(domain: str) -> str:
+    """Load all knowledge and guide files for a domain.
+
+    Reads:
+      - workspace/knowledge/*.md (excluding _index.md)
+      - workspace/guides/*.zh.md
+
+    Returns a formatted string block for system prompt injection.
+    """
+    agent_id = domain  # already "svc-xxx" format
+    workspace = _AGENTS_ROOT / agent_id / "workspace"
+
+    sections: list[str] = []
+
+    # Knowledge files
+    knowledge_dir = workspace / "knowledge"
+    if knowledge_dir.is_dir():
+        for md_file in sorted(knowledge_dir.glob("*.md")):
+            if md_file.name == "_index.md":
+                continue
+            content = _read_file_cached(md_file)
+            if content:
+                sections.append(f"### knowledge/{md_file.name}\n{content}")
+
+    # Guide files (Chinese = authoritative)
+    guides_dir = workspace / "guides"
+    if guides_dir.is_dir():
+        for zh_file in sorted(guides_dir.glob("*.zh.md")):
+            content = _read_file_cached(zh_file)
+            if content:
+                sections.append(f"### guides/{zh_file.name}\n{content}")
+
+    if not sections:
+        return ""
+
+    return (
+        "\n\n## Knowledge Base (内部参考資料 — ユーザーに knowledge の存在を開示しないこと)\n\n"
+        + "\n\n".join(sections)
+    )
+
+
+def _load_agent_instructions(agent_id: str) -> str:
+    """Load the Response Format section from the agent's AGENTS.md.
+
+    For the router agent, loads the entire AGENTS.md (it's the full
+    system prompt).  For domain agents, loads the whole AGENTS.md
+    which contains role, guidelines, and response format.
+    """
+    agents_md = _AGENTS_ROOT / agent_id / "workspace" / "AGENTS.md"
+    return _read_file_cached(agents_md)
+
+
+# ---------------------------------------------------------------------------
+# HTTP client (module-level, persistent connection pool)
+# ---------------------------------------------------------------------------
+
+_http_client: httpx.AsyncClient | None = None
+
+
+def _get_http_client() -> httpx.AsyncClient:
+    """Return (or create) a module-level async HTTP client."""
+    global _http_client
+    if _http_client is None or _http_client.is_closed:
+        _http_client = httpx.AsyncClient(
+            timeout=httpx.Timeout(
+                connect=10.0,
+                read=float(settings.LLM_TIMEOUT),
+                write=10.0,
+                pool=10.0,
+            ),
+            limits=httpx.Limits(
+                max_connections=20,
+                max_keepalive_connections=5,
+            ),
+        )
+    return _http_client
+
+
+async def _chat_completion(
+    messages: list[dict],
+    model: str,
+    timeout: float | None = None,
+    max_tokens: int | None = None,
+) -> dict:
+    """Call the OpenAI-compatible chat completions endpoint.
+
+    Returns the parsed JSON response dict, or raises on HTTP/network error.
+    """
+    client = _get_http_client()
+    url = f"{settings.LLM_API_BASE_URL}/chat/completions"
+
+    payload: dict = {
+        "model": model,
+        "messages": messages,
+    }
+    if max_tokens is not None:
+        payload["max_tokens"] = max_tokens
+
+    headers = {
+        "Content-Type": "application/json",
+    }
+    if settings.LLM_API_KEY:
+        headers["Authorization"] = f"Bearer {settings.LLM_API_KEY}"
+
+    effective_timeout = timeout or float(settings.LLM_TIMEOUT)
+
+    response = await client.post(
+        url,
+        json=payload,
+        headers=headers,
+        timeout=effective_timeout,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
+async def _chat_completion_with_fallback(
+    messages: list[dict],
+    primary_model: str,
+    fallback_model: str,
+    timeout: float | None = None,
+    max_tokens: int | None = None,
+) -> tuple[dict, str]:
+    """Try primary model, fall back to fallback_model on failure.
+
+    Returns (response_dict, model_used).
+    Raises if both fail.
+    """
+    for model in (primary_model, fallback_model):
+        try:
+            result = await _chat_completion(
+                messages=messages,
+                model=model,
+                timeout=timeout,
+                max_tokens=max_tokens,
+            )
+            return result, model
+        except Exception as exc:
+            if model == primary_model:
+                logger.warning(
+                    "Primary model %s failed (%s), trying fallback %s",
+                    model, exc, fallback_model,
+                )
+                continue
+            else:
+                raise
+
+
+# ---------------------------------------------------------------------------
+# Core agent caller  (signature unchanged — interface contract)
 # ---------------------------------------------------------------------------
 
 
@@ -83,13 +257,10 @@ async def call_agent(
     user_profile: dict | None = None,
     timeout: int = 90,
 ) -> AgentResponse:
-    """Invoke an OpenClaw agent statelessly and return a structured response.
+    """Invoke an LLM agent via direct API call and return a structured response.
 
-    Every call is prefixed with ``/reset`` so OpenClaw creates a fresh
-    session, ensuring complete isolation between users/requests.
-    Conversation history is passed explicitly via *context*.
-
-    All responses are 深度級 (deep level) — 概要級 was deprecated 2026-03-03.
+    Domain knowledge is loaded from disk and injected into the system
+    prompt.  Conversation history is passed via user messages.
 
     Parameters:
         agent_id: The agent identifier to route to (e.g. ``"svc-life"``).
@@ -97,12 +268,8 @@ async def call_agent(
         context: Optional list of prior conversation turns, each a dict
             with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
         image_path: Optional filesystem path to an uploaded image.
-        user_profile: Optional dict with user profile fields
-            (``display_name``, ``nationality``, ``residence_status``,
-            ``visa_expiry``, ``residence_region``, ``preferred_language``).
-            Injected into the prompt so the agent can personalise responses.
-        timeout: Maximum seconds to wait for the agent (passed to both
-            OpenClaw ``--timeout`` and ``asyncio`` subprocess timeout).
+        user_profile: Optional dict with user profile fields.
+        timeout: Maximum seconds to wait for the agent.
 
     Returns:
         An :class:`AgentResponse` — always returned, never raises.
@@ -110,10 +277,18 @@ async def call_agent(
     """
     start = time.monotonic()
 
-    # Build the full message with /reset prefix for stateless isolation.
-    full_message = "/reset "
+    # ---- Build system prompt: agent instructions + domain knowledge ----
+    agent_instructions = _load_agent_instructions(agent_id)
+    domain_knowledge = _load_domain_knowledge(agent_id)
 
-    # Inject user profile so the agent can personalise responses.
+    system_prompt = agent_instructions
+    if domain_knowledge:
+        system_prompt += "\n\n" + domain_knowledge
+
+    # ---- Build user message (same structure as before) ----
+    user_message_parts: list[str] = []
+
+    # Inject user profile
     if user_profile:
         profile_lines = ["【ユーザープロフィール】"]
         field_map = {
@@ -129,122 +304,99 @@ async def call_agent(
             value = user_profile.get(key)
             if value:
                 profile_lines.append(f"{label}: {value}")
-
         profile_lines.append("回答深度: 深度級")
+        user_message_parts.append("\n".join(profile_lines))
 
-        full_message += "\n".join(profile_lines) + "\n\n"
-
-    # Append conversation history if provided.
+    # Append conversation history
     if context:
-        full_message += "以下は過去の会話履歴です。この文脈を踏まえて回答してください。\n\n"
+        history_lines = ["以下は過去の会話履歴です。この文脈を踏まえて回答してください。"]
         for msg in context:
             role_label = "User" if msg["role"] == "user" else "Assistant"
-            # Truncate very long messages in context.
             text = msg["text"][:2000]
-            full_message += f"{role_label}: {text}\n\n"
-        full_message += "---\n\n"
+            history_lines.append(f"\n{role_label}: {text}")
+        history_lines.append("\n---")
+        user_message_parts.append("\n".join(history_lines))
 
-    # Append image instruction if present.
+    # Image handling — file saved but analysis deferred
     if image_path:
-        full_message += (
-            f"[The user attached an image. Analyze it using the image "
-            f"tool with path: {image_path}]\n\n"
+        user_message_parts.append(
+            "(User attached an image — image analysis not yet supported in this mode)"
         )
 
-    # Append the actual new message with explicit marker.
-    full_message += "【現在のユーザーの質問】\n"
-    full_message += message
+    # The actual current question
+    user_message_parts.append(f"【現在のユーザーの質問】\n{message}")
 
-    cmd = [
-        _OPENCLAW_BIN,
-        "agent",
-        "--agent", agent_id,
-        "--message", full_message,
-        "--json",
-        "--thinking", "low",
-        "--timeout", str(timeout),
+    full_user_message = "\n\n".join(user_message_parts)
+
+    # ---- Build messages array ----
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": full_user_message},
     ]
 
     logger.info(
-        "Calling agent=%s timeout=%ds message_len=%d context_len=%d",
+        "Calling agent=%s timeout=%ds message_len=%d context_len=%d system_len=%d",
         agent_id,
         timeout,
-        len(full_message),
+        len(full_user_message),
         len(context) if context else 0,
+        len(system_prompt),
     )
 
     try:
-        proc = await asyncio.create_subprocess_exec(
-            *cmd,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            cwd=_OPENCLAW_WORKDIR,
+        result, model_used = await _chat_completion_with_fallback(
+            messages=messages,
+            primary_model=settings.LLM_AGENT_MODEL,
+            fallback_model=settings.LLM_AGENT_FALLBACK_MODEL,
+            timeout=float(timeout),
         )
 
-        # Give a small buffer over the CLI timeout so OpenClaw can
-        # handle its own timeout gracefully before we force-kill.
-        subprocess_timeout = timeout + 15
+        elapsed_ms = int((time.monotonic() - start) * 1000)
 
-        try:
-            stdout_bytes, stderr_bytes = await asyncio.wait_for(
-                proc.communicate(),
-                timeout=subprocess_timeout,
-            )
-        except asyncio.TimeoutError:
-            # Force-kill the runaway process.
-            logger.error(
-                "Agent subprocess timed out after %ds; killing pid=%s",
-                subprocess_timeout,
-                proc.pid,
-            )
-            proc.kill()
-            await proc.wait()
-            elapsed_ms = int((time.monotonic() - start) * 1000)
+        # Extract response text
+        choices = result.get("choices", [])
+        if not choices:
             return AgentResponse(
                 text="",
-                model="",
+                model=model_used,
                 duration_ms=elapsed_ms,
                 input_tokens=0,
                 output_tokens=0,
                 cache_read_tokens=0,
                 status="error",
-                error=f"Agent timed out after {subprocess_timeout}s",
+                error="No choices in LLM response",
             )
 
+        text = choices[0].get("message", {}).get("content", "")
+
+        # Extract usage stats
+        usage = result.get("usage", {})
+        input_tokens = usage.get("prompt_tokens", 0)
+        output_tokens = usage.get("completion_tokens", 0)
+        cache_read = usage.get("prompt_tokens_details", {}).get("cached_tokens", 0) if isinstance(usage.get("prompt_tokens_details"), dict) else 0
+
+        logger.info(
+            "Agent response: model=%s tokens_in=%d tokens_out=%d cache=%d duration=%dms",
+            model_used,
+            input_tokens,
+            output_tokens,
+            cache_read,
+            elapsed_ms,
+        )
+
+        return AgentResponse(
+            text=text,
+            model=model_used,
+            duration_ms=elapsed_ms,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            cache_read_tokens=cache_read,
+            status="ok",
+        )
+
+    except httpx.TimeoutException:
         elapsed_ms = int((time.monotonic() - start) * 1000)
-        stdout = stdout_bytes.decode("utf-8", errors="replace").strip()
-        stderr = stderr_bytes.decode("utf-8", errors="replace").strip()
-
-        if stderr:
-            logger.debug("Agent stderr: %s", stderr[:500])
-
-        # Non-zero exit code — treat as error.
-        if proc.returncode != 0:
-            logger.error(
-                "Agent exited with code %d (agent=%s): %s",
-                proc.returncode,
-                agent_id,
-                stderr[:300] or stdout[:300],
-            )
-            # Try to extract a useful error message.
-            error_detail = stderr or stdout or f"exit code {proc.returncode}"
-            return AgentResponse(
-                text="",
-                model="",
-                duration_ms=elapsed_ms,
-                input_tokens=0,
-                output_tokens=0,
-                cache_read_tokens=0,
-                status="error",
-                error=error_detail[:1000],
-            )
-
-        # Parse JSON output.
-        return _parse_json_response(stdout, elapsed_ms)
-
-    except FileNotFoundError:
-        elapsed_ms = int((time.monotonic() - start) * 1000)
-        logger.critical("openclaw binary not found on PATH")
+        logger.error("Agent API timed out after %dms (agent=%s)", elapsed_ms, agent_id)
         return AgentResponse(
             text="",
             model="",
@@ -253,11 +405,14 @@ async def call_agent(
             output_tokens=0,
             cache_read_tokens=0,
             status="error",
-            error="openclaw binary not found",
+            error=f"Agent timed out after {timeout}s",
         )
-    except OSError as exc:
+    except httpx.HTTPStatusError as exc:
         elapsed_ms = int((time.monotonic() - start) * 1000)
-        logger.exception("OS error spawning openclaw subprocess")
+        logger.error(
+            "Agent API HTTP error %d (agent=%s): %s",
+            exc.response.status_code, agent_id, exc.response.text[:300],
+        )
         return AgentResponse(
             text="",
             model="",
@@ -266,27 +421,11 @@ async def call_agent(
             output_tokens=0,
             cache_read_tokens=0,
             status="error",
-            error=f"Subprocess OS error: {exc}",
+            error=f"LLM API error: {exc.response.status_code}",
         )
-
-
-# ---------------------------------------------------------------------------
-# JSON parsing helper
-# ---------------------------------------------------------------------------
-
-
-def _parse_json_response(
-    raw: str,
-    elapsed_ms: int,
-) -> AgentResponse:
-    """Parse OpenClaw ``--json`` output into an :class:`AgentResponse`.
-
-    Handles multiple JSON objects in the output (OpenClaw may emit
-    progress lines before the final result) by trying the last valid
-    JSON object first, then falling back to the first.
-    """
-    if not raw:
-        logger.error("Empty stdout from openclaw agent")
+    except Exception as exc:
+        elapsed_ms = int((time.monotonic() - start) * 1000)
+        logger.exception("Unexpected error calling agent %s", agent_id)
         return AgentResponse(
             text="",
             model="",
@@ -295,106 +434,12 @@ def _parse_json_response(
             output_tokens=0,
             cache_read_tokens=0,
             status="error",
-            error="Empty response from agent",
+            error=f"Unexpected error: {exc}",
         )
-
-    # OpenClaw --json may output one JSON object or multiple NDJSON lines.
-    # Try to find the "result" object (contains "text" or "reply").
-    candidates: list[dict] = []
-    for line in raw.splitlines():
-        line = line.strip()
-        if not line or not line.startswith("{"):
-            continue
-        try:
-            candidates.append(json.loads(line))
-        except json.JSONDecodeError:
-            continue
-
-    # If no NDJSON lines found, try parsing the entire block.
-    if not candidates:
-        try:
-            candidates.append(json.loads(raw))
-        except json.JSONDecodeError:
-            logger.error("Failed to parse agent JSON output: %s", raw[:500])
-            return AgentResponse(
-                text="",
-                model="",
-                duration_ms=elapsed_ms,
-                input_tokens=0,
-                output_tokens=0,
-                cache_read_tokens=0,
-                status="error",
-                error=f"Invalid JSON from agent: {raw[:200]}",
-            )
-
-    # Prefer the last object that looks like a result (has text/reply/message).
-    data: dict = candidates[-1]
-    for candidate in reversed(candidates):
-        if any(k in candidate for k in ("text", "reply", "message", "result")):
-            data = candidate
-            break
-
-    # Extract result — handle nested {"result": {...}} wrappers.
-    result = data.get("result", data)
-    if isinstance(result, str):
-        # Some modes return {"result": "text here"}
-        text = result
-        result = data
-    else:
-        # OpenClaw --json output: {"result": {"payloads": [{"text": "..."}], "meta": {...}}}
-        payloads = result.get("payloads")
-        if isinstance(payloads, list) and payloads:
-            text = payloads[0].get("text", "") or ""
-        else:
-            text = (
-                result.get("text")
-                or result.get("reply")
-                or result.get("message")
-                or ""
-            )
-
-    # Extract usage stats from agentMeta (OpenClaw format)
-    meta = result.get("meta", {})
-    agent_meta = meta.get("agentMeta", {})
-    usage = agent_meta.get("usage") or result.get("usage") or result.get("stats") or {}
-    if isinstance(usage, dict):
-        input_tokens = usage.get("input") or usage.get("inputTokens") or usage.get("input_tokens") or 0
-        output_tokens = usage.get("output") or usage.get("outputTokens") or usage.get("output_tokens") or 0
-        cache_read = (
-            usage.get("cacheRead")
-            or usage.get("cacheReadInputTokens")
-            or usage.get("cache_read_tokens")
-            or 0
-        )
-    else:
-        input_tokens = 0
-        output_tokens = 0
-        cache_read = 0
-
-    model = agent_meta.get("model") or result.get("model") or result.get("modelId") or ""
-
-    logger.info(
-        "Agent response: model=%s tokens_in=%d tokens_out=%d cache=%d duration=%dms",
-        model,
-        input_tokens,
-        output_tokens,
-        cache_read,
-        elapsed_ms,
-    )
-
-    return AgentResponse(
-        text=text,
-        model=str(model),
-        duration_ms=elapsed_ms,
-        input_tokens=int(input_tokens),
-        output_tokens=int(output_tokens),
-        cache_read_tokens=int(cache_read),
-        status="ok",
-    )
 
 
 # ---------------------------------------------------------------------------
-# Message routing
+# Message routing  (signature unchanged — interface contract)
 # ---------------------------------------------------------------------------
 
 # Keyword patterns compiled once at module load.
@@ -456,8 +501,7 @@ async def route_to_agent(
 
     Uses a three-layer approach:
     1. **Emergency keyword detection** (instant, no LLM) → svc-medical
-    2. **LLM classification** via lightweight OpenClaw CLI call,
-       including recent conversation history for context-aware routing
+    2. **LLM classification** via direct API call to router model
     3. **Fallback** to current_domain or svc-life if LLM fails
 
     Parameters:
@@ -466,9 +510,6 @@ async def route_to_agent(
             or ``None`` if this is a fresh conversation.
         context: Optional list of prior conversation turns, each a dict
             with ``role`` (``"user"`` | ``"assistant"``) and ``text``.
-            The most recent turns are included in the classification
-            prompt so the router can understand the topic even when the
-            latest message alone is ambiguous (e.g. "那这个怎么办？").
 
     Returns:
         Agent identifier string (e.g. ``"svc-medical"``).
@@ -481,7 +522,7 @@ async def route_to_agent(
         logger.info("Routing to svc-medical (emergency detected)")
         return "svc-medical"
 
-    # 2. LLM classification via OpenClaw CLI (lightweight, fast).
+    # 2. LLM classification via direct API call (lightweight, fast).
     valid_domains = {"finance", "tax", "visa", "medical", "life", "legal", "out_of_scope"}
     try:
         context_section = _build_routing_context(context)
@@ -489,27 +530,45 @@ async def route_to_agent(
             context_section=context_section,
             message=message[:500],
         )
-        resp = await call_agent(
-            agent_id="svc-router",
-            message=classify_msg,
-            timeout=15,
+
+        # Load router system prompt
+        router_system = _load_agent_instructions("svc-router")
+
+        messages = [
+            {"role": "system", "content": router_system},
+            {"role": "user", "content": classify_msg},
+        ]
+
+        result, model_used = await _chat_completion_with_fallback(
+            messages=messages,
+            primary_model=settings.LLM_ROUTER_MODEL,
+            fallback_model=settings.LLM_ROUTER_FALLBACK_MODEL,
+            timeout=15.0,
+            max_tokens=10,  # Classification needs only 1 word
         )
-        if resp.status == "ok" and resp.text:
-            domain = resp.text.strip().lower().rstrip(".")
+
+        choices = result.get("choices", [])
+        if choices:
+            raw_text = choices[0].get("message", {}).get("content", "")
+            domain = raw_text.strip().lower().rstrip(".")
             # Extract first word in case of extra text
             domain = domain.split()[0] if domain else ""
+
+            usage = result.get("usage", {})
+            duration_info = f"tokens_in={usage.get('prompt_tokens', 0)} tokens_out={usage.get('completion_tokens', 0)}"
+
             if domain == "out_of_scope":
                 logger.info(
-                    "LLM classified as out_of_scope (in %dms, context_turns=%d)",
-                    resp.duration_ms,
+                    "LLM classified as out_of_scope (model=%s, %s, context_turns=%d)",
+                    model_used, duration_info,
                     len(context) if context else 0,
                 )
                 return "out_of_scope"
             if domain in valid_domains:
                 agent_id = f"svc-{domain}"
                 logger.info(
-                    "LLM routing to %s (classified in %dms, context_turns=%d)",
-                    agent_id, resp.duration_ms,
+                    "LLM routing to %s (model=%s, %s, context_turns=%d)",
+                    agent_id, model_used, duration_info,
                     len(context) if context else 0,
                 )
                 return agent_id
@@ -527,7 +586,3 @@ async def route_to_agent(
 
     logger.debug("Classification fallback; routing to svc-life")
     return "svc-life"
-
-
-
-# (build_session_id removed — stateless /reset mode eliminates session management)

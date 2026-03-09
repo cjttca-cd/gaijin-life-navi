@@ -1,6 +1,5 @@
 """Application configuration via environment variables."""
 
-import os
 from pathlib import Path
 
 from pydantic_settings import BaseSettings
@@ -36,6 +35,15 @@ class Settings(BaseSettings):
 
     # AI Service URL (for internal moderation calls)
     AI_SERVICE_URL: str = "http://localhost:8001"
+
+    # LLM Direct API Configuration (replaces OpenClaw subprocess calls)
+    LLM_API_BASE_URL: str = "http://192.168.18.119:8317/v1"
+    LLM_API_KEY: str = ""  # Set via env var
+    LLM_ROUTER_MODEL: str = "gemini-2.5-flash-lite"
+    LLM_ROUTER_FALLBACK_MODEL: str = "gemini-2.5-flash"
+    LLM_AGENT_MODEL: str = "gemini-3-flash"
+    LLM_AGENT_FALLBACK_MODEL: str = "gemini-2.5-flash"
+    LLM_TIMEOUT: int = 30  # seconds per API call
 
     # TestFlight mode — unlocks all guides + allows anonymous AI Chat for testing.
     # Set TESTFLIGHT_MODE=true in .env or environment. Disable before App Store release.
