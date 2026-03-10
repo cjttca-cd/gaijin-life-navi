@@ -32,7 +32,7 @@ router = APIRouter(tags=["navigator"])
 # ── Constants ──────────────────────────────────────────────────────────
 
 _FALLBACK_LANG = "ja"
-_SUPPORTED_LANGS = {"zh", "ja", "en", "vi", "pt", "ko"}
+_SUPPORTED_LANGS = {"zh", "zh-Hant", "ja", "en", "vi", "pt", "ko"}
 
 # ── Domain → guides directory mapping ──────────────────────────────────
 
@@ -105,7 +105,7 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
 # ── Language-aware file helpers ────────────────────────────────────────
 
 # Filename pattern: {slug}.{lang}.md  (e.g. bank-account-opening.zh.md)
-_LANG_FILE_RE = re.compile(r"^(.+)\.([a-z]{2})\.md$")
+_LANG_FILE_RE = re.compile(r"^(.+)\.([a-z]{2}(?:-[A-Za-z]+)?)\.md$")
 
 
 def _parse_guide_filename(filename: str) -> tuple[str, str | None]:
