@@ -1,7 +1,7 @@
 """Navigator & Emergency endpoints — serve static guides.
 
-Guides are sourced from each agent's workspace/guides/ directory.
-Agent-internal knowledge (workspace/knowledge/) is NOT exposed via this API.
+Guides are sourced from backend/app_service/guides/{domain}/ directory.
+Agent-internal knowledge (knowledge/) is NOT exposed via this API.
 
 GET  /api/v1/navigator/domains                  — List all domains
 GET  /api/v1/navigator/{domain}/guides           — List guides for a domain
@@ -36,14 +36,14 @@ _SUPPORTED_LANGS = {"zh", "zh-Hant", "ja", "en", "vi", "pt", "ko"}
 
 # ── Domain → guides directory mapping ──────────────────────────────────
 
-_AGENTS_ROOT = Path("/root/.openclaw/agents")
+_GUIDES_DIR = Path(__file__).resolve().parent.parent / "guides"
 
 DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
     "finance": {
         "label": "Finance & Banking",
         "icon": "💰",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-finance" / "workspace" / "guides",
+        "guides_path": _GUIDES_DIR / "finance",
         "description": {
             "ja": "銀行口座・送金・保険・年金",
             "zh": "银行开户・汇款・保险・年金",
@@ -53,7 +53,7 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "label": "Tax & Social Insurance",
         "icon": "📊",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-tax" / "workspace" / "guides",
+        "guides_path": _GUIDES_DIR / "tax",
         "description": {
             "ja": "確定申告・源泉徴収・控除・住民税",
             "zh": "报税・源泉税・扣除・住民税",
@@ -63,7 +63,7 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "label": "Visa & Immigration",
         "icon": "🛂",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-visa" / "workspace" / "guides",
+        "guides_path": _GUIDES_DIR / "visa",
         "description": {
             "ja": "在留資格・更新・変更・永住",
             "zh": "签证类型・更新・变更・永住",
@@ -73,7 +73,7 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "label": "Medical & Health",
         "icon": "🏥",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-medical" / "workspace" / "guides",
+        "guides_path": _GUIDES_DIR / "medical",
         "description": {
             "ja": "健康保険・病院・薬局・救急",
             "zh": "健康保险・就医・药店・急救",
@@ -83,7 +83,7 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "label": "Daily Life",
         "icon": "🌏",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-life" / "workspace" / "guides",
+        "guides_path": _GUIDES_DIR / "life",
         "description": {
             "ja": "引越し・届出・運転免許・防災",
             "zh": "搬家・行政手续・驾照・防災",
@@ -93,7 +93,7 @@ DOMAIN_CONFIG: dict[str, dict[str, Any]] = {
         "label": "Legal & Rights",
         "icon": "⚖️",
         "status": "active",
-        "guides_path": _AGENTS_ROOT / "svc-legal" / "workspace" / "guides",
+        "guides_path": _GUIDES_DIR / "legal",
         "description": {
             "ja": "労働法・契約・相談窓口・権利",
             "zh": "劳动法・合同・咨询窗口・权利",
@@ -644,7 +644,7 @@ async def get_guide(
 )
 async def emergency_info() -> dict:
     """Emergency contacts and quick guide — always public, no auth required."""
-    emergency_path = _AGENTS_ROOT / "svc-medical" / "workspace" / "guides" / "emergency.md"
+    emergency_path = _GUIDES_DIR / "medical" / "emergency.md"
 
     if not emergency_path.is_file():
         # Return hardcoded essentials as fallback
