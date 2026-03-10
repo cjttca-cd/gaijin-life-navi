@@ -750,17 +750,19 @@ async def _chat_completion_stream(
 
     effective_timeout = timeout or float(settings.LLM_TIMEOUT)
 
-    req = client.build_request("POST", url, json=payload, headers=headers)
-    response = await client.send(
-        req,
-        stream=True,
-        timeout=httpx.Timeout(
+    req = client.build_request(
+        "POST",
+        url,
+        json=payload,
+        headers=headers,
+        extensions={"timeout": httpx.Timeout(
             connect=10.0,
             read=effective_timeout,
             write=10.0,
             pool=10.0,
-        ),
+        ).as_dict()},
     )
+    response = await client.send(req, stream=True)
     response.raise_for_status()
     return response
 
