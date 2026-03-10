@@ -16,9 +16,6 @@ FLUTTER_ALLOW_ROOT=true $FLUTTER build web \
   --release
 
 echo "=== 2. Patching firebase_core_web Safari bug ==="
-# firebase_core_web apps getter crashes on Safari because it only catches
-# Chrome's "of undefined" but not Safari's "undefined is not an object"
-# Fix: add null check before getApps() call
 sed -i 's|try{o=v\.G\.firebase_core\.getApps()|try{if(!v.G.firebase_core)return A.b([],t.Nb);o=v.G.firebase_core.getApps()|' \
   "$APP_DIR/build/web/main.dart.js"
 
@@ -38,7 +35,7 @@ fi
 sed -i 's/"engineRevision"/"useLocalCanvasKit":true,"engineRevision"/' \
   "$DEPLOY_DIR/flutter_bootstrap.js"
 
-# Generate hashed filenames
+# Generate hashed filenames for JS
 JS_HASH=$(md5sum "$DEPLOY_DIR/main.dart.js" | cut -c1-8)
 cp "$DEPLOY_DIR/main.dart.js" "$DEPLOY_DIR/main.dart.${JS_HASH}.js"
 sed -i "s|main.dart.js|main.dart.${JS_HASH}.js|g" "$DEPLOY_DIR/flutter_bootstrap.js"
@@ -46,8 +43,33 @@ sed -i "s|main.dart.js|main.dart.${JS_HASH}.js|g" "$DEPLOY_DIR/flutter_bootstrap
 BS_HASH=$(md5sum "$DEPLOY_DIR/flutter_bootstrap.js" | cut -c1-8)
 cp "$DEPLOY_DIR/flutter_bootstrap.js" "$DEPLOY_DIR/flutter_bootstrap.${BS_HASH}.js"
 
-# Deploy production index.html
-cat > "$DEPLOY_DIR/index.html" << 'INDEXHTML'
+# Generate hashed filenames for icons (bypass Cloudflare CDN cache)
+FAV_HASH=$(md5sum "$DEPLOY_DIR/favicon.png" | cut -c1-8)
+cp "$DEPLOY_DIR/favicon.png" "$DEPLOY_DIR/favicon.${FAV_HASH}.png"
+
+ICON192_HASH=$(md5sum "$DEPLOY_DIR/icons/Icon-192.png" | cut -c1-8)
+cp "$DEPLOY_DIR/icons/Icon-192.png" "$DEPLOY_DIR/icons/Icon-192.${ICON192_HASH}.png"
+
+ICON512_HASH=$(md5sum "$DEPLOY_DIR/icons/Icon-512.png" | cut -c1-8)
+cp "$DEPLOY_DIR/icons/Icon-512.png" "$DEPLOY_DIR/icons/Icon-512.${ICON512_HASH}.png"
+
+MASK192_HASH=$(md5sum "$DEPLOY_DIR/icons/Icon-maskable-192.png" | cut -c1-8)
+cp "$DEPLOY_DIR/icons/Icon-maskable-192.png" "$DEPLOY_DIR/icons/Icon-maskable-192.${MASK192_HASH}.png"
+
+MASK512_HASH=$(md5sum "$DEPLOY_DIR/icons/Icon-maskable-512.png" | cut -c1-8)
+cp "$DEPLOY_DIR/icons/Icon-maskable-512.png" "$DEPLOY_DIR/icons/Icon-maskable-512.${MASK512_HASH}.png"
+
+# Update manifest.json with hashed icon filenames
+sed -i "s|icons/Icon-192.png|icons/Icon-192.${ICON192_HASH}.png|g" "$DEPLOY_DIR/manifest.json"
+sed -i "s|icons/Icon-512.png|icons/Icon-512.${ICON512_HASH}.png|g" "$DEPLOY_DIR/manifest.json"
+sed -i "s|icons/Icon-maskable-192.png|icons/Icon-maskable-192.${MASK192_HASH}.png|g" "$DEPLOY_DIR/manifest.json"
+sed -i "s|icons/Icon-maskable-512.png|icons/Icon-maskable-512.${MASK512_HASH}.png|g" "$DEPLOY_DIR/manifest.json"
+
+MANIFEST_HASH=$(md5sum "$DEPLOY_DIR/manifest.json" | cut -c1-8)
+cp "$DEPLOY_DIR/manifest.json" "$DEPLOY_DIR/manifest.${MANIFEST_HASH}.json"
+
+# Deploy production index.html (with hashed icon + manifest references)
+cat > "$DEPLOY_DIR/index.html" << INDEXHTML
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,10 +81,10 @@ cat > "$DEPLOY_DIR/index.html" << 'INDEXHTML'
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Japan Life Navi">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="apple-touch-icon" href="icons/Icon-192.${ICON192_HASH}.png">
+  <link rel="icon" type="image/png" href="favicon.${FAV_HASH}.png"/>
   <title>Japan Life Navigator</title>
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="manifest.${MANIFEST_HASH}.json">
   <style>
     body{margin:0;background:#1a1a2e}
     #loading{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#e0e0e0}
@@ -85,4 +107,6 @@ echo ""
 echo "✅ Deployed successfully!"
 echo "   JS:        main.dart.${JS_HASH}.js"
 echo "   Bootstrap: flutter_bootstrap.${BS_HASH}.js"
+echo "   Favicon:   favicon.${FAV_HASH}.png"
+echo "   Manifest:  manifest.${MANIFEST_HASH}.json"
 echo "   URL:       https://japan-life-navi.nebulainfinity.com/"
