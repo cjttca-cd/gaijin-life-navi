@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -109,10 +110,17 @@ class _ChatConversationScreenState
 
     try {
       final controller = ref.read(chatSendControllerProvider);
-      await controller.sendMessageStream(
-        messageText,
-        imageBase64: imageBase64,
-      );
+      if (kIsWeb) {
+        await controller.sendMessage(
+          messageText,
+          imageBase64: imageBase64,
+        );
+      } else {
+        await controller.sendMessageStream(
+          messageText,
+          imageBase64: imageBase64,
+        );
+      }
 
       // Log chat_message_sent on success.
       final latestUsage = ref.read(chatUsageProvider);
